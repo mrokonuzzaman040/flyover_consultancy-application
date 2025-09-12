@@ -63,7 +63,7 @@ export default function WhyChooseUs() {
         {/* Header */}
         <div className="text-center mb-16">
           <h2 className="text-4xl font-bold text-gray-900 mb-4">
-            Why Choose <span className="text-red-600">Flyover Global</span>
+            Why Choose <span className="text-brand-600">Flyover Global</span>
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
             Your trusted partner in achieving international education dreams with proven expertise and unwavering support
@@ -83,18 +83,18 @@ export default function WhyChooseUs() {
               }}
             >
               {/* Background Gradient */}
-              <div className="absolute inset-0 bg-gradient-to-br from-red-500/5 to-red-600/5 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              <div className="absolute inset-0 bg-gradient-to-br from-brand-500/5 to-brand-600/5 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               
               {/* Icon */}
               <div className="relative mb-6">
-                <div className="w-16 h-16 bg-gradient-to-br from-red-500 to-red-600 rounded-xl flex items-center justify-center text-white group-hover:scale-110 transition-transform duration-300">
+                <div className="w-16 h-16 bg-gradient-to-br from-brand-500 to-brand-600 rounded-xl flex items-center justify-center text-white group-hover:scale-110 transition-transform duration-300">
                   {feature.icon}
                 </div>
               </div>
 
               {/* Content */}
               <div className="relative">
-                <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-red-600 transition-colors duration-300">
+                <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-brand-600 transition-colors duration-300">
                   {feature.title}
                 </h3>
                 <p className="text-gray-600 mb-4 leading-relaxed">
@@ -104,11 +104,11 @@ export default function WhyChooseUs() {
                 {/* Stats */}
                 <div className="flex items-center justify-between pt-4 border-t border-gray-100">
                   <div>
-                    <div className="text-2xl font-bold text-red-600">{feature.stat}</div>
+                    <div className="text-2xl font-bold text-brand-600">{feature.stat}</div>
                     <div className="text-sm text-gray-500">{feature.statLabel}</div>
                   </div>
-                  <div className="w-8 h-8 bg-red-100 rounded-full flex items-center justify-center group-hover:bg-red-200 transition-colors duration-300">
-                    <svg className="w-4 h-4 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <div className="w-8 h-8 bg-brand-100 rounded-full flex items-center justify-center group-hover:bg-brand-200 transition-colors duration-300">
+                    <svg className="w-4 h-4 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                     </svg>
                   </div>
@@ -120,7 +120,7 @@ export default function WhyChooseUs() {
 
         {/* Bottom CTA */}
         <div className="text-center mt-16">
-          <div className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-red-600 to-red-700 text-white rounded-full font-semibold hover:from-red-700 hover:to-red-800 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl">
+          <div className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-brand-600 to-brand-700 text-white rounded-full font-semibold hover:from-brand-700 hover:to-brand-800 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl">
             <span>Start Your Journey Today</span>
             <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />

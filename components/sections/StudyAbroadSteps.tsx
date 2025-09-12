@@ -9,9 +9,9 @@ const steps = [
     id: 1,
     title: "Initial Consultation",
     description: "Meet with our expert counselors to discuss your academic goals and preferences",
-    color: "from-red-500 to-orange-500",
-    bgColor: "bg-red-50",
-    textColor: "text-red-600"
+    color: "from-brand-500 to-orange-500",
+    bgColor: "bg-brand-50",
+    textColor: "text-brand-600"
   },
   {
     id: 2,
@@ -78,7 +78,7 @@ export default function StudyAbroadSteps() {
         
         {/* Progress line */}
         <div className="relative mb-16">
-          <div className="absolute top-1/2 left-0 right-0 h-1 bg-gradient-to-r from-red-200 via-yellow-200 to-green-200 rounded-full transform -translate-y-1/2"></div>
+          <div className="absolute top-1/2 left-0 right-0 h-1 bg-gradient-to-r from-brand-200 via-yellow-200 to-green-200 rounded-full transform -translate-y-1/2"></div>
           <div className="relative flex justify-between">
             {steps.map((step) => (
               <button

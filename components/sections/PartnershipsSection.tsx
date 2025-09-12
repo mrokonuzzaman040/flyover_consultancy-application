@@ -24,7 +24,7 @@ export default function PartnershipsSection() {
           <text x="50" y="65" textAnchor="middle" className="fill-white text-xs">UNIVERSITY</text>
         </svg>
       ),
-      color: "from-red-600 to-red-800"
+      color: "from-brand-600 to-brand-800"
     },
     {
       id: 2,
@@ -136,7 +136,7 @@ export default function PartnershipsSection() {
           <text x="50" y="60" textAnchor="middle" className="fill-white text-xs">UNIVERSITY</text>
         </svg>
       ),
-      color: "from-red-600 to-red-800"
+      color: "from-brand-600 to-brand-800"
     },
     {
       id: 10,
@@ -195,7 +195,7 @@ export default function PartnershipsSection() {
         {/* Header */}
         <div className="text-center mb-16">
           <h2 className="text-4xl font-bold text-gray-900 mb-4">
-            Our Global <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-red-700">University Partners</span>
+            Our Global <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-600 to-brand-700">University Partners</span>
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
             We have established partnerships with world-renowned universities across the globe to provide you with the best educational opportunities.
@@ -212,7 +212,7 @@ export default function PartnershipsSection() {
               }`}
               style={{ transitionDelay: `${index * 100}ms` }}
             >
-              <div className="text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-red-700 mb-2">
+              <div className="text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-brand-600 to-brand-700 mb-2">
                 {stat.number}
               </div>
               <div className="text-gray-600 font-medium">
@@ -247,7 +247,7 @@ export default function PartnershipsSection() {
                 </div>
                 
                 {/* University Name */}
-                <h3 className="text-sm font-bold text-gray-900 mb-2 leading-tight group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-red-600 group-hover:to-red-700 transition-all duration-300">
+                <h3 className="text-sm font-bold text-gray-900 mb-2 leading-tight group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-brand-600 group-hover:to-brand-700 transition-all duration-300">
                   {partner.name}
                 </h3>
                 
@@ -263,7 +263,7 @@ export default function PartnershipsSection() {
 
                 {/* Hover Effect */}
                 {hoveredIndex === index && (
-                  <div className="absolute inset-0 bg-gradient-to-br from-red-500/10 to-red-600/10 rounded-2xl animate-pulse" />
+                  <div className="absolute inset-0 bg-gradient-to-br from-brand-500/10 to-brand-600/10 rounded-2xl animate-pulse" />
                 )}
               </div>
             </div>
@@ -280,10 +280,10 @@ export default function PartnershipsSection() {
               Our partnerships ensure you get direct access to top universities with streamlined application processes and exclusive opportunities.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button className="px-8 py-3 bg-gradient-to-r from-red-600 to-red-700 text-white rounded-full font-semibold hover:from-red-700 hover:to-red-800 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl">
+              <button className="px-8 py-3 bg-gradient-to-r from-brand-600 to-brand-700 text-white rounded-full font-semibold hover:from-brand-700 hover:to-brand-800 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl">
                 Explore Universities
               </button>
-              <button className="px-8 py-3 border-2 border-red-600 text-red-600 rounded-full font-semibold hover:bg-red-600 hover:text-white transition-all duration-300">
+              <button className="px-8 py-3 border-2 border-brand-600 text-brand-600 rounded-full font-semibold hover:bg-brand-600 hover:text-white transition-all duration-300">
                 Schedule Consultation
               </button>
             </div>

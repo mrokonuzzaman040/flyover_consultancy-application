@@ -77,7 +77,7 @@ export default function UpcomingEvents() {
         <div className="flex items-end justify-between mb-16">
           <div>
             <h2 className="text-4xl font-bold text-gray-900 mb-4">
-              Upcoming <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand to-red-300">Events</span>
+              Upcoming <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand to-brand-300">Events</span>
             </h2>
             <p className="text-xl text-gray-600">
               Join our events to accelerate your study abroad journey
@@ -85,7 +85,7 @@ export default function UpcomingEvents() {
           </div>
           <Link 
             href="/events" 
-            className="group inline-flex items-center px-6 py-3 bg-brand text-white rounded-full font-semibold hover:from-red-600 hover:to-red-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
+            className="group inline-flex items-center px-6 py-3 bg-brand text-white rounded-full font-semibold hover:from-brand-600 hover:to-brand-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
           >
             <span>View All Events</span>
             <svg className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -104,7 +104,7 @@ export default function UpcomingEvents() {
                 className={`group relative bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 border border-gray-100 overflow-hidden ${
                   isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
                 } ${
-                  event.featured ? 'ring-2 ring-red-500 ring-opacity-50' : ''
+                  event.featured ? 'ring-2 ring-brand-500 ring-opacity-50' : ''
                 }`}
                 style={{
                   transitionDelay: `${index * 150}ms`
@@ -177,7 +177,7 @@ export default function UpcomingEvents() {
                     <div className="pt-4">
                       <button className={`w-full py-3 px-4 rounded-xl font-semibold transition-all duration-300 ${
                         hoveredIndex === index
-                          ? `bg-gradient-to-r from-red-600 to-red-700 text-white shadow-lg transform scale-105`
+                          ? `bg-gradient-to-r from-brand-600 to-brand-700 text-white shadow-lg transform scale-105`
                           : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                       }`}>
                         {event.type === 'Webinar' ? 'Register Free' : 'Register Now'}

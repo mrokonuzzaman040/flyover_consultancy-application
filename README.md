@@ -56,7 +56,7 @@ npx prisma migrate dev --name init
 
 Branding
 
-- Replace `public/logo.png:1` with your red/white logo.
+- Replace `public/logo.png:1` with your brand/white logo.
 - Brand color is `bg-brand` (#E30613) from `tailwind.config.ts:1`.
 
 Next steps (suggested)

@@ -20,7 +20,7 @@ const successStories = [
       </div>
     ),
     flag: "🇺🇸",
-    color: "from-red-500 to-red-700"
+    color: "from-brand-500 to-brand-700"
   },
   {
     id: 2,
@@ -69,7 +69,7 @@ const successStories = [
     scholarship: "International Excellence Scholarship",
     year: "2023",
     avatar: (
-      <div className="w-16 h-16 bg-gradient-to-br from-orange-400 to-red-500 rounded-full flex items-center justify-center text-white font-bold text-lg">
+      <div className="w-16 h-16 bg-gradient-to-br from-orange-400 to-brand-500 rounded-full flex items-center justify-center text-white font-bold text-lg">
         AR
       </div>
     ),
@@ -153,7 +153,7 @@ export default function SuccessStories() {
         {/* Header */}
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-red-700">22,000+</span> Success Stories
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-600 to-brand-700">22,000+</span> Success Stories
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
             Real students, real achievements. Discover how Flyover Global has transformed dreams into reality for thousands of students worldwide.
@@ -169,7 +169,7 @@ export default function SuccessStories() {
                 }`}
                 style={{ transitionDelay: `${index * 100}ms` }}
               >
-                <div className="text-2xl md:text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-red-700 mb-1">
+                <div className="text-2xl md:text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-brand-600 to-brand-700 mb-1">
                   {stat.number}
                 </div>
                 <div className="text-sm text-gray-600 font-medium">
@@ -212,7 +212,7 @@ export default function SuccessStories() {
                             <div className="flex items-center space-x-4">
                               {story.avatar}
                               <div>
-                                <h3 className="font-bold text-gray-900 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-red-600 group-hover:to-red-700 transition-all duration-300">
+                                <h3 className="font-bold text-gray-900 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-brand-600 group-hover:to-brand-700 transition-all duration-300">
                                   {story.author}
                                 </h3>
                                 <div className="text-sm text-gray-500">
@@ -224,7 +224,7 @@ export default function SuccessStories() {
                           </div>
 
                           {/* University Info */}
-                          <div className="mb-6 p-4 bg-gray-50 rounded-xl group-hover:bg-gradient-to-r group-hover:from-red-50 group-hover:to-red-50 transition-all duration-300">
+                          <div className="mb-6 p-4 bg-gray-50 rounded-xl group-hover:bg-gradient-to-r group-hover:from-brand-50 group-hover:to-brand-50 transition-all duration-300">
                             <div className="font-semibold text-gray-900 mb-1">{story.university}</div>
                             <div className="text-sm text-gray-600 mb-2">{story.program}</div>
                             <div className="flex items-center justify-between">
@@ -247,7 +247,7 @@ export default function SuccessStories() {
 
                           {/* Hover Effect */}
                           {hoveredIndex === slideIndex * 3 + index && (
-                            <div className="absolute inset-0 bg-gradient-to-br from-red-500/10 to-red-600/10 rounded-2xl animate-pulse" />
+                            <div className="absolute inset-0 bg-gradient-to-br from-brand-500/10 to-brand-600/10 rounded-2xl animate-pulse" />
                           )}
                         </div>
                       </div>
@@ -266,7 +266,7 @@ export default function SuccessStories() {
                 onClick={() => goToSlide(index)}
                 className={`w-3 h-3 rounded-full transition-all duration-300 ${
                   currentSlide === index
-                    ? 'bg-gradient-to-r from-red-600 to-red-700 scale-125'
+                    ? 'bg-gradient-to-r from-brand-600 to-brand-700 scale-125'
                     : 'bg-gray-300 hover:bg-gray-400'
                 }`}
               />
@@ -284,10 +284,10 @@ export default function SuccessStories() {
               Join thousands of successful students who have achieved their dreams with Flyover Global. Your journey to a world-class education starts here.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button className="px-8 py-3 bg-gradient-to-r from-red-600 to-red-700 text-white rounded-full font-semibold hover:from-red-700 hover:to-red-800 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl">
+              <button className="px-8 py-3 bg-gradient-to-r from-brand-600 to-brand-700 text-white rounded-full font-semibold hover:from-brand-700 hover:to-brand-800 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl">
                 Start Your Journey
               </button>
-              <button className="px-8 py-3 border-2 border-red-600 text-red-600 rounded-full font-semibold hover:bg-red-600 hover:text-white transition-all duration-300">
+              <button className="px-8 py-3 border-2 border-brand-600 text-brand-600 rounded-full font-semibold hover:bg-brand-600 hover:text-white transition-all duration-300">
                 Read More Stories
               </button>
             </div>

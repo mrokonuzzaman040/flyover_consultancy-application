@@ -121,7 +121,7 @@ export default function AwardsSection() {
 
               {/* Award Icon */}
               <div className="relative mb-8">
-                <div className={`w-20 h-20 bg-gradient-to-br from-brand to-red-300 rounded-3xl flex items-center justify-center text-white group-hover:scale-110 group-hover:rotate-3 transition-all duration-500 shadow-xl group-hover:shadow-2xl`}>
+                <div className={`w-20 h-20 bg-gradient-to-br from-brand to-brand-300 rounded-3xl flex items-center justify-center text-white group-hover:scale-110 group-hover:rotate-3 transition-all duration-500 shadow-xl group-hover:shadow-2xl`}>
                   <div className="transform group-hover:scale-110 transition-transform duration-300">
                     {award.icon}
                   </div>

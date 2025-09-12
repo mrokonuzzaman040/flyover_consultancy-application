@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 
 export default function ContactPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-red-50/30">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-brand-50/30">
       {/* Enhanced Page Header */}
       <PageHeader 
         title="Contact Us" 
@@ -21,8 +21,8 @@ export default function ContactPage() {
       
       {/* Background Elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-1/4 -left-32 w-64 h-64 bg-red-100/20 rounded-full blur-3xl" />
-        <div className="absolute bottom-1/4 -right-32 w-64 h-64 bg-red-200/20 rounded-full blur-3xl" />
+        <div className="absolute top-1/4 -left-32 w-64 h-64 bg-brand-100/20 rounded-full blur-3xl" />
+        <div className="absolute bottom-1/4 -right-32 w-64 h-64 bg-brand-200/20 rounded-full blur-3xl" />
       </div>
 
       <div className="relative mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
@@ -31,7 +31,7 @@ export default function ContactPage() {
           <Reveal>
             <div className="text-center mb-12">
               <h2 className="text-3xl font-bold text-gray-900 mb-4">
-                Get in <span className="text-red-600">Touch</span>
+                Get in <span className="text-brand-600">Touch</span>
               </h2>
               <p className="text-lg text-gray-600 max-w-2xl mx-auto">
                 We&apos;re here to help you achieve your study abroad dreams. Reach out through any of the channels below.
@@ -42,8 +42,8 @@ export default function ContactPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
             <Reveal delay={0.1}>
               <div className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 group">
-                <div className="w-12 h-12 bg-red-100 rounded-xl flex items-center justify-center mb-4 group-hover:bg-red-200 transition-colors">
-                  <MapPin className="w-6 h-6 text-red-600" />
+                <div className="w-12 h-12 bg-brand-100 rounded-xl flex items-center justify-center mb-4 group-hover:bg-brand-200 transition-colors">
+                  <MapPin className="w-6 h-6 text-brand-600" />
                 </div>
                 <h3 className="font-semibold text-gray-900 mb-2">Visit Us</h3>
                 <p className="text-sm text-gray-600 leading-relaxed">
@@ -56,8 +56,8 @@ export default function ContactPage() {
 
             <Reveal delay={0.2}>
               <div className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 group">
-                <div className="w-12 h-12 bg-red-100 rounded-xl flex items-center justify-center mb-4 group-hover:bg-red-200 transition-colors">
-                  <Phone className="w-6 h-6 text-red-600" />
+                <div className="w-12 h-12 bg-brand-100 rounded-xl flex items-center justify-center mb-4 group-hover:bg-brand-200 transition-colors">
+                  <Phone className="w-6 h-6 text-brand-600" />
                 </div>
                 <h3 className="font-semibold text-gray-900 mb-2">Call Us</h3>
                 <p className="text-sm text-gray-600 leading-relaxed">
@@ -70,8 +70,8 @@ export default function ContactPage() {
 
             <Reveal delay={0.3}>
               <div className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 group">
-                <div className="w-12 h-12 bg-red-100 rounded-xl flex items-center justify-center mb-4 group-hover:bg-red-200 transition-colors">
-                  <Mail className="w-6 h-6 text-red-600" />
+                <div className="w-12 h-12 bg-brand-100 rounded-xl flex items-center justify-center mb-4 group-hover:bg-brand-200 transition-colors">
+                  <Mail className="w-6 h-6 text-brand-600" />
                 </div>
                 <h3 className="font-semibold text-gray-900 mb-2">Email Us</h3>
                 <p className="text-sm text-gray-600 leading-relaxed">
@@ -84,8 +84,8 @@ export default function ContactPage() {
 
             <Reveal delay={0.4}>
               <div className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 group">
-                <div className="w-12 h-12 bg-red-100 rounded-xl flex items-center justify-center mb-4 group-hover:bg-red-200 transition-colors">
-                  <Clock className="w-6 h-6 text-red-600" />
+                <div className="w-12 h-12 bg-brand-100 rounded-xl flex items-center justify-center mb-4 group-hover:bg-brand-200 transition-colors">
+                  <Clock className="w-6 h-6 text-brand-600" />
                 </div>
                 <h3 className="font-semibold text-gray-900 mb-2">Office Hours</h3>
                 <p className="text-sm text-gray-600 leading-relaxed">
@@ -106,7 +106,7 @@ export default function ContactPage() {
               <div className="bg-white rounded-3xl p-8 shadow-xl border border-gray-100">
                 <div className="mb-8">
                   <h2 className="text-2xl font-bold text-gray-900 mb-3">
-                    Send us a <span className="text-red-600">Message</span>
+                    Send us a <span className="text-brand-600">Message</span>
                   </h2>
                   <p className="text-gray-600">
                     Fill out the form below and our expert consultants will get back to you within 24 hours.
@@ -123,27 +123,27 @@ export default function ContactPage() {
             <Reveal delay={0.2}>
               <div className="bg-white rounded-3xl p-6 shadow-xl border border-gray-100">
                 <h3 className="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
-                  <Globe className="w-5 h-5 text-red-600" />
+                  <Globe className="w-5 h-5 text-brand-600" />
                   Our Offices
                 </h3>
                 <div className="space-y-6">
-                  <div className="border-l-4 border-red-500 pl-4">
+                  <div className="border-l-4 border-brand-500 pl-4">
                     <h4 className="font-semibold text-gray-900">Dhaka Office</h4>
                     <p className="text-sm text-gray-600 mt-1">
                       House 123, Road 456, Dhanmondi<br />
                       Dhaka 1205, Bangladesh
                     </p>
-                    <p className="text-sm text-red-600 font-medium mt-2">
+                    <p className="text-sm text-brand-600 font-medium mt-2">
                       +880-1700-000000
                     </p>
                   </div>
-                  <div className="border-l-4 border-red-500 pl-4">
+                  <div className="border-l-4 border-brand-500 pl-4">
                     <h4 className="font-semibold text-gray-900">Chittagong Office</h4>
                     <p className="text-sm text-gray-600 mt-1">
                       Building 789, GEC Circle<br />
                       Chittagong 4000, Bangladesh
                     </p>
-                    <p className="text-sm text-red-600 font-medium mt-2">
+                    <p className="text-sm text-brand-600 font-medium mt-2">
                       +880-1800-000000
                     </p>
                   </div>
@@ -152,7 +152,7 @@ export default function ContactPage() {
                 {/* Interactive Map Placeholder */}
                 <div className="mt-6 aspect-video w-full bg-gradient-to-br from-gray-100 to-gray-200 rounded-xl flex items-center justify-center border border-gray-200">
                   <div className="text-center">
-                    <MapPin className="w-8 h-8 text-red-500 mx-auto mb-2" />
+                    <MapPin className="w-8 h-8 text-brand-500 mx-auto mb-2" />
                     <p className="text-sm text-gray-600">Interactive Map</p>
                     <p className="text-xs text-gray-500">Coming Soon</p>
                   </div>
@@ -162,7 +162,7 @@ export default function ContactPage() {
 
             {/* Quick Stats */}
             <Reveal delay={0.3}>
-              <div className="bg-gradient-to-br from-red-600 to-red-700 rounded-3xl p-6 text-white">
+              <div className="bg-gradient-to-br from-brand-600 to-brand-700 rounded-3xl p-6 text-white">
                 <h3 className="text-xl font-bold mb-6 flex items-center gap-2">
                   <Users className="w-5 h-5" />
                   Why Choose Us?

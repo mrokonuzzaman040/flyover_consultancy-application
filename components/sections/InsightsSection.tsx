@@ -15,7 +15,7 @@ const insights = [
     title: "Top 10 Universities in Canada for International Students 2025",
     excerpt: "Comprehensive analysis of Canada's leading universities, including admission requirements, tuition fees, and scholarship opportunities for international students.",
     image: (
-      <div className="w-full h-48 bg-gradient-to-br from-red-400 to-red-600 rounded-lg flex items-center justify-center text-white text-4xl font-bold">
+      <div className="w-full h-48 bg-gradient-to-br from-brand-400 to-brand-600 rounded-lg flex items-center justify-center text-white text-4xl font-bold">
         🇨🇦
       </div>
     ),
@@ -72,7 +72,7 @@ const insights = [
     title: "Living Costs Breakdown: UK vs USA vs Canada vs Australia",
     excerpt: "Detailed comparison of living expenses, accommodation costs, and budgeting tips for popular study destinations.",
     image: (
-      <div className="w-full h-48 bg-gradient-to-br from-orange-400 to-red-500 rounded-lg flex items-center justify-center text-white text-4xl font-bold">
+      <div className="w-full h-48 bg-gradient-to-br from-orange-400 to-brand-500 rounded-lg flex items-center justify-center text-white text-4xl font-bold">
         🏠
       </div>
     ),
@@ -152,7 +152,7 @@ export default function InsightsSection() {
         {/* Header */}
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-red-700">Insights</span> to Keep You Ahead
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-600 to-brand-700">Insights</span> to Keep You Ahead
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
             Stay informed with expert advice, latest trends, and actionable insights to make your study abroad journey successful.
@@ -166,7 +166,7 @@ export default function InsightsSection() {
                 onClick={() => setActiveCategory(category.name)}
                 className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 transform hover:scale-105 ${
                   activeCategory === category.name
-                    ? 'bg-gradient-to-r from-red-600 to-red-700 text-white shadow-lg'
+                    ? 'bg-gradient-to-r from-brand-600 to-brand-700 text-white shadow-lg'
                     : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-200'
                 } ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
                 style={{ transitionDelay: `${index * 100}ms` }}
@@ -228,7 +228,7 @@ export default function InsightsSection() {
                         <span>{featuredInsight.likes}</span>
                       </span>
                     </div>
-                    <button className="px-6 py-3 bg-gradient-to-r from-red-600 to-red-700 text-white rounded-full font-semibold hover:from-red-700 hover:to-red-800 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl">
+                    <button className="px-6 py-3 bg-gradient-to-r from-brand-600 to-brand-700 text-white rounded-full font-semibold hover:from-brand-700 hover:to-brand-800 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl">
                       Read Article
                     </button>
                   </div>
@@ -284,7 +284,7 @@ export default function InsightsSection() {
                   </div>
                 </div>
                 
-                <h3 className="text-lg font-bold text-gray-900 mb-3 leading-tight group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-red-600 group-hover:to-red-700 transition-all duration-300">
+                <h3 className="text-lg font-bold text-gray-900 mb-3 leading-tight group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-brand-600 group-hover:to-brand-700 transition-all duration-300">
                   {insight.title}
                 </h3>
                 
@@ -317,7 +317,7 @@ export default function InsightsSection() {
 
                 {/* Hover Effect */}
                 {hoveredIndex === index && (
-                  <div className="absolute inset-0 bg-gradient-to-br from-red-500/5 to-red-600/5 rounded-2xl" />
+                  <div className="absolute inset-0 bg-gradient-to-br from-brand-500/5 to-brand-600/5 rounded-2xl" />
                 )}
               </div>
             </article>
@@ -339,12 +339,12 @@ export default function InsightsSection() {
                 placeholder="Enter your email address"
                 className="flex-1 px-4 py-3 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
-              <button className="px-8 py-3 bg-gradient-to-r from-red-600 to-red-700 text-white rounded-full font-semibold hover:from-red-700 hover:to-red-800 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl">
+              <button className="px-8 py-3 bg-gradient-to-r from-brand-600 to-brand-700 text-white rounded-full font-semibold hover:from-brand-700 hover:to-brand-800 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl">
                 Subscribe
               </button>
             </div>
             <div className="mt-4">
-              <Link href="/resources" className="text-red-600 hover:text-red-700 font-semibold transition-colors duration-200">
+              <Link href="/resources" className="text-brand-600 hover:text-brand-700 font-semibold transition-colors duration-200">
                 View All Articles →
               </Link>
             </div>

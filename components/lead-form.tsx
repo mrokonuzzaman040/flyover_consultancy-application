@@ -202,8 +202,8 @@ export default function LeadForm({ purpose = "consultation" }: { purpose?: "cons
       />
       
       {error && (
-        <div className="rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-800 flex items-start gap-3">
-          <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
+        <div className="rounded-xl border border-brand-200 bg-brand-50 p-4 text-sm text-brand-800 flex items-start gap-3">
+          <AlertCircle className="w-5 h-5 text-brand-600 flex-shrink-0 mt-0.5" />
           <div>
             <p className="font-medium">Error</p>
             <p>{error}</p>
@@ -226,7 +226,7 @@ export default function LeadForm({ purpose = "consultation" }: { purpose?: "cons
          <h3 className="text-sm font-semibold text-gray-800 border-b border-gray-200 pb-2">Personal Information</h3>
          <div className="grid gap-1">
            <label className="text-sm font-medium text-gray-700" htmlFor="name">
-             Full name <span className="text-red-500">*</span>
+             Full name <span className="text-brand-500">*</span>
            </label>
            <input
              id="name"
@@ -234,19 +234,19 @@ export default function LeadForm({ purpose = "consultation" }: { purpose?: "cons
              required
              maxLength={50}
              onChange={(e) => validateField('name', e.target.value)}
-             className={`rounded-xl border ${fieldErrors.name ? 'border-red-300 bg-red-50' : 'border-gray-300 bg-white'} px-4 py-3 text-gray-900 placeholder:text-gray-400 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20 transition-colors`}
+             className={`rounded-xl border ${fieldErrors.name ? 'border-brand-300 bg-brand-50' : 'border-gray-300 bg-white'} px-4 py-3 text-gray-900 placeholder:text-gray-400 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20 transition-colors`}
              placeholder="Enter your full name"
            />
            {fieldErrors.name && (
-             <p className="text-xs text-red-600 flex items-center gap-1">
-               <AlertCircle className="w-3 h-3 text-red-500" />
+             <p className="text-xs text-brand-600 flex items-center gap-1">
+               <AlertCircle className="w-3 h-3 text-brand-500" />
                {fieldErrors.name}
              </p>
            )}
          </div>
          <div className="grid gap-1">
            <label className="text-sm font-medium text-gray-700" htmlFor="email">
-             Email Address <span className="text-red-500">*</span>
+             Email Address <span className="text-brand-500">*</span>
            </label>
            <input
              id="email"
@@ -254,13 +254,13 @@ export default function LeadForm({ purpose = "consultation" }: { purpose?: "cons
              type="email"
              required
              onChange={(e) => validateField('email', e.target.value)}
-             className={`rounded-xl border ${fieldErrors.email ? 'border-red-300 bg-red-50' : 'border-gray-300 bg-white'} px-4 py-3 text-gray-900 placeholder:text-gray-400 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20 transition-colors`}
+             className={`rounded-xl border ${fieldErrors.email ? 'border-brand-300 bg-brand-50' : 'border-gray-300 bg-white'} px-4 py-3 text-gray-900 placeholder:text-gray-400 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20 transition-colors`}
              placeholder="your.email@example.com"
              suppressHydrationWarning={true}
            />
            {fieldErrors.email && (
-             <p className="text-xs text-red-600 flex items-center gap-1">
-               <AlertCircle className="w-3 h-3 text-red-500" />
+             <p className="text-xs text-brand-600 flex items-center gap-1">
+               <AlertCircle className="w-3 h-3 text-brand-500" />
                {fieldErrors.email}
              </p>
            )}
@@ -274,12 +274,12 @@ export default function LeadForm({ purpose = "consultation" }: { purpose?: "cons
              name="phone"
              type="tel"
              onChange={(e) => validateField('phone', e.target.value)}
-             className={`rounded-xl border ${fieldErrors.phone ? 'border-red-300 bg-red-50' : 'border-gray-300 bg-white'} px-4 py-3 text-gray-900 placeholder:text-gray-400 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20 transition-colors`}
+             className={`rounded-xl border ${fieldErrors.phone ? 'border-brand-300 bg-brand-50' : 'border-gray-300 bg-white'} px-4 py-3 text-gray-900 placeholder:text-gray-400 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20 transition-colors`}
              placeholder="+880 1700 000000"
            />
            {fieldErrors.phone && (
-             <p className="text-xs text-red-600 flex items-center gap-1">
-               <AlertCircle className="w-3 h-3 text-red-500" />
+             <p className="text-xs text-brand-600 flex items-center gap-1">
+               <AlertCircle className="w-3 h-3 text-brand-500" />
                {fieldErrors.phone}
              </p>
            )}
@@ -293,13 +293,13 @@ export default function LeadForm({ purpose = "consultation" }: { purpose?: "cons
          {/* Country Interest Dropdown */}
          <div className="grid gap-1">
            <label className="text-sm font-medium text-gray-700">
-             Interested Countries <span className="text-red-500">*</span>
+             Interested Countries <span className="text-brand-500">*</span>
            </label>
         <div className="relative" ref={countryDropdownRef}>
           <button
             type="button"
             onClick={() => setIsCountryDropdownOpen(!isCountryDropdownOpen)}
-            className={`w-full rounded-xl border ${fieldErrors.countryInterest ? 'border-red-300 bg-red-50' : 'border-gray-300 bg-white'} px-4 py-3 text-left text-gray-900 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20 flex items-center justify-between transition-colors`}
+            className={`w-full rounded-xl border ${fieldErrors.countryInterest ? 'border-brand-300 bg-brand-50' : 'border-gray-300 bg-white'} px-4 py-3 text-left text-gray-900 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20 flex items-center justify-between transition-colors`}
           >
             <span className="text-sm">
               {selectedCountries.length === 0
@@ -355,8 +355,8 @@ export default function LeadForm({ purpose = "consultation" }: { purpose?: "cons
           </div>
         )}
         {fieldErrors.countryInterest && (
-          <p className="text-xs text-red-600 flex items-center gap-1">
-            <AlertCircle className="w-3 h-3 text-red-500" />
+          <p className="text-xs text-brand-600 flex items-center gap-1">
+            <AlertCircle className="w-3 h-3 text-brand-500" />
             {fieldErrors.countryInterest}
           </p>
         )}
@@ -411,12 +411,12 @@ export default function LeadForm({ purpose = "consultation" }: { purpose?: "cons
            rows={4}
            maxLength={500}
            onChange={(e) => validateField('message', e.target.value)}
-           className={`rounded-xl border ${fieldErrors.message ? 'border-red-300 bg-red-50' : 'border-gray-300 bg-white'} px-4 py-3 text-gray-900 placeholder:text-gray-400 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20 resize-none transition-colors`}
+           className={`rounded-xl border ${fieldErrors.message ? 'border-brand-300 bg-brand-50' : 'border-gray-300 bg-white'} px-4 py-3 text-gray-900 placeholder:text-gray-400 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20 resize-none transition-colors`}
            placeholder="Tell us about your study abroad goals, preferred timeline, or any specific questions you have..."
          />
          {fieldErrors.message && (
-           <p className="text-xs text-red-600 flex items-center gap-1">
-             <AlertCircle className="w-3 h-3 text-red-500" />
+           <p className="text-xs text-brand-600 flex items-center gap-1">
+             <AlertCircle className="w-3 h-3 text-brand-500" />
              {fieldErrors.message}
            </p>
          )}
@@ -426,7 +426,7 @@ export default function LeadForm({ purpose = "consultation" }: { purpose?: "cons
      <button
        type="submit"
        disabled={state === "submitting" || isRateLimited}
-       className="inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-red-600 to-red-700 px-8 py-4 text-base font-semibold text-white shadow-lg transition-all hover:from-red-700 hover:to-red-800 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-red-500/40 disabled:opacity-60 disabled:cursor-not-allowed transform hover:scale-[1.02] active:scale-[0.98]"
+       className="inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-brand-600 to-brand-700 px-8 py-4 text-base font-semibold text-white shadow-lg transition-all hover:from-brand-700 hover:to-brand-800 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-brand-500/40 disabled:opacity-60 disabled:cursor-not-allowed transform hover:scale-[1.02] active:scale-[0.98]"
      >
        {state === "submitting" ? (
          <>
