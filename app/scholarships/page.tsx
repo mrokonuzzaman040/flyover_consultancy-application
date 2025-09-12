@@ -16,7 +16,7 @@ export default function ScholarshipsPage() {
       />
       <div className="mx-auto max-w-5xl px-4 py-10 sm:px-6 lg:px-8">
         <div className="rounded-lg card p-5">
-          <h2 className="text-lg font-semibold">Get Scholarship Advice</h2>
+          <h2 className="text-lg font-bold text-brand">Get Scholarship Advice</h2>
           <p className="mt-2 text-sm text-gray-700">Submit your details and our counselor will reach out.</p>
           <div className="mt-4">
             <LeadForm purpose="enquiry" />

@@ -75,9 +75,9 @@ export default function ContactPage() {
                 </div>
                 <h3 className="font-semibold text-gray-900 mb-2">Email Us</h3>
                 <p className="text-sm text-gray-600 leading-relaxed">
-                  info@flyoverconsultancy.com<br />
-                  admissions@flyoverconsultancy.com<br />
-                  support@flyoverconsultancy.com
+                  info@flyover.com<br />
+                  admissions@flyover.com<br />
+                  support@flyover.com
                 </p>
               </div>
             </Reveal>

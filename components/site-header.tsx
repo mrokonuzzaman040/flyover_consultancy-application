@@ -31,10 +31,10 @@ const nav = [
     href: "/services",
     dropdown: [
       { href: "/services", label: "All Services" },
-      { href: "/services/consultation", label: "Study Consultation" },
-      { href: "/services/visa", label: "Visa Assistance" },
-      { href: "/services/application", label: "Application Support" },
-      { href: "/courses", label: "Course Selection" },
+      { href: "/services/study-consultation", label: "Study Consultation" },
+      { href: "/services/visa-assistance", label: "Visa Assistance" },
+      { href: "/services/application-support", label: "Application Support" },
+      { href: "/services/course-selection", label: "Course Selection" },
     ],
   },
   {
@@ -42,8 +42,8 @@ const nav = [
     href: "/resources",
     dropdown: [
       { href: "/resources", label: "All Resources" },
-      { href: "/resources/guides", label: "Study Guides" },
-      { href: "/resources/tips", label: "Application Tips" },
+      { href: "/resources/study-guides", label: "Study Guides" },
+      { href: "/resources/application-tips", label: "Application Tips" },
       { href: "/events", label: "Events & Webinars" },
       { href: "/resources/faq", label: "FAQ" },
     ],
