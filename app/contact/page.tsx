@@ -1,15 +1,15 @@
 import type { Metadata } from "next";
 import LeadForm from "@/components/lead-form";
 import Reveal from "@/components/ui/reveal";
+import PageHeader from "@/components/page-header";
 
 export const metadata: Metadata = { title: "Contact Us | Flyover Consultancy" };
 
 export default function ContactPage() {
   return (
-    <div className="mx-auto max-w-5xl px-4 py-10 sm:px-6 lg:px-8">
-      <h1 className="text-3xl font-bold tracking-tight text-gray-900">Contact Us</h1>
-      <p className="mt-3 text-gray-700">Reach our offices and submit a general enquiry.</p>
-      <div className="mt-8 grid gap-6 md:grid-cols-2">
+    <div>
+      <PageHeader title="Contact Us" subtitle="Reach our offices and submit a general enquiry." image="/hero/slide1.svg" />
+      <div className="mx-auto max-w-5xl px-4 py-10 sm:px-6 lg:px-8 grid gap-6 md:grid-cols-2">
         <Reveal>
           <div className="card p-5">
             <h2 className="text-lg font-semibold">Offices</h2>
