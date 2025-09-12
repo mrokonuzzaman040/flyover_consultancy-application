@@ -1,36 +1,67 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+Flyover Consultancy — Study Abroad Website (Next.js 15, App Router)
 
-## Getting Started
+This repo is a production-ready starter following the provided SRS: public marketing pages, lead capture forms, API endpoints, Prisma schema, and SEO basics. No external CMS; an admin area can be added incrementally.
 
-First, run the development server:
+Quick start
 
-```bash
+1) Install deps and run dev
+
+```
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2) Environment vars
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Copy `.env.example` to `.env` and set at least:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- `NEXT_PUBLIC_SITE_URL=http://localhost:3000`
+- `DATABASE_URL=postgresql://user:pass@host:5432/db?sslmode=require` (optional for local testing; API will no-op without it)
 
-## Learn More
+3) Prisma models
 
-To learn more about Next.js, take a look at the following resources:
+Models for Leads, Events, Posts, Destinations, Services, Testimonials, Offices, Users are in `prisma/schema.prisma:1`. After setting `DATABASE_URL`, run:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```
+npx prisma migrate dev --name init
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+4) Routes overview
 
-## Deploy on Vercel
+- Home `app/page.tsx:1`
+- Services `app/services/page.tsx:1`
+- Destinations index `app/destinations/page.tsx:1`
+- Destination details `app/destinations/[slug]/page.tsx:1`
+- Courses `app/courses/page.tsx:1`
+- Scholarships `app/scholarships/page.tsx:1`
+- Resources index `app/resources/page.tsx:1` and article `app/resources/[slug]/page.tsx:1`
+- Events index `app/events/page.tsx:1` and detail `app/events/[slug]/page.tsx:1`
+- Testimonials `app/testimonials/page.tsx:1`
+- About `app/about/page.tsx:1`
+- Contact `app/contact/page.tsx:1`
+- Book consultation `app/book-consultation/page.tsx:1`
+- Legal `app/legal/privacy/page.tsx:1`, `app/legal/terms/page.tsx:1`
+- Health check API `app/api/health/route.ts:1`
+- Lead API `app/api/leads/route.ts:1`
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+5) Lead handling
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Client component `components/lead-form.tsx:1` posts to `/api/leads`.
+- Server handler validates with Zod and saves via Prisma when `DATABASE_URL` is set.
+
+6) SEO basics
+
+- Metadata in `app/layout.tsx:1`
+- Robots `app/robots.ts:1`, sitemap `app/sitemap.ts:1`
+
+Branding
+
+- Replace `public/logo.png:1` with your red/white logo.
+- Brand color is `bg-brand` (#E30613) from `tailwind.config.ts:1`.
+
+Next steps (suggested)
+
+- Build admin at `/admin` with auth (NextAuth), CRUD for all models.
+- Add email notifications (Resend/Nodemailer) from `app/api/leads/route.ts:1`.
+- Implement Resources/Events data fetching from DB and file uploads (S3/R2).
+- Add reCAPTCHA v3 or hCaptcha to forms and basic rate limiting.
