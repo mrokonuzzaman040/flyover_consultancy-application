@@ -8,7 +8,7 @@ export default function SiteFooter() {
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
         <div className="grid gap-10 md:grid-cols-4">
           <div>
-            <img src="/logo.svg" alt="Flyover Consultancy" className="h-9 w-auto brightness-0 invert" />
+            <img src="/logo.png" alt="Flyover Consultancy" className="h-9 w-auto brightness-0 invert" />
             <p className="mt-4 text-sm text-white/80">
               Flyover Consultancy provides end-to-end support for international students — from course selection and applications to visas and pre-departure.
             </p>
