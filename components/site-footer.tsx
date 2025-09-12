@@ -20,8 +20,8 @@ export default function SiteFooter() {
             </div>
           </div>
           <div>
-            <h3 className="text-sm font-semibold">Destinations</h3>
-            <ul className="mt-3 space-y-2 text-sm text-white/85">
+            <h3 className="text-sm font-semibold text-white">Destinations</h3>
+            <ul className="mt-3 space-y-2 text-sm text-white/90">
               {[
                 ["Australia", "/destinations/australia"],
                 ["Canada", "/destinations/canada"],
@@ -38,8 +38,8 @@ export default function SiteFooter() {
             </ul>
           </div>
           <div>
-            <h3 className="text-sm font-semibold">Services</h3>
-            <ul className="mt-3 space-y-2 text-sm text-white/85">
+            <h3 className="text-sm font-semibold text-white">Services</h3>
+            <ul className="mt-3 space-y-2 text-sm text-white/90">
               {[
                 ["Admission Support", "/services/admission-support"],
                 ["Visa Services", "/services/visa-services"],
@@ -54,24 +54,24 @@ export default function SiteFooter() {
             </ul>
           </div>
           <div>
-            <h3 className="text-sm font-semibold">Stay in the loop</h3>
-            <form className="mt-3 flex overflow-hidden rounded-md border border-white/15">
-              <input type="email" placeholder="Your email" className="w-full bg-transparent px-3 py-2 text-sm text-white placeholder:text-white/50 focus:outline-none" />
-              <button type="button" className="bg-brand px-3 text-sm font-semibold">Subscribe</button>
+            <h3 className="text-sm font-semibold text-white">Stay in the loop</h3>
+            <form className="mt-3 flex overflow-hidden rounded-md border border-white/25">
+              <input type="email" placeholder="Your email" className="w-full bg-transparent px-3 py-2 text-sm text-white placeholder:text-white/60 focus:outline-none focus:ring-2 focus:ring-brand/50" />
+              <button type="button" className="bg-brand px-4 text-sm font-semibold text-white hover:bg-brand-700 transition-colors">Subscribe</button>
             </form>
-            <div className="mt-4 text-sm text-white/80">
+            <div className="mt-4 text-sm text-white/85">
               <div>Phone: +880-000-000000</div>
-              <div>Email: info@flyover.example</div>
+              <div>Email: info@flyover.com</div>
             </div>
           </div>
         </div>
-        <div className="mt-10 border-t border-white/10 pt-6 text-xs text-white/70">
+        <div className="mt-10 border-t border-white/15 pt-6 text-xs text-white/80">
           <div className="flex flex-col items-start justify-between gap-2 sm:flex-row">
             <div>© {new Date().getFullYear()} Flyover Consultancy. All rights reserved.</div>
             <div className="flex gap-4">
-              <Link href="/legal/privacy" className="hover:underline">Privacy</Link>
-              <Link href="/legal/terms" className="hover:underline">Terms</Link>
-              <Link href="/contact" className="hover:underline">Contact</Link>
+              <Link href="/legal/privacy" className="hover:underline hover:text-white transition-colors">Privacy</Link>
+              <Link href="/legal/terms" className="hover:underline hover:text-white transition-colors">Terms</Link>
+              <Link href="/contact" className="hover:underline hover:text-white transition-colors">Contact</Link>
             </div>
           </div>
         </div>

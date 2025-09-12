@@ -31,7 +31,7 @@ export default function SiteHeader() {
 
         <nav className="hidden md:flex items-center gap-6 text-sm font-medium">
           {nav.map((item) => (
-            <Link key={item.href} href={item.href} className="text-gray-700 hover:text-brand">
+            <Link key={item.href} href={item.href} className="text-gray-800 hover:text-brand transition-colors font-medium">
               {item.label}
             </Link>
           ))}
@@ -42,7 +42,7 @@ export default function SiteHeader() {
         </div>
 
         <button
-          className="md:hidden inline-flex items-center justify-center rounded-md p-2 text-gray-700 hover:bg-brand/10"
+          className="md:hidden inline-flex items-center justify-center rounded-md p-2 text-gray-800 hover:bg-brand/10 transition-colors"
           onClick={() => setOpen((s) => !s)}
           aria-label="Toggle navigation"
           aria-expanded={open}
@@ -57,20 +57,22 @@ export default function SiteHeader() {
         </button>
       </div>
       {open && (
-        <div className="md:hidden border-t border-brand/15 bg-white">
-          <div className="mx-auto max-w-7xl px-4 py-3 sm:px-6 lg:px-8">
-            <div className="grid gap-2">
+        <div className="md:hidden border-t border-brand/15 bg-white shadow-lg">
+          <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
+            <div className="grid gap-1">
               {nav.map((item) => (
                 <Link
                   key={item.href}
                   href={item.href}
-                  className="block rounded px-2 py-2 text-gray-700 hover:bg-brand/10"
+                  className="block rounded-md px-3 py-3 text-gray-800 hover:bg-brand/10 hover:text-brand transition-colors font-medium"
                   onClick={() => setOpen(false)}
                 >
                   {item.label}
                 </Link>
               ))}
-              <CtaButton className="w-full text-center text-white" />
+              <div className="mt-3 pt-3 border-t border-gray-200">
+                <CtaButton className="w-full justify-center" />
+              </div>
             </div>
           </div>
         </div>

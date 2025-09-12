@@ -57,23 +57,23 @@ export default function HeroSlider() {
               <div className="mx-auto flex h-full max-w-7xl items-center px-4 sm:px-6 lg:px-8">
                 <Reveal>
                   <div className="max-w-2xl text-white">
-                    <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl drop-shadow">{s.headline}</h1>
-                    <p className="mt-4 text-lg text-white/90">{s.sub}</p>
+                    <h1 className="text-3xl font-extrabold tracking-tight sm:text-4xl md:text-5xl drop-shadow-lg">{s.headline}</h1>
+                    <p className="mt-4 text-base sm:text-lg text-white/90 drop-shadow">{s.sub}</p>
+                    <div className="mt-6 flex flex-col sm:flex-row gap-3">
+                      {s.primary ? (
+                        <CtaButton href={s.primary.href} className="text-sm sm:text-base px-6 py-3">{s.primary.label}</CtaButton>
+                      ) : null}
+                      {s.secondary ? (
+                        <Link
+                          href={s.secondary.href}
+                          className="inline-flex items-center justify-center rounded-md border-2 border-white/40 bg-white/15 px-6 py-3 text-sm sm:text-base font-semibold text-white backdrop-blur hover:bg-white/25 transition-all duration-200 drop-shadow"
+                        >
+                          {s.secondary.label}
+                        </Link>
+                      ) : null}
+                    </div>
                   </div>
                 </Reveal>
-                <div className="max-w-2xl mt-6 flex flex-wrap gap-3">
-                  {s.primary ? (
-                    <CtaButton href={s.primary.href}>{s.primary.label}</CtaButton>
-                  ) : null}
-                  {s.secondary ? (
-                    <Link
-                      href={s.secondary.href}
-                      className="inline-flex items-center justify-center rounded-md border border-white/30 bg-white/10 px-4 py-2 text-sm font-semibold text-white backdrop-blur hover:bg-white/20"
-                    >
-                      {s.secondary.label}
-                    </Link>
-                  ) : null}
-                </div>
               </div>
             </div>
           </div>

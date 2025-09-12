@@ -134,7 +134,7 @@ export default function LeadForm({ purpose = "consultation" }: { purpose?: "cons
              type="email"
              required
              className="rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-900 placeholder:text-gray-400 focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand/30"
-             placeholder="you@example.com"
+             placeholder="you@flyover.com"
              suppressHydrationWarning={true}
            />
          </div>
