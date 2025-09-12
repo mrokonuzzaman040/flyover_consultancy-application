@@ -1,23 +1,95 @@
 "use client";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import CtaButton from "@/components/cta-button";
 import Image from "next/image";
 
 const nav = [
-  { href: "/services", label: "Services" },
-  { href: "/destinations", label: "Destinations" },
-  { href: "/courses", label: "Courses" },
-  { href: "/scholarships", label: "Scholarships" },
-  { href: "/resources", label: "Resources" },
-  { href: "/events", label: "Events" },
-  { href: "/testimonials", label: "Testimonials" },
-  { href: "/about", label: "About" },
+  {
+    label: "About Us",
+    href: "/about",
+    dropdown: [
+      { href: "/about", label: "Our Story" },
+      { href: "/about#team", label: "Our Team" },
+      { href: "/about#mission", label: "Mission & Vision" },
+      { href: "/testimonials", label: "Testimonials" },
+    ],
+  },
+  {
+    label: "Destinations",
+    href: "/destinations",
+    dropdown: [
+      { href: "/destinations", label: "All Destinations" },
+      { href: "/destinations/usa", label: "USA" },
+      { href: "/destinations/canada", label: "Canada" },
+      { href: "/destinations/uk", label: "United Kingdom" },
+      { href: "/destinations/australia", label: "Australia" },
+    ],
+  },
+  {
+    label: "Our Services",
+    href: "/services",
+    dropdown: [
+      { href: "/services", label: "All Services" },
+      { href: "/services/consultation", label: "Study Consultation" },
+      { href: "/services/visa", label: "Visa Assistance" },
+      { href: "/services/application", label: "Application Support" },
+      { href: "/courses", label: "Course Selection" },
+    ],
+  },
+  {
+    label: "Resources",
+    href: "/resources",
+    dropdown: [
+      { href: "/resources", label: "All Resources" },
+      { href: "/resources/guides", label: "Study Guides" },
+      { href: "/resources/tips", label: "Application Tips" },
+      { href: "/events", label: "Events & Webinars" },
+      { href: "/resources/faq", label: "FAQ" },
+    ],
+  },
+  {
+    label: "Scholarships",
+    href: "/scholarships",
+    dropdown: [
+      { href: "/scholarships", label: "All Scholarships" },
+      { href: "/scholarships/undergraduate", label: "Undergraduate" },
+      { href: "/scholarships/graduate", label: "Graduate" },
+      { href: "/scholarships/phd", label: "PhD Programs" },
+      { href: "/scholarships/merit", label: "Merit-based" },
+    ],
+  },
   { href: "/contact", label: "Contact" },
 ];
 
 export default function SiteHeader() {
   const [open, setOpen] = useState(false);
+  const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+  const [closeTimeout, setCloseTimeout] = useState<NodeJS.Timeout | null>(null);
+
+  const handleMouseEnter = (label: string) => {
+    if (closeTimeout) {
+      clearTimeout(closeTimeout);
+      setCloseTimeout(null);
+    }
+    setActiveDropdown(label);
+  };
+
+  const handleMouseLeave = () => {
+    const timeout = setTimeout(() => {
+      setActiveDropdown(null);
+    }, 300); // 300ms delay before closing
+    setCloseTimeout(timeout);
+  };
+
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (closeTimeout) {
+        clearTimeout(closeTimeout);
+      }
+    };
+  }, [closeTimeout]);
 
   return (
     <header className="sticky top-0 z-40 w-full border-b border-brand/15 bg-white/90 backdrop-blur supports-[backdrop-filter]:bg-white/70">
@@ -31,9 +103,49 @@ export default function SiteHeader() {
 
         <nav className="hidden md:flex items-center gap-6 text-sm font-medium">
           {nav.map((item) => (
-            <Link key={item.href} href={item.href} className="text-gray-800 hover:text-brand transition-colors font-medium">
-              {item.label}
-            </Link>
+            <div
+              key={item.label}
+              className="relative"
+              onMouseEnter={() => item.dropdown && handleMouseEnter(item.label)}
+              onMouseLeave={handleMouseLeave}
+            >
+              <Link
+                href={item.href}
+                className="flex items-center gap-1 text-gray-800 hover:text-brand transition-colors font-medium py-2"
+              >
+                {item.label}
+                {item.dropdown && (
+                  <svg
+                    className="h-4 w-4 transition-transform duration-200"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                )}
+              </Link>
+              
+              {item.dropdown && activeDropdown === item.label && (
+                <div 
+                  className="absolute top-full left-0 mt-1 w-56 bg-white border border-gray-200 rounded-lg shadow-lg z-50"
+                  onMouseEnter={() => handleMouseEnter(item.label)}
+                  onMouseLeave={handleMouseLeave}
+                >
+                  <div className="py-2">
+                    {item.dropdown.map((dropdownItem) => (
+                      <Link
+                        key={dropdownItem.href}
+                        href={dropdownItem.href}
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-brand/10 hover:text-brand transition-colors"
+                      >
+                        {dropdownItem.label}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
           ))}
         </nav>
 
@@ -61,14 +173,50 @@ export default function SiteHeader() {
           <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
             <div className="grid gap-1">
               {nav.map((item) => (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className="block rounded-md px-3 py-3 text-gray-800 hover:bg-brand/10 hover:text-brand transition-colors font-medium"
-                  onClick={() => setOpen(false)}
-                >
-                  {item.label}
-                </Link>
+                <div key={item.label}>
+                  {item.dropdown ? (
+                    <div>
+                      <button
+                        className="flex w-full items-center justify-between rounded-md px-3 py-3 text-gray-800 hover:bg-brand/10 hover:text-brand transition-colors font-medium text-left"
+                        onClick={() => setActiveDropdown(activeDropdown === item.label ? null : item.label)}
+                      >
+                        {item.label}
+                        <svg
+                          className={`h-4 w-4 transition-transform duration-200 ${
+                            activeDropdown === item.label ? 'rotate-180' : ''
+                          }`}
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                        </svg>
+                      </button>
+                      {activeDropdown === item.label && (
+                        <div className="ml-4 mt-1 space-y-1">
+                          {item.dropdown.map((dropdownItem) => (
+                            <Link
+                              key={dropdownItem.href}
+                              href={dropdownItem.href}
+                              className="block rounded-md px-3 py-2 text-sm text-gray-600 hover:bg-brand/10 hover:text-brand transition-colors"
+                              onClick={() => setOpen(false)}
+                            >
+                              {dropdownItem.label}
+                            </Link>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    <Link
+                      href={item.href}
+                      className="block rounded-md px-3 py-3 text-gray-800 hover:bg-brand/10 hover:text-brand transition-colors font-medium"
+                      onClick={() => setOpen(false)}
+                    >
+                      {item.label}
+                    </Link>
+                  )}
+                </div>
               ))}
               <div className="mt-3 pt-3 border-t border-gray-200">
                 <CtaButton className="w-full justify-center" />
