@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { CheckCircle, Circle, ArrowRight } from "lucide-react";
-import AnimatedCounter from "../ui/animated-counter";
+// import AnimatedCounter from "../ui/animated-counter";
 
 const steps = [
   {
@@ -47,12 +47,12 @@ const steps = [
   }
 ];
 
-const successStats = [
-  { number: 5000, label: "Students Placed", suffix: "+" },
-  { number: 98, label: "Success Rate", suffix: "%" },
-  { number: 50, label: "Partner Universities", suffix: "+" },
-  { number: 15, label: "Countries", suffix: "+" }
-];
+// const successStats = [
+//   { number: 5000, label: "Students Placed", suffix: "+" },
+//   { number: 98, label: "Success Rate", suffix: "%" },
+//   { number: 50, label: "Partner Universities", suffix: "+" },
+//   { number: 15, label: "Countries", suffix: "+" }
+// ];
 
 export default function StudyAbroadSteps() {
   const [activeStep, setActiveStep] = useState(1);
@@ -139,23 +139,6 @@ export default function StudyAbroadSteps() {
               )}
             </div>
           ))}
-        </div>
-        
-        {/* Success statistics */}
-        <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-white/20">
-          <h3 className="text-2xl font-bold text-center mb-8 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-            Our Success Story
-          </h3>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            {successStats.map((stat, index) => (
-              <div key={index} className="text-center">
-                <div className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-2">
-                  <AnimatedCounter to={stat.number} />{stat.suffix}
-                </div>
-                <div className="text-sm text-gray-600 font-medium">{stat.label}</div>
-              </div>
-            ))}
-          </div>
         </div>
       </div>
     </section>
