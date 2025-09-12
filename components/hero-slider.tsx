@@ -59,21 +59,21 @@ export default function HeroSlider() {
                   <div className="max-w-2xl text-white">
                     <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl drop-shadow">{s.headline}</h1>
                     <p className="mt-4 text-lg text-white/90">{s.sub}</p>
-                    <div className="mt-6 flex flex-wrap gap-3">
-                      {s.primary ? (
-                        <CtaButton href={s.primary.href}>{s.primary.label}</CtaButton>
-                      ) : null}
-                      {s.secondary ? (
-                        <Link
-                          href={s.secondary.href}
-                          className="inline-flex items-center justify-center rounded-md border border-white/30 bg-white/10 px-4 py-2 text-sm font-semibold text-white backdrop-blur hover:bg-white/20"
-                        >
-                          {s.secondary.label}
-                        </Link>
-                      ) : null}
-                    </div>
                   </div>
                 </Reveal>
+                <div className="max-w-2xl mt-6 flex flex-wrap gap-3">
+                  {s.primary ? (
+                    <CtaButton href={s.primary.href}>{s.primary.label}</CtaButton>
+                  ) : null}
+                  {s.secondary ? (
+                    <Link
+                      href={s.secondary.href}
+                      className="inline-flex items-center justify-center rounded-md border border-white/30 bg-white/10 px-4 py-2 text-sm font-semibold text-white backdrop-blur hover:bg-white/20"
+                    >
+                      {s.secondary.label}
+                    </Link>
+                  ) : null}
+                </div>
               </div>
             </div>
           </div>

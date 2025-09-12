@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import CtaButton from "@/components/cta-button";
+import Image from "next/image";
 
 const nav = [
   { href: "/services", label: "Services" },
@@ -23,7 +24,7 @@ export default function SiteHeader() {
       <div className="mx-auto flex h-16 max-w-7xl items-center gap-4 px-4 sm:px-6 lg:px-8">
         <div className="flex flex-1 items-center gap-3">
           <Link href="/" className="flex items-center gap-2">
-            <img src="/logo.png" alt="Flyover Consultancy" className="h-7 w-auto" />
+            <Image src="/logo.png" alt="Flyover Consultancy" width={128} height={128} />
             <span className="sr-only">Flyover Consultancy</span>
           </Link>
         </div>
@@ -69,7 +70,7 @@ export default function SiteHeader() {
                   {item.label}
                 </Link>
               ))}
-              <CtaButton className="w-full text-center" />
+              <CtaButton className="w-full text-center text-white" />
             </div>
           </div>
         </div>

@@ -63,7 +63,7 @@ export default function Slider({
       <div
         ref={viewportRef}
         className={clsx(
-          "flex snap-x snap-mandatory overflow-x-auto no-scrollbar scroll-smooth",
+          "flex h-full snap-x snap-mandatory overflow-x-auto no-scrollbar scroll-smooth",
           "[&>*]:snap-start [&>*]:shrink-0 [&>*]:basis-full"
         )}
       >
