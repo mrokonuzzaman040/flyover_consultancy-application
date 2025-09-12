@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import Reveal from "@/components/ui/reveal";
 import PageHeader from "@/components/page-header";
 import { MapPin, Users, GraduationCap, Globe, ArrowRight, Calendar, DollarSign, FileText, Award, Heart} from "lucide-react";
-import Image from "next/image";
+import { UniversityImage } from "@/components/ui/lazy-image";
 
 const COUNTRIES = {
   australia: {
@@ -543,20 +543,20 @@ export default async function DestinationPage({ params }: { params: Promise<{ sl
                 <div className="group bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
                   {/* University Image/Logo */}
                   <div className="relative h-48 overflow-hidden">
-                    <Image
+                    <UniversityImage
                       src={university.image || 'https://images.unsplash.com/photo-1562774053-701939374585?w=400&h=300&fit=crop&crop=entropy&auto=format&q=80'} 
                       alt={`${university.name} campus`}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      className="group-hover:scale-105 transition-transform duration-300"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent z-10" />
                     {/* Ranking Badge */}
-                    <div className="absolute top-4 right-4">
+                    <div className="absolute top-4 right-4 z-20">
                       <div className="bg-white/95 backdrop-blur-sm rounded-full px-3 py-1 text-xs font-bold text-brand-600 shadow-lg">
                         {university.ranking}
                       </div>
                     </div>
                     {/* University Logo Overlay */}
-                    <div className="absolute bottom-4 left-4">
+                    <div className="absolute bottom-4 left-4 z-20">
                       <div className="w-12 h-12 bg-white/95 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg">
                         <GraduationCap className="w-6 h-6 text-brand-600" />
                       </div>

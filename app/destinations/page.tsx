@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Reveal from "@/components/ui/reveal";
 import PageHeader from "@/components/page-header";
+import LazyImage from "@/components/ui/lazy-image";
 import { Users, GraduationCap, Globe, Star, ArrowRight } from "lucide-react";
 
 export const metadata: Metadata = {
@@ -14,6 +15,7 @@ const countries = [
     slug: "australia",
     name: "Australia",
     flag: "🇦🇺",
+    image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&h=400&fit=crop&crop=entropy&auto=format&q=80",
     description: "World-class universities with post-study work opportunities and vibrant student life.",
     highlights: ["Post-study work visa", "High quality of life", "Research opportunities"],
     universities: "43 Universities",
@@ -27,6 +29,7 @@ const countries = [
     slug: "canada",
     name: "Canada",
     flag: "🇨🇦",
+    image: "https://images.unsplash.com/photo-1517935706615-2717063c2225?w=600&h=400&fit=crop&crop=entropy&auto=format&q=80",
     description: "High-quality education with welcoming immigration pathways and multicultural environment.",
     highlights: ["Immigration pathways", "Affordable tuition", "Safe environment"],
     universities: "98 Universities",
@@ -40,6 +43,7 @@ const countries = [
     slug: "usa",
     name: "United States",
     flag: "🇺🇸",
+    image: "https://images.unsplash.com/photo-1485738422979-f5c462d49f74?w=600&h=400&fit=crop&crop=entropy&auto=format&q=80",
     description: "Top-ranked universities with extensive research opportunities and diverse academic programs.",
     highlights: ["World's top universities", "Research funding", "Diverse programs"],
     universities: "4,000+ Universities",
@@ -53,6 +57,7 @@ const countries = [
     slug: "uk",
     name: "United Kingdom",
     flag: "🇬🇧",
+    image: "https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=600&h=400&fit=crop&crop=entropy&auto=format&q=80",
     description: "Historic institutions offering 1-year master's programs with rich academic heritage.",
     highlights: ["1-year master's", "Historic universities", "Cultural diversity"],
     universities: "130+ Universities",
@@ -66,6 +71,7 @@ const countries = [
     slug: "europe",
     name: "Europe",
     flag: "🇪🇺",
+    image: "https://images.unsplash.com/photo-1467269204594-9661b134dd2b?w=600&h=400&fit=crop&crop=entropy&auto=format&q=80",
     description: "Schengen access with varied tuition options and rich cultural experiences across multiple countries.",
     highlights: ["Schengen mobility", "Low tuition fees", "Cultural diversity"],
     universities: "4,000+ Universities",
@@ -79,6 +85,7 @@ const countries = [
     slug: "new-zealand",
     name: "New Zealand",
     flag: "🇳🇿",
+    image: "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=600&h=400&fit=crop&crop=entropy&auto=format&q=80",
     description: "Safe, beautiful country with innovation-focused education and excellent quality of life.",
     highlights: ["Safe environment", "Innovation focus", "Natural beauty"],
     universities: "8 Universities",
@@ -92,6 +99,7 @@ const countries = [
     slug: "japan",
     name: "Japan",
     flag: "🇯🇵",
+    image: "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=600&h=400&fit=crop&crop=entropy&auto=format&q=80",
     description: "Technology-forward education with unique culture, excellent scholarships, and innovation opportunities.",
     highlights: ["Technology focus", "MEXT scholarships", "Cultural experience"],
     universities: "780+ Universities",
@@ -166,14 +174,28 @@ export default function DestinationsPage() {
               <Reveal key={country.slug} delay={index * 0.1}>
                 <Link 
                   href={`/destinations/${country.slug}`} 
-                  className="group bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden h-[580px] flex flex-col"
+                  className="group bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden h-[650px] flex flex-col"
                 >
+                  {/* Image Section */}
+                  <div className="relative h-48 overflow-hidden flex-shrink-0">
+                    <LazyImage
+                      src={country.image}
+                      alt={`Study in ${country.name}`}
+                      width={600}
+                      height={400}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+                    <div className="absolute top-4 right-4">
+                      <ArrowRight className="w-6 h-6 text-white drop-shadow-lg group-hover:translate-x-1 transition-transform" />
+                    </div>
+                    <div className="absolute bottom-4 left-4">
+                      <div className="text-4xl drop-shadow-lg">{country.flag}</div>
+                    </div>
+                  </div>
+                  
                   {/* Header with gradient */}
                   <div className={`bg-gradient-to-r ${country.color} p-6 text-white flex-shrink-0`}>
-                    <div className="flex items-center justify-between mb-4">
-                      <div className="text-4xl">{country.flag}</div>
-                      <ArrowRight className="w-6 h-6 group-hover:translate-x-1 transition-transform" />
-                    </div>
                     <h3 className="text-2xl font-bold mb-2">{country.name}</h3>
                     <p className="text-white/90 text-sm leading-relaxed line-clamp-3">{country.description}</p>
                   </div>
