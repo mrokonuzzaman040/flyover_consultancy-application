@@ -308,24 +308,192 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 4. Study abroad in just 5 steps */}
-      <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
-        <h2 className="text-2xl font-bold tracking-tight text-gray-900">Study Abroad in Just 5 Steps</h2>
-        <ol className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
-          {[
-            { t: "Book consultation" },
-            { t: "Shortlist programs" },
-            { t: "Apply & get offers" },
-            { t: "Visa approval" },
-            { t: "Fly & settle" },
-          ].map((s, i) => (
-            <li key={i} className="card p-5">
-              <div className="text-3xl font-extrabold text-brand">{i + 1}</div>
-              <div className="mt-2 text-gray-900 font-semibold">{s.t}</div>
-            </li>
-          ))}
-        </ol>
-      </section>
+      {/* 4. Study abroad in just 5 steps - Professional Infographic */}
+        <section className="relative overflow-hidden bg-gradient-to-br from-brand-50 via-red-50 to-orange-50 py-24">
+          {/* Background decorative elements */}
+          <div className="absolute inset-0 bg-grid-slate-100 [mask-image:linear-gradient(0deg,white,rgba(255,255,255,0.6))] -z-10"></div>
+          <div className="absolute top-0 left-1/4 w-72 h-72 bg-red-200 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse"></div>
+          <div className="absolute bottom-0 right-1/4 w-72 h-72 bg-orange-200 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse delay-1000"></div>
+          
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-20">
+              <div className="inline-flex items-center px-4 py-2 rounded-full bg-red-100 text-red-800 text-sm font-medium mb-6">
+                <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                </svg>
+                Proven Success Process
+              </div>
+              <h2 className="text-5xl md:text-6xl font-extrabold text-gray-900 mb-6 leading-tight">
+                Study Abroad in Just{' '}
+                <span className="relative">
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand via-red-600 to-orange-600">5 Steps</span>
+                  <div className="absolute -bottom-2 left-0 right-0 h-1 bg-gradient-to-r from-brand via-red-600 to-orange-600 rounded-full"></div>
+                </span>
+              </h2>
+              <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+                Transform your dreams into reality with our comprehensive, time-tested approach to international education
+              </p>
+            </div>
+            
+            <div className="relative">
+              {/* Enhanced progress line with dots */}
+              <div className="hidden lg:block absolute top-24 left-0 right-0 z-0">
+                <div className="flex items-center justify-between max-w-5xl mx-auto px-16">
+                  <div className="flex-1 h-0.5 bg-gradient-to-r from-red-300 to-orange-300"></div>
+                  <div className="w-3 h-3 bg-red-400 rounded-full mx-4"></div>
+                  <div className="flex-1 h-0.5 bg-gradient-to-r from-orange-300 to-amber-300"></div>
+                  <div className="w-3 h-3 bg-orange-400 rounded-full mx-4"></div>
+                  <div className="flex-1 h-0.5 bg-gradient-to-r from-amber-300 to-yellow-300"></div>
+                  <div className="w-3 h-3 bg-amber-400 rounded-full mx-4"></div>
+                  <div className="flex-1 h-0.5 bg-gradient-to-r from-yellow-300 to-green-300"></div>
+                  <div className="w-3 h-3 bg-yellow-400 rounded-full mx-4"></div>
+                  <div className="flex-1 h-0.5 bg-gradient-to-r from-green-300 to-emerald-300"></div>
+                </div>
+              </div>
+              
+              <ol className="relative grid gap-8 sm:grid-cols-2 lg:grid-cols-5 z-10">
+                {/* Step 1 - Book Consultation */}
+                <li className="group relative">
+                  <div className="bg-white rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-3 hover:scale-105 border border-red-100 relative overflow-hidden">
+                    <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-red-100 to-red-200 rounded-full -translate-y-10 translate-x-10 opacity-50"></div>
+                    <div className="flex flex-col items-center text-center relative z-10">
+                      <div className="w-20 h-20 bg-gradient-to-br from-brand to-red-600 rounded-2xl flex items-center justify-center mb-6 shadow-2xl transform group-hover:rotate-6 transition-transform duration-300">
+                        <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                      </div>
+                      <div className="text-3xl font-black text-brand mb-3">01</div>
+                      <h3 className="text-xl font-bold text-gray-900 mb-3">Book Consultation</h3>
+                      <p className="text-sm text-gray-600 leading-relaxed">Schedule your personalized consultation with our expert counselors</p>
+                    </div>
+                  </div>
+                </li>
+                
+                {/* Step 2 - Shortlist Programs */}
+                <li className="group relative">
+                  <div className="bg-white rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-3 hover:scale-105 border border-orange-100 relative overflow-hidden">
+                    <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-orange-100 to-orange-200 rounded-full -translate-y-10 translate-x-10 opacity-50"></div>
+                    <div className="flex flex-col items-center text-center relative z-10">
+                      <div className="w-20 h-20 bg-gradient-to-br from-orange-500 to-orange-600 rounded-2xl flex items-center justify-center mb-6 shadow-2xl transform group-hover:rotate-6 transition-transform duration-300">
+                        <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+                        </svg>
+                      </div>
+                      <div className="text-3xl font-black text-orange-600 mb-3">02</div>
+                      <h3 className="text-xl font-bold text-gray-900 mb-3">Shortlist Programs</h3>
+                      <p className="text-sm text-gray-600 leading-relaxed">Discover courses perfectly aligned with your goals and budget</p>
+                    </div>
+                  </div>
+                </li>
+                
+                {/* Step 3 - Apply & Get Offers */}
+                <li className="group relative">
+                  <div className="bg-white rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-3 hover:scale-105 border border-amber-100 relative overflow-hidden">
+                    <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-amber-100 to-amber-200 rounded-full -translate-y-10 translate-x-10 opacity-50"></div>
+                    <div className="flex flex-col items-center text-center relative z-10">
+                      <div className="w-20 h-20 bg-gradient-to-br from-amber-500 to-amber-600 rounded-2xl flex items-center justify-center mb-6 shadow-2xl transform group-hover:rotate-6 transition-transform duration-300">
+                        <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                      </div>
+                      <div className="text-3xl font-black text-amber-600 mb-3">03</div>
+                      <h3 className="text-xl font-bold text-gray-900 mb-3">Apply & Get Offers</h3>
+                      <p className="text-sm text-gray-600 leading-relaxed">Submit applications and secure admission offers from top universities</p>
+                    </div>
+                  </div>
+                </li>
+                
+                {/* Step 4 - Visa Approval */}
+                <li className="group relative">
+                  <div className="bg-white rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-3 hover:scale-105 border border-yellow-100 relative overflow-hidden">
+                    <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-yellow-100 to-yellow-200 rounded-full -translate-y-10 translate-x-10 opacity-50"></div>
+                    <div className="flex flex-col items-center text-center relative z-10">
+                      <div className="w-20 h-20 bg-gradient-to-br from-yellow-500 to-yellow-600 rounded-2xl flex items-center justify-center mb-6 shadow-2xl transform group-hover:rotate-6 transition-transform duration-300">
+                        <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                      </div>
+                      <div className="text-3xl font-black text-yellow-600 mb-3">04</div>
+                      <h3 className="text-xl font-bold text-gray-900 mb-3">Visa Approval</h3>
+                      <p className="text-sm text-gray-600 leading-relaxed">Navigate visa documentation with our expert guidance and support</p>
+                    </div>
+                  </div>
+                </li>
+                
+                {/* Step 5 - Fly & Settle */}
+                <li className="group relative">
+                  <div className="bg-white rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-3 hover:scale-105 border border-green-100 relative overflow-hidden">
+                    <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-green-100 to-green-200 rounded-full -translate-y-10 translate-x-10 opacity-50"></div>
+                    <div className="flex flex-col items-center text-center relative z-10">
+                      <div className="w-20 h-20 bg-gradient-to-br from-green-500 to-green-600 rounded-2xl flex items-center justify-center mb-6 shadow-2xl transform group-hover:rotate-6 transition-transform duration-300">
+                        <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                        </svg>
+                      </div>
+                      <div className="text-3xl font-black text-green-600 mb-3">05</div>
+                      <h3 className="text-xl font-bold text-gray-900 mb-3">Fly & Settle</h3>
+                      <p className="text-sm text-gray-600 leading-relaxed">Begin your international journey with comprehensive settlement support</p>
+                    </div>
+                  </div>
+                </li>
+              </ol>
+            </div>
+            
+            {/* Enhanced Success Stats */}
+            <div className="mt-24">
+              <div className="text-center mb-12">
+                <h3 className="text-2xl font-bold text-gray-900 mb-4">Our Track Record Speaks</h3>
+                <p className="text-gray-600">Numbers that demonstrate our commitment to your success</p>
+              </div>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+                <div className="group bg-white/80 backdrop-blur-lg rounded-2xl p-8 border border-white/30 shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
+                  <div className="text-center">
+                    <div className="w-12 h-12 bg-gradient-to-br from-brand to-red-600 rounded-xl flex items-center justify-center mx-auto mb-4">
+                      <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                      </svg>
+                    </div>
+                    <div className="text-4xl font-black text-brand mb-2 group-hover:scale-110 transition-transform duration-300">98%</div>
+                    <div className="text-sm font-semibold text-gray-700">Success Rate</div>
+                  </div>
+                </div>
+                <div className="group bg-white/80 backdrop-blur-lg rounded-2xl p-8 border border-white/30 shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
+                  <div className="text-center">
+                    <div className="w-12 h-12 bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl flex items-center justify-center mx-auto mb-4">
+                      <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z" />
+                      </svg>
+                    </div>
+                    <div className="text-4xl font-black text-orange-600 mb-2 group-hover:scale-110 transition-transform duration-300">15K+</div>
+                    <div className="text-sm font-semibold text-gray-700">Students Placed</div>
+                  </div>
+                </div>
+                <div className="group bg-white/80 backdrop-blur-lg rounded-2xl p-8 border border-white/30 shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
+                  <div className="text-center">
+                    <div className="w-12 h-12 bg-gradient-to-br from-amber-500 to-amber-600 rounded-xl flex items-center justify-center mx-auto mb-4">
+                      <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M4 4a2 2 0 00-2 2v8a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2H4zm3 5a1 1 0 011-1h4a1 1 0 110 2H8a1 1 0 01-1-1zm0 3a1 1 0 011-1h4a1 1 0 110 2H8a1 1 0 01-1-1z" clipRule="evenodd" />
+                      </svg>
+                    </div>
+                    <div className="text-4xl font-black text-amber-600 mb-2 group-hover:scale-110 transition-transform duration-300">500+</div>
+                    <div className="text-sm font-semibold text-gray-700">Partner Universities</div>
+                  </div>
+                </div>
+                <div className="group bg-white/80 backdrop-blur-lg rounded-2xl p-8 border border-white/30 shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
+                  <div className="text-center">
+                    <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-green-600 rounded-xl flex items-center justify-center mx-auto mb-4">
+                      <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M3 6a3 3 0 013-3h10a1 1 0 01.8 1.6L14.25 8l2.55 3.4A1 1 0 0116 13H6a1 1 0 00-1 1v3a1 1 0 11-2 0V6z" clipRule="evenodd" />
+                      </svg>
+                    </div>
+                    <div className="text-4xl font-black text-green-600 mb-2 group-hover:scale-110 transition-transform duration-300">11</div>
+                    <div className="text-sm font-semibold text-gray-700">Countries</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
 
       {/* 5. Why Choose Us */}
       <section className="section-muted">
