@@ -63,16 +63,6 @@ const COUNTRIES = [
   "Other",
 ];
 
-const SERVICES = [
-  "Student Visa",
-  "Work Visa",
-  "Tourist Visa",
-  "Business Visa",
-  "Immigration Consultation",
-  "Document Preparation",
-  "Other",
-];
-
 const STATUS_OPTIONS = [
   { value: "NEW", label: "New" },
   { value: "CONTACTED", label: "Contacted" },
@@ -121,10 +111,10 @@ export default function AdminLeadsPage() {
   const fetchLeads = async () => {
     try {
       setError(null);
-      const response = await fetch("/api/leads");
+      const response = await fetch("/api/admin/leads");
       if (response.ok) {
         const data = await response.json();
-        setLeads(data);
+        setLeads(data.leads || data);
       } else {
         const errorData = await response.json().catch(() => ({}));
         const errorMessage = errorData.message || `Failed to fetch leads (${response.status})`;
@@ -211,7 +201,7 @@ export default function AdminLeadsPage() {
     setSaving(true);
 
     try {
-      const url = isEditDialogOpen ? `/api/leads/${selectedLead?.id}` : "/api/leads";
+      const url = isEditDialogOpen ? `/api/admin/leads/${selectedLead?.id}` : "/api/admin/leads";
       const method = isEditDialogOpen ? "PUT" : "POST";
 
       const response = await fetch(url, {
@@ -247,7 +237,7 @@ export default function AdminLeadsPage() {
 
     setDeletingLead(selectedLead.id);
     try {
-      const response = await fetch(`/api/leads/${selectedLead.id}`, {
+      const response = await fetch(`/api/admin/leads/${selectedLead.id}`, {
         method: "DELETE",
       });
 

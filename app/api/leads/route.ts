@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { headers } from "next/headers";
 import { prisma } from "@/lib/prisma";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
 
 const LeadSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters").max(50, "Name must be less than 50 characters"),
@@ -15,6 +17,75 @@ const LeadSchema = z.object({
   purpose: z.enum(["consultation", "enquiry"]).default("consultation"),
   timestamp: z.number().optional(),
 });
+
+export async function GET(req: NextRequest) {
+  try {
+    // Check authentication for admin access
+    const session = await getServerSession(authOptions);
+    if (!session || !session.user) {
+      return NextResponse.json(
+        { error: "Unauthorized" },
+        { status: 401 }
+      );
+    }
+
+    // Get query parameters for pagination and filtering
+    const { searchParams } = new URL(req.url);
+    const page = parseInt(searchParams.get('page') || '1');
+    const limit = parseInt(searchParams.get('limit') || '10');
+    const status = searchParams.get('status');
+    const search = searchParams.get('search');
+
+    const skip = (page - 1) * limit;
+
+    // Build where clause for filtering
+    const where: {
+      status?: string;
+      OR?: Array<{
+        name?: { contains: string; mode: 'insensitive' };
+        email?: { contains: string; mode: 'insensitive' };
+        phone?: { contains: string; mode: 'insensitive' };
+      }>;
+    } = {};
+    if (status && status !== 'ALL') {
+      where.status = status.toLowerCase();
+    }
+    if (search) {
+      where.OR = [
+        { name: { contains: search, mode: 'insensitive' } },
+        { email: { contains: search, mode: 'insensitive' } },
+        { phone: { contains: search, mode: 'insensitive' } }
+      ];
+    }
+
+    // Fetch leads with pagination
+    const [leads, total] = await Promise.all([
+      prisma.lead.findMany({
+        where,
+        skip,
+        take: limit,
+        orderBy: { createdAt: 'desc' }
+      }),
+      prisma.lead.count({ where })
+    ]);
+
+    return NextResponse.json({
+      leads,
+      pagination: {
+        page,
+        limit,
+        total,
+        pages: Math.ceil(total / limit)
+      }
+    });
+  } catch (error) {
+    console.error('Error fetching leads:', error);
+    return NextResponse.json(
+      { error: 'Failed to fetch leads' },
+      { status: 500 }
+    );
+  }
+}
 
 export async function POST(req: NextRequest) {
   try {
@@ -37,23 +108,11 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Basic rate limiting using in-memory store (for production, use Redis)
-    const ip = req.headers.get('x-forwarded-for') ?? req.headers.get('x-real-ip') ?? '127.0.0.1';
-    
-    // Simple rate limiting check (can be enhanced with Redis in production)
-    const rateLimitKey = `rate_limit_${ip}`;
-    const now = Date.now();
-    const windowMs = 60000; // 1 minute
-    const maxRequests = 5;
-    
-    // In production, this should use a proper cache like Redis
-    // For now, we'll skip rate limiting to avoid complexity
-
     // Parse and validate request body
     let body;
     try {
       body = await req.json();
-    } catch (parseError) {
+    } catch {
       return NextResponse.json(
         { error: "Invalid JSON format" },
         { status: 400 }
