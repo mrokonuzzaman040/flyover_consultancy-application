@@ -1,10 +1,9 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import SiteHeader from "@/components/site-header";
-import SiteFooter from "@/components/site-footer";
 import ScrollProgress from "@/components/ui/scroll-progress";
 import LenisProvider from "@/components/ui/lenis-provider";
+import ConditionalLayout from "@/components/ConditionalLayout";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -53,9 +52,7 @@ export default function RootLayout({
       >
         <LenisProvider />
         <ScrollProgress />
-        <SiteHeader />
-        <main className="min-h-[60vh] bg-white">{children}</main>
-        <SiteFooter />
+        <ConditionalLayout>{children}</ConditionalLayout>
       </body>
     </html>
   );

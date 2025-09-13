@@ -22,6 +22,7 @@ import {
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Session } from "next-auth"
+import Image from "next/image"
 
 type NavigationItem = {
   name: string
@@ -112,19 +113,22 @@ function SidebarContent({
 }) {
   return (
     <>
-      <div className="flex items-center justify-between h-16 px-6 border-b border-slate-200 bg-gradient-to-r from-blue-600 to-blue-700">
-        <div className="flex items-center">
-          <h1 className="text-xl font-bold text-white">Flyover Admin</h1>
+      <div className="flex items-center justify-center h-20 px-6 border-b border-slate-200/50 shadow-lg">
+        <div className="flex items-center space-x-3">
+          <div>
+            <Image src="/logo.png" alt="Flyover Consultancy" width={128} height={128} />
+            <p className="text-xs text-white/70 font-medium">Admin Dashboard</p>
+          </div>
         </div>
         {onClose && (
-          <Button variant="ghost" size="sm" onClick={onClose} className="text-white hover:bg-white/20">
+          <Button variant="ghost" size="sm" onClick={onClose} className="text-white hover:bg-white/20 rounded-lg">
             <X className="h-5 w-5" />
           </Button>
         )}
       </div>
       
-      <div className="flex-1 flex flex-col overflow-y-auto bg-gradient-to-b from-slate-50 to-white">
-        <nav className="flex-1 px-3 py-6 space-y-2">
+      <div className="flex-1 flex flex-col overflow-y-auto bg-gradient-to-b from-slate-50/50 to-white">
+        <nav className="flex-1 px-4 py-8 space-y-1">
           {navigation.map((item: NavigationItem) => {
             const isActive = pathname === item.href
             return (
@@ -132,46 +136,52 @@ function SidebarContent({
                 key={item.name}
                 href={item.href}
                 className={cn(
-                  "group flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all duration-200 ease-in-out",
+                  "group flex items-center px-4 py-3.5 text-sm font-medium rounded-xl transition-all duration-300 ease-out relative overflow-hidden",
                   isActive
-                    ? "bg-blue-50 text-blue-700 border-l-4 border-blue-600 shadow-sm"
-                    : "text-slate-600 hover:bg-slate-100 hover:text-slate-900 hover:shadow-sm"
+                    ? "bg-gradient-to-r from-brand-50 to-brand-100/50 text-brand-700 shadow-md border border-brand-200/50 transform scale-[1.02]"
+                    : "text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 hover:shadow-sm hover:transform hover:scale-[1.01]"
                 )}
                 onClick={onClose}
               >
+                {isActive && (
+                  <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-brand-500 to-brand-600 rounded-r-full" />
+                )}
                 <item.icon
                   className={cn(
-                    "mr-3 h-5 w-5 flex-shrink-0 transition-colors",
-                    isActive ? "text-blue-600" : "text-slate-400 group-hover:text-slate-600"
+                    "mr-4 h-5 w-5 flex-shrink-0 transition-all duration-300",
+                    isActive ? "text-brand-600 scale-110" : "text-slate-400 group-hover:text-slate-600 group-hover:scale-105"
                   )}
                 />
-                {item.name}
+                <span className="font-semibold tracking-wide">{item.name}</span>
+                {isActive && (
+                  <div className="ml-auto w-2 h-2 bg-brand-500 rounded-full animate-pulse" />
+                )}
               </Link>
             )
           })}
         </nav>
         
-        <div className="flex-shrink-0 p-4 border-t border-slate-200 bg-slate-50">
-          <div className="flex items-center mb-4 p-3 bg-white rounded-lg shadow-sm">
+        <div className="flex-shrink-0 p-6 border-t border-slate-200/50 bg-gradient-to-r from-slate-50/80 to-white">
+          <div className="flex items-center mb-6 p-4 bg-white rounded-2xl shadow-lg border border-slate-100 hover:shadow-xl transition-all duration-300">
             <div className="flex-shrink-0">
-              <div className="h-10 w-10 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center shadow-md">
-                <span className="text-sm font-semibold text-white">
+              <div className="h-12 w-12 rounded-2xl bg-gradient-to-br from-brand-500 via-brand-600 to-brand-700 flex items-center justify-center shadow-lg ring-2 ring-brand-100">
+                <span className="text-base font-bold text-white">
                   {session?.user?.name?.charAt(0) || session?.user?.email?.charAt(0) || "U"}
                 </span>
               </div>
             </div>
-            <div className="ml-3 flex-1 min-w-0">
-              <p className="text-sm font-semibold text-slate-900 truncate">{session?.user?.name || "User"}</p>
-              <p className="text-xs text-slate-500 capitalize">{session?.user?.role || "Admin"}</p>
+            <div className="ml-4 flex-1 min-w-0">
+              <p className="text-sm font-bold text-slate-900 truncate tracking-wide">{session?.user?.name || "User"}</p>
+              <p className="text-xs text-brand-600 capitalize font-semibold bg-brand-50 px-2 py-1 rounded-full inline-block mt-1">{session?.user?.role || "Admin"}</p>
             </div>
           </div>
           <Button
             variant="ghost"
             size="sm"
-            className="w-full justify-start text-slate-600 hover:text-slate-900 hover:bg-white transition-colors"
+            className="w-full justify-start text-slate-600 hover:text-white hover:bg-gradient-to-r hover:from-brand-500 hover:to-brand-600 transition-all duration-300 rounded-xl py-3 font-semibold"
             onClick={onSignOut}
           >
-            <LogOut className="mr-2 h-4 w-4" />
+            <LogOut className="mr-3 h-4 w-4" />
             Sign out
           </Button>
         </div>
