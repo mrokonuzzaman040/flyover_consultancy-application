@@ -18,8 +18,8 @@ datasource db {
 model Lead {
   id               String   @id @default(cuid())
   name             String
-  email            String
-  phone            String?
+  email            String?
+  phone            String
   countryInterest  String[]
   serviceInterest  String[]
   message          String?
