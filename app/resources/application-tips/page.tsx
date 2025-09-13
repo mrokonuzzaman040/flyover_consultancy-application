@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { CheckCircleIcon, LightbulbIcon, AlertTriangleIcon, ClockIcon, FileTextIcon, UserIcon, StarIcon, ArrowRightIcon, BookOpenIcon, GraduationCapIcon, TrendingUpIcon } from "lucide-react";
+import { CheckCircleIcon, LightbulbIcon, AlertTriangleIcon, ClockIcon, FileTextIcon, UserIcon, StarIcon, BookOpenIcon, GraduationCapIcon, TrendingUpIcon } from "lucide-react";
 import PageHeader from "@/components/page-header";
 import Reveal from "@/components/ui/reveal";
 import CtaButton from "@/components/cta-button";

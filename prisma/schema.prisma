@@ -77,13 +77,23 @@ model Destination {
   id              String   @id @default(cuid())
   country         String
   slug            String   @unique
+  flag            String?
+  image           String?
+  description     String?
+  highlights      String[]
+  universities    String?
+  students        String?
+  popularCities   String[]
+  averageCost     String?
+  workRights      String?
+  color           String?
   hero            String?
   overviewMD      String?
   costsMD         String?
   intakesMD       String?
   visaMD          String?
   scholarshipsMD  String?
-  popularCourses  String[]
+  popularCourses   String[]
   faqs            Json?
   createdAt       DateTime @default(now())
 }
