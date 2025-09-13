@@ -58,8 +58,8 @@ export default function AdminSidebar() {
         "fixed inset-0 z-50 lg:hidden",
         sidebarOpen ? "block" : "hidden"
       )}>
-        <div className="fixed inset-0 bg-gray-600 bg-opacity-75" onClick={() => setSidebarOpen(false)} />
-        <div className="fixed inset-y-0 left-0 flex w-64 flex-col bg-white">
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm" onClick={() => setSidebarOpen(false)} />
+        <div className="fixed inset-y-0 left-0 flex w-72 flex-col bg-white shadow-2xl">
           <SidebarContent 
             navigation={navigation} 
             pathname={pathname} 
@@ -71,8 +71,8 @@ export default function AdminSidebar() {
       </div>
 
       {/* Desktop sidebar */}
-      <div className="hidden lg:fixed lg:inset-y-0 lg:flex lg:w-64 lg:flex-col">
-        <div className="flex flex-col flex-grow bg-white border-r border-gray-200">
+      <div className="hidden lg:fixed lg:inset-y-0 lg:flex lg:w-64 lg:flex-col lg:z-40">
+        <div className="flex flex-col flex-grow bg-white border-r border-slate-200 shadow-lg">
           <SidebarContent 
             navigation={navigation} 
             pathname={pathname} 
@@ -112,19 +112,19 @@ function SidebarContent({
 }) {
   return (
     <>
-      <div className="flex items-center justify-between h-16 px-4 border-b border-gray-200">
+      <div className="flex items-center justify-between h-16 px-6 border-b border-slate-200 bg-gradient-to-r from-blue-600 to-blue-700">
         <div className="flex items-center">
-          <h1 className="text-xl font-bold text-gray-900">Flyover Admin</h1>
+          <h1 className="text-xl font-bold text-white">Flyover Admin</h1>
         </div>
         {onClose && (
-          <Button variant="ghost" size="sm" onClick={onClose}>
+          <Button variant="ghost" size="sm" onClick={onClose} className="text-white hover:bg-white/20">
             <X className="h-5 w-5" />
           </Button>
         )}
       </div>
       
-      <div className="flex-1 flex flex-col overflow-y-auto">
-        <nav className="flex-1 px-2 py-4 space-y-1">
+      <div className="flex-1 flex flex-col overflow-y-auto bg-gradient-to-b from-slate-50 to-white">
+        <nav className="flex-1 px-3 py-6 space-y-2">
           {navigation.map((item: NavigationItem) => {
             const isActive = pathname === item.href
             return (
@@ -132,17 +132,17 @@ function SidebarContent({
                 key={item.name}
                 href={item.href}
                 className={cn(
-                  "group flex items-center px-2 py-2 text-sm font-medium rounded-md transition-colors",
+                  "group flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all duration-200 ease-in-out",
                   isActive
-                    ? "bg-gray-100 text-gray-900"
-                    : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+                    ? "bg-blue-50 text-blue-700 border-l-4 border-blue-600 shadow-sm"
+                    : "text-slate-600 hover:bg-slate-100 hover:text-slate-900 hover:shadow-sm"
                 )}
                 onClick={onClose}
               >
                 <item.icon
                   className={cn(
-                    "mr-3 h-5 w-5 flex-shrink-0",
-                    isActive ? "text-gray-500" : "text-gray-400 group-hover:text-gray-500"
+                    "mr-3 h-5 w-5 flex-shrink-0 transition-colors",
+                    isActive ? "text-blue-600" : "text-slate-400 group-hover:text-slate-600"
                   )}
                 />
                 {item.name}
@@ -151,24 +151,24 @@ function SidebarContent({
           })}
         </nav>
         
-        <div className="flex-shrink-0 p-4 border-t border-gray-200">
-          <div className="flex items-center mb-3">
+        <div className="flex-shrink-0 p-4 border-t border-slate-200 bg-slate-50">
+          <div className="flex items-center mb-4 p-3 bg-white rounded-lg shadow-sm">
             <div className="flex-shrink-0">
-              <div className="h-8 w-8 rounded-full bg-gray-300 flex items-center justify-center">
-                <span className="text-sm font-medium text-gray-700">
+              <div className="h-10 w-10 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center shadow-md">
+                <span className="text-sm font-semibold text-white">
                   {session?.user?.name?.charAt(0) || session?.user?.email?.charAt(0) || "U"}
                 </span>
               </div>
             </div>
-            <div className="ml-3">
-              <p className="text-sm font-medium text-gray-700">{session?.user?.name || "User"}</p>
-              <p className="text-xs text-gray-500">{session?.user?.role}</p>
+            <div className="ml-3 flex-1 min-w-0">
+              <p className="text-sm font-semibold text-slate-900 truncate">{session?.user?.name || "User"}</p>
+              <p className="text-xs text-slate-500 capitalize">{session?.user?.role || "Admin"}</p>
             </div>
           </div>
           <Button
             variant="ghost"
             size="sm"
-            className="w-full justify-start text-gray-600 hover:text-gray-900"
+            className="w-full justify-start text-slate-600 hover:text-slate-900 hover:bg-white transition-colors"
             onClick={onSignOut}
           >
             <LogOut className="mr-2 h-4 w-4" />

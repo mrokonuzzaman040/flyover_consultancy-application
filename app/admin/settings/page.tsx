@@ -8,7 +8,9 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Switch } from "@/components/ui/switch"
 import { Separator } from "@/components/ui/separator"
-import { Settings, Save, Upload, Database, Mail, Shield } from "lucide-react"
+import { Settings, Save, Upload, Database, Mail, Shield, RefreshCw, Loader2, AlertTriangle } from "lucide-react"
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import { Skeleton } from "@/components/ui/skeleton"
 import { toast } from "sonner"
 
 type SystemSettings = {
@@ -45,6 +47,7 @@ export default function SettingsPage() {
   })
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     fetchSettings()
@@ -53,14 +56,22 @@ export default function SettingsPage() {
   const fetchSettings = async () => {
     try {
       setLoading(true)
+      setError(null)
       const response = await fetch('/api/admin/settings')
       if (response.ok) {
         const data = await response.json()
         setSettings(prev => ({ ...prev, ...data.settings }))
+      } else {
+        const errorData = await response.json().catch(() => ({}))
+        const errorMessage = errorData.error || 'Failed to load settings'
+        setError(errorMessage)
+        toast.error(errorMessage)
       }
     } catch (error) {
       console.error('Fetch settings error:', error)
-      toast.error("Failed to load settings")
+      const errorMessage = error instanceof Error ? error.message : 'Failed to load settings'
+      setError(errorMessage)
+      toast.error(errorMessage)
     } finally {
       setLoading(false)
     }
@@ -69,6 +80,7 @@ export default function SettingsPage() {
   const handleSave = async () => {
     try {
       setSaving(true)
+      setError(null)
       const response = await fetch('/api/admin/settings', {
         method: 'POST',
         headers: {
@@ -80,11 +92,16 @@ export default function SettingsPage() {
       if (response.ok) {
         toast.success("Settings saved successfully")
       } else {
-        toast.error("Failed to save settings")
+        const errorData = await response.json().catch(() => ({}))
+        const errorMessage = errorData.error || 'Failed to save settings'
+        setError(errorMessage)
+        toast.error(errorMessage)
       }
     } catch (error) {
       console.error('Save settings error:', error)
-      toast.error("Failed to save settings")
+      const errorMessage = error instanceof Error ? error.message : 'Failed to save settings'
+      setError(errorMessage)
+      toast.error(errorMessage)
     } finally {
       setSaving(false)
     }
@@ -97,18 +114,36 @@ export default function SettingsPage() {
   if (loading) {
     return (
       <div className="space-y-6">
-        <div className="h-8 bg-gray-200 animate-pulse rounded" />
-        <div className="space-y-4">
-          {[...Array(3)].map((_, i) => (
+        <div className="flex items-center justify-between">
+          <div className="space-y-2">
+            <Skeleton className="h-8 w-64" />
+            <Skeleton className="h-4 w-96" />
+          </div>
+          <Skeleton className="h-10 w-32" />
+        </div>
+        <div className="space-y-6">
+          {[...Array(4)].map((_, i) => (
             <Card key={i}>
               <CardHeader>
-                <div className="h-6 bg-gray-200 animate-pulse rounded w-1/3" />
-                <div className="h-4 bg-gray-200 animate-pulse rounded w-2/3" />
+                <div className="flex items-center gap-2">
+                  <Skeleton className="h-5 w-5" />
+                  <Skeleton className="h-6 w-40" />
+                </div>
+                <Skeleton className="h-4 w-80" />
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
                   {[...Array(3)].map((_, j) => (
-                    <div key={j} className="h-10 bg-gray-200 animate-pulse rounded" />
+                    <div key={j} className="grid grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <Skeleton className="h-4 w-24" />
+                        <Skeleton className="h-10 w-full" />
+                      </div>
+                      <div className="space-y-2">
+                        <Skeleton className="h-4 w-24" />
+                        <Skeleton className="h-10 w-full" />
+                      </div>
+                    </div>
                   ))}
                 </div>
               </CardContent>
@@ -128,11 +163,50 @@ export default function SettingsPage() {
             Configure system-wide settings and preferences
           </p>
         </div>
-        <Button onClick={handleSave} disabled={saving}>
-          <Save className="h-4 w-4 mr-2" />
-          {saving ? "Saving..." : "Save Changes"}
-        </Button>
+        <div className="flex items-center gap-2">
+          <Button
+            onClick={() => fetchSettings()}
+            disabled={loading || saving}
+            variant="outline"
+            size="sm"
+          >
+            {loading ? (
+              <Loader2 className="h-4 w-4 animate-spin" />
+            ) : (
+              <RefreshCw className="h-4 w-4" />
+            )}
+            Refresh
+          </Button>
+          <Button onClick={handleSave} disabled={saving || loading}>
+            {saving ? (
+              <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+            ) : (
+              <Save className="h-4 w-4 mr-2" />
+            )}
+            {saving ? "Saving..." : "Save Changes"}
+          </Button>
+        </div>
       </div>
+
+      {error && (
+        <Alert variant="destructive">
+          <AlertTriangle className="h-4 w-4" />
+          <AlertTitle>Error</AlertTitle>
+          <AlertDescription className="flex items-center justify-between">
+            {error}
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => {
+                setError(null);
+                fetchSettings();
+              }}
+            >
+              Try again
+            </Button>
+          </AlertDescription>
+        </Alert>
+      )}
 
       <div className="grid gap-6">
         {/* General Settings */}
@@ -155,6 +229,7 @@ export default function SettingsPage() {
                   value={settings.siteName}
                   onChange={(e) => updateSetting('siteName', e.target.value)}
                   placeholder="Enter site name"
+                  disabled={loading || saving}
                 />
               </div>
               <div className="space-y-2">
@@ -165,6 +240,7 @@ export default function SettingsPage() {
                   value={settings.adminEmail}
                   onChange={(e) => updateSetting('adminEmail', e.target.value)}
                   placeholder="admin@example.com"
+                  disabled={loading || saving}
                 />
               </div>
             </div>
@@ -176,6 +252,7 @@ export default function SettingsPage() {
                 onChange={(e) => updateSetting('siteDescription', e.target.value)}
                 placeholder="Enter site description"
                 rows={3}
+                disabled={loading || saving}
               />
             </div>
           </CardContent>
@@ -203,6 +280,7 @@ export default function SettingsPage() {
                   onChange={(e) => updateSetting('maxFileSize', parseInt(e.target.value))}
                   min="1"
                   max="100"
+                  disabled={loading || saving}
                 />
               </div>
               <div className="space-y-2">
@@ -212,6 +290,7 @@ export default function SettingsPage() {
                   value={settings.allowedFileTypes.join(', ')}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateSetting('allowedFileTypes', e.target.value.split(', ').filter(Boolean))}
                   placeholder="image/jpeg, image/png, application/pdf"
+                  disabled={loading || saving}
                 />
               </div>
             </div>
@@ -240,6 +319,7 @@ export default function SettingsPage() {
               <Switch
                 checked={settings.enableRegistration}
                 onCheckedChange={(checked: boolean) => updateSetting('enableRegistration', checked)}
+                disabled={loading || saving}
               />
             </div>
             <Separator />
@@ -253,6 +333,7 @@ export default function SettingsPage() {
               <Switch
                 checked={settings.enableEmailVerification}
                 onCheckedChange={(checked: boolean) => updateSetting('enableEmailVerification', checked)}
+                disabled={loading || saving}
               />
             </div>
             <Separator />
@@ -266,6 +347,7 @@ export default function SettingsPage() {
               <Switch
                 checked={settings.maintenanceMode}
                 onCheckedChange={(checked: boolean) => updateSetting('maintenanceMode', checked)}
+                disabled={loading || saving}
               />
             </div>
           </CardContent>
@@ -293,6 +375,7 @@ export default function SettingsPage() {
                     value={settings.cloudinaryCloudName}
                     onChange={(e) => updateSetting('cloudinaryCloudName', e.target.value)}
                     placeholder="your-cloud-name"
+                    disabled={loading || saving}
                   />
                 </div>
                 <div className="space-y-2">
@@ -302,6 +385,7 @@ export default function SettingsPage() {
                     value={settings.cloudinaryApiKey}
                     onChange={(e) => updateSetting('cloudinaryApiKey', e.target.value)}
                     placeholder="your-api-key"
+                    disabled={loading || saving}
                   />
                 </div>
               </div>
@@ -320,6 +404,7 @@ export default function SettingsPage() {
                     value={settings.smtpHost}
                     onChange={(e) => updateSetting('smtpHost', e.target.value)}
                     placeholder="smtp.gmail.com"
+                    disabled={loading || saving}
                   />
                 </div>
                 <div className="space-y-2">
@@ -330,6 +415,7 @@ export default function SettingsPage() {
                     value={settings.smtpPort}
                     onChange={(e) => updateSetting('smtpPort', parseInt(e.target.value))}
                     placeholder="587"
+                    disabled={loading || saving}
                   />
                 </div>
               </div>
@@ -340,6 +426,7 @@ export default function SettingsPage() {
                   value={settings.smtpUser}
                   onChange={(e) => updateSetting('smtpUser', e.target.value)}
                   placeholder="your-email@gmail.com"
+                  disabled={loading || saving}
                 />
               </div>
             </div>

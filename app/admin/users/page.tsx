@@ -6,7 +6,9 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Search, UserPlus, Edit, Trash2, Shield, User } from "lucide-react"
+import { Alert, AlertDescription } from "@/components/ui/alert"
+import { Skeleton } from "@/components/ui/skeleton"
+import { Search, UserPlus, Edit, Trash2, Shield, User, AlertCircle, RefreshCw } from "lucide-react"
 import { toast } from "sonner"
 
 type User = {
@@ -31,8 +33,11 @@ type PaginationInfo = {
 export default function UsersPage() {
   const [users, setUsers] = useState<User[]>([])
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
   const [searchTerm, setSearchTerm] = useState("")
   const [roleFilter, setRoleFilter] = useState("all")
+  const [updatingRole, setUpdatingRole] = useState<string | null>(null)
+  const [deletingUser, setDeletingUser] = useState<string | null>(null)
   const [pagination, setPagination] = useState<PaginationInfo>({
     page: 1,
     limit: 20,
@@ -43,6 +48,7 @@ export default function UsersPage() {
   const fetchUsers = async (page = 1, search = "", role = "all") => {
     try {
       setLoading(true)
+      setError(null)
       const params = new URLSearchParams({
         page: page.toString(),
         limit: pagination.limit.toString()
@@ -62,11 +68,15 @@ export default function UsersPage() {
         setUsers(data.users)
         setPagination(data.pagination)
       } else {
-        toast.error("Failed to fetch users")
+        const errorData = await response.json().catch(() => ({ message: 'Failed to fetch users' }))
+        setError(errorData.message || 'Failed to fetch users')
+        toast.error(errorData.message || "Failed to fetch users")
       }
     } catch (error) {
       console.error("Fetch users error:", error)
-      toast.error("Failed to fetch users")
+      const errorMessage = error instanceof Error ? error.message : 'Network error occurred'
+      setError(errorMessage)
+      toast.error(errorMessage)
     } finally {
       setLoading(false)
     }
@@ -83,6 +93,7 @@ export default function UsersPage() {
 
   const handleRoleChange = async (userId: string, newRole: string) => {
     try {
+      setUpdatingRole(userId)
       const response = await fetch(`/api/admin/users/${userId}`, {
         method: 'PATCH',
         headers: {
@@ -95,11 +106,15 @@ export default function UsersPage() {
         toast.success("User role updated successfully")
         fetchUsers(pagination.page, searchTerm, roleFilter)
       } else {
-        toast.error("Failed to update user role")
+        const errorData = await response.json().catch(() => ({ message: 'Failed to update user role' }))
+        toast.error(errorData.message || "Failed to update user role")
       }
     } catch (error) {
       console.error("Update role error:", error)
-      toast.error("Failed to update user role")
+      const errorMessage = error instanceof Error ? error.message : 'Network error occurred'
+      toast.error(errorMessage)
+    } finally {
+      setUpdatingRole(null)
     }
   }
 
@@ -109,6 +124,7 @@ export default function UsersPage() {
     }
 
     try {
+      setDeletingUser(userId)
       const response = await fetch(`/api/admin/users/${userId}`, {
         method: 'DELETE'
       })
@@ -117,11 +133,15 @@ export default function UsersPage() {
         toast.success("User deleted successfully")
         fetchUsers(pagination.page, searchTerm, roleFilter)
       } else {
-        toast.error("Failed to delete user")
+        const errorData = await response.json().catch(() => ({ message: 'Failed to delete user' }))
+        toast.error(errorData.message || "Failed to delete user")
       }
     } catch (error) {
       console.error("Delete user error:", error)
-      toast.error("Failed to delete user")
+      const errorMessage = error instanceof Error ? error.message : 'Network error occurred'
+      toast.error(errorMessage)
+    } finally {
+      setDeletingUser(null)
     }
   }
 
@@ -172,10 +192,23 @@ export default function UsersPage() {
 
       <Card>
         <CardHeader>
-          <CardTitle>All Users ({pagination.total})</CardTitle>
-          <CardDescription>
-            Browse and manage all user accounts
-          </CardDescription>
+          <div className="flex items-center justify-between">
+            <div>
+              <CardTitle>All Users ({pagination.total})</CardTitle>
+              <CardDescription>
+                Browse and manage all user accounts
+              </CardDescription>
+            </div>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => fetchUsers(pagination.page, searchTerm, roleFilter)}
+              disabled={loading}
+            >
+              <RefreshCw className={`h-4 w-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
+              Refresh
+            </Button>
+          </div>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSearch} className="mb-6">
@@ -188,9 +221,10 @@ export default function UsersPage() {
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="pl-10"
+                  disabled={loading}
                 />
               </div>
-              <Select value={roleFilter} onValueChange={setRoleFilter}>
+              <Select value={roleFilter} onValueChange={setRoleFilter} disabled={loading}>
                 <SelectTrigger className="w-40">
                   <SelectValue placeholder="Filter by role" />
                 </SelectTrigger>
@@ -201,14 +235,51 @@ export default function UsersPage() {
                   <SelectItem value="ADMIN">Admin</SelectItem>
                 </SelectContent>
               </Select>
-              <Button type="submit">Search</Button>
+              <Button type="submit" disabled={loading}>
+                {loading ? (
+                  <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
+                ) : (
+                  <Search className="h-4 w-4 mr-2" />
+                )}
+                Search
+              </Button>
             </div>
           </form>
 
+          {error && (
+            <Alert className="mb-6 border-red-200 bg-red-50">
+              <AlertCircle className="h-4 w-4 text-red-600" />
+              <AlertDescription className="text-red-800">
+                {error}
+                <Button
+                  variant="link"
+                  size="sm"
+                  onClick={() => fetchUsers(pagination.page, searchTerm, roleFilter)}
+                  className="ml-2 h-auto p-0 text-red-600 underline"
+                >
+                  Try again
+                </Button>
+              </AlertDescription>
+            </Alert>
+          )}
+
           {loading ? (
-            <div className="space-y-3">
+            <div className="space-y-4">
               {[...Array(5)].map((_, i) => (
-                <div key={i} className="h-20 bg-gray-200 animate-pulse rounded-lg" />
+                <div key={i} className="flex items-center justify-between p-4 border rounded-lg">
+                  <div className="flex items-center space-x-4">
+                    <Skeleton className="h-10 w-10 rounded-full" />
+                    <div className="space-y-2">
+                      <Skeleton className="h-4 w-48" />
+                      <Skeleton className="h-3 w-64" />
+                    </div>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Skeleton className="h-8 w-24" />
+                    <Skeleton className="h-8 w-16" />
+                    <Skeleton className="h-8 w-20" />
+                  </div>
+                </div>
               ))}
             </div>
           ) : users.length === 0 ? (
@@ -255,6 +326,7 @@ export default function UsersPage() {
                     <Select
                       value={user.role}
                       onValueChange={(value: string) => handleRoleChange(user.id, value)}
+                      disabled={updatingRole === user.id}
                     >
                       <SelectTrigger className="w-32">
                         <SelectValue />
@@ -268,6 +340,7 @@ export default function UsersPage() {
                     <Button
                       variant="outline"
                       size="sm"
+                      disabled={updatingRole === user.id || deletingUser === user.id}
                     >
                       <Edit className="h-4 w-4 mr-1" />
                       Edit
@@ -276,9 +349,14 @@ export default function UsersPage() {
                       variant="outline"
                       size="sm"
                       onClick={() => handleDeleteUser(user.id)}
-                      className="text-red-600 hover:text-red-700"
+                      disabled={updatingRole === user.id || deletingUser === user.id}
+                      className="text-red-600 hover:text-red-700 disabled:text-gray-400"
                     >
-                      <Trash2 className="h-4 w-4 mr-1" />
+                      {deletingUser === user.id ? (
+                        <RefreshCw className="h-4 w-4 mr-1 animate-spin" />
+                      ) : (
+                        <Trash2 className="h-4 w-4 mr-1" />
+                      )}
                       Delete
                     </Button>
                   </div>

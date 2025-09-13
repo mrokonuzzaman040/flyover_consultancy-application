@@ -4,8 +4,11 @@ import { useState, useEffect } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { Alert, AlertDescription } from "@/components/ui/alert"
+import { Skeleton } from "@/components/ui/skeleton"
 import FileUpload from "@/components/admin/FileUpload"
-import { Search, Download, Trash2, Eye, FileIcon, ImageIcon } from "lucide-react"
+import { Search, Download, Trash2, Eye, FileIcon, ImageIcon, AlertCircle, RefreshCw, Upload, Loader2, AlertTriangle } from "lucide-react"
+import { AlertTitle } from "@/components/ui/alert"
 import { toast } from "sonner"
 
 type Upload = {
@@ -32,7 +35,9 @@ type PaginationInfo = {
 export default function UploadsPage() {
   const [uploads, setUploads] = useState<Upload[]>([])
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
   const [searchTerm, setSearchTerm] = useState("")
+  const [deletingFile, setDeletingFile] = useState<string | null>(null)
   const [pagination, setPagination] = useState<PaginationInfo>({
     page: 1,
     limit: 20,
@@ -44,6 +49,7 @@ export default function UploadsPage() {
   const fetchUploads = async (page = 1, search = "") => {
     try {
       setLoading(true)
+      setError(null)
       const params = new URLSearchParams({
         page: page.toString(),
         limit: pagination.limit.toString()
@@ -59,11 +65,15 @@ export default function UploadsPage() {
         setUploads(data.uploads)
         setPagination(data.pagination)
       } else {
-        toast.error("Failed to fetch uploads")
+        const errorData = await response.json().catch(() => ({ message: 'Failed to fetch uploads' }))
+        setError(errorData.message || 'Failed to fetch uploads')
+        toast.error(errorData.message || "Failed to fetch uploads")
       }
     } catch (error) {
       console.error("Fetch uploads error:", error)
-      toast.error("Failed to fetch uploads")
+      const errorMessage = error instanceof Error ? error.message : 'Network error occurred'
+      setError(errorMessage)
+      toast.error(errorMessage)
     } finally {
       setLoading(false)
     }
@@ -83,6 +93,7 @@ export default function UploadsPage() {
       return
     }
 
+    setDeletingFile(id)
     try {
       const response = await fetch(`/api/admin/upload/${id}`, {
         method: 'DELETE'
@@ -92,11 +103,18 @@ export default function UploadsPage() {
         toast.success("File deleted successfully")
         fetchUploads(pagination.page, searchTerm)
       } else {
-        toast.error("Failed to delete file")
+        const errorData = await response.json().catch(() => ({}))
+        const errorMessage = errorData.error || 'Failed to delete file'
+        setError(errorMessage)
+        toast.error(errorMessage)
       }
     } catch (error) {
       console.error("Delete error:", error)
-      toast.error("Failed to delete file")
+      const errorMessage = error instanceof Error ? error.message : 'Failed to delete file'
+      setError(errorMessage)
+      toast.error(errorMessage)
+    } finally {
+      setDeletingFile(null)
     }
   }
 
@@ -154,6 +172,25 @@ export default function UploadsPage() {
             </CardDescription>
           </CardHeader>
           <CardContent>
+            {error && (
+              <Alert variant="destructive" className="mb-4">
+                <AlertTriangle className="h-4 w-4" />
+                <AlertTitle>Error</AlertTitle>
+                <AlertDescription className="flex items-center justify-between">
+                  {error}
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => {
+                      setError(null);
+                      fetchUploads(pagination.page, searchTerm);
+                    }}
+                  >
+                    Try again
+                  </Button>
+                </AlertDescription>
+              </Alert>
+            )}
             <FileUpload onUpload={handleUploadComplete} />
           </CardContent>
         </Card>
@@ -161,10 +198,27 @@ export default function UploadsPage() {
 
       <Card>
         <CardHeader>
-          <CardTitle>All Uploads ({pagination.total})</CardTitle>
-          <CardDescription>
-            Browse and manage all uploaded files
-          </CardDescription>
+          <div className="flex items-center justify-between">
+            <div>
+              <CardTitle>All Uploads ({pagination.total})</CardTitle>
+              <CardDescription>
+                Browse and manage all uploaded files
+              </CardDescription>
+            </div>
+            <Button
+              onClick={() => fetchUploads(1, searchTerm)}
+              disabled={loading}
+              variant="outline"
+              size="sm"
+            >
+              {loading ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <RefreshCw className="h-4 w-4" />
+              )}
+              Refresh
+            </Button>
+          </div>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSearch} className="mb-6">
@@ -177,6 +231,7 @@ export default function UploadsPage() {
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="pl-10"
+                  disabled={loading}
                 />
               </div>
               <Button type="submit">Search</Button>
@@ -184,9 +239,22 @@ export default function UploadsPage() {
           </form>
 
           {loading ? (
-            <div className="space-y-3">
-              {[...Array(5)].map((_, i) => (
-                <div key={i} className="h-16 bg-gray-200 animate-pulse rounded-lg" />
+            <div className="space-y-4">
+              {[...Array(3)].map((_, i) => (
+                <div key={i} className="flex items-center justify-between p-4 border rounded-lg">
+                  <div className="flex items-center space-x-3">
+                    <Skeleton className="h-10 w-10 rounded" />
+                    <div className="space-y-2">
+                      <Skeleton className="h-4 w-32" />
+                      <Skeleton className="h-3 w-24" />
+                    </div>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Skeleton className="h-8 w-16" />
+                    <Skeleton className="h-8 w-16" />
+                    <Skeleton className="h-8 w-16" />
+                  </div>
+                </div>
               ))}
             </div>
           ) : uploads.length === 0 ? (
@@ -223,6 +291,7 @@ export default function UploadsPage() {
                       variant="outline"
                       size="sm"
                       onClick={() => window.open(upload.url, '_blank')}
+                      disabled={deletingFile === upload.id}
                     >
                       <Eye className="h-4 w-4 mr-1" />
                       View
@@ -236,6 +305,7 @@ export default function UploadsPage() {
                         link.download = upload.filename
                         link.click()
                       }}
+                      disabled={deletingFile === upload.id}
                     >
                       <Download className="h-4 w-4 mr-1" />
                       Download
@@ -245,8 +315,13 @@ export default function UploadsPage() {
                       size="sm"
                       onClick={() => handleDelete(upload.id)}
                       className="text-red-600 hover:text-red-700"
+                      disabled={deletingFile === upload.id}
                     >
-                      <Trash2 className="h-4 w-4 mr-1" />
+                      {deletingFile === upload.id ? (
+                        <Loader2 className="h-4 w-4 mr-1 animate-spin" />
+                      ) : (
+                        <Trash2 className="h-4 w-4 mr-1" />
+                      )}
                       Delete
                     </Button>
                   </div>
