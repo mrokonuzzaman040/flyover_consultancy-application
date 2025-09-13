@@ -8,8 +8,9 @@ import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Trash2, Edit, Eye, Plus, Search, Filter, Quote, User, Calendar } from "lucide-react"
+import { Trash2, Edit, Eye, Plus, Search, Filter, Quote } from "lucide-react"
 import { toast } from "sonner"
+import Image from "next/image"
 
 interface Testimonial {
   id: string
@@ -255,10 +256,12 @@ export default function AdminTestimonialsPage() {
               <div className="flex justify-between items-start">
                 <div className="flex items-center space-x-3">
                   {testimonial.avatarUrl ? (
-                    <img 
+                    <Image 
                       src={testimonial.avatarUrl} 
                       alt={testimonial.author}
                       className="w-10 h-10 rounded-full object-cover"
+                      height={120}
+                      width={120}
                     />
                   ) : (
                     <div className="w-10 h-10 bg-blue-600 text-white rounded-full flex items-center justify-center text-sm font-medium">
@@ -475,10 +478,12 @@ export default function AdminTestimonialsPage() {
             <div className="p-6 space-y-6">
               <div className="flex items-center space-x-4">
                 {selectedTestimonial.avatarUrl ? (
-                  <img 
+                  <Image 
                     src={selectedTestimonial.avatarUrl} 
                     alt={selectedTestimonial.author}
                     className="w-16 h-16 rounded-full object-cover"
+                    height={16}
+                    width={16}
                   />
                 ) : (
                   <div className="w-16 h-16 bg-blue-600 text-white rounded-full flex items-center justify-center text-lg font-medium">
