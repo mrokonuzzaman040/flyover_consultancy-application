@@ -46,6 +46,7 @@ export default function AdminDestinationsPage() {
         toast.error('Failed to fetch destinations')
       }
     } catch (error) {
+      console.log(error)
       toast.error('Error fetching destinations')
     } finally {
       setLoading(false)

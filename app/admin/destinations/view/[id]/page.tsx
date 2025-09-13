@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useParams, useRouter } from 'next/navigation'
+import { useParams } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Globe, ArrowLeft, Edit } from 'lucide-react'
@@ -34,7 +34,6 @@ interface Destination {
 
 export default function ViewDestination() {
   const params = useParams()
-  const router = useRouter()
   const [destination, setDestination] = useState<Destination | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')

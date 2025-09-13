@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { CalendarIcon, ClockIcon, UsersIcon, MapPinIcon, VideoIcon, ArrowRightIcon, StarIcon, TrendingUpIcon, GlobeIcon } from "lucide-react";
+import { CalendarIcon, ClockIcon, UsersIcon, VideoIcon, ArrowRightIcon, StarIcon, TrendingUpIcon, GlobeIcon } from "lucide-react";
 import Reveal from "@/components/ui/reveal";
 import PageHeader from "@/components/page-header";
 import CtaButton from "@/components/cta-button";
@@ -208,7 +208,6 @@ function EventCard({ event, index }: { event: typeof upcomingEvents[0]; index: n
 
 export default function EventsPage() {
   const featuredEvents = upcomingEvents.filter(event => event.featured);
-  const regularEvents = upcomingEvents.filter(event => !event.featured);
 
   return (
     <div>
