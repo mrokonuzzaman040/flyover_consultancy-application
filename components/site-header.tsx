@@ -10,8 +10,8 @@ const nav = [
     href: "/about",
     dropdown: [
       { href: "/about", label: "Our Story" },
-      { href: "/about#team", label: "Our Team" },
-      { href: "/about#mission", label: "Mission & Vision" },
+      { href: "/team", label: "Our Team" },
+      { href: "/mission-vision", label: "Mission & Vision" },
       { href: "/testimonials", label: "Testimonials" },
     ],
   },
