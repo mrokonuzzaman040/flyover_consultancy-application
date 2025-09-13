@@ -269,7 +269,7 @@ export default function LeadForm({ purpose = "consultation" }: { purpose?: "cons
   const [isServiceDropdownOpen, setIsServiceDropdownOpen] = useState(false);
   const [isCountryCodeDropdownOpen, setIsCountryCodeDropdownOpen] = useState(false);
   const [selectedCountryCode, setSelectedCountryCode] = useState(COUNTRY_CODES[0]);
-  const [countrySearchTerm, setCountrySearchTerm] = useState("");
+  const [countryCodeSearchTerm, setCountryCodeSearchTerm] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [honeypot, setHoneypot] = useState("");
   const [submitAttempts, setSubmitAttempts] = useState(0);
@@ -515,18 +515,18 @@ export default function LeadForm({ purpose = "consultation" }: { purpose?: "cons
                {isCountryCodeDropdownOpen && (
                  <div className="absolute top-full left-0 mt-1 w-64 bg-white border border-gray-200 rounded-xl shadow-lg z-50 max-h-80 overflow-y-auto">
                    <div className="sticky top-0 bg-white border-b border-gray-200 p-2">
-                     <input
-                   type="text"
-                   placeholder="Search countries..."
-                   value={countryInterestSearchTerm}
-                   onChange={(e) => setCountryInterestSearchTerm(e.target.value)}
-                   className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20"
-                   onClick={(e) => e.stopPropagation()}
-                 />
-                   </div>
+                   <input
+                 type="text"
+                 placeholder="Search country codes..."
+                 value={countryCodeSearchTerm}
+                 onChange={(e) => setCountryCodeSearchTerm(e.target.value)}
+                 className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20"
+                 onClick={(e) => e.stopPropagation()}
+               />
+                 </div>
                    {COUNTRY_CODES.filter(country => 
-                     country.name.toLowerCase().includes(countrySearchTerm.toLowerCase()) ||
-                     country.code.toLowerCase().includes(countrySearchTerm.toLowerCase())
+                     country.name.toLowerCase().includes(countryCodeSearchTerm.toLowerCase()) ||
+                     country.code.toLowerCase().includes(countryCodeSearchTerm.toLowerCase())
                    ).map((country, index) => (
                      <button
                        key={`${country.code}-${country.country}`}
@@ -534,7 +534,7 @@ export default function LeadForm({ purpose = "consultation" }: { purpose?: "cons
                        onClick={() => {
                          setSelectedCountryCode(country);
                          setIsCountryCodeDropdownOpen(false);
-                         setCountrySearchTerm("");
+                         setCountryCodeSearchTerm("");
                        }}
                        className="w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-gray-50 transition-colors border-b border-gray-100 last:border-b-0"
                      >
@@ -601,15 +601,15 @@ export default function LeadForm({ purpose = "consultation" }: { purpose?: "cons
                 <input
                   type="text"
                   placeholder="Search countries..."
-                  value={countrySearchTerm}
-                  onChange={(e) => setCountrySearchTerm(e.target.value)}
+                  value={countryInterestSearchTerm}
+                  onChange={(e) => setCountryInterestSearchTerm(e.target.value)}
                   className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20"
                   onClick={(e) => e.stopPropagation()}
                 />
               </div>
-              <div className="max-h-48 overflow-y-auto p-2">
+              <div className="max-h-48 overflow-y-auto p-2 grid grid-cols-2 gap-1">
                 {filteredCountries.map((country) => (
-                  <label key={country} className="flex items-center gap-2 p-2 hover:bg-gray-50 rounded cursor-pointer">
+                  <label key={country} className="flex items-start gap-2 p-2 hover:bg-gray-50 rounded cursor-pointer min-h-[2.5rem]">
                     <input
                       type="checkbox"
                       name="countryInterest"
@@ -623,9 +623,9 @@ export default function LeadForm({ purpose = "consultation" }: { purpose?: "cons
                         validateField('countryInterest', newCountries);
                         setCountryInterestSearchTerm('');
                       }}
-                      className="rounded border-gray-300 text-brand focus:ring-brand"
+                      className="rounded border-gray-300 text-brand focus:ring-brand mt-0.5 flex-shrink-0"
                     />
-                    <span className="text-sm text-gray-700">{country}</span>
+                    <span className="text-xs text-gray-700 leading-tight break-words flex-1">{country}</span>
                   </label>
                 ))}
               </div>

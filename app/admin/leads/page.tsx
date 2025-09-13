@@ -465,129 +465,137 @@ export default function AdminLeadsPage() {
         </Card>
       </div>
 
-      {/* Leads List */}
-      <div className="space-y-4">
-        {filteredLeads.map((lead) => (
-          <Card key={lead.id} className="bg-white">
-            <CardHeader className="pb-3">
-              <div className="flex items-center justify-between">
-                <div>
-                  <CardTitle className="text-lg">{lead.name}</CardTitle>
-                  <CardDescription className="flex items-center gap-2">
-                    <Mail className="w-4 h-4 text-gray-400" />
-                    {lead.email}
-                  </CardDescription>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => openViewDialog(lead)}
-                    disabled={loading || saving || deletingLead === lead.id}
-                  >
-                    <Eye className="w-4 h-4" />
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => openEditDialog(lead)}
-                    disabled={loading || saving || deletingLead === lead.id}
-                  >
-                    <Edit className="w-4 h-4" />
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => openDeleteDialog(lead)}
-                    className="text-red-600 hover:text-red-700"
-                    disabled={loading || saving || deletingLead === lead.id}
-                  >
-                    {deletingLead === lead.id ? (
-                      <Loader2 className="w-4 h-4 animate-spin" />
-                    ) : (
-                      <Trash2 className="w-4 h-4" />
-                    )}
-                  </Button>
-                </div>
+      {/* Leads Table */}
+      <Card className="bg-white">
+        <CardContent className="p-0">
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead className="bg-gray-50 border-b">
+                <tr>
+                  <th className="text-left p-4 font-medium text-gray-600">Name</th>
+                  <th className="text-left p-4 font-medium text-gray-600">Contact</th>
+                  <th className="text-left p-4 font-medium text-gray-600">Countries</th>
+                  <th className="text-left p-4 font-medium text-gray-600">Services</th>
+                  <th className="text-left p-4 font-medium text-gray-600">Status</th>
+                  <th className="text-left p-4 font-medium text-gray-600">Created</th>
+                  <th className="text-left p-4 font-medium text-gray-600">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filteredLeads.map((lead) => (
+                  <tr key={lead.id} className="border-b hover:bg-gray-50">
+                    <td className="p-4">
+                      <div>
+                        <div className="font-medium text-gray-900">{lead.name}</div>
+                        {lead.message && (
+                          <div className="text-xs text-gray-500 mt-1 max-w-xs truncate" title={lead.message}>
+                            {lead.message}
+                          </div>
+                        )}
+                      </div>
+                    </td>
+                    <td className="p-4">
+                      <div className="space-y-1">
+                        <div className="flex items-center gap-2 text-sm">
+                          <Mail className="w-3 h-3 text-gray-400" />
+                          <span className="text-gray-900">{lead.email}</span>
+                        </div>
+                        {lead.phone && (
+                          <div className="flex items-center gap-2 text-sm">
+                            <Phone className="w-3 h-3 text-gray-400" />
+                            <span className="text-gray-600">{lead.phone}</span>
+                          </div>
+                        )}
+                      </div>
+                    </td>
+                    <td className="p-4">
+                      <div className="flex flex-wrap gap-1 max-w-xs">
+                        {lead.countryInterest.slice(0, 2).map((country) => (
+                          <Badge key={country} variant="outline" className="text-xs">
+                            {country}
+                          </Badge>
+                        ))}
+                        {lead.countryInterest.length > 2 && (
+                          <Badge variant="outline" className="text-xs">
+                            +{lead.countryInterest.length - 2}
+                          </Badge>
+                        )}
+                      </div>
+                    </td>
+                    <td className="p-4">
+                      <div className="flex flex-wrap gap-1 max-w-xs">
+                        {lead.serviceInterest.slice(0, 2).map((service) => (
+                          <Badge key={service} variant="secondary" className="text-xs">
+                            {service}
+                          </Badge>
+                        ))}
+                        {lead.serviceInterest.length > 2 && (
+                          <Badge variant="secondary" className="text-xs">
+                            +{lead.serviceInterest.length - 2}
+                          </Badge>
+                        )}
+                      </div>
+                    </td>
+                    <td className="p-4">
+                      {getStatusBadge(lead.status)}
+                    </td>
+                    <td className="p-4">
+                      <div className="text-sm text-gray-600">
+                        {new Date(lead.createdAt).toLocaleDateString()}
+                      </div>
+                      {lead.source && (
+                        <Badge variant="outline" className="text-xs mt-1">
+                          {lead.source}
+                        </Badge>
+                      )}
+                    </td>
+                    <td className="p-4">
+                      <div className="flex items-center gap-1">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => openViewDialog(lead)}
+                          disabled={loading || saving || deletingLead === lead.id}
+                          className="h-8 w-8 p-0"
+                        >
+                          <Eye className="w-4 h-4" />
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => openEditDialog(lead)}
+                          disabled={loading || saving || deletingLead === lead.id}
+                          className="h-8 w-8 p-0"
+                        >
+                          <Edit className="w-4 h-4" />
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => openDeleteDialog(lead)}
+                          className="text-red-600 hover:text-red-700 h-8 w-8 p-0"
+                          disabled={loading || saving || deletingLead === lead.id}
+                        >
+                          {deletingLead === lead.id ? (
+                            <Loader2 className="w-4 h-4 animate-spin" />
+                          ) : (
+                            <Trash2 className="w-4 h-4" />
+                          )}
+                        </Button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            {filteredLeads.length === 0 && (
+              <div className="text-center py-8 text-gray-500">
+                No leads found matching your criteria.
               </div>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
-                <div>
-                  <p className="font-medium text-gray-500 mb-1">Phone</p>
-                  {lead.phone ? (
-                    <div className="flex items-center gap-2">
-                      <Phone className="w-4 h-4 text-gray-400" />
-                      <span>{lead.phone}</span>
-                    </div>
-                  ) : (
-                    <span className="text-gray-400">-</span>
-                  )}
-                </div>
-                <div>
-                  <p className="font-medium text-gray-500 mb-1">Countries</p>
-                  <div className="flex flex-wrap gap-1">
-                    {lead.countryInterest.slice(0, 2).map((country) => (
-                      <Badge key={country} variant="outline" className="text-xs">
-                        {country}
-                      </Badge>
-                    ))}
-                    {lead.countryInterest.length > 2 && (
-                      <Badge variant="outline" className="text-xs">
-                        +{lead.countryInterest.length - 2}
-                      </Badge>
-                    )}
-                  </div>
-                </div>
-                <div>
-                  <p className="font-medium text-gray-500 mb-1">Status</p>
-                  {getStatusBadge(lead.status)}
-                </div>
-                <div>
-                  <p className="font-medium text-gray-500 mb-1">Source</p>
-                  {lead.source ? (
-                    <Badge variant="outline">{lead.source}</Badge>
-                  ) : (
-                    <span className="text-gray-400">-</span>
-                  )}
-                </div>
-              </div>
-              <div className="mt-4 flex items-center justify-between text-sm text-gray-500">
-                <div className="flex items-center gap-2">
-                  <Calendar className="w-4 h-4" />
-                  <span>Created: {new Date(lead.createdAt).toLocaleDateString()}</span>
-                </div>
-                {lead.serviceInterest.length > 0 && (
-                  <div className="flex flex-wrap gap-1">
-                    {lead.serviceInterest.slice(0, 2).map((service) => (
-                      <Badge key={service} variant="secondary" className="text-xs">
-                        {service}
-                      </Badge>
-                    ))}
-                    {lead.serviceInterest.length > 2 && (
-                      <Badge variant="secondary" className="text-xs">
-                        +{lead.serviceInterest.length - 2}
-                      </Badge>
-                    )}
-                  </div>
-                )}
-              </div>
-              {lead.message && (
-                <div className="mt-3 p-3 bg-gray-50 rounded-lg">
-                  <p className="font-medium text-gray-500 text-sm mb-1">Message</p>
-                  <p className="text-sm text-gray-700">{lead.message}</p>
-                </div>
-              )}
-            </CardContent>
-          </Card>
-        ))}
-
-        {filteredLeads.length === 0 && (
-          <div className="text-center py-8 text-gray-500 bg-white rounded-lg border">
-            No leads found matching your criteria.
+            )}
           </div>
-        )}
-      </div>
+        </CardContent>
+      </Card>
 
       {/* Create/Edit Modal */}
       {(isCreateDialogOpen || isEditDialogOpen) && (
