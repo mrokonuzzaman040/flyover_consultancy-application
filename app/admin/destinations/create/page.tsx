@@ -268,9 +268,10 @@ export default function CreateDestinationPage() {
                 id="overviewMD"
                 value={formData.overviewMD}
                 onChange={(e) => setFormData({...formData, overviewMD: e.target.value})}
-                placeholder="Overview content in markdown..."
-                rows={4}
+                placeholder="Overview content in markdown...&#10;&#10;Example:&#10;**Bold text**&#10;*Italic text*&#10;- List item 1&#10;- List item 2"
+                rows={6}
               />
+              <p className="text-xs text-gray-500 mt-1">Supports Markdown formatting: **bold**, *italic*, lists, etc. Use two spaces at end of line for line breaks.</p>
             </div>
             <div>
               <Label htmlFor="costsMD">Costs Information (Markdown)</Label>
@@ -278,9 +279,10 @@ export default function CreateDestinationPage() {
                 id="costsMD"
                 value={formData.costsMD}
                 onChange={(e) => setFormData({...formData, costsMD: e.target.value})}
-                placeholder="Cost information in markdown..."
-                rows={4}
+                placeholder="Cost information in markdown...&#10;&#10;Example:&#10;**Tuition Fees:** $20,000 - $45,000 AUD per year  &#10;**Living Costs:** $20,000 - $27,000 AUD per year  &#10;**Accommodation:** $15,000 - $25,000 AUD per year"
+                rows={6}
               />
+              <p className="text-xs text-gray-500 mt-1">Supports Markdown formatting: **bold**, *italic*, lists, etc. Use two spaces at end of line for line breaks.</p>
             </div>
           </div>
 
@@ -291,9 +293,10 @@ export default function CreateDestinationPage() {
                 id="intakesMD"
                 value={formData.intakesMD}
                 onChange={(e) => setFormData({...formData, intakesMD: e.target.value})}
-                placeholder="Intake information in markdown..."
-                rows={4}
+                placeholder="Intake information in markdown...&#10;&#10;Example:&#10;**Fall Intake:** August - September  &#10;*Application Deadline:* December - February&#10;&#10;**Spring Intake:** January  &#10;*Application Deadline:* September - October"
+                rows={6}
               />
+              <p className="text-xs text-gray-500 mt-1">Supports Markdown formatting: **bold**, *italic*, lists, etc. Use two spaces at end of line for line breaks.</p>
             </div>
             <div>
               <Label htmlFor="visaMD">Visa Information (Markdown)</Label>
@@ -301,9 +304,10 @@ export default function CreateDestinationPage() {
                 id="visaMD"
                 value={formData.visaMD}
                 onChange={(e) => setFormData({...formData, visaMD: e.target.value})}
-                placeholder="Visa information in markdown..."
-                rows={4}
+                placeholder="Visa information in markdown...&#10;&#10;Example:&#10;**Visa Type:** Student Visa  &#10;**Processing Time:** 4-6 weeks  &#10;**Cost:** $650 AUD&#10;&#10;**Requirements:**&#10;- University acceptance letter&#10;- Financial documentation"
+                rows={6}
               />
+              <p className="text-xs text-gray-500 mt-1">Supports Markdown formatting: **bold**, *italic*, lists, etc. Use two spaces at end of line for line breaks.</p>
             </div>
           </div>
 
@@ -313,9 +317,10 @@ export default function CreateDestinationPage() {
               id="scholarshipsMD"
               value={formData.scholarshipsMD}
               onChange={(e) => setFormData({...formData, scholarshipsMD: e.target.value})}
-              placeholder="Scholarship information in markdown..."
-              rows={3}
+                placeholder="Scholarship information in markdown...&#10;&#10;Example:&#10;**Merit-based Scholarships:** Up to 100% tuition  &#10;**Need-based Financial Aid:** Varies  &#10;**University Scholarships:** $5,000 - $50,000&#10;&#10;- Academic excellence&#10;- Demonstrated financial need"
+              rows={6}
             />
+            <p className="text-xs text-gray-500 mt-1">Supports Markdown formatting: **bold**, *italic*, lists, etc.</p>
           </div>
 
           <div>

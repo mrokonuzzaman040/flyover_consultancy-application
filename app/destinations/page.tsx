@@ -5,111 +5,37 @@ import PageHeader from "@/components/page-header";
 import LazyImage from "@/components/ui/lazy-image";
 import { Users, GraduationCap, Globe, Star, ArrowRight } from "lucide-react";
 
+interface Destination {
+  id: string;
+  country: string;
+  slug: string;
+  flag?: string;
+  image?: string;
+  description?: string;
+  highlights: string[];
+  universities?: string;
+  students?: string;
+  popularCities: string[];
+  averageCost?: string;
+  workRights?: string;
+  color?: string;
+  hero?: string;
+  overviewMD?: string;
+  costsMD?: string;
+  intakesMD?: string;
+  visaMD?: string;
+  scholarshipsMD?: string;
+  popularCourses: string[];
+  faqs?: Array<{question: string; answer: string}>;
+  createdAt: string;
+}
+
 export const metadata: Metadata = {
   title: "Study Destinations | Flyover Consultancy",
   description: "Explore top study destinations including Australia, Canada, USA, UK, Europe, New Zealand, and Japan. Find universities, costs, visas, and more.",
 };
 
-const countries = [
-  {
-    slug: "australia",
-    name: "Australia",
-    flag: "🇦🇺",
-    image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&h=400&fit=crop&crop=entropy&auto=format&q=80",
-    description: "World-class universities with post-study work opportunities and vibrant student life.",
-    highlights: ["Post-study work visa", "High quality of life", "Research opportunities"],
-    universities: "43 Universities",
-    students: "700,000+ International Students",
-    popularCities: ["Sydney", "Melbourne", "Brisbane"],
-    averageCost: "$20,000 - $45,000 AUD",
-    workRights: "20 hrs/week",
-    color: "from-green-400 to-blue-500"
-  },
-  {
-    slug: "canada",
-    name: "Canada",
-    flag: "🇨🇦",
-    image: "https://images.unsplash.com/photo-1517935706615-2717063c2225?w=600&h=400&fit=crop&crop=entropy&auto=format&q=80",
-    description: "High-quality education with welcoming immigration pathways and multicultural environment.",
-    highlights: ["Immigration pathways", "Affordable tuition", "Safe environment"],
-    universities: "98 Universities",
-    students: "640,000+ International Students",
-    popularCities: ["Toronto", "Vancouver", "Montreal"],
-    averageCost: "$13,000 - $35,000 CAD",
-    workRights: "20 hrs/week",
-    color: "from-red-400 to-red-600"
-  },
-  {
-    slug: "usa",
-    name: "United States",
-    flag: "🇺🇸",
-    image: "https://images.unsplash.com/photo-1485738422979-f5c462d49f74?w=600&h=400&fit=crop&crop=entropy&auto=format&q=80",
-    description: "Top-ranked universities with extensive research opportunities and diverse academic programs.",
-    highlights: ["World's top universities", "Research funding", "Diverse programs"],
-    universities: "4,000+ Universities",
-    students: "1.1M+ International Students",
-    popularCities: ["New York", "Los Angeles", "Boston"],
-    averageCost: "$25,000 - $55,000 USD",
-    workRights: "On-campus only",
-    color: "from-blue-400 to-blue-600"
-  },
-  {
-    slug: "uk",
-    name: "United Kingdom",
-    flag: "🇬🇧",
-    image: "https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=600&h=400&fit=crop&crop=entropy&auto=format&q=80",
-    description: "Historic institutions offering 1-year master's programs with rich academic heritage.",
-    highlights: ["1-year master's", "Historic universities", "Cultural diversity"],
-    universities: "130+ Universities",
-    students: "485,000+ International Students",
-    popularCities: ["London", "Manchester", "Edinburgh"],
-    averageCost: "£15,000 - £35,000 GBP",
-    workRights: "20 hrs/week",
-    color: "from-purple-400 to-indigo-600"
-  },
-  {
-    slug: "europe",
-    name: "Europe",
-    flag: "🇪🇺",
-    image: "https://images.unsplash.com/photo-1467269204594-9661b134dd2b?w=600&h=400&fit=crop&crop=entropy&auto=format&q=80",
-    description: "Schengen access with varied tuition options and rich cultural experiences across multiple countries.",
-    highlights: ["Schengen mobility", "Low tuition fees", "Cultural diversity"],
-    universities: "4,000+ Universities",
-    students: "2M+ International Students",
-    popularCities: ["Berlin", "Amsterdam", "Paris"],
-    averageCost: "€5,000 - €20,000 EUR",
-    workRights: "Varies by country",
-    color: "from-yellow-400 to-orange-500"
-  },
-  {
-    slug: "new-zealand",
-    name: "New Zealand",
-    flag: "🇳🇿",
-    image: "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=600&h=400&fit=crop&crop=entropy&auto=format&q=80",
-    description: "Safe, beautiful country with innovation-focused education and excellent quality of life.",
-    highlights: ["Safe environment", "Innovation focus", "Natural beauty"],
-    universities: "8 Universities",
-    students: "50,000+ International Students",
-    popularCities: ["Auckland", "Wellington", "Christchurch"],
-    averageCost: "$22,000 - $32,000 NZD",
-    workRights: "20 hrs/week",
-    color: "from-teal-400 to-cyan-500"
-  },
-  {
-    slug: "japan",
-    name: "Japan",
-    flag: "🇯🇵",
-    image: "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=600&h=400&fit=crop&crop=entropy&auto=format&q=80",
-    description: "Technology-forward education with unique culture, excellent scholarships, and innovation opportunities.",
-    highlights: ["Technology focus", "MEXT scholarships", "Cultural experience"],
-    universities: "780+ Universities",
-    students: "280,000+ International Students",
-    popularCities: ["Tokyo", "Osaka", "Kyoto"],
-    averageCost: "¥500,000 - ¥1,500,000 JPY",
-    workRights: "28 hrs/week",
-    color: "from-pink-400 to-rose-500"
-  }
-];
+// This will be replaced with dynamic data from API
 
 const stats = [
   { icon: Globe, label: "Countries", value: "50+" },
@@ -118,7 +44,26 @@ const stats = [
   { icon: Star, label: "Success Rate", value: "98%" }
 ];
 
-export default function DestinationsPage() {
+async function getDestinations() {
+  try {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/admin/destinations`, {
+      cache: 'no-store' // Ensure fresh data
+    });
+    
+    if (!response.ok) {
+      throw new Error('Failed to fetch destinations');
+    }
+    
+    const data = await response.json();
+    return data.destinations || [];
+  } catch (error) {
+    console.error('Error fetching destinations:', error);
+    return [];
+  }
+}
+
+export default async function DestinationsPage() {
+  const countries = await getDestinations();
   return (
     <div>
       <PageHeader
@@ -170,7 +115,7 @@ export default function DestinationsPage() {
           </Reveal>
           
           <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-            {countries.map((country, index) => (
+            {countries.map((country: Destination, index: number) => (
               <Reveal key={country.slug} delay={index * 0.1}>
                 <Link 
                   href={`/destinations/${country.slug}`} 
@@ -179,8 +124,8 @@ export default function DestinationsPage() {
                   {/* Image Section */}
                   <div className="relative h-48 overflow-hidden flex-shrink-0">
                     <LazyImage
-                      src={country.image}
-                      alt={`Study in ${country.name}`}
+                      src={country.image || 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&h=400&fit=crop&crop=entropy&auto=format&q=80'}
+                      alt={`Study in ${country.country}`}
                       width={600}
                       height={400}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
@@ -196,7 +141,7 @@ export default function DestinationsPage() {
                   
                   {/* Header with gradient */}
                   <div className={`bg-gradient-to-r ${country.color} p-6 text-white flex-shrink-0`}>
-                    <h3 className="text-2xl font-bold mb-2">{country.name}</h3>
+                    <h3 className="text-2xl font-bold mb-2">{country.country}</h3>
                     <p className="text-white/90 text-sm leading-relaxed line-clamp-3">{country.description}</p>
                   </div>
                   
@@ -218,7 +163,7 @@ export default function DestinationsPage() {
                     <div className="mb-6 flex-1">
                       <div className="text-xs text-gray-500 uppercase tracking-wide mb-2">Key Highlights</div>
                       <div className="flex flex-wrap gap-2">
-                        {country.highlights.map((highlight, idx) => (
+                        {country.highlights.map((highlight: string, idx: number) => (
                           <span key={idx} className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-brand-100 text-brand-800">
                             {highlight}
                           </span>
