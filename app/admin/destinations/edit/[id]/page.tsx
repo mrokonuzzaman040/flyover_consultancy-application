@@ -90,6 +90,7 @@ export default function EditDestinationPage() {
     popularCourses: [] as string[]
   })
   const [universityCourseInput, setUniversityCourseInput] = useState("")
+  const [editingUniversityIndex, setEditingUniversityIndex] = useState<number | null>(null)
 
   useEffect(() => {
     if (params.id) {
@@ -255,6 +256,51 @@ export default function EditDestinationPage() {
     })
   }
 
+  const startEditUniversity = (index: number) => {
+    const university = formData.universities[index]
+    setUniversityInput({
+      name: university.name || "",
+      location: university.location || "",
+      ranking: university.ranking || "",
+      image: university.image || "",
+      description: university.description || "",
+      popularCourses: university.popularCourses || []
+    })
+    setEditingUniversityIndex(index)
+  }
+
+  const updateUniversity = () => {
+    if (editingUniversityIndex !== null && universityInput.name.trim() && universityInput.location.trim()) {
+      const updatedUniversities = [...formData.universities]
+      updatedUniversities[editingUniversityIndex] = { ...universityInput }
+      setFormData({
+        ...formData,
+        universities: updatedUniversities
+      })
+      setUniversityInput({
+        name: "",
+        location: "",
+        ranking: "",
+        image: "",
+        description: "",
+        popularCourses: []
+      })
+      setEditingUniversityIndex(null)
+    }
+  }
+
+  const cancelEditUniversity = () => {
+    setUniversityInput({
+      name: "",
+      location: "",
+      ranking: "",
+      image: "",
+      description: "",
+      popularCourses: []
+    })
+    setEditingUniversityIndex(null)
+  }
+
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-US', {
       year: 'numeric',
@@ -268,7 +314,7 @@ export default function EditDestinationPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-brand-600"></div>
       </div>
     )
   }
@@ -594,7 +640,9 @@ export default function EditDestinationPage() {
             {!viewMode && (
               <Card className="mb-4">
                 <CardHeader>
-                  <CardTitle className="text-lg">Add University</CardTitle>
+                  <CardTitle className="text-lg">
+                    {editingUniversityIndex !== null ? 'Edit University' : 'Add University'}
+                  </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="grid grid-cols-2 gap-4">
@@ -677,9 +725,22 @@ export default function EditDestinationPage() {
                       )}
                     </div>
                   </div>
-                  <Button type="button" onClick={addUniversity} className="w-full">
-                    Add University
-                  </Button>
+                  <div className="flex gap-2">
+                    {editingUniversityIndex !== null ? (
+                      <>
+                        <Button type="button" onClick={updateUniversity} className="flex-1">
+                          Update University
+                        </Button>
+                        <Button type="button" onClick={cancelEditUniversity} variant="outline" className="flex-1">
+                          Cancel
+                        </Button>
+                      </>
+                    ) : (
+                      <Button type="button" onClick={addUniversity} className="w-full">
+                        Add University
+                      </Button>
+                    )}
+                  </div>
                 </CardContent>
               </Card>
             )}
@@ -693,7 +754,7 @@ export default function EditDestinationPage() {
                           <h4 className="font-semibold">{university.name}</h4>
                           <p className="text-sm text-gray-600">{university.location}</p>
                           {university.ranking && (
-                            <p className="text-sm text-blue-600">{university.ranking}</p>
+                            <p className="text-sm text-brand-600">{university.ranking}</p>
                           )}
                           {university.description && (
                             <p className="text-sm text-gray-700 mt-1">{university.description}</p>
@@ -709,14 +770,24 @@ export default function EditDestinationPage() {
                           )}
                         </div>
                         {!viewMode && (
-                          <Button
-                            type="button"
-                            variant="destructive"
-                            size="sm"
-                            onClick={() => removeUniversity(index)}
-                          >
-                            Remove
-                          </Button>
+                          <div className="flex gap-2">
+                            <Button
+                              type="button"
+                              variant="outline"
+                              size="sm"
+                              onClick={() => startEditUniversity(index)}
+                            >
+                              Edit
+                            </Button>
+                            <Button
+                              type="button"
+                              variant="destructive"
+                              size="sm"
+                              onClick={() => removeUniversity(index)}
+                            >
+                              Remove
+                            </Button>
+                          </div>
                         )}
                       </div>
                     </CardContent>
@@ -821,7 +892,7 @@ export default function EditDestinationPage() {
                   Cancel
                 </Button>
               </Link>
-              <Button onClick={handleUpdate} disabled={saving} className="bg-blue-600 hover:bg-blue-700">
+              <Button onClick={handleUpdate} disabled={saving} className="bg-brand-600 hover:bg-brand-700">
                 {saving ? 'Saving...' : 'Save Changes'}
               </Button>
             </div>
