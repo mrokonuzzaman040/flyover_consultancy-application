@@ -102,7 +102,7 @@ export async function POST(req: NextRequest) {
       data: {
         name: parsed.data.name || '',
         email: parsed.data.email || '',
-        phone: parsed.data.phone,
+        phone: parsed.data.phone || '',
         countryInterest: parsed.data.countryInterest || [],
         serviceInterest: parsed.data.serviceInterest || [],
         message: parsed.data.message,
