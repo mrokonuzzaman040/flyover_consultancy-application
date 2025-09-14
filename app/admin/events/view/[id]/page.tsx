@@ -61,7 +61,7 @@ export default function ViewEventPage({ params }: { params: Promise<{ id: string
       case 'draft':
         return 'bg-gray-100 text-gray-800'
       case 'cancelled':
-        return 'bg-red-100 text-red-800'
+        return 'bg-brand-100 text-brand-800'
       case 'completed':
         return 'bg-blue-100 text-blue-800'
       default:
@@ -114,7 +114,7 @@ export default function ViewEventPage({ params }: { params: Promise<{ id: string
             </Button>
           </Link>
           <Link href={`/admin/events/delete/${event.id}`}>
-            <Button variant="outline" size="sm" className="text-red-600 hover:text-red-700">
+            <Button variant="outline" size="sm" className="text-brand-600 hover:text-brand-700">
               <Trash2 className="w-4 h-4 mr-2" />
               Delete
             </Button>

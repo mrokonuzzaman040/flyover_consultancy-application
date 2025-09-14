@@ -550,7 +550,7 @@ export default function CreateDestinationPage() {
                           onClick={() => removeUniversity(index)}
                           variant="ghost"
                           size="sm"
-                          className="text-red-600 hover:text-red-700"
+                          className="text-brand-600 hover:text-brand-700"
                         >
                           <Trash2 className="w-4 h-4" />
                         </Button>

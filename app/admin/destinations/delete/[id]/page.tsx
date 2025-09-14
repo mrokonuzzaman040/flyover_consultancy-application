@@ -129,13 +129,13 @@ export default function DeleteDestinationPage({ params }: { params: { id: string
       </div>
 
       {/* Warning Alert */}
-      <Card className="border-red-200 bg-red-50">
+      <Card className="border-brand-200 bg-brand-50">
         <CardContent className="pt-6">
           <div className="flex items-start gap-3">
-            <AlertTriangle className="w-5 h-5 text-red-600 mt-0.5" />
+            <AlertTriangle className="w-5 h-5 text-brand-600 mt-0.5" />
             <div>
-              <h3 className="font-semibold text-red-900 mb-1">Warning: This action cannot be undone</h3>
-              <p className="text-red-700 text-sm">
+              <h3 className="font-semibold text-brand-900 mb-1">Warning: This action cannot be undone</h3>
+              <p className="text-brand-700 text-sm">
                 Deleting this destination will permanently remove all associated data including content, 
                 courses, FAQs, and any related information. This action is irreversible.
               </p>
@@ -232,7 +232,7 @@ export default function DeleteDestinationPage({ params }: { params: { id: string
               <Button 
                 onClick={handleDelete}
                 disabled={deleting}
-                className="bg-red-600 hover:bg-red-700"
+                className="bg-brand-600 hover:bg-brand-700"
               >
                 {deleting ? (
                   <>

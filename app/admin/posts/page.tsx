@@ -192,7 +192,7 @@ export default function AdminPostsPage() {
                     variant="outline"
                     onClick={() => handleDelete(post)}
                     disabled={deleteLoading === post.id}
-                    className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                    className="text-brand-600 hover:text-brand-700 hover:bg-brand-50"
                   >
                     <Trash2 className="w-4 h-4" />
                   </Button>

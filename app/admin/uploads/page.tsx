@@ -314,7 +314,7 @@ export default function UploadsPage() {
                       variant="outline"
                       size="sm"
                       onClick={() => handleDelete(upload.id)}
-                      className="text-red-600 hover:text-red-700"
+                      className="text-brand-600 hover:text-brand-700"
                       disabled={deletingFile === upload.id}
                     >
                       {deletingFile === upload.id ? (

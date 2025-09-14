@@ -144,7 +144,7 @@ export default function ViewServicePage() {
           <Button
             variant="outline"
             onClick={() => setShowDeleteModal(true)}
-            className="text-red-600 hover:text-red-700"
+            className="text-brand-600 hover:text-brand-700"
           >
             <Trash2 className="w-4 h-4 mr-2" />
             Delete
@@ -349,7 +349,7 @@ export default function ViewServicePage() {
                 <Button variant="outline" onClick={() => setShowDeleteModal(false)}>
                   Cancel
                 </Button>
-                <Button onClick={handleDelete} className="bg-red-600 hover:bg-red-700">
+                <Button onClick={handleDelete} className="bg-brand-600 hover:bg-brand-700">
                   Delete
                 </Button>
               </div>

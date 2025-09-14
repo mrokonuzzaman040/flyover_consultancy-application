@@ -89,7 +89,7 @@ export default function ViewDestination() {
       <div className="container mx-auto px-4 py-8">
         <div className="flex items-center justify-center min-h-[400px]">
           <div className="text-center">
-            <p className="text-red-600 mb-4">{error || 'Destination not found'}</p>
+            <p className="text-brand-600 mb-4">{error || 'Destination not found'}</p>
             <Link href="/admin/destinations">
               <Button variant="outline">
                 <ArrowLeft className="w-4 h-4 mr-2" />

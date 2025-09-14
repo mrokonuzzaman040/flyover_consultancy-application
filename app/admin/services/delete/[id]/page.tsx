@@ -111,21 +111,21 @@ export default function DeleteServicePage() {
         <h1 className="text-3xl font-bold text-gray-900">Delete Service</h1>
       </div>
 
-      <Card className="border-red-200">
+      <Card className="border-brand-200">
         <CardHeader>
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center">
-              <AlertTriangle className="w-5 h-5 text-red-600" />
+            <div className="w-10 h-10 bg-brand-100 rounded-full flex items-center justify-center">
+              <AlertTriangle className="w-5 h-5 text-brand-600" />
             </div>
             <div>
-              <CardTitle className="text-red-900">Confirm Deletion</CardTitle>
-              <p className="text-red-700 text-sm">This action cannot be undone</p>
+              <CardTitle className="text-brand-900">Confirm Deletion</CardTitle>
+              <p className="text-brand-700 text-sm">This action cannot be undone</p>
             </div>
           </div>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-            <h3 className="font-semibold text-red-900 mb-2">Service to be deleted:</h3>
+          <div className="bg-brand-50 border border-brand-200 rounded-lg p-4">
+            <h3 className="font-semibold text-brand-900 mb-2">Service to be deleted:</h3>
             <div className="space-y-2">
               <div>
                 <span className="font-medium text-gray-900">Name:</span>
@@ -169,7 +169,7 @@ export default function DeleteServicePage() {
             <Button
               onClick={handleDelete}
               disabled={deleting}
-              className="bg-red-600 hover:bg-red-700"
+              className="bg-brand-600 hover:bg-brand-700"
             >
               {deleting ? 'Deleting...' : 'Delete Service'}
             </Button>

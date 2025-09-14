@@ -28,7 +28,7 @@ const countries = [
     popularCities: ["Toronto", "Vancouver", "Montreal"],
     averageCost: "$13,000 - $35,000 CAD",
     workRights: "20 hrs/week",
-    color: "from-red-400 to-red-600"
+    color: "from-brand-400 to-brand-600"
   },
   {
     slug: "usa",

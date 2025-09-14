@@ -247,15 +247,15 @@ export default function UsersPage() {
           </form>
 
           {error && (
-            <Alert className="mb-6 border-red-200 bg-red-50">
-              <AlertCircle className="h-4 w-4 text-red-600" />
-              <AlertDescription className="text-red-800">
+            <Alert className="mb-6 border-brand-200 bg-brand-50">
+              <AlertCircle className="h-4 w-4 text-brand-600" />
+              <AlertDescription className="text-brand-800">
                 {error}
                 <Button
                   variant="link"
                   size="sm"
                   onClick={() => fetchUsers(pagination.page, searchTerm, roleFilter)}
-                  className="ml-2 h-auto p-0 text-red-600 underline"
+                  className="ml-2 h-auto p-0 text-brand-600 underline"
                 >
                   Try again
                 </Button>
@@ -350,7 +350,7 @@ export default function UsersPage() {
                       size="sm"
                       onClick={() => handleDeleteUser(user.id)}
                       disabled={updatingRole === user.id || deletingUser === user.id}
-                      className="text-red-600 hover:text-red-700 disabled:text-gray-400"
+                      className="text-brand-600 hover:text-brand-700 disabled:text-gray-400"
                     >
                       {deletingUser === user.id ? (
                         <RefreshCw className="h-4 w-4 mr-1 animate-spin" />

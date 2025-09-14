@@ -86,7 +86,7 @@ export default function AdminDashboard() {
       value: stats.recentActivity,
       icon: TrendingUp,
       description: "Actions this week",
-      color: "text-red-600"
+      color: "text-brand-600"
     }
   ]
 

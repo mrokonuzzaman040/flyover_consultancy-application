@@ -573,7 +573,7 @@ export default function AdminLeadsPage() {
                           variant="ghost"
                           size="sm"
                           onClick={() => openDeleteDialog(lead)}
-                          className="text-red-600 hover:text-red-700 h-8 w-8 p-0"
+                          className="text-brand-600 hover:text-brand-700 h-8 w-8 p-0"
                           disabled={loading || saving || deletingLead === lead.id}
                         >
                           {deletingLead === lead.id ? (
@@ -828,7 +828,7 @@ export default function AdminLeadsPage() {
             <div className="p-6">
               <div className="flex items-center justify-between mb-4">
                 <div>
-                  <h2 className="text-lg font-semibold text-red-600">Delete Lead</h2>
+                  <h2 className="text-lg font-semibold text-brand-600">Delete Lead</h2>
                   <p className="text-sm text-gray-500">This action cannot be undone</p>
                 </div>
                 <Button

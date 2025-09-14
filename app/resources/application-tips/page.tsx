@@ -281,7 +281,7 @@ export default function ApplicationTipsPage() {
         <div className="mb-16">
           <Reveal>
             <h3 className="text-2xl font-bold text-gray-900 mb-8 flex items-center gap-3">
-              <AlertTriangleIcon className="h-6 w-6 text-red-600" />
+              <AlertTriangleIcon className="h-6 w-6 text-brand-600" />
               Common Mistakes to Avoid
             </h3>
           </Reveal>
@@ -293,7 +293,7 @@ export default function ApplicationTipsPage() {
                   <div className="flex items-start justify-between mb-3">
                     <h4 className="font-semibold text-gray-900 flex-1">{item.mistake}</h4>
                     <span className={`px-2 py-1 text-xs rounded-full ${
-                      item.impact === 'Critical' ? 'bg-red-100 text-red-700' :
+                      item.impact === 'Critical' ? 'bg-brand-100 text-brand-700' :
                       item.impact === 'High' ? 'bg-orange-100 text-orange-700' :
                       'bg-yellow-100 text-yellow-700'
                     }`}>
