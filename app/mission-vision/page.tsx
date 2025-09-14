@@ -11,33 +11,33 @@ export const metadata: Metadata = {
 const coreValues = [
   {
     icon: Heart,
-    title: 'Student-Centric Approach',
-    description: 'Every decision we make is guided by what&apos;s best for our students. Their success is our success, and their dreams fuel our passion.'
+    title: 'Excellence',
+    description: 'We strive for the highest standards in all our services, ensuring that our students receive top-quality guidance and support throughout their educational journey.'
+  },
+  {
+    icon: Award,
+    title: 'Integrity',
+    description: 'We operate with honesty, transparency, and ethical practices in all our interactions, building trust with students, families, and educational institutions.'
+  },
+  {
+    icon: Users,
+    title: 'Student-Centricity',
+    description: 'Our students are at the heart of everything we do. We tailor our services to meet individual needs and prioritize their success and well-being.'
+  },
+  {
+    icon: Lightbulb,
+    title: 'Innovation',
+    description: 'We embrace new technologies and methodologies to enhance our services and provide cutting-edge solutions for international education.'
   },
   {
     icon: Globe,
     title: 'Global Perspective',
-    description: 'We believe in the power of international education to broaden horizons, foster understanding, and create global citizens.'
-  },
-  {
-    icon: Lightbulb,
-    title: 'Innovation & Excellence',
-    description: 'We continuously innovate our services and maintain the highest standards to provide exceptional educational consulting.'
-  },
-  {
-    icon: Users,
-    title: 'Inclusive Community',
-    description: 'We celebrate diversity and ensure that quality international education is accessible to students from all backgrounds.'
-  },
-  {
-    icon: Award,
-    title: 'Integrity & Trust',
-    description: 'We build lasting relationships through transparency, honesty, and unwavering commitment to ethical practices.'
+    description: 'We understand and appreciate diverse cultures and educational systems, helping students navigate the complexities of international education.'
   },
   {
     icon: Target,
-    title: 'Results-Driven',
-    description: 'We measure our success by the achievements of our students and their satisfaction with our services.'
+    title: 'Accessibility',
+    description: 'We are committed to making international education accessible to students from all backgrounds, breaking down barriers to quality education.'
   }
 ]
 
@@ -97,10 +97,12 @@ export default function MissionVisionPage() {
                   on a global stage.
                 </p>
                 <div className="bg-brand-50 rounded-2xl p-8">
-                  <p className="text-lg text-brand-800 font-medium leading-relaxed">
-                    &quot;We believe that every student, regardless of their background, deserves the opportunity 
-                    to pursue their dreams at the world&apos;s best universities. Our mission is to make that 
-                    dream a reality through expert guidance, unwavering support, and innovative solutions.&quot;
+                  <p className="text-xl text-gray-700 leading-relaxed mb-8">
+                    &quot;At Flyover Education, our mission is to empower students worldwide to achieve their 
+                    academic dreams by providing comprehensive, personalized, and accessible international 
+                    education consulting services. We are committed to bridging the gap between aspiration 
+                    and achievement, ensuring that every student, regardless of their background, has the 
+                    opportunity to pursue quality education abroad.&quot;
                   </p>
                   <div className="mt-6 text-brand-600 font-semibold">— Sarah Johnson, Founder & CEO</div>
                 </div>
@@ -121,8 +123,10 @@ export default function MissionVisionPage() {
               <h2 className="text-4xl font-bold text-gray-900 mb-6">Our Vision</h2>
               <div className="max-w-4xl mx-auto">
                 <p className="text-xl text-gray-700 leading-relaxed mb-8">
-                  To be the world&apos;s most trusted platform for international education, creating a global 
-                  community where cultural exchange, academic excellence, and personal growth flourish without boundaries.
+                  Our vision is to be the leading global platform for international education, recognized 
+                  for our excellence, innovation, and commitment to student success. We envision a world 
+                  where geographical boundaries do not limit educational opportunities, and where every 
+                  student can access the best education suited to their goals and aspirations.
                 </p>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
                   <div className="text-center">

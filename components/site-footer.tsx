@@ -22,8 +22,8 @@ export default function SiteFooter() {
               Flyover Consultancy provides end-to-end support for international students — from course selection and applications to visas and pre-departure.
             </p>
             <div className="mt-4 flex gap-3 text-white/90">
-              <a href="#" aria-label="Facebook" className="hover:text-white"><Facebook className="h-5 w-5" /></a>
-              <a href="#" aria-label="Instagram" className="hover:text-white"><Instagram className="h-5 w-5" /></a>
+              <a href="https://www.facebook.com/flyoverconsultancy" aria-label="Facebook" className="hover:text-white" target="_blank" rel="noopener noreferrer"><Facebook className="h-5 w-5" /></a>
+              <a href="https://www.instagram.com/flyover.consultancy/" aria-label="Instagram" className="hover:text-white" target="_blank" rel="noopener noreferrer"><Instagram className="h-5 w-5" /></a>
               <a href="#" aria-label="YouTube" className="hover:text-white"><Youtube className="h-5 w-5" /></a>
               <a href="#" aria-label="LinkedIn" className="hover:text-white"><Linkedin className="h-5 w-5" /></a>
             </div>
@@ -76,8 +76,8 @@ export default function SiteFooter() {
               </div>
             )}
             <div className="mt-4 text-sm text-white/85">
-              <div>Phone: +880-000-000000</div>
-              <div>Email: info@flyover.com</div>
+              <div>Phone: +8801703666064</div>
+              <div>Email: info.flyoverconsultancy@gmail.com</div>
             </div>
           </div>
         </div>

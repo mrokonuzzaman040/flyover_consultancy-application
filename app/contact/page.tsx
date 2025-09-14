@@ -61,9 +61,9 @@ export default function ContactPage() {
                 </div>
                 <h3 className="font-semibold text-gray-900 mb-2">Call Us</h3>
                 <p className="text-sm text-gray-600 leading-relaxed">
-                  Dhaka: +880-1700-000000<br />
-                  Chittagong: +880-1800-000000<br />
-                  Hotline: +880-9600-000000
+                  +8801703666064 - Mahfujur Rahaman Bulbul (Director)<br />
+                  +8801310338691 - Rakibul Islam (Sr. Manager)<br />
+                  +8801301523004 - Arnab Chowdhury (Sr. Manager)
                 </p>
               </div>
             </Reveal>
@@ -75,9 +75,7 @@ export default function ContactPage() {
                 </div>
                 <h3 className="font-semibold text-gray-900 mb-2">Email Us</h3>
                 <p className="text-sm text-gray-600 leading-relaxed">
-                  info@flyover.com<br />
-                  admissions@flyover.com<br />
-                  support@flyover.com
+                  info.flyoverconsultancy@gmail.com
                 </p>
               </div>
             </Reveal>
@@ -134,7 +132,7 @@ export default function ContactPage() {
                       Dhaka 1205, Bangladesh
                     </p>
                     <p className="text-sm text-brand-600 font-medium mt-2">
-                      +880-1700-000000
+                      +8801703666064
                     </p>
                   </div>
                   <div className="border-l-4 border-brand-500 pl-4">
@@ -144,7 +142,7 @@ export default function ContactPage() {
                       Chittagong 4000, Bangladesh
                     </p>
                     <p className="text-sm text-brand-600 font-medium mt-2">
-                      +880-1800-000000
+                      +8801310338691
                     </p>
                   </div>
                 </div>

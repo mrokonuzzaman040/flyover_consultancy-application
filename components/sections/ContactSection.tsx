@@ -5,11 +5,11 @@ import LeadForm from "@/components/lead-form";
 const offices = [
   {
     city: "Dhaka",
-    phone: "+880-000-000000"
+    phone: "+8801703666064"
   },
   {
     city: "Chittagong",
-    phone: "+880-000-000000"
+    phone: "+8801310338691"
   }
 ];
 
