@@ -130,7 +130,7 @@ export default function EditDestinationPage() {
         toast.error('Failed to fetch destination')
         router.push('/admin/destinations')
       }
-    } catch (error) {
+    } catch {
       toast.error('Error fetching destination')
       router.push('/admin/destinations')
     } finally {
@@ -157,7 +157,7 @@ export default function EditDestinationPage() {
         const errorData = await response.json()
         toast.error(errorData.error || 'Failed to update destination')
       }
-    } catch (error) {
+    } catch {
       toast.error('Error updating destination')
     } finally {
       setSaving(false)
