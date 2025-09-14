@@ -9,8 +9,24 @@ import { prisma } from '@/lib/prisma'
 const updateServiceSchema = z.object({
   name: z.string().min(1, 'Name is required').optional(),
   slug: z.string().min(1, 'Slug is required').optional(),
+  title: z.string().optional(),
+  subtitle: z.string().optional(),
+  description: z.string().optional(),
+  image: z.string().optional(),
   sectionsMD: z.array(z.string()).optional(),
-  ctaLabel: z.string().optional()
+  features: z.array(z.object({
+    icon: z.string().optional(),
+    title: z.string(),
+    description: z.string()
+  })).optional(),
+  benefits: z.array(z.string()).optional(),
+  process: z.array(z.object({
+    step: z.string(),
+    title: z.string(),
+    description: z.string()
+  })).optional(),
+  ctaLabel: z.string().optional(),
+  ctaText: z.string().optional()
 })
 
 export async function GET(
@@ -87,12 +103,12 @@ export async function PATCH(
       }
     }
 
-    const updatedService = await prisma.service.update({
+    const service = await prisma.service.update({
       where: { id },
       data: validatedData
     })
 
-    return NextResponse.json(updatedService)
+    return NextResponse.json(service)
   } catch (error) {
     if (error instanceof z.ZodError) {
       return NextResponse.json(
@@ -137,10 +153,7 @@ export async function DELETE(
       where: { id }
     })
 
-    return NextResponse.json(
-      { message: 'Service deleted successfully' },
-      { status: 200 }
-    )
+    return NextResponse.json({ message: 'Service deleted successfully' })
   } catch (error) {
     console.error('Error deleting service:', error)
     return NextResponse.json(

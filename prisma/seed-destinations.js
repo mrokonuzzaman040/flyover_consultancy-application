@@ -10,7 +10,32 @@ const destinations = [
     image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&h=400&fit=crop&crop=entropy&auto=format&q=80",
     description: "World-class universities with post-study work opportunities and vibrant student life.",
     highlights: ["Post-study work visa", "High quality of life", "Research opportunities"],
-    universities: "43 Universities",
+    universities: [
+      {
+        name: "University of Melbourne",
+        location: "Melbourne, VIC",
+        ranking: "#33 globally",
+        image: "https://images.unsplash.com/photo-1562774053-701939374585?w=400&h=300&fit=crop&crop=entropy&auto=format&q=80",
+        courses: ["Business", "Medicine", "Engineering", "Arts"],
+        description: "Australia's leading research university with a strong international reputation."
+      },
+      {
+        name: "University of Sydney",
+        location: "Sydney, NSW",
+        ranking: "#38 globally",
+        image: "https://images.unsplash.com/photo-1562774053-701939374585?w=400&h=300&fit=crop&crop=entropy&auto=format&q=80",
+        courses: ["Medicine", "Law", "Business", "Engineering"],
+        description: "One of Australia's oldest and most prestigious universities."
+      },
+      {
+        name: "Australian National University",
+        location: "Canberra, ACT",
+        ranking: "#30 globally",
+        image: "https://images.unsplash.com/photo-1562774053-701939374585?w=400&h=300&fit=crop&crop=entropy&auto=format&q=80",
+        courses: ["Public Policy", "International Relations", "Science", "Arts"],
+        description: "Australia's national university with a focus on research and public policy."
+      }
+    ],
     students: "700,000+ International Students",
     popularCities: ["Sydney", "Melbourne", "Brisbane"],
     averageCost: "$20,000 - $45,000 AUD",
@@ -41,7 +66,32 @@ const destinations = [
     image: "https://images.unsplash.com/photo-1485738422979-f5c462d49f74?w=600&h=400&fit=crop&crop=entropy&auto=format&q=80",
     description: "Top-ranked universities with extensive research opportunities and diverse academic programs.",
     highlights: ["World's top universities", "Research funding", "Diverse programs"],
-    universities: "4,000+ Universities",
+    universities: [
+      {
+        name: "Harvard University",
+        location: "Cambridge, MA",
+        ranking: "#3 globally",
+        image: "https://images.unsplash.com/photo-1562774053-701939374585?w=400&h=300&fit=crop&crop=entropy&auto=format&q=80",
+        courses: ["Medicine", "Law", "Business", "Engineering"],
+        description: "America's oldest institution of higher learning and one of the world's most prestigious universities."
+      },
+      {
+        name: "Stanford University",
+        location: "Stanford, CA",
+        ranking: "#2 globally",
+        image: "https://images.unsplash.com/photo-1562774053-701939374585?w=400&h=300&fit=crop&crop=entropy&auto=format&q=80",
+        courses: ["Computer Science", "Engineering", "Business", "Medicine"],
+        description: "Leading research university known for its entrepreneurial spirit and innovation."
+      },
+      {
+        name: "Massachusetts Institute of Technology",
+        location: "Cambridge, MA",
+        ranking: "#1 globally",
+        image: "https://images.unsplash.com/photo-1562774053-701939374585?w=400&h=300&fit=crop&crop=entropy&auto=format&q=80",
+        courses: ["Engineering", "Computer Science", "Physics", "Mathematics"],
+        description: "World-renowned for science and technology education and research."
+      }
+    ],
     students: "1.1M+ International Students",
     popularCities: ["New York", "Los Angeles", "Boston"],
     averageCost: "$25,000 - $55,000 USD",

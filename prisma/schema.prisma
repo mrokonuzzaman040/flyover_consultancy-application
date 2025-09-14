@@ -81,7 +81,7 @@ model Destination {
   image           String?
   description     String?
   highlights      String[]
-  universities    String?
+  universities    Json?    // Array of university objects with detailed info
   students        String?
   popularCities   String[]
   averageCost     String?
@@ -99,12 +99,21 @@ model Destination {
 }
 
 model Service {
-  id         String   @id @default(cuid())
-  name       String
-  slug       String   @unique
-  sectionsMD String[]
-  ctaLabel   String?
-  createdAt  DateTime @default(now())
+  id          String   @id @default(cuid())
+  name        String
+  slug        String   @unique
+  title       String?
+  subtitle    String?
+  description String?
+  image       String?
+  sectionsMD  String[]
+  features    Json?    // Array of feature objects
+  benefits    Json?    // Array of benefit strings
+  process     Json?    // Array of process step objects
+  ctaLabel    String?
+  ctaText     String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
 
 model Testimonial {

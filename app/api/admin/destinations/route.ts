@@ -13,7 +13,14 @@ const destinationSchema = z.object({
   image: z.string().optional(),
   description: z.string().optional(),
   highlights: z.array(z.string()).default([]),
-  universities: z.string().optional(),
+  universities: z.array(z.object({
+    name: z.string(),
+    location: z.string(),
+    ranking: z.string().optional(),
+    image: z.string().optional(),
+    courses: z.array(z.string()).default([]),
+    description: z.string().optional()
+  })).optional(),
   students: z.string().optional(),
   popularCities: z.array(z.string()).default([]),
   averageCost: z.string().optional(),

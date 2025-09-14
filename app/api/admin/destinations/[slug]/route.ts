@@ -43,7 +43,7 @@ const updateDestinationSchema = z.object({
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ slug: string }> }
 ) {
   try {
     // TODO: Add authentication check
@@ -52,18 +52,11 @@ export async function GET(
     //   return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     // }
 
-    const { id } = await params
+    const { slug } = await params
     
-    // Try to find by slug first, then by id
-    let destination = await prisma.destination.findUnique({
-      where: { slug: id }
+    const destination = await prisma.destination.findUnique({
+      where: { slug }
     })
-    
-    if (!destination) {
-      destination = await prisma.destination.findUnique({
-        where: { id }
-      })
-    }
 
     if (!destination) {
       return NextResponse.json(
@@ -84,7 +77,7 @@ export async function GET(
 
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ slug: string }> }
 ) {
   try {
     // TODO: Add authentication check
@@ -93,13 +86,13 @@ export async function PATCH(
     //   return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     // }
 
-    const { id } = await params
+    const { slug } = await params
     const body = await request.json()
     const validatedData = updateDestinationSchema.parse(body)
 
     // Check if destination exists
     const existingDestination = await prisma.destination.findUnique({
-      where: { id }
+      where: { slug }
     })
 
     if (!existingDestination) {
@@ -137,18 +130,49 @@ export async function PATCH(
         question: string
         answer: string
       }[]
+      flag?: string
+      image?: string
+      description?: string
+      highlights?: string[]
+      universities?: {
+        name: string
+        location: string
+        ranking?: string
+        image?: string
+        description?: string
+        popularCourses: string[]
+      }[]
+      students?: string
+      popularCities?: string[]
+      averageCost?: string
+      workRights?: string
+      color?: string
     } = {}
 
-    // Only include defined fields in the update
-    Object.keys(validatedData).forEach((key) => {
-      const value = validatedData[key as keyof typeof validatedData]
-      if (value !== undefined) {
-        updateData[key as keyof typeof updateData] = value as never
-      }
-    })
+    // Only include fields that are present in the request
+    if (validatedData.country !== undefined) updateData.country = validatedData.country
+    if (validatedData.slug !== undefined) updateData.slug = validatedData.slug
+    if (validatedData.flag !== undefined) updateData.flag = validatedData.flag
+    if (validatedData.image !== undefined) updateData.image = validatedData.image
+    if (validatedData.description !== undefined) updateData.description = validatedData.description
+    if (validatedData.highlights !== undefined) updateData.highlights = validatedData.highlights
+    if (validatedData.universities !== undefined) updateData.universities = validatedData.universities
+    if (validatedData.students !== undefined) updateData.students = validatedData.students
+    if (validatedData.popularCities !== undefined) updateData.popularCities = validatedData.popularCities
+    if (validatedData.averageCost !== undefined) updateData.averageCost = validatedData.averageCost
+    if (validatedData.workRights !== undefined) updateData.workRights = validatedData.workRights
+    if (validatedData.color !== undefined) updateData.color = validatedData.color
+    if (validatedData.hero !== undefined) updateData.hero = validatedData.hero
+    if (validatedData.overviewMD !== undefined) updateData.overviewMD = validatedData.overviewMD
+    if (validatedData.costsMD !== undefined) updateData.costsMD = validatedData.costsMD
+    if (validatedData.intakesMD !== undefined) updateData.intakesMD = validatedData.intakesMD
+    if (validatedData.visaMD !== undefined) updateData.visaMD = validatedData.visaMD
+    if (validatedData.scholarshipsMD !== undefined) updateData.scholarshipsMD = validatedData.scholarshipsMD
+    if (validatedData.popularCourses !== undefined) updateData.popularCourses = validatedData.popularCourses
+    if (validatedData.faqs !== undefined) updateData.faqs = validatedData.faqs
 
     const destination = await prisma.destination.update({
-      where: { id },
+      where: { slug },
       data: updateData
     })
 
@@ -171,7 +195,7 @@ export async function PATCH(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ slug: string }> }
 ) {
   try {
     // TODO: Add authentication check
@@ -180,9 +204,9 @@ export async function DELETE(
     //   return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     // }
 
-    const { id } = await params
+    const { slug } = await params
     const destination = await prisma.destination.findUnique({
-      where: { id }
+      where: { slug }
     })
 
     if (!destination) {
@@ -193,7 +217,7 @@ export async function DELETE(
     }
 
     await prisma.destination.delete({
-      where: { id }
+      where: { slug }
     })
 
     return NextResponse.json({ message: 'Destination deleted successfully' })

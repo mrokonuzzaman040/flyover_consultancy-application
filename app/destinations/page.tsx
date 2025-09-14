@@ -5,6 +5,20 @@ import PageHeader from "@/components/page-header";
 import LazyImage from "@/components/ui/lazy-image";
 import { Users, GraduationCap, Globe, Star, ArrowRight } from "lucide-react";
 
+interface University {
+  name: string;
+  location: string;
+  ranking?: string;
+  image?: string;
+  courses: string[];
+  description?: string;
+}
+
+interface FAQ {
+  question: string;
+  answer: string;
+}
+
 interface Destination {
   id: string;
   country: string;
@@ -13,7 +27,7 @@ interface Destination {
   image?: string;
   description?: string;
   highlights: string[];
-  universities?: string;
+  universities?: University[] | string | null;
   students?: string;
   popularCities: string[];
   averageCost?: string;
@@ -26,7 +40,7 @@ interface Destination {
   visaMD?: string;
   scholarshipsMD?: string;
   popularCourses: string[];
-  faqs?: Array<{question: string; answer: string}>;
+  faqs?: FAQ[] | null;
   createdAt: string;
 }
 
@@ -151,7 +165,11 @@ export default async function DestinationsPage() {
                     <div className="grid grid-cols-2 gap-4 mb-6">
                       <div>
                         <div className="text-xs text-gray-500 uppercase tracking-wide">Universities</div>
-                        <div className="font-semibold text-gray-900 text-sm">{country.universities}</div>
+                        <div className="font-semibold text-gray-900 text-sm">
+                          {Array.isArray(country.universities) ? `${country.universities.length}+` : 
+                           typeof country.universities === 'string' ? country.universities : 
+                           'N/A'}
+                        </div>
                       </div>
                       <div>
                         <div className="text-xs text-gray-500 uppercase tracking-wide">Students</div>

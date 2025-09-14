@@ -8,7 +8,7 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { ArrowLeft } from "lucide-react"
+import { ArrowLeft, Plus, Trash2 } from "lucide-react"
 import { toast } from "sonner"
 import Link from "next/link"
 
@@ -22,7 +22,14 @@ export default function CreateDestinationPage() {
     image: "",
     description: "",
     highlights: [] as string[],
-    universities: "",
+    universities: [] as Array<{
+      name: string;
+      location: string;
+      ranking?: string;
+      image?: string;
+      courses: string[];
+      description?: string;
+    }>,
     students: "",
     popularCities: [] as string[],
     averageCost: "",
@@ -40,6 +47,15 @@ export default function CreateDestinationPage() {
   const [courseInput, setCourseInput] = useState("")
   const [highlightInput, setHighlightInput] = useState("")
   const [cityInput, setCityInput] = useState("")
+  const [universityInput, setUniversityInput] = useState({
+    name: "",
+    location: "",
+    ranking: "",
+    image: "",
+    courses: [] as string[],
+    description: ""
+  })
+  const [universityCourseInput, setUniversityCourseInput] = useState("")
 
   const handleCreate = async () => {
     setLoading(true)
@@ -81,6 +97,47 @@ export default function CreateDestinationPage() {
     setFormData({
       ...formData,
       popularCourses: formData.popularCourses.filter((_, i) => i !== index)
+    })
+  }
+
+  const addUniversityCourse = () => {
+    if (universityCourseInput.trim() && !universityInput.courses.includes(universityCourseInput.trim())) {
+      setUniversityInput({
+        ...universityInput,
+        courses: [...universityInput.courses, universityCourseInput.trim()]
+      })
+      setUniversityCourseInput("")
+    }
+  }
+
+  const removeUniversityCourse = (index: number) => {
+    setUniversityInput({
+      ...universityInput,
+      courses: universityInput.courses.filter((_, i) => i !== index)
+    })
+  }
+
+  const addUniversity = () => {
+    if (universityInput.name.trim() && universityInput.location.trim()) {
+      setFormData({
+        ...formData,
+        universities: [...formData.universities, { ...universityInput }]
+      })
+      setUniversityInput({
+        name: "",
+        location: "",
+        ranking: "",
+        image: "",
+        courses: [],
+        description: ""
+      })
+    }
+  }
+
+  const removeUniversity = (index: number) => {
+    setFormData({
+      ...formData,
+      universities: formData.universities.filter((_, i) => i !== index)
     })
   }
 
@@ -201,14 +258,15 @@ export default function CreateDestinationPage() {
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <Label htmlFor="universities">Universities</Label>
-              <Input
-                id="universities"
-                value={formData.universities}
-                onChange={(e) => setFormData({...formData, universities: e.target.value})}
-                placeholder="e.g., 43 Universities"
-              />
-            </div>
+            <Label htmlFor="universities">Universities</Label>
+            <Input
+              id="universities"
+              value={`${formData.universities.length} universities added`}
+              readOnly
+              className="bg-gray-50 cursor-not-allowed"
+              placeholder="Universities will be shown here"
+            />
+          </div>
             <div>
               <Label htmlFor="students">International Students</Label>
               <Input
@@ -386,6 +444,133 @@ export default function CreateDestinationPage() {
                   {course} ×
                 </Badge>
               ))}
+            </div>
+          </div>
+
+          {/* Universities Section */}
+          <div>
+            <Label>Universities</Label>
+            <div className="space-y-4">
+              {/* University Input Form */}
+              <div className="border rounded-lg p-4 bg-gray-50">
+                <h4 className="font-medium mb-3">Add New University</h4>
+                <div className="grid grid-cols-2 gap-3 mb-3">
+                  <div>
+                    <Label htmlFor="university-name">University Name *</Label>
+                    <Input
+                      id="university-name"
+                      value={universityInput.name}
+                      onChange={(e) => setUniversityInput({...universityInput, name: e.target.value})}
+                      placeholder="e.g., Harvard University"
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="university-location">Location *</Label>
+                    <Input
+                      id="university-location"
+                      value={universityInput.location}
+                      onChange={(e) => setUniversityInput({...universityInput, location: e.target.value})}
+                      placeholder="e.g., Cambridge, MA"
+                    />
+                  </div>
+                </div>
+                <div className="grid grid-cols-2 gap-3 mb-3">
+                  <div>
+                    <Label htmlFor="university-ranking">Global Ranking</Label>
+                    <Input
+                      id="university-ranking"
+                      value={universityInput.ranking}
+                      onChange={(e) => setUniversityInput({...universityInput, ranking: e.target.value})}
+                      placeholder="e.g., #3 globally"
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="university-image">Image URL</Label>
+                    <Input
+                      id="university-image"
+                      value={universityInput.image}
+                      onChange={(e) => setUniversityInput({...universityInput, image: e.target.value})}
+                      placeholder="e.g., https://images.unsplash.com/photo-..."
+                    />
+                  </div>
+                </div>
+                <div className="mb-3">
+                  <Label htmlFor="university-description">Description</Label>
+                  <Textarea
+                    id="university-description"
+                    value={universityInput.description}
+                    onChange={(e) => setUniversityInput({...universityInput, description: e.target.value})}
+                    placeholder="Brief description of the university..."
+                    rows={2}
+                  />
+                </div>
+                <div className="mb-3">
+                  <Label>Popular Courses</Label>
+                  <div className="flex gap-2 mb-2">
+                    <Input
+                      value={universityCourseInput}
+                      onChange={(e) => setUniversityCourseInput(e.target.value)}
+                      placeholder="Add a course"
+                      onKeyPress={(e) => e.key === 'Enter' && addUniversityCourse()}
+                    />
+                    <Button type="button" onClick={addUniversityCourse} variant="outline" size="sm">
+                      <Plus className="w-4 h-4" />
+                    </Button>
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    {universityInput.courses.map((course, index) => (
+                      <Badge key={index} variant="secondary" className="cursor-pointer" onClick={() => removeUniversityCourse(index)}>
+                        {course} ×
+                      </Badge>
+                    ))}
+                  </div>
+                </div>
+                <Button type="button" onClick={addUniversity} variant="outline" className="w-full">
+                  <Plus className="w-4 h-4 mr-2" />
+                  Add University
+                </Button>
+              </div>
+
+              {/* Added Universities List */}
+              {formData.universities.length > 0 && (
+                <div className="space-y-3">
+                  <h4 className="font-medium">Added Universities ({formData.universities.length})</h4>
+                  {formData.universities.map((university, index) => (
+                    <div key={index} className="border rounded-lg p-4 bg-white">
+                      <div className="flex justify-between items-start mb-2">
+                        <div>
+                          <h5 className="font-semibold text-gray-900">{university.name}</h5>
+                          <p className="text-sm text-gray-600">{university.location}</p>
+                          {university.ranking && (
+                            <p className="text-xs text-brand-600 font-medium">{university.ranking}</p>
+                          )}
+                        </div>
+                        <Button
+                          type="button"
+                          onClick={() => removeUniversity(index)}
+                          variant="ghost"
+                          size="sm"
+                          className="text-red-600 hover:text-red-700"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </Button>
+                      </div>
+                      {university.description && (
+                        <p className="text-sm text-gray-700 mb-2">{university.description}</p>
+                      )}
+                      {university.courses.length > 0 && (
+                        <div className="flex flex-wrap gap-1">
+                          {university.courses.map((course, courseIndex) => (
+                            <Badge key={courseIndex} variant="outline" className="text-xs">
+                              {course}
+                            </Badge>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
 

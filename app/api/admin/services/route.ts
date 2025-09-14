@@ -9,8 +9,24 @@ import { prisma } from '@/lib/prisma'
 const createServiceSchema = z.object({
   name: z.string().min(1, 'Name is required'),
   slug: z.string().min(1, 'Slug is required'),
+  title: z.string().optional(),
+  subtitle: z.string().optional(),
+  description: z.string().optional(),
+  image: z.string().optional(),
   sectionsMD: z.array(z.string()).optional().default([]),
-  ctaLabel: z.string().optional()
+  features: z.array(z.object({
+    icon: z.string().optional(),
+    title: z.string(),
+    description: z.string()
+  })).optional(),
+  benefits: z.array(z.string()).optional(),
+  process: z.array(z.object({
+    step: z.string(),
+    title: z.string(),
+    description: z.string()
+  })).optional(),
+  ctaLabel: z.string().optional(),
+  ctaText: z.string().optional()
 })
 
 const querySchema = z.object({
@@ -29,9 +45,9 @@ export async function GET(request: NextRequest) {
 
     const { searchParams } = new URL(request.url)
     const { page, limit, search } = querySchema.parse({
-      page: searchParams.get('page'),
-      limit: searchParams.get('limit'),
-      search: searchParams.get('search')
+      page: searchParams.get('page') || '1',
+      limit: searchParams.get('limit') || '10',
+      search: searchParams.get('search') || undefined
     })
 
     const pageNum = parseInt(page)
