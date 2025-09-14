@@ -73,7 +73,7 @@ export default function AdminDestinationsPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-brand-600"></div>
       </div>
     )
   }
@@ -83,7 +83,7 @@ export default function AdminDestinationsPage() {
       <div className="flex justify-between items-center">
         <h1 className="text-3xl font-bold text-gray-900">Destinations Management</h1>
         <Link href="/admin/destinations/create">
-          <Button className="bg-blue-600 hover:bg-blue-700">
+          <Button className="bg-brand-600 hover:bg-brand-700">
             <Plus className="w-4 h-4 mr-2" />
             Create Destination
           </Button>
@@ -112,7 +112,7 @@ export default function AdminDestinationsPage() {
             <CardHeader className="pb-3">
               <div className="flex justify-between items-start">
                 <div className="flex items-center space-x-3">
-                  <div className="w-10 h-10 bg-blue-600 text-white rounded-full flex items-center justify-center">
+                  <div className="w-10 h-10 bg-brand-600 text-white rounded-full flex items-center justify-center">
                     <Globe className="w-5 h-5" />
                   </div>
                   <div>
