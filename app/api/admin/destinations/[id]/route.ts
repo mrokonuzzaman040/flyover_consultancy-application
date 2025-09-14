@@ -97,10 +97,16 @@ export async function PATCH(
     const body = await request.json()
     const validatedData = updateDestinationSchema.parse(body)
 
-    // Check if destination exists
-    const existingDestination = await prisma.destination.findUnique({
-      where: { id }
+    // Check if destination exists - try slug first, then id
+    let existingDestination = await prisma.destination.findUnique({
+      where: { slug: id }
     })
+    
+    if (!existingDestination) {
+      existingDestination = await prisma.destination.findUnique({
+        where: { id }
+      })
+    }
 
     if (!existingDestination) {
       return NextResponse.json(
@@ -148,7 +154,7 @@ export async function PATCH(
     })
 
     const destination = await prisma.destination.update({
-      where: { id },
+      where: { id: existingDestination.id },
       data: updateData
     })
 
@@ -181,9 +187,17 @@ export async function DELETE(
     // }
 
     const { id } = await params
-    const destination = await prisma.destination.findUnique({
-      where: { id }
+    
+    // Try to find by slug first, then by id
+    let destination = await prisma.destination.findUnique({
+      where: { slug: id }
     })
+    
+    if (!destination) {
+      destination = await prisma.destination.findUnique({
+        where: { id }
+      })
+    }
 
     if (!destination) {
       return NextResponse.json(
@@ -193,7 +207,7 @@ export async function DELETE(
     }
 
     await prisma.destination.delete({
-      where: { id }
+      where: { id: destination.id }
     })
 
     return NextResponse.json({ message: 'Destination deleted successfully' })

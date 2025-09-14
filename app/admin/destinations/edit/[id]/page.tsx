@@ -698,7 +698,7 @@ export default function EditDestinationPage() {
                           {university.description && (
                             <p className="text-sm text-gray-700 mt-1">{university.description}</p>
                           )}
-                          {university.popularCourses.length > 0 && (
+                          {university.popularCourses && university.popularCourses.length > 0 && (
                             <div className="flex flex-wrap gap-1 mt-2">
                               {university.popularCourses.map((course, courseIndex) => (
                                 <Badge key={courseIndex} variant="outline" className="text-xs">
