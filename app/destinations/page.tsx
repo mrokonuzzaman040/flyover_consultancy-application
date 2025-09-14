@@ -59,9 +59,14 @@ const stats = [
 ];
 
 async function getDestinations() {
+  // During build time, skip API calls and return empty array
+  if (process.env.NODE_ENV === 'production' && !process.env.NEXT_PUBLIC_BASE_URL) {
+    return [];
+  }
+  
   try {
     const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/admin/destinations`, {
-      cache: 'no-store' // Ensure fresh data
+      next: { revalidate: 3600 } // Revalidate every hour
     });
     
     if (!response.ok) {

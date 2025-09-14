@@ -18,7 +18,8 @@ import {
   Upload,
   MapPin,
   Award,
-  GraduationCap
+  GraduationCap,
+  CalendarCheck
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Session } from "next-auth"
@@ -33,6 +34,7 @@ type NavigationItem = {
 const navigation: NavigationItem[] = [
   { name: "Dashboard", href: "/admin", icon: LayoutDashboard },
   { name: "Leads", href: "/admin/leads", icon: Users },
+  { name: "Meeting Schedules", href: "/admin/meeting-schedules", icon: CalendarCheck },
   { name: "Posts", href: "/admin/posts", icon: FileText },
   { name: "Events", href: "/admin/events", icon: Calendar },
   { name: "Testimonials", href: "/admin/testimonials", icon: MessageSquare },

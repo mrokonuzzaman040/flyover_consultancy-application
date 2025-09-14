@@ -10,45 +10,66 @@ export const metadata: Metadata = {
   description: "Comprehensive study abroad services including consultation, visa assistance, application support, and course selection. Expert guidance for your international education journey.",
 };
 
-export default function ServicesPage() {
-  const services = [
-    { 
-      href: "/services/study-consultation", 
-      title: "Study Consultation", 
-      desc: "Expert guidance to help you choose the right course and university for your goals.",
-      icon: GraduationCap,
-      features: ["University Selection", "Course Matching", "Career Guidance", "Country Comparison"],
-      duration: "1-2 weeks",
-      price: "Free Initial Consultation"
-    },
-    { 
-      href: "/services/visa-assistance", 
-      title: "Visa Assistance", 
-      desc: "Complete support with visa applications, documentation, and interview preparation.",
-      icon: Plane,
-      features: ["Document Preparation", "Application Filing", "Interview Prep", "Status Tracking"],
-      duration: "4-8 weeks",
-      price: "Competitive Rates"
-    },
-    { 
-      href: "/services/application-support", 
-      title: "Application Support", 
-      desc: "End-to-end assistance with university applications and admission processes.",
-      icon: FileText,
-      features: ["Application Review", "Essay Writing", "Document Verification", "Submission Support"],
-      duration: "2-4 weeks",
-      price: "Package Deals Available"
-    },
-    { 
-      href: "/services/course-selection", 
-      title: "Course Selection", 
-      desc: "Personalized recommendations to find the perfect academic program for you.",
-      icon: BookOpen,
-      features: ["Program Analysis", "Career Alignment", "Skill Assessment", "Future Prospects"],
-      duration: "1 week",
-      price: "Included in Consultation"
-    },
-  ];
+interface Service {
+  id: string;
+  name: string;
+  slug: string;
+  title?: string;
+  subtitle?: string;
+  description?: string;
+  image?: string;
+  features?: Array<{
+    icon?: string;
+    title: string;
+    description: string;
+  }>;
+  benefits?: string[];
+  process?: Array<{
+    step: string;
+    title: string;
+    description: string;
+  }>;
+  ctaLabel?: string;
+  ctaText?: string;
+}
+
+async function getServices(): Promise<Service[]> {
+  // During build time, skip API calls and return empty array
+  if (process.env.NODE_ENV === 'production' && !process.env.NEXT_PUBLIC_BASE_URL) {
+    return [];
+  }
+  
+  try {
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
+    const response = await fetch(`${baseUrl}/api/services`, {
+      next: { revalidate: 3600 } // Revalidate every hour
+    });
+    
+    if (!response.ok) {
+      console.error('API response not ok:', response.status);
+      return [];
+    }
+    
+    const data = await response.json();
+    return data.services || [];
+  } catch (error) {
+    console.error('Error fetching services:', error);
+    return [];
+  }
+}
+
+// Icon mapping for services
+const getServiceIcon = (serviceName: string) => {
+  const name = serviceName.toLowerCase();
+  if (name.includes('consultation') || name.includes('study')) return GraduationCap;
+  if (name.includes('visa')) return Plane;
+  if (name.includes('application')) return FileText;
+  if (name.includes('course') || name.includes('selection')) return BookOpen;
+  return GraduationCap; // default
+};
+
+export default async function ServicesPage() {
+  const services = await getServices();
 
   return (
     <div>
@@ -106,11 +127,16 @@ export default function ServicesPage() {
 
         {/* Services Grid */}
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-2">
-          {services.map((service, i) => {
-            const IconComponent = service.icon;
+          {services.length > 0 ? services.map((service, i) => {
+            const IconComponent = getServiceIcon(service.name);
+            const serviceHref = `/services/${service.slug}`;
+            const serviceTitle = service.title || service.name;
+            const serviceDesc = service.description || service.subtitle || 'Professional service to help with your study abroad journey.';
+            const serviceFeatures = service.features?.map(f => f.title) || service.benefits || ['Expert Guidance', 'Professional Support', 'Personalized Service', 'Quality Assurance'];
+            
             return (
-              <Reveal key={service.href} delay={i * 0.1}>
-                <Link href={service.href} className="group">
+              <Reveal key={service.id} delay={i * 0.1}>
+                <Link href={serviceHref} className="group">
                   <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8 hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
                     {/* Service Header */}
                     <div className="flex items-start space-x-4 mb-6">
@@ -121,9 +147,9 @@ export default function ServicesPage() {
                       </div>
                       <div className="flex-1">
                         <h3 className="text-xl font-bold text-gray-900 group-hover:text-brand transition-colors">
-                          {service.title}
+                          {serviceTitle}
                         </h3>
-                        <p className="text-gray-600 mt-2">{service.desc}</p>
+                        <p className="text-gray-600 mt-2">{serviceDesc}</p>
                       </div>
                     </div>
 
@@ -133,7 +159,7 @@ export default function ServicesPage() {
                       <div>
                         <h4 className="text-sm font-semibold text-gray-900 mb-2">What&apos;s Included:</h4>
                         <div className="grid grid-cols-2 gap-2">
-                          {service.features.map((feature, idx) => (
+                          {serviceFeatures.slice(0, 4).map((feature, idx) => (
                             <div key={idx} className="flex items-center space-x-2">
                               <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" />
                               <span className="text-sm text-gray-600">{feature}</span>
@@ -145,12 +171,12 @@ export default function ServicesPage() {
                       {/* Duration and Price */}
                       <div className="flex justify-between items-center pt-4 border-t border-gray-100">
                         <div>
-                          <div className="text-xs text-gray-500 uppercase tracking-wide">Duration</div>
-                          <div className="text-sm font-medium text-gray-900">{service.duration}</div>
+                          <div className="text-xs text-gray-500 uppercase tracking-wide">Service</div>
+                          <div className="text-sm font-medium text-gray-900">Professional</div>
                         </div>
                         <div className="text-right">
-                          <div className="text-xs text-gray-500 uppercase tracking-wide">Pricing</div>
-                          <div className="text-sm font-medium text-brand">{service.price}</div>
+                          <div className="text-xs text-gray-500 uppercase tracking-wide">Support</div>
+                          <div className="text-sm font-medium text-brand">Expert Level</div>
                         </div>
                       </div>
                     </div>
@@ -170,7 +196,11 @@ export default function ServicesPage() {
                 </Link>
               </Reveal>
             );
-          })}
+          }) : (
+            <div className="col-span-full text-center py-12">
+              <p className="text-gray-500 text-lg">No services available at the moment.</p>
+            </div>
+          )}
         </div>
 
         {/* CTA Section */}

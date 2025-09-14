@@ -2,6 +2,8 @@
 
 import { UserCheck, FileText, Award, Plane, ArrowRight, CheckCircle, Clock, Users, Star } from "lucide-react";
 import { useState } from "react";
+import Link from "next/link";
+import ScheduleMeetingModal from "@/components/modals/ScheduleMeetingModal";
 
 const services = [
   {
@@ -43,6 +45,15 @@ const stats = [
 
 export default function ServicesSection() {
   const [activeService, setActiveService] = useState(0);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleScheduleClick = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
 
   return (
     <section className="relative bg-gradient-to-br from-brand-600 via-brand-700 to-brand-800 py-24 overflow-hidden">
@@ -150,10 +161,10 @@ export default function ServicesSection() {
 
                   
                   {/* CTA Button */}
-                  <button className="w-full bg-gradient-to-r from-white/20 to-white/10 hover:from-white/30 hover:to-white/20 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300 flex items-center justify-center group-hover:shadow-lg border border-white/20 hover:border-white/40">
+                  <Link href="/book-consultation" className="w-full bg-gradient-to-r from-white/20 to-white/10 hover:from-white/30 hover:to-white/20 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300 flex items-center justify-center group-hover:shadow-lg border border-white/20 hover:border-white/40">
                     Learn More
                     <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
-                  </button>
+                  </Link>
                 </div>
               </div>
             );
@@ -163,15 +174,23 @@ export default function ServicesSection() {
         {/* Bottom CTA */}
         <div className="text-center mt-16">
           <div className="inline-flex flex-col sm:flex-row gap-4">
-            <button className="px-8 py-4 bg-white text-brand-700 font-bold rounded-2xl hover:bg-gray-100 transition-all duration-300 transform hover:scale-105 shadow-xl">
+            <Link href="/book-consultation" className="px-8 py-4 bg-white text-brand-700 font-bold rounded-2xl hover:bg-gray-100 transition-all duration-300 transform hover:scale-105 shadow-xl">
               Get Started Today
-            </button>
-            <button className="px-8 py-4 border-2 border-white/30 text-white font-semibold rounded-2xl hover:bg-white/10 transition-all duration-300">
+            </Link>
+            <button 
+              onClick={handleScheduleClick}
+              className="px-8 py-4 border-2 border-white/30 text-white font-semibold rounded-2xl hover:bg-white/10 transition-all duration-300"
+            >
               Schedule Free Consultation
             </button>
           </div>
         </div>
       </div>
+      
+      <ScheduleMeetingModal
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+      />
     </section>
   );
 }

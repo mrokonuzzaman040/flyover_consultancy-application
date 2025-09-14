@@ -40,7 +40,7 @@ interface Service {
 async function getService(slug: string): Promise<Service | null> {
   try {
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
-    const response = await fetch(`${baseUrl}/api/admin/services`, {
+    const response = await fetch(`${baseUrl}/api/services`, {
       cache: 'no-store'
     });
     

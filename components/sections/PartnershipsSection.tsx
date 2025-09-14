@@ -1,10 +1,20 @@
 "use client";
 
 import { useState, useEffect } from 'react';
+import ScheduleMeetingModal from "@/components/modals/ScheduleMeetingModal";
 
 export default function PartnershipsSection() {
   const [isVisible, setIsVisible] = useState(false);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleScheduleClick = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
 
   useEffect(() => {
     const timer = setTimeout(() => setIsVisible(true), 300);
@@ -283,13 +293,21 @@ export default function PartnershipsSection() {
               <button className="px-8 py-3 bg-gradient-to-r from-brand-600 to-brand-700 text-white rounded-full font-semibold hover:from-brand-700 hover:to-brand-800 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl">
                 Explore Universities
               </button>
-              <button className="px-8 py-3 border-2 border-brand-600 text-brand-600 rounded-full font-semibold hover:bg-brand-600 hover:text-white transition-all duration-300">
+              <button 
+                onClick={handleScheduleClick}
+                className="px-8 py-3 border-2 border-brand-600 text-brand-600 rounded-full font-semibold hover:bg-brand-600 hover:text-white transition-all duration-300"
+              >
                 Schedule Consultation
               </button>
             </div>
           </div>
         </div>
       </div>
+      
+      <ScheduleMeetingModal
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+      />
     </section>
   );
 }

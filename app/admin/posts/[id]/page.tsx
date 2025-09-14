@@ -8,6 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { ArrowLeft, Edit, Trash2 } from "lucide-react"
 import { toast } from "sonner"
+import Image from "next/image"
 
 interface Post {
   id: string
@@ -47,7 +48,7 @@ export default function ViewPostPage() {
         toast.error('Failed to fetch post')
         router.push('/admin/posts')
       }
-    } catch (error) {
+    } catch  {
       toast.error('Error fetching post')
       router.push('/admin/posts')
     } finally {
@@ -81,7 +82,7 @@ export default function ViewPostPage() {
       } else {
         toast.error('Failed to delete post')
       }
-    } catch (error) {
+    } catch {
       toast.error('Error deleting post')
     } finally {
       setDeleteLoading(false)
@@ -228,10 +229,12 @@ export default function ViewPostPage() {
             <div>
               <Label className="font-medium">Cover Image</Label>
               <div className="mt-1">
-                <img 
+                <Image 
                   src={post.coverUrl} 
                   alt="Cover" 
                   className="max-w-full h-48 object-cover rounded-lg border" 
+                  width={192}
+                  height={192}
                 />
               </div>
             </div>

@@ -63,7 +63,7 @@ export default function ViewServicePage() {
         toast.error('Failed to fetch service')
         router.push('/admin/services')
       }
-    } catch (error) {
+    } catch (_error) {
       toast.error('Error fetching service')
       router.push('/admin/services')
     } finally {
@@ -83,7 +83,7 @@ export default function ViewServicePage() {
       } else {
         toast.error('Failed to delete service')
       }
-    } catch (error) {
+    } catch (_error) {
       toast.error('Error deleting service')
     }
   }
