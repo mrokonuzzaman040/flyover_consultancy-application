@@ -9,21 +9,54 @@ import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 
 type ButtonLink = { label?: string; href?: string };
-type Slide = { title?: string; subtitle?: string; imageUrl?: string; primaryButton?: ButtonLink; secondaryButton?: ButtonLink };
-type Item = { title?: string; description?: string; imageUrl?: string; href?: string; icon?: string; name?: string; logoUrl?: string };
+type Slide = { title?: string; subtitle?: string; headline?: string; sub?: string; imageUrl?: string; image?: string; primaryButton?: ButtonLink & { isModal?: boolean }; secondaryButton?: ButtonLink };
+type Item = {
+  title?: string;
+  description?: string;
+  imageUrl?: string;
+  href?: string;
+  icon?: string;
+  name?: string;
+  logoUrl?: string;
+  stat?: string;
+  statLabel?: string;
+  number?: string;
+  step?: string;
+  year?: string;
+  organization?: string;
+  color?: string;
+  city?: string;
+  category?: string;
+  country?: string;
+  universityLogoUrl?: string;
+};
 type ContentSection = { title?: string; contentMD?: string; imageUrl?: string; items?: Item[]; enabled?: boolean };
 type HomeSettingsForm = {
   heroSlider: Slide[];
   transformSection: ContentSection;
+  servicesSection: ContentSection;
+  destinationsSection: ContentSection;
   whyChooseSection: ContentSection;
   partnersSection: ContentSection;
+  fiveStepsSection: ContentSection;
+  awardsSection: ContentSection;
+  upcomingEventsSection: ContentSection;
+  successStoriesSection: ContentSection;
+  insightsSection: ContentSection;
 };
 
 const emptyForm: HomeSettingsForm = {
   heroSlider: [],
   transformSection: { title: "", contentMD: "", imageUrl: "", enabled: true },
+  servicesSection: { title: "", contentMD: "", enabled: true },
+  destinationsSection: { title: "", items: [], enabled: true },
   whyChooseSection: { title: "", items: [], enabled: true },
   partnersSection: { title: "", items: [], enabled: true },
+  fiveStepsSection: { title: "", items: [], enabled: true },
+  awardsSection: { title: "", items: [], enabled: true },
+  upcomingEventsSection: { title: "", contentMD: "", enabled: true },
+  successStoriesSection: { title: "", contentMD: "", enabled: true },
+  insightsSection: { title: "", contentMD: "", enabled: true },
 };
 
 export default function HomeSettingsPage() {
@@ -43,8 +76,15 @@ export default function HomeSettingsPage() {
       const next: HomeSettingsForm = {
         heroSlider: s.heroSlider || [],
         transformSection: s.transformSection || { title: "", contentMD: "", imageUrl: "", enabled: true },
+        servicesSection: s.servicesSection || { title: "", contentMD: "", enabled: true },
+        destinationsSection: s.destinationsSection || { title: "", items: [], enabled: true },
         whyChooseSection: s.whyChooseSection || { title: "", items: [], enabled: true },
         partnersSection: s.partnersSection || { title: "", items: [], enabled: true },
+        fiveStepsSection: s.fiveStepsSection || { title: "", items: [], enabled: true },
+        awardsSection: s.awardsSection || { title: "", items: [], enabled: true },
+        upcomingEventsSection: s.upcomingEventsSection || { title: "", contentMD: "", enabled: true },
+        successStoriesSection: s.successStoriesSection || { title: "", contentMD: "", enabled: true },
+        insightsSection: s.insightsSection || { title: "", contentMD: "", enabled: true },
       };
       setForm(next);
     } catch (e: unknown) {
@@ -78,7 +118,7 @@ export default function HomeSettingsPage() {
     return { ...prev, heroSlider: arr };
   });
 
-  const addWhyItem = () => setForm((prev) => ({ ...prev, whyChooseSection: { ...prev.whyChooseSection, items: [...(prev.whyChooseSection.items || []), { title: "", description: "", icon: "" }] } }));
+  const addWhyItem = () => setForm((prev) => ({ ...prev, whyChooseSection: { ...prev.whyChooseSection, items: [...(prev.whyChooseSection.items || []), { title: "", description: "", icon: "", stat: "", statLabel: "" }] } }));
   const removeWhyItem = (index: number) => setForm((prev) => ({ ...prev, whyChooseSection: { ...prev.whyChooseSection, items: (prev.whyChooseSection.items || []).filter((_, i) => i !== index) } }));
 
   const updateWhyItem = (index: number, patch: Partial<Item>) => setForm((prev) => {
@@ -171,6 +211,65 @@ export default function HomeSettingsPage() {
         </CardContent>
       </Card>
 
+      {/* Services Section (header only) */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Services Section</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-3">
+          <div>
+            <Label>Title</Label>
+            <Input value={form.servicesSection.title || ""} onChange={(e) => setForm({ ...form, servicesSection: { ...form.servicesSection, title: e.target.value } })} />
+          </div>
+          <div>
+            <Label>Subtitle / Description</Label>
+            <Textarea rows={4} value={form.servicesSection.contentMD || ""} onChange={(e) => setForm({ ...form, servicesSection: { ...form.servicesSection, contentMD: e.target.value } })} />
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Destinations Section */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Top Institutions / Destinations</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-3">
+          <div>
+            <Label>Title</Label>
+            <Input value={form.destinationsSection.title || ""} onChange={(e) => setForm({ ...form, destinationsSection: { ...form.destinationsSection, title: e.target.value } })} />
+          </div>
+          <div className="flex justify-end">
+            <Button variant="outline" onClick={() => setForm((p)=>({...p, destinationsSection:{...p.destinationsSection, items:[...(p.destinationsSection.items||[]), { name:"", city:"", imageUrl:"", universityLogoUrl:"", description:""}]}}))}>Add Destination</Button>
+          </div>
+          {(form.destinationsSection.items || []).map((d, i) => (
+            <div key={i} className="border rounded p-3 grid grid-cols-2 gap-2">
+              <Input placeholder="Name" value={d.name || ""} onChange={(e)=>{
+                const items=[...(form.destinationsSection.items||[])]; items[i]={...items[i], name:e.target.value}; setForm({...form, destinationsSection:{...form.destinationsSection, items}});
+              }} />
+              <Input placeholder="City" value={d.city || ""} onChange={(e)=>{
+                const items=[...(form.destinationsSection.items||[])]; items[i]={...items[i], city:e.target.value}; setForm({...form, destinationsSection:{...form.destinationsSection, items}});
+              }} />
+              <Input placeholder="Image URL" value={d.imageUrl || ""} onChange={(e)=>{
+                const items=[...(form.destinationsSection.items||[])]; items[i]={...items[i], imageUrl:e.target.value}; setForm({...form, destinationsSection:{...form.destinationsSection, items}});
+              }} />
+              <Input placeholder="University Logo URL" value={d.universityLogoUrl || ""} onChange={(e)=>{
+                const items=[...(form.destinationsSection.items||[])]; items[i]={...items[i], universityLogoUrl:e.target.value}; setForm({...form, destinationsSection:{...form.destinationsSection, items}});
+              }} />
+              <div className="col-span-2">
+                <Textarea placeholder="Short description" value={d.description || ""} onChange={(e)=>{
+                  const items=[...(form.destinationsSection.items||[])]; items[i]={...items[i], description:e.target.value}; setForm({...form, destinationsSection:{...form.destinationsSection, items}});
+                }} />
+              </div>
+              <div className="col-span-2 flex justify-end">
+                <Button variant="outline" className="text-red-600" onClick={()=>{
+                  setForm((p)=>({...p, destinationsSection:{...p.destinationsSection, items:(p.destinationsSection.items||[]).filter((_,idx)=>idx!==i)}}))
+                }}>Remove</Button>
+              </div>
+            </div>
+          ))}
+        </CardContent>
+      </Card>
+
       {/* Why Choose Flyover */}
       <Card>
         <CardHeader>
@@ -189,6 +288,8 @@ export default function HomeSettingsPage() {
               <Input placeholder="Icon name" value={it.icon || ""} onChange={(e) => updateWhyItem(i, { icon: e.target.value })} />
               <Input placeholder="Title" value={it.title || ""} onChange={(e) => updateWhyItem(i, { title: e.target.value })} />
               <Input placeholder="Description" value={it.description || ""} onChange={(e) => updateWhyItem(i, { description: e.target.value })} />
+              <Input placeholder="Stat (e.g., 22K+)" value={it.stat || ""} onChange={(e) => updateWhyItem(i, { stat: e.target.value })} />
+              <Input placeholder="Stat Label (e.g., Success Stories)" value={it.statLabel || ""} onChange={(e) => updateWhyItem(i, { statLabel: e.target.value })} />
               <div className="col-span-3 flex justify-end">
                 <Button variant="outline" className="text-red-600" onClick={() => removeWhyItem(i)}>Remove</Button>
               </div>
@@ -215,11 +316,128 @@ export default function HomeSettingsPage() {
               <Input placeholder="Name" value={p.name || ""} onChange={(e) => updatePartner(i, { name: e.target.value })} />
               <Input placeholder="Logo URL" value={p.logoUrl || ""} onChange={(e) => updatePartner(i, { logoUrl: e.target.value })} />
               <Input placeholder="Website URL" value={p.href || ""} onChange={(e) => updatePartner(i, { href: e.target.value })} />
+              <Input placeholder="Category" value={p.category || ""} onChange={(e) => updatePartner(i, { category: e.target.value })} />
+              <Input placeholder="Country" value={p.country || ""} onChange={(e) => updatePartner(i, { country: e.target.value })} />
               <div className="col-span-3 flex justify-end">
                 <Button variant="outline" className="text-red-600" onClick={() => removePartner(i)}>Remove</Button>
               </div>
             </div>
           ))}
+        </CardContent>
+      </Card>
+
+      {/* Study Steps, Awards, Upcoming Events, Success Stories, Insights are appended below */}
+
+      {/* Study Abroad in 5 Steps */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Study Abroad in 5 Steps</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-3">
+          <div>
+            <Label>Title</Label>
+            <Input value={form.fiveStepsSection.title || ""} onChange={(e) => setForm({ ...form, fiveStepsSection: { ...form.fiveStepsSection, title: e.target.value } })} />
+          </div>
+          <div className="flex justify-end">
+            <Button variant="outline" onClick={()=>setForm((p)=>({...p, fiveStepsSection:{...p.fiveStepsSection, items:[...(p.fiveStepsSection.items||[]), { step:"01", title:"", description:""}]}}))}>Add Step</Button>
+          </div>
+          {(form.fiveStepsSection.items || []).map((st, i) => (
+            <div key={i} className="border rounded p-3 grid grid-cols-3 gap-2">
+              <Input placeholder="Step number (e.g., 01)" value={st.step || ""} onChange={(e)=>{
+                const items=[...(form.fiveStepsSection.items||[])]; items[i]={...items[i], step:e.target.value}; setForm({...form, fiveStepsSection:{...form.fiveStepsSection, items}});
+              }} />
+              <Input placeholder="Title" value={st.title || ""} onChange={(e)=>{
+                const items=[...(form.fiveStepsSection.items||[])]; items[i]={...items[i], title:e.target.value}; setForm({...form, fiveStepsSection:{...form.fiveStepsSection, items}});
+              }} />
+              <Input placeholder="Description" value={st.description || ""} onChange={(e)=>{
+                const items=[...(form.fiveStepsSection.items||[])]; items[i]={...items[i], description:e.target.value}; setForm({...form, fiveStepsSection:{...form.fiveStepsSection, items}});
+              }} />
+              <div className="col-span-3 flex justify-end">
+                <Button variant="outline" className="text-red-600" onClick={()=>setForm((p)=>({...p, fiveStepsSection:{...p.fiveStepsSection, items:(p.fiveStepsSection.items||[]).filter((_,idx)=>idx!==i)}}))}>Remove</Button>
+              </div>
+            </div>
+          ))}
+        </CardContent>
+      </Card>
+
+      {/* Awards & Achievements */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Awards & Achievements</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-3">
+          <div>
+            <Label>Title</Label>
+            <Input value={form.awardsSection.title || ""} onChange={(e)=>setForm({...form, awardsSection:{...form.awardsSection, title:e.target.value}})} />
+          </div>
+          <div className="flex justify-end">
+            <Button variant="outline" onClick={()=>setForm((p)=>({...p, awardsSection:{...p.awardsSection, items:[...(p.awardsSection.items||[]), { title:"", description:"", year:"", organization:"", color:"" }]}}))}>Add Award</Button>
+          </div>
+          {(form.awardsSection.items||[]).map((aw, i)=>(
+            <div key={i} className="border rounded p-3 grid grid-cols-3 gap-2">
+              <Input placeholder="Title" value={aw.title||""} onChange={(e)=>{ const items=[...(form.awardsSection.items||[])]; items[i]={...items[i], title:e.target.value}; setForm({...form, awardsSection:{...form.awardsSection, items}}); }} />
+              <Input placeholder="Year" value={aw.year||""} onChange={(e)=>{ const items=[...(form.awardsSection.items||[])]; items[i]={...items[i], year:e.target.value}; setForm({...form, awardsSection:{...form.awardsSection, items}}); }} />
+              <Input placeholder="Organization" value={aw.organization||""} onChange={(e)=>{ const items=[...(form.awardsSection.items||[])]; items[i]={...items[i], organization:e.target.value}; setForm({...form, awardsSection:{...form.awardsSection, items}}); }} />
+              <div className="col-span-3">
+                <Textarea placeholder="Description" value={aw.description||""} onChange={(e)=>{ const items=[...(form.awardsSection.items||[])]; items[i]={...items[i], description:e.target.value}; setForm({...form, awardsSection:{...form.awardsSection, items}}); }} />
+              </div>
+              <Input placeholder="Color gradient (e.g., from-yellow-400 to-orange-500)" value={aw.color||""} onChange={(e)=>{ const items=[...(form.awardsSection.items||[])]; items[i]={...items[i], color:e.target.value}; setForm({...form, awardsSection:{...form.awardsSection, items}}); }} />
+              <div className="col-span-3 flex justify-end">
+                <Button variant="outline" className="text-red-600" onClick={()=> setForm((p)=>({...p, awardsSection:{...p.awardsSection, items:(p.awardsSection.items||[]).filter((_,idx)=>idx!==i)}}))}>Remove</Button>
+              </div>
+            </div>
+          ))}
+        </CardContent>
+      </Card>
+
+      {/* Upcoming Events (header) */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Upcoming Events</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-3">
+          <div>
+            <Label>Title</Label>
+            <Input value={form.upcomingEventsSection.title||""} onChange={(e)=>setForm({...form, upcomingEventsSection:{...form.upcomingEventsSection, title:e.target.value}})} />
+          </div>
+          <div>
+            <Label>Subtitle</Label>
+            <Textarea rows={3} value={form.upcomingEventsSection.contentMD||""} onChange={(e)=>setForm({...form, upcomingEventsSection:{...form.upcomingEventsSection, contentMD:e.target.value}})} />
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Success Stories (header) */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Success Stories</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-3">
+          <div>
+            <Label>Title</Label>
+            <Input value={form.successStoriesSection.title||""} onChange={(e)=>setForm({...form, successStoriesSection:{...form.successStoriesSection, title:e.target.value}})} />
+          </div>
+          <div>
+            <Label>Subtitle</Label>
+            <Textarea rows={3} value={form.successStoriesSection.contentMD||""} onChange={(e)=>setForm({...form, successStoriesSection:{...form.successStoriesSection, contentMD:e.target.value}})} />
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Insights (header) */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Insights</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-3">
+          <div>
+            <Label>Title</Label>
+            <Input value={form.insightsSection.title||""} onChange={(e)=>setForm({...form, insightsSection:{...form.insightsSection, title:e.target.value}})} />
+          </div>
+          <div>
+            <Label>Subtitle</Label>
+            <Textarea rows={3} value={form.insightsSection.contentMD||""} onChange={(e)=>setForm({...form, insightsSection:{...form.insightsSection, contentMD:e.target.value}})} />
+          </div>
         </CardContent>
       </Card>
     </div>
