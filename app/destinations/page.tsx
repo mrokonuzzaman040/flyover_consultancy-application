@@ -59,30 +59,38 @@ const stats = [
 ];
 
 async function getDestinations() {
-  // During build time, skip API calls and return empty array
-  if (process.env.NODE_ENV === 'production' && !process.env.NEXT_PUBLIC_BASE_URL) {
-    return [];
-  }
-  
   try {
+    // First try to fetch from API
     const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/admin/destinations`, {
-      next: { revalidate: 3600 } // Revalidate every hour
+      next: { revalidate: 3600 }, // Revalidate every hour
+      cache: 'force-cache'
     });
     
-    if (!response.ok) {
-      throw new Error('Failed to fetch destinations');
+    if (response.ok) {
+      const data = await response.json();
+      if (data.destinations && data.destinations.length > 0) {
+        return data.destinations;
+      }
     }
-    
-    const data = await response.json();
-    return data.destinations || [];
   } catch (error) {
-    console.error('Error fetching destinations:', error);
+    console.log('API not available, using test data:', error instanceof Error ? error.message : 'Unknown error');
+  }
+  
+  // Fallback to test data
+  try {
+    const testData = await import('@/data/destinations-test-data.json');
+    return testData.destinations || [];
+  } catch (error) {
+    console.error('Error loading test data:', error);
     return [];
   }
 }
 
 export default async function DestinationsPage() {
   const countries = await getDestinations();
+  
+  // If no countries are available, show a message
+  const hasCountries = countries && countries.length > 0;
   return (
     <div>
       <PageHeader
@@ -133,18 +141,37 @@ export default async function DestinationsPage() {
             </div>
           </Reveal>
           
-          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-            {countries.map((country: Destination, index: number) => (
-              <Reveal key={country.slug} delay={index * 0.1}>
+          {!hasCountries ? (
+            <div className="text-center py-16">
+              <div className="mx-auto max-w-md">
+                <Globe className="mx-auto h-16 w-16 text-gray-400 mb-4" />
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">No Destinations Available</h3>
+                <p className="text-gray-600 mb-6">
+                   We&apos;re currently updating our destination information. Please check back soon or contact us for assistance.
+                 </p>
+                <a 
+                  href="/contact" 
+                  className="inline-flex items-center px-6 py-3 bg-brand-600 text-white rounded-lg hover:bg-brand-700 transition-colors"
+                >
+                  Contact Us
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </a>
+              </div>
+            </div>
+          ) : (
+            <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+              {countries.map((country: Destination, index: number) => (
+                <Reveal key={country.slug} delay={index * 0.1}>
                 <Link 
                   href={`/destinations/${country.slug}`} 
-                  className="group bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden h-[650px] flex flex-col"
+                  className="group bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden h-[650px] flex flex-col transform hover:-translate-y-1"
+                  aria-label={`Learn more about studying in ${country.country}`}
                 >
                   {/* Image Section */}
                   <div className="relative h-48 overflow-hidden flex-shrink-0">
                     <LazyImage
-                      src={country.image || 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&h=400&fit=crop&crop=entropy&auto=format&q=80'}
-                      alt={`Study in ${country.country}`}
+                      src={country.image || `https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&h=400&fit=crop&crop=entropy&auto=format&q=80`}
+                      alt={`Study abroad in ${country.country} - Universities and education opportunities`}
                       width={600}
                       height={400}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
@@ -211,9 +238,10 @@ export default async function DestinationsPage() {
                     </div>
                   </div>
                 </Link>
-              </Reveal>
-            ))}
-          </div>
+                </Reveal>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 
