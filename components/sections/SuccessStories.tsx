@@ -3,119 +3,15 @@
 import { useState, useEffect } from 'react';
 import Link from "next/link";
 import StarRating from "@/components/ui/star-rating";
+import sectionsData from '@/data/sections-data.json';
 
-const successStories = [
-  {
-    id: 1,
-    rating: 5,
-    text: "Flyover Global made my dream of studying at Harvard a reality. Their personalized guidance and scholarship assistance helped me secure a full scholarship. The counselors were incredibly supportive throughout the entire process.",
-    author: "Rashida Ahmed",
-    university: "Harvard University",
-    program: "Master's in Computer Science",
-    country: "USA",
-    scholarship: "Full Scholarship",
-    year: "2024",
-    avatar: (
-      <div className="w-16 h-16 bg-gradient-to-br from-pink-400 to-purple-500 rounded-full flex items-center justify-center text-white font-bold text-lg">
-        RA
-      </div>
-    ),
-    flag: "🇺🇸",
-    color: "from-brand-500 to-brand-700"
-  },
-  {
-    id: 2,
-    rating: 5,
-    text: "The team at Flyover Global helped me navigate the complex application process for Oxford. Their IELTS preparation sessions were excellent, and I achieved the score I needed. Now I'm pursuing my PhD in Engineering!",
-    author: "Mohammad Hassan",
-    university: "University of Oxford",
-    program: "PhD in Engineering",
-    country: "UK",
-    scholarship: "Partial Scholarship",
-    year: "2023",
-    avatar: (
-      <div className="w-16 h-16 bg-gradient-to-br from-blue-400 to-indigo-500 rounded-full flex items-center justify-center text-white font-bold text-lg">
-        MH
-      </div>
-    ),
-    flag: "🇬🇧",
-    color: "from-blue-600 to-blue-800"
-  },
-  {
-    id: 3,
-    rating: 5,
-    text: "Thanks to Flyover Global, I'm now studying at the University of Toronto. The visa process was seamless, and their career counseling helped me choose the perfect program. Couldn't be happier with my decision!",
-    author: "Fatima Khan",
-    university: "University of Toronto",
-    program: "Master's in Business Administration",
-    country: "Canada",
-    scholarship: "Merit Scholarship",
-    year: "2024",
-    avatar: (
-      <div className="w-16 h-16 bg-gradient-to-br from-green-400 to-emerald-500 rounded-full flex items-center justify-center text-white font-bold text-lg">
-        FK
-      </div>
-    ),
-    flag: "🇨🇦",
-    color: "from-green-500 to-green-700"
-  },
-  {
-    id: 4,
-    rating: 5,
-    text: "Flyover Global's support was incredible from start to finish. They helped me get into the University of Melbourne with a scholarship. The pre-departure orientation was very helpful for my transition to Australia.",
-    author: "Arif Rahman",
-    university: "University of Melbourne",
-    program: "Master's in Data Science",
-    country: "Australia",
-    scholarship: "International Excellence Scholarship",
-    year: "2023",
-    avatar: (
-      <div className="w-16 h-16 bg-gradient-to-br from-orange-400 to-brand-500 rounded-full flex items-center justify-center text-white font-bold text-lg">
-        AR
-      </div>
-    ),
-    flag: "🇦🇺",
-    color: "from-orange-500 to-orange-700"
-  },
-  {
-    id: 5,
-    rating: 5,
-    text: "I was overwhelmed by the application process until I found Flyover Global. They simplified everything and helped me secure admission to NUS with financial aid. Their expertise in Asian universities is unmatched.",
-    author: "Nusrat Jahan",
-    university: "National University of Singapore",
-    program: "Master's in Public Policy",
-    country: "Singapore",
-    scholarship: "Need-based Aid",
-    year: "2024",
-    avatar: (
-      <div className="w-16 h-16 bg-gradient-to-br from-purple-400 to-pink-500 rounded-full flex items-center justify-center text-white font-bold text-lg">
-        NJ
-      </div>
-    ),
-    flag: "🇸🇬",
-    color: "from-purple-500 to-purple-700"
-  },
-  {
-    id: 6,
-    rating: 5,
-    text: "The personalized attention I received from Flyover Global was amazing. They helped me craft compelling essays and prepare for interviews. Now I'm at Imperial College London pursuing my dream in Artificial Intelligence!",
-    author: "Tanvir Ahmed",
-    university: "Imperial College London",
-    program: "Master's in Artificial Intelligence",
-    country: "UK",
-    scholarship: "Dean's Excellence Scholarship",
-    year: "2023",
-    avatar: (
-      <div className="w-16 h-16 bg-gradient-to-br from-cyan-400 to-blue-500 rounded-full flex items-center justify-center text-white font-bold text-lg">
-        TA
-      </div>
-    ),
-    flag: "🇬🇧",
-    color: "from-cyan-500 to-cyan-700"
-  }
-];
+interface SuccessStoriesProps {
+  successStories?: typeof sectionsData.successStories;
+}
 
-export default function SuccessStories() {
+
+
+export default function SuccessStories({ successStories = sectionsData.successStories }: SuccessStoriesProps) {
   const [isVisible, setIsVisible] = useState(false);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
@@ -226,7 +122,9 @@ export default function SuccessStories() {
                           <div className="flex items-start justify-between mb-4 md:mb-6">
                             <div className="flex items-center space-x-3 md:space-x-4 flex-1 min-w-0">
                               <div className="flex-shrink-0">
-                                {story.avatar}
+                                <div className={`w-16 h-16 bg-gradient-to-br ${story.color} rounded-full flex items-center justify-center text-white font-bold text-lg`}>
+                                  {story.avatar}
+                                </div>
                               </div>
                               <div className="min-w-0 flex-1">
                                 <h3 className="font-bold text-gray-900 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-brand-600 group-hover:to-brand-700 transition-all duration-300 text-sm md:text-base truncate">

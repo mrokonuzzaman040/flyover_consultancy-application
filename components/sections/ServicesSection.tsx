@@ -4,46 +4,31 @@ import { UserCheck, FileText, Award, Plane, ArrowRight, CheckCircle, Clock, User
 import { useState } from "react";
 import Link from "next/link";
 import ScheduleMeetingModal from "@/components/modals/ScheduleMeetingModal";
+import sectionsData from '@/data/sections-data.json';
 
-const services = [
-  {
-    icon: UserCheck,
-    title: "Personalized Counseling",
-    description: "Get expert guidance tailored to your academic goals and career aspirations.",
-    features: ["1-on-1 Expert Sessions", "Career Path Analysis", "Goal Setting & Planning"],
-    popular: true
-  },
-  {
-    icon: FileText,
-    title: "Application Support",
-    description: "Complete assistance with university applications, essays, and documentation.",
-    features: ["Essay Writing Help", "Document Review", "Application Tracking"],
-    popular: false
-  },
-  {
-    icon: Award,
-    title: "Scholarship Guidance",
-    description: "Discover and apply for scholarships to fund your international education.",
-    features: ["Scholarship Search", "Application Assistance", "Interview Prep"],
-    popular: false
-  },
-  {
-    icon: Plane,
-    title: "Visa & Travel Support",
-    description: "Navigate visa processes and pre-departure preparations with confidence.",
-    features: ["Visa Documentation", "Interview Preparation", "Travel Planning"],
-    popular: true
-  }
-];
+// Icon mapping
+const iconMap = {
+  UserCheck,
+  FileText,
+  Award,
+  Plane,
+  Users,
+  CheckCircle,
+  Star,
+  Clock
+};
 
-const stats = [
-  { icon: Users, value: "5,000+", label: "Students Helped" },
-  { icon: CheckCircle, value: "98%", label: "Success Rate" },
-  { icon: Star, value: "4.9/5", label: "Client Rating" },
-  { icon: Clock, value: "15+", label: "Years Experience" }
-];
+interface ServicesSectionProps {
+  services?: typeof sectionsData.services;
+  stats?: typeof sectionsData.stats;
+}
 
-export default function ServicesSection() {
+
+
+export default function ServicesSection({ 
+  services = sectionsData.services, 
+  stats = sectionsData.stats 
+}: ServicesSectionProps = {}) {
   const [activeService, setActiveService] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -89,7 +74,7 @@ export default function ServicesSection() {
           {/* Stats Row */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-3xl mx-auto">
             {stats.map((stat, index) => {
-              const IconComponent = stat.icon;
+              const IconComponent = iconMap[stat.icon as keyof typeof iconMap];
               return (
                 <div key={index} className="text-center">
                   <div className="inline-flex items-center justify-center w-10 h-10 bg-white/10 rounded-lg mb-2">
@@ -106,7 +91,7 @@ export default function ServicesSection() {
         {/* Services Grid - Enhanced Design */}
         <div className="grid gap-8 lg:grid-cols-2 xl:grid-cols-4">
           {services.map((service, index) => {
-            const IconComponent = service.icon;
+            const IconComponent = iconMap[service.icon as keyof typeof iconMap];
             const isActive = activeService === index;
             
             return (

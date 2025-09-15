@@ -1,60 +1,14 @@
 "use client";
 
+import React from 'react';
 import { useState } from "react";
 import { CheckCircle, Circle, ArrowRight } from "lucide-react";
-// import AnimatedCounter from "../ui/animated-counter";
+import sectionsData from '@/data/sections-data.json';
+interface StudyAbroadStepsProps {
+  steps?: typeof sectionsData.studyAbroadSteps;
+}
 
-const steps = [
-  {
-    id: 1,
-    title: "Initial Consultation",
-    description: "Meet with our expert counselors to discuss your academic goals and preferences",
-    color: "from-brand-500 to-orange-500",
-    bgColor: "bg-brand-50",
-    textColor: "text-brand-600"
-  },
-  {
-    id: 2,
-    title: "University Selection",
-    description: "Get personalized recommendations based on your profile and career aspirations",
-    color: "from-orange-500 to-amber-500",
-    bgColor: "bg-orange-50",
-    textColor: "text-orange-600"
-  },
-  {
-    id: 3,
-    title: "Application Process",
-    description: "Complete applications with our guidance and submit to your chosen universities",
-    color: "from-amber-500 to-yellow-500",
-    bgColor: "bg-amber-50",
-    textColor: "text-amber-600"
-  },
-  {
-    id: 4,
-    title: "Visa Assistance",
-    description: "Navigate the visa process with our comprehensive support and documentation help",
-    color: "from-yellow-500 to-green-500",
-    bgColor: "bg-yellow-50",
-    textColor: "text-yellow-600"
-  },
-  {
-    id: 5,
-    title: "Pre-Departure",
-    description: "Prepare for your journey with orientation sessions and travel arrangements",
-    color: "from-green-500 to-emerald-500",
-    bgColor: "bg-green-50",
-    textColor: "text-green-600"
-  }
-];
-
-// const successStats = [
-//   { number: 5000, label: "Students Placed", suffix: "+" },
-//   { number: 98, label: "Success Rate", suffix: "%" },
-//   { number: 50, label: "Partner Universities", suffix: "+" },
-//   { number: 15, label: "Countries", suffix: "+" }
-// ];
-
-export default function StudyAbroadSteps() {
+export default function StudyAbroadSteps({ steps = sectionsData.studyAbroadSteps }: StudyAbroadStepsProps) {
   const [activeStep, setActiveStep] = useState(1);
 
   return (

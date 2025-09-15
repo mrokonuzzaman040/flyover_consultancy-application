@@ -6,6 +6,7 @@ import Slider from "@/components/ui/slider";
 import CtaButton from "@/components/cta-button";
 import Reveal from "@/components/ui/reveal";
 import ScheduleMeetingModal from "@/components/modals/ScheduleMeetingModal";
+import heroSlidesData from "@/data/sections-data.json";
 
 type Slide = {
   image: string;
@@ -15,31 +16,13 @@ type Slide = {
   secondary?: { label: string; href: string };
 };
 
-const slides: Slide[] = [
-  {
-    image: "/hero/slide1.svg",
-    headline: "Your Global Study Partner",
-    sub: "Admissions, visas, scholarships and more — end-to-end guidance.",
-    primary: { label: "Schedule Free Consultation", isModal: true },
-    secondary: { label: "Explore Destinations", href: "/destinations" },
-  },
-  {
-    image: "/hero/slide2.svg",
-    headline: "550+ Institutions, 22,000+ Success Stories",
-    sub: "Unlock top universities across AU, CA, USA, UK, EU, NZ, JP.",
-    primary: { label: "See Services", href: "/services" },
-    secondary: { label: "Upcoming Events", href: "/events" },
-  },
-  {
-    image: "/hero/slide3.svg",
-    headline: "Start in 5 Simple Steps",
-    sub: "From counseling to takeoff — we streamline your journey.",
-    primary: { label: "Schedule Consultation", isModal: true },
-    secondary: { label: "Read Resources", href: "/resources" },
-  },
-];
 
-export default function HeroSlider() {
+
+interface HeroSliderProps {
+  slides?: Slide[];
+}
+
+export default function HeroSlider({ slides = heroSlidesData.slides }: HeroSliderProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleScheduleClick = () => {

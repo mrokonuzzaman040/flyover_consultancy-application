@@ -2,136 +2,28 @@
 
 import { useState, useEffect } from 'react';
 import Link from "next/link";
+import sectionsData from '@/data/sections-data.json';
 
-const insights = [
-  {
-    id: 1,
-    category: "University Rankings",
-    categoryColor: "bg-blue-100 text-blue-800",
-    author: "Dr. Sarah Mitchell",
-    authorRole: "Education Consultant",
-    readTime: "8 min read",
-    publishDate: "Dec 15, 2024",
-    title: "Top 10 Universities in Canada for International Students 2025",
-    excerpt: "Comprehensive analysis of Canada's leading universities, including admission requirements, tuition fees, and scholarship opportunities for international students.",
-    image: (
-      <div className="w-full h-48 bg-gradient-to-br from-brand-400 to-brand-600 rounded-lg flex items-center justify-center text-white text-4xl font-bold">
-        🇨🇦
-      </div>
-    ),
-    featured: true,
-    views: "12.5K",
-    likes: "892"
-  },
-  {
-    id: 2,
-    category: "Visa Guide",
-    categoryColor: "bg-green-100 text-green-800",
-    author: "Ahmed Hassan",
-    authorRole: "Immigration Lawyer",
-    readTime: "12 min read",
-    publishDate: "Dec 12, 2024",
-    title: "Complete Student Visa Application Guide 2025: Step-by-Step Process",
-    excerpt: "Everything you need to know about student visa applications, including required documents, processing times, and common mistakes to avoid.",
-    image: (
-      <div className="w-full h-48 bg-gradient-to-br from-green-400 to-emerald-600 rounded-lg flex items-center justify-center text-white text-4xl font-bold">
-        📋
-      </div>
-    ),
-    featured: false,
-    views: "8.7K",
-    likes: "654"
-  },
-  {
-    id: 3,
-    category: "Scholarships",
-    categoryColor: "bg-purple-100 text-purple-800",
-    author: "Maria Rodriguez",
-    authorRole: "Financial Aid Advisor",
-    readTime: "6 min read",
-    publishDate: "Dec 10, 2024",
-    title: "$2M+ in Scholarships: Opportunities You Can't Afford to Miss",
-    excerpt: "Discover merit-based, need-based, and country-specific scholarships available for international students in 2025.",
-    image: (
-      <div className="w-full h-48 bg-gradient-to-br from-purple-400 to-indigo-600 rounded-lg flex items-center justify-center text-white text-4xl font-bold">
-        💰
-      </div>
-    ),
-    featured: false,
-    views: "15.2K",
-    likes: "1.1K"
-  },
-  {
-    id: 4,
-    category: "Cost of Living",
-    categoryColor: "bg-orange-100 text-orange-800",
-    author: "James Thompson",
-    authorRole: "Student Life Coordinator",
-    readTime: "10 min read",
-    publishDate: "Dec 8, 2024",
-    title: "Living Costs Breakdown: UK vs USA vs Canada vs Australia",
-    excerpt: "Detailed comparison of living expenses, accommodation costs, and budgeting tips for popular study destinations.",
-    image: (
-      <div className="w-full h-48 bg-gradient-to-br from-orange-400 to-brand-500 rounded-lg flex items-center justify-center text-white text-4xl font-bold">
-        🏠
-      </div>
-    ),
-    featured: false,
-    views: "9.8K",
-    likes: "743"
-  },
-  {
-    id: 5,
-    category: "Career Guidance",
-    categoryColor: "bg-cyan-100 text-cyan-800",
-    author: "Lisa Chen",
-    authorRole: "Career Development Specialist",
-    readTime: "7 min read",
-    publishDate: "Dec 5, 2024",
-    title: "Post-Graduation Work Permits: Your Path to International Career",
-    excerpt: "Navigate post-study work opportunities, visa extensions, and career prospects in different countries after graduation.",
-    image: (
-      <div className="w-full h-48 bg-gradient-to-br from-cyan-400 to-blue-500 rounded-lg flex items-center justify-center text-white text-4xl font-bold">
-        🎓
-      </div>
-    ),
-    featured: false,
-    views: "6.4K",
-    likes: "521"
-  },
-  {
-    id: 6,
-    category: "Test Preparation",
-    categoryColor: "bg-pink-100 text-pink-800",
-    author: "Robert Kim",
-    authorRole: "IELTS/TOEFL Expert",
-    readTime: "9 min read",
-    publishDate: "Dec 3, 2024",
-    title: "IELTS vs TOEFL: Which Test Should You Take in 2025?",
-    excerpt: "Comprehensive comparison of English proficiency tests, preparation strategies, and university acceptance criteria.",
-    image: (
-      <div className="w-full h-48 bg-gradient-to-br from-pink-400 to-rose-500 rounded-lg flex items-center justify-center text-white text-4xl font-bold">
-        📚
-      </div>
-    ),
-    featured: false,
-    views: "11.3K",
-    likes: "867"
-  }
-];
+interface InsightsSectionProps {
+  insights?: typeof sectionsData.insights;
+}
 
-const categories = [
-  { name: "All", count: insights.length },
-  { name: "University Rankings", count: insights.filter(i => i.category === "University Rankings").length },
-  { name: "Visa Guide", count: insights.filter(i => i.category === "Visa Guide").length },
-  { name: "Scholarships", count: insights.filter(i => i.category === "Scholarships").length },
-  { name: "Cost of Living", count: insights.filter(i => i.category === "Cost of Living").length },
-  { name: "Career Guidance", count: insights.filter(i => i.category === "Career Guidance").length }
-];
 
-export default function InsightsSection() {
+
+
+
+export default function InsightsSection({ insights = sectionsData.insights }: InsightsSectionProps) {
   const [isVisible, setIsVisible] = useState(false);
   const [activeCategory, setActiveCategory] = useState("All");
+
+  const categories = [
+    { name: "All", count: insights.length },
+    { name: "University Rankings", count: insights.filter(i => i.category === "University Rankings").length },
+    { name: "Visa Guide", count: insights.filter(i => i.category === "Visa Guide").length },
+    { name: "Scholarships", count: insights.filter(i => i.category === "Scholarships").length },
+    { name: "Cost of Living", count: insights.filter(i => i.category === "Cost of Living").length },
+    { name: "Career Guidance", count: insights.filter(i => i.category === "Career Guidance").length }
+  ];
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [email, setEmail] = useState("");
 
@@ -236,7 +128,9 @@ export default function InsightsSection() {
                 </div>
                 
                 <div className="relative">
-                  {featuredInsight.image}
+                  <div className="w-full h-48 bg-gradient-to-br from-brand-400 to-brand-600 rounded-lg flex items-center justify-center text-white text-4xl font-bold">
+                    {featuredInsight.image}
+                  </div>
                   <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
                 </div>
               </div>
@@ -260,7 +154,9 @@ export default function InsightsSection() {
             >
               {/* Image */}
               <div className="relative overflow-hidden">
-                {insight.image}
+                <div className="w-full h-48 bg-gradient-to-br from-brand-400 to-brand-600 flex items-center justify-center text-white text-4xl font-bold">
+                  {insight.image}
+                </div>
                 <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 <div className="absolute top-4 left-4">
                   <span className={`px-3 py-1 rounded-full text-xs font-semibold ${insight.categoryColor}`}>

@@ -2,8 +2,13 @@
 
 import { useState, useEffect } from 'react';
 import ScheduleMeetingModal from "@/components/modals/ScheduleMeetingModal";
+import sectionsData from '@/data/sections-data.json';
 
-export default function PartnershipsSection() {
+interface PartnershipsSectionProps {
+  partners?: typeof sectionsData.partners;
+}
+
+export default function PartnershipsSection({ partners = sectionsData.partners }: PartnershipsSectionProps) {
   const [isVisible, setIsVisible] = useState(false);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -21,176 +26,17 @@ export default function PartnershipsSection() {
     return () => clearTimeout(timer);
   }, []);
 
-  const partners = [
-    {
-      id: 1,
-      name: "Harvard University",
-      category: "Ivy League",
-      country: "USA",
-      logo: (
-        <svg className="w-12 h-12" viewBox="0 0 100 100" fill="none">
-          <rect width="100" height="100" rx="20" fill="#A41E22"/>
-          <text x="50" y="35" textAnchor="middle" className="fill-white text-xs font-bold">HARVARD</text>
-          <text x="50" y="65" textAnchor="middle" className="fill-white text-xs">UNIVERSITY</text>
-        </svg>
-      ),
-      color: "from-brand-600 to-brand-800"
-    },
-    {
-      id: 2,
-      name: "University of Oxford",
-      category: "Russell Group",
-      country: "UK",
-      logo: (
-        <svg className="w-12 h-12" viewBox="0 0 100 100" fill="none">
-          <rect width="100" height="100" rx="20" fill="#002147"/>
-          <text x="50" y="35" textAnchor="middle" className="fill-white text-xs font-bold">OXFORD</text>
-          <text x="50" y="65" textAnchor="middle" className="fill-white text-xs">UNIVERSITY</text>
-        </svg>
-      ),
-      color: "from-blue-900 to-indigo-900"
-    },
-    {
-      id: 3,
-      name: "University of Toronto",
-      category: "U15 Group",
-      country: "Canada",
-      logo: (
-        <svg className="w-12 h-12" viewBox="0 0 100 100" fill="none">
-          <rect width="100" height="100" rx="20" fill="#003A79"/>
-          <text x="50" y="35" textAnchor="middle" className="fill-white text-xs font-bold">TORONTO</text>
-          <text x="50" y="65" textAnchor="middle" className="fill-white text-xs">UNIVERSITY</text>
-        </svg>
-      ),
-      color: "from-blue-700 to-blue-900"
-    },
-    {
-      id: 4,
-      name: "University of Melbourne",
-      category: "Group of Eight",
-      country: "Australia",
-      logo: (
-        <svg className="w-12 h-12" viewBox="0 0 100 100" fill="none">
-          <rect width="100" height="100" rx="20" fill="#012A5E"/>
-          <text x="50" y="30" textAnchor="middle" className="fill-white text-xs font-bold">MELBOURNE</text>
-          <text x="50" y="70" textAnchor="middle" className="fill-white text-xs">UNIVERSITY</text>
-        </svg>
-      ),
-      color: "from-indigo-700 to-indigo-900"
-    },
-    {
-      id: 5,
-      name: "National University of Singapore",
-      category: "ASEAN Universities",
-      country: "Singapore",
-      logo: (
-        <svg className="w-12 h-12" viewBox="0 0 100 100" fill="none">
-          <rect width="100" height="100" rx="20" fill="#003D7A"/>
-          <text x="50" y="40" textAnchor="middle" className="fill-white text-xs font-bold">NUS</text>
-          <text x="50" y="60" textAnchor="middle" className="fill-white text-xs">Singapore</text>
-        </svg>
-      ),
-      color: "from-blue-800 to-blue-900"
-    },
-    {
-      id: 6,
-      name: "University of British Columbia",
-      category: "U15 Group",
-      country: "Canada",
-      logo: (
-        <svg className="w-12 h-12" viewBox="0 0 100 100" fill="none">
-          <rect width="100" height="100" rx="20" fill="#2F5D7C"/>
-          <text x="50" y="40" textAnchor="middle" className="fill-white text-xs font-bold">UBC</text>
-          <text x="50" y="60" textAnchor="middle" className="fill-white text-xs">Canada</text>
-        </svg>
-      ),
-      color: "from-slate-600 to-slate-800"
-    },
-    {
-      id: 7,
-      name: "King's College London",
-      category: "Russell Group",
-      country: "UK",
-      logo: (
-        <svg className="w-12 h-12" viewBox="0 0 100 100" fill="none">
-          <rect width="100" height="100" rx="20" fill="#8B1538"/>
-          <text x="50" y="35" textAnchor="middle" className="fill-white text-xs font-bold">KING&apos;S</text>
-          <text x="50" y="65" textAnchor="middle" className="fill-white text-xs">LONDON</text>
-        </svg>
-      ),
-      color: "from-rose-700 to-rose-900"
-    },
-    {
-      id: 8,
-      name: "University of Sydney",
-      category: "Group of Eight",
-      country: "Australia",
-      logo: (
-        <svg className="w-12 h-12" viewBox="0 0 100 100" fill="none">
-          <rect width="100" height="100" rx="20" fill="#E27D00"/>
-          <text x="50" y="35" textAnchor="middle" className="fill-white text-xs font-bold">SYDNEY</text>
-          <text x="50" y="65" textAnchor="middle" className="fill-white text-xs">UNIVERSITY</text>
-        </svg>
-      ),
-      color: "from-orange-600 to-orange-800"
-    },
-    {
-      id: 9,
-      name: "McGill University",
-      category: "U15 Group",
-      country: "Canada",
-      logo: (
-        <svg className="w-12 h-12" viewBox="0 0 100 100" fill="none">
-          <rect width="100" height="100" rx="20" fill="#ED1B2F"/>
-          <text x="50" y="40" textAnchor="middle" className="fill-white text-xs font-bold">McGILL</text>
-          <text x="50" y="60" textAnchor="middle" className="fill-white text-xs">UNIVERSITY</text>
-        </svg>
-      ),
-      color: "from-brand-600 to-brand-800"
-    },
-    {
-      id: 10,
-      name: "University of Auckland",
-      category: "Go8 Partner",
-      country: "New Zealand",
-      logo: (
-        <svg className="w-12 h-12" viewBox="0 0 100 100" fill="none">
-          <rect width="100" height="100" rx="20" fill="#00467F"/>
-          <text x="50" y="30" textAnchor="middle" className="fill-white text-xs font-bold">AUCKLAND</text>
-          <text x="50" y="70" textAnchor="middle" className="fill-white text-xs">UNIVERSITY</text>
-        </svg>
-      ),
-      color: "from-blue-700 to-blue-900"
-    },
-    {
-      id: 11,
-      name: "Imperial College London",
-      category: "Russell Group",
-      country: "UK",
-      logo: (
-        <svg className="w-12 h-12" viewBox="0 0 100 100" fill="none">
-          <rect width="100" height="100" rx="20" fill="#003E74"/>
-          <text x="50" y="30" textAnchor="middle" className="fill-white text-xs font-bold">IMPERIAL</text>
-          <text x="50" y="70" textAnchor="middle" className="fill-white text-xs">LONDON</text>
-        </svg>
-      ),
-      color: "from-blue-800 to-blue-900"
-    },
-    {
-      id: 12,
-      name: "University of Edinburgh",
-      category: "Russell Group",
-      country: "UK",
-      logo: (
-        <svg className="w-12 h-12" viewBox="0 0 100 100" fill="none">
-          <rect width="100" height="100" rx="20" fill="#041E42"/>
-          <text x="50" y="30" textAnchor="middle" className="fill-white text-xs font-bold">EDINBURGH</text>
-          <text x="50" y="70" textAnchor="middle" className="fill-white text-xs">UNIVERSITY</text>
-        </svg>
-      ),
-      color: "from-slate-800 to-slate-900"
-    }
-  ];
+  // Create partners with SVG logos from props data
+  const partnersWithLogos = partners.map(partner => ({
+    ...partner,
+    logoSvg: (
+      <div className={`w-16 h-16 rounded-full bg-gradient-to-br ${partner.color} flex items-center justify-center`}>
+        <span className="text-white text-xs font-bold text-center leading-tight">
+          {partner.logo}
+        </span>
+      </div>
+    )
+  }));
 
   const stats = [
     { number: "200+", label: "Partner Universities" },
@@ -234,7 +80,7 @@ export default function PartnershipsSection() {
 
         {/* Partners Grid */}
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-6 mb-16">
-          {partners.map((partner, index) => (
+          {partnersWithLogos.map((partner, index) => (
             <div
               key={partner.id}
               className={`group relative bg-white rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 border border-gray-100 ${
@@ -253,7 +99,7 @@ export default function PartnershipsSection() {
               <div className="relative z-10 text-center">
                 {/* Logo */}
                 <div className="flex justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
-                  {partner.logo}
+                  {partner.logoSvg}
                 </div>
                 
                 {/* University Name */}
