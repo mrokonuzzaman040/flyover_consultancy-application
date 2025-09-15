@@ -9,18 +9,28 @@ import remarkGfm from 'remark-gfm';
 
 async function getDestination(slug: string) {
   try {
+    // First try to fetch from API
     const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/destinations/${slug}`, {
       cache: 'no-store'
     });
     
-    if (!response.ok) {
-      throw new Error('Failed to fetch destination');
+    if (response.ok) {
+      const data = await response.json();
+      if (data.destination) {
+        return data.destination;
+      }
     }
-    
-    const data = await response.json();
-    return data.destination;
   } catch (error) {
-    console.error('Error fetching destination:', error);
+    console.log('API not available for destination, using test data:', error instanceof Error ? error.message : 'Unknown error');
+  }
+  
+  // Fallback to test data
+  try {
+    const testData = await import('@/data/destinations-test-data.json');
+    const destination = testData.destinations.find((dest) => dest.slug === slug);
+    return destination || null;
+  } catch (error) {
+    console.error('Error loading test data for destination:', error);
     return null;
   }
 }
