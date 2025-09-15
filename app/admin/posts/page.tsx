@@ -46,7 +46,7 @@ export default function AdminPostsPage() {
       } else {
         toast.error('Failed to fetch posts')
       }
-    } catch (error) {
+    } catch {
       toast.error('Error fetching posts')
     } finally {
       setLoading(false)
@@ -70,7 +70,7 @@ export default function AdminPostsPage() {
       } else {
         toast.error('Failed to delete post')
       }
-    } catch (error) {
+    } catch {
       toast.error('Error deleting post')
     } finally {
       setDeleteLoading(null)
