@@ -11,6 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Trash2, Edit, Eye, Plus, Search, Filter, Quote } from "lucide-react"
 import { toast } from "sonner"
 import Image from "next/image"
+import PageHeader from "@/components/admin/PageHeader"
 
 interface Testimonial {
   id: string
@@ -201,20 +202,23 @@ export default function AdminTestimonialsPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-brand-600"></div>
       </div>
     )
   }
 
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <h1 className="text-3xl font-bold text-gray-900">Testimonials Management</h1>
-        <Button onClick={() => setShowCreateModal(true)} className="bg-blue-600 hover:bg-blue-700">
-          <Plus className="w-4 h-4 mr-2" />
-          Create Testimonial
-        </Button>
-      </div>
+      <PageHeader
+        title="Testimonials Management"
+        description="Collect and manage testimonials"
+        actions={(
+          <Button onClick={() => setShowCreateModal(true)} className="bg-brand-600 hover:bg-brand-700">
+            <Plus className="w-4 h-4 mr-2" />
+            Create Testimonial
+          </Button>
+        )}
+      />
 
       {/* Filters */}
       <Card>
@@ -264,7 +268,7 @@ export default function AdminTestimonialsPage() {
                       width={120}
                     />
                   ) : (
-                    <div className="w-10 h-10 bg-blue-600 text-white rounded-full flex items-center justify-center text-sm font-medium">
+                    <div className="w-10 h-10 bg-brand-600 text-white rounded-full flex items-center justify-center text-sm font-medium">
                       {getInitials(testimonial.author)}
                     </div>
                   )}
@@ -390,7 +394,7 @@ export default function AdminTestimonialsPage() {
               <Button variant="outline" onClick={() => { setShowCreateModal(false); resetForm(); }}>
                 Cancel
               </Button>
-              <Button onClick={handleCreate} className="bg-blue-600 hover:bg-blue-700">
+              <Button onClick={handleCreate} className="bg-brand-600 hover:bg-brand-700">
                 Create Testimonial
               </Button>
             </div>
@@ -460,7 +464,7 @@ export default function AdminTestimonialsPage() {
               <Button variant="outline" onClick={() => { setShowEditModal(false); resetForm(); }}>
                 Cancel
               </Button>
-              <Button onClick={handleUpdate} className="bg-blue-600 hover:bg-blue-700">
+              <Button onClick={handleUpdate} className="bg-brand-600 hover:bg-brand-700">
                 Update Testimonial
               </Button>
             </div>
@@ -486,7 +490,7 @@ export default function AdminTestimonialsPage() {
                     width={16}
                   />
                 ) : (
-                  <div className="w-16 h-16 bg-blue-600 text-white rounded-full flex items-center justify-center text-lg font-medium">
+                  <div className="w-16 h-16 bg-brand-600 text-white rounded-full flex items-center justify-center text-lg font-medium">
                     {getInitials(selectedTestimonial.author)}
                   </div>
                 )}
@@ -502,7 +506,7 @@ export default function AdminTestimonialsPage() {
               <div>
                 <Label className="font-medium text-gray-900">Testimonial</Label>
                 <div className="bg-gray-50 p-4 rounded-lg mt-2">
-                  <Quote className="w-6 h-6 text-blue-600 mb-2" />
+                  <Quote className="w-6 h-6 text-brand-600 mb-2" />
                   <p className="text-gray-700 leading-relaxed italic">&ldquo;{selectedTestimonial.quote}&rdquo;</p>
                 </div>
               </div>

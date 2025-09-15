@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge"
 import { Trash2, Edit, Eye, Plus, Search, Globe, BookOpen, DollarSign, FileText } from "lucide-react"
 import { toast } from "sonner"
 import Link from "next/link"
+import PageHeader from "@/components/admin/PageHeader"
 
 interface Destination {
   id: string
@@ -80,15 +81,18 @@ export default function AdminDestinationsPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <h1 className="text-3xl font-bold text-gray-900">Destinations Management</h1>
-        <Link href="/admin/destinations/create">
-          <Button className="bg-brand-600 hover:bg-brand-700">
-            <Plus className="w-4 h-4 mr-2" />
-            Create Destination
-          </Button>
-        </Link>
-      </div>
+      <PageHeader
+        title="Destinations Management"
+        description="Create and curate study destinations"
+        actions={(
+          <Link href="/admin/destinations/create">
+            <Button className="bg-brand-600 hover:bg-brand-700">
+              <Plus className="w-4 h-4 mr-2" />
+              Create Destination
+            </Button>
+          </Link>
+        )}
+      />
 
       {/* Search */}
       <Card>

@@ -9,6 +9,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { ArrowLeft, Plus, Trash2 } from "lucide-react"
 import { toast } from "sonner"
+import PageHeader from "@/components/admin/PageHeader"
 
 interface Feature {
   icon: string
@@ -127,17 +128,15 @@ export default function CreateServicePage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center gap-4">
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => router.back()}
-        >
-          <ArrowLeft className="w-4 h-4 mr-2" />
-          Back
-        </Button>
-        <h1 className="text-3xl font-bold text-gray-900">Create New Service</h1>
-      </div>
+      <PageHeader
+        title="Create New Service"
+        actions={(
+          <Button variant="outline" size="sm" onClick={() => router.back()}>
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            Back
+          </Button>
+        )}
+      />
 
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Basic Information */}
@@ -499,7 +498,7 @@ export default function CreateServicePage() {
           <Button
             type="submit"
             disabled={loading}
-            className="bg-blue-600 hover:bg-blue-700"
+            className="bg-brand-600 hover:bg-brand-700"
           >
             {loading ? 'Creating...' : 'Create Service'}
           </Button>

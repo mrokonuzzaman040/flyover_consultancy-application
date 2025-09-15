@@ -21,7 +21,7 @@ export default function ViewResourcePage({ params }: { params: Promise<{ id: str
 
   if (loading) return (
     <div className="flex items-center justify-center min-h-screen">
-      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-brand-600"></div>
     </div>
   );
 
@@ -44,7 +44,7 @@ export default function ViewResourcePage({ params }: { params: Promise<{ id: str
           <div className="text-sm text-gray-600">Status: {item.status}</div>
           {item.category && <div className="text-sm text-gray-600">Category: {item.category}</div>}
           {item.author && <div className="text-sm text-gray-600">Author: {item.author}</div>}
-          {item.coverUrl && <div className="text-sm text-blue-600 break-all">Cover: {item.coverUrl}</div>}
+          {item.coverUrl && <div className="text-sm text-brand-600 break-all">Cover: {item.coverUrl}</div>}
           <div className="border rounded p-3 whitespace-pre-wrap text-sm">{item.contentMD}</div>
         </CardContent>
       </Card>

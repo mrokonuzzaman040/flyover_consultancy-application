@@ -8,6 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Trash2, Edit, Eye, Plus, Search, Settings, FileText, Tag } from "lucide-react"
 import { toast } from "sonner"
+import PageHeader from "@/components/admin/PageHeader"
 
 interface Service {
   id: string
@@ -93,20 +94,23 @@ export default function AdminServicesPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-brand-600"></div>
       </div>
     )
   }
 
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <h1 className="text-3xl font-bold text-gray-900">Services Management</h1>
-        <Button onClick={navigateToCreate} className="bg-blue-600 hover:bg-blue-700">
-          <Plus className="w-4 h-4 mr-2" />
-          Create Service
-        </Button>
-      </div>
+      <PageHeader
+        title="Services Management"
+        description="Create, edit, and organize your services"
+        actions={(
+          <Button onClick={navigateToCreate} className="bg-brand-600 hover:bg-brand-700">
+            <Plus className="w-4 h-4 mr-2" />
+            Create Service
+          </Button>
+        )}
+      />
 
       {/* Search */}
       <Card>
@@ -130,7 +134,7 @@ export default function AdminServicesPage() {
             <CardHeader className="pb-3">
               <div className="flex justify-between items-start">
                 <div className="flex items-center space-x-3">
-                  <div className="w-10 h-10 bg-blue-600 text-white rounded-full flex items-center justify-center">
+                  <div className="w-10 h-10 bg-brand-600 text-white rounded-full flex items-center justify-center">
                     <Settings className="w-5 h-5" />
                   </div>
                   <div>

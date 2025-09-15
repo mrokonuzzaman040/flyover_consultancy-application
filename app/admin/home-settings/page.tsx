@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import PageHeader from "@/components/admin/PageHeader";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -137,13 +138,16 @@ export default function HomeSettingsPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold text-gray-900">Home Settings</h1>
-        <div className="flex gap-2">
-          <Button variant="outline" onClick={fetchSettings} disabled={loading || saving}>Refresh</Button>
-          <Button onClick={handleSave} disabled={loading || saving}>{saving ? "Saving..." : "Save"}</Button>
-        </div>
-      </div>
+      <PageHeader
+        title="Home Settings"
+        description="Configure homepage content and sections"
+        actions={(
+          <div className="flex gap-2">
+            <Button variant="outline" onClick={fetchSettings} disabled={loading || saving}>Refresh</Button>
+            <Button onClick={handleSave} disabled={loading || saving} className="bg-brand-600 hover:bg-brand-700">{saving ? "Saving..." : "Save"}</Button>
+          </div>
+        )}
+      />
 
       {/* Hero Slider */}
       <Card>

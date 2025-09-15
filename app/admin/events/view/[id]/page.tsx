@@ -72,7 +72,7 @@ export default function ViewEventPage({ params }: { params: Promise<{ id: string
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-brand-600"></div>
       </div>
     )
   }
@@ -232,7 +232,7 @@ export default function ViewEventPage({ params }: { params: Promise<{ id: string
               <div className="pt-2">
                 <div className="w-full bg-gray-200 rounded-full h-2">
                   <div 
-                    className="bg-blue-600 h-2 rounded-full" 
+                    className="bg-brand-600 h-2 rounded-full" 
                     style={{ 
                       width: `${((event.capacity - event.seatsRemaining) / event.capacity) * 100}%` 
                     }}

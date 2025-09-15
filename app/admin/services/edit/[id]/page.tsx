@@ -186,7 +186,7 @@ export default function EditServicePage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-brand-600"></div>
       </div>
     )
   }
@@ -215,7 +215,7 @@ export default function EditServicePage() {
           <ArrowLeft className="w-4 h-4 mr-2" />
           Back
         </Button>
-        <h1 className="text-3xl font-bold text-gray-900">Edit Service: {service.name}</h1>
+        <h1 className="text-2xl sm:text-3xl font-semibold text-slate-900">Edit Service: {service.name}</h1>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
@@ -578,7 +578,7 @@ export default function EditServicePage() {
           <Button
             type="submit"
             disabled={saving}
-            className="bg-blue-600 hover:bg-blue-700"
+            className="bg-brand-600 hover:bg-brand-700"
           >
             {saving ? 'Updating...' : 'Update Service'}
           </Button>

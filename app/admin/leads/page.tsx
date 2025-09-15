@@ -35,6 +35,7 @@ import {
 } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Skeleton } from "@/components/ui/skeleton";
+import PageHeader from "@/components/admin/PageHeader";
 
 interface Lead {
   id: string;
@@ -323,31 +324,31 @@ export default function AdminLeadsPage() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">Leads</h1>
-          <p className="text-gray-600">Manage and track your leads</p>
-        </div>
-        <div className="flex items-center gap-2">
-          <Button
-            onClick={() => fetchLeads()}
-            disabled={loading || saving}
-            variant="outline"
-            size="sm"
-          >
-            {loading ? (
-              <Loader2 className="h-4 w-4 animate-spin" />
-            ) : (
-              <RefreshCw className="h-4 w-4" />
-            )}
-            Refresh
-          </Button>
-          <Button onClick={openCreateDialog} disabled={loading || saving}>
-            <Plus className="w-4 h-4 mr-2" />
-            Add Lead
-          </Button>
-        </div>
-      </div>
+      <PageHeader
+        title="Leads"
+        description="Manage and track your leads"
+        actions={(
+          <div className="flex items-center gap-2">
+            <Button
+              onClick={() => fetchLeads()}
+              disabled={loading || saving}
+              variant="outline"
+              size="sm"
+            >
+              {loading ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <RefreshCw className="h-4 w-4" />
+              )}
+              Refresh
+            </Button>
+            <Button onClick={openCreateDialog} disabled={loading || saving} className="bg-brand-600 hover:bg-brand-700">
+              <Plus className="w-4 h-4 mr-2" />
+              Add Lead
+            </Button>
+          </div>
+        )}
+      />
 
       {error && (
         <Alert variant="destructive">

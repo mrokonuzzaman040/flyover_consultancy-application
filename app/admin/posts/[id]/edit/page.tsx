@@ -110,7 +110,7 @@ export default function EditPostPage() {
   if (fetchLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-brand-600"></div>
       </div>
     )
   }
@@ -250,7 +250,7 @@ export default function EditPostPage() {
               <Button
                 type="submit"
                 disabled={loading}
-                className="bg-blue-600 hover:bg-blue-700"
+                className="bg-brand-600 hover:bg-brand-700"
               >
                 <Save className="w-4 h-4 mr-2" />
                 {loading ? 'Updating...' : 'Update Post'}

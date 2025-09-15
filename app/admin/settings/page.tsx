@@ -12,6 +12,7 @@ import { Settings, Save, Upload, Database, Mail, Shield, RefreshCw, Loader2, Ale
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Skeleton } from "@/components/ui/skeleton"
 import { toast } from "sonner"
+import PageHeader from "@/components/admin/PageHeader"
 
 type SystemSettings = {
   siteName: string
@@ -156,37 +157,35 @@ export default function SettingsPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">System Settings</h1>
-          <p className="text-gray-600 mt-1">
-            Configure system-wide settings and preferences
-          </p>
-        </div>
-        <div className="flex items-center gap-2">
-          <Button
-            onClick={() => fetchSettings()}
-            disabled={loading || saving}
-            variant="outline"
-            size="sm"
-          >
-            {loading ? (
-              <Loader2 className="h-4 w-4 animate-spin" />
-            ) : (
-              <RefreshCw className="h-4 w-4" />
-            )}
-            Refresh
-          </Button>
-          <Button onClick={handleSave} disabled={saving || loading}>
-            {saving ? (
-              <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-            ) : (
-              <Save className="h-4 w-4 mr-2" />
-            )}
-            {saving ? "Saving..." : "Save Changes"}
-          </Button>
-        </div>
-      </div>
+      <PageHeader
+        title="System Settings"
+        description="Configure system-wide settings and preferences"
+        actions={(
+          <div className="flex items-center gap-2">
+            <Button
+              onClick={() => fetchSettings()}
+              disabled={loading || saving}
+              variant="outline"
+              size="sm"
+            >
+              {loading ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <RefreshCw className="h-4 w-4" />
+              )}
+              Refresh
+            </Button>
+            <Button onClick={handleSave} disabled={saving || loading} className="bg-brand-600 hover:bg-brand-700">
+              {saving ? (
+                <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+              ) : (
+                <Save className="h-4 w-4 mr-2" />
+              )}
+              {saving ? "Saving..." : "Save Changes"}
+            </Button>
+          </div>
+        )}
+      />
 
       {error && (
         <Alert variant="destructive">

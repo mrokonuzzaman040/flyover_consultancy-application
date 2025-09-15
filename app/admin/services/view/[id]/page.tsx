@@ -101,7 +101,7 @@ export default function ViewServicePage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-brand-600"></div>
       </div>
     )
   }
@@ -282,7 +282,7 @@ export default function ViewServicePage() {
               {service.process.map((step, index) => (
                 <div key={index} className="flex gap-4 items-start">
                   <div className="flex-shrink-0">
-                    <div className="w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center text-sm font-bold">
+                  <div className="w-8 h-8 bg-brand-600 text-white rounded-full flex items-center justify-center text-sm font-bold">
                       {step.step}
                     </div>
                   </div>

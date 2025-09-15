@@ -125,12 +125,10 @@ function SidebarContent({
   return (
     <>
       <div className="flex items-center justify-between h-16 px-4 border-b border-slate-200">
-        <div className="flex items-center space-x-2">
-          <Image src="/logo.png" alt="Flyover Consultancy" width={28} height={28} />
-          <div className="leading-tight">
-            <p className="text-sm font-semibold text-slate-900">Flyover Admin</p>
-            <p className="text-xs text-slate-500">Dashboard</p>
-          </div>
+        <div className="flex items-center justify-center">
+          <Link href="/" target="_blank" rel="noopener noreferrer">
+            <Image src="/logo.png" alt="Flyover Consultancy" width={120} height={120} />
+          </Link>
         </div>
         {onClose && (
           <Button variant="ghost" size="icon" onClick={onClose} className="text-slate-600 hover:bg-slate-100 rounded-md">

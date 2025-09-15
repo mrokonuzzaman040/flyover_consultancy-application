@@ -9,6 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Trash2, Edit, Eye, Plus, Search, Filter } from "lucide-react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import PageHeader from "@/components/admin/PageHeader";
 
 type Resource = {
   id: string;
@@ -76,20 +77,23 @@ export default function AdminResourcesPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-brand-600"></div>
       </div>
     );
   }
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold text-gray-900">Resources</h1>
-        <Button onClick={() => router.push('/admin/resources/create')} className="bg-blue-600 hover:bg-blue-700">
-          <Plus className="w-4 h-4 mr-2" />
-          Create Resource
-        </Button>
-      </div>
+      <PageHeader
+        title="Resources"
+        description="Articles and guides for your audience"
+        actions={(
+          <Button onClick={() => router.push('/admin/resources/create')} className="bg-brand-600 hover:bg-brand-700">
+            <Plus className="w-4 h-4 mr-2" />
+            Create Resource
+          </Button>
+        )}
+      />
 
       <Card>
         <CardContent className="pt-6">

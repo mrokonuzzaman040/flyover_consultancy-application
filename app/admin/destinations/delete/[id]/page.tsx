@@ -90,7 +90,7 @@ export default function DeleteDestinationPage({ params }: { params: { id: string
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-brand-600"></div>
       </div>
     )
   }
@@ -148,7 +148,7 @@ export default function DeleteDestinationPage({ params }: { params: { id: string
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-blue-600 text-white rounded-full flex items-center justify-center">
+            <div className="w-10 h-10 bg-brand-600 text-white rounded-full flex items-center justify-center">
               <Globe className="w-5 h-5" />
             </div>
             <div>

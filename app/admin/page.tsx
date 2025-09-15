@@ -178,7 +178,7 @@ export default function AdminDashboard() {
             </div>
             <div className="flex items-center justify-between">
               <span className="text-sm font-medium">Your Role</span>
-              <span className="text-sm text-blue-600">{(session?.user as { role?: string } | undefined)?.role || 'Admin'}</span>
+              <span className="text-sm text-brand-600">{(session?.user as { role?: string } | undefined)?.role || 'Admin'}</span>
             </div>
           </CardContent>
         </Card>

@@ -10,6 +10,7 @@ import FileUpload from "@/components/admin/FileUpload"
 import { Search, Download, Trash2, Eye, FileIcon, ImageIcon, AlertCircle, RefreshCw, Upload, Loader2, AlertTriangle } from "lucide-react"
 import { AlertTitle } from "@/components/ui/alert"
 import { toast } from "sonner"
+import PageHeader from "@/components/admin/PageHeader"
 
 type Upload = {
   id: string
@@ -151,17 +152,15 @@ export default function UploadsPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">File Uploads</h1>
-          <p className="text-gray-600 mt-1">
-            Manage uploaded files and media assets
-          </p>
-        </div>
-        <Button onClick={() => setShowUploadForm(!showUploadForm)}>
-          {showUploadForm ? "Cancel" : "Upload Files"}
-        </Button>
-      </div>
+      <PageHeader
+        title="File Uploads"
+        description="Manage uploaded files and media assets"
+        actions={(
+          <Button onClick={() => setShowUploadForm(!showUploadForm)} className="bg-brand-600 hover:bg-brand-700">
+            {showUploadForm ? "Cancel" : "Upload Files"}
+          </Button>
+        )}
+      />
 
       {showUploadForm && (
         <Card>

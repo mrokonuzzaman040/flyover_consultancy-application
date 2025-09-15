@@ -9,6 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Trash2, Edit, Eye, Plus, Search, MapPin, Phone, Mail } from "lucide-react"
 import { toast } from "sonner"
+import PageHeader from "@/components/admin/PageHeader"
 
 interface Office {
   id: string
@@ -170,20 +171,23 @@ export default function AdminOfficesPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-brand-600"></div>
       </div>
     )
   }
 
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <h1 className="text-3xl font-bold text-gray-900">Offices Management</h1>
-        <Button onClick={() => setShowCreateModal(true)} className="bg-blue-600 hover:bg-blue-700">
-          <Plus className="w-4 h-4 mr-2" />
-          Add Office
-        </Button>
-      </div>
+      <PageHeader
+        title="Offices Management"
+        description="Manage your office locations and contact details"
+        actions={(
+          <Button onClick={() => setShowCreateModal(true)} className="bg-brand-600 hover:bg-brand-700">
+            <Plus className="w-4 h-4 mr-2" />
+            Add Office
+          </Button>
+        )}
+      />
 
       {/* Search */}
       <Card>
@@ -207,7 +211,7 @@ export default function AdminOfficesPage() {
             <CardHeader className="pb-3">
               <div className="flex justify-between items-start">
                 <div className="flex items-center space-x-3">
-                  <div className="w-10 h-10 bg-blue-600 text-white rounded-full flex items-center justify-center">
+                  <div className="w-10 h-10 bg-brand-600 text-white rounded-full flex items-center justify-center">
                     <MapPin className="w-5 h-5" />
                   </div>
                   <div>
@@ -335,7 +339,7 @@ export default function AdminOfficesPage() {
               <Button variant="outline" onClick={() => { setShowCreateModal(false); resetForm(); }}>
                 Cancel
               </Button>
-              <Button onClick={handleCreate} className="bg-blue-600 hover:bg-blue-700">
+              <Button onClick={handleCreate} className="bg-brand-600 hover:bg-brand-700">
                 Add Office
               </Button>
             </div>
@@ -399,7 +403,7 @@ export default function AdminOfficesPage() {
               <Button variant="outline" onClick={() => { setShowEditModal(false); resetForm(); }}>
                 Cancel
               </Button>
-              <Button onClick={handleUpdate} className="bg-blue-600 hover:bg-blue-700">
+              <Button onClick={handleUpdate} className="bg-brand-600 hover:bg-brand-700">
                 Update Office
               </Button>
             </div>
@@ -416,9 +420,9 @@ export default function AdminOfficesPage() {
             </div>
             <div className="p-6 space-y-6">
               <div className="flex items-center space-x-4">
-                <div className="w-16 h-16 bg-blue-600 text-white rounded-full flex items-center justify-center text-lg font-medium">
-                  <MapPin className="w-8 h-8" />
-                </div>
+                  <div className="w-16 h-16 bg-brand-600 text-white rounded-full flex items-center justify-center text-lg font-medium">
+                    <MapPin className="w-8 h-8" />
+                  </div>
                 <div>
                   <h3 className="text-2xl font-semibold text-gray-900">{selectedOffice.city}</h3>
                   <p className="text-gray-600">Office Location</p>

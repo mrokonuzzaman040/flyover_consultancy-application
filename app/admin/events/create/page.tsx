@@ -216,7 +216,7 @@ export default function CreateEventPage() {
                   Cancel
                 </Button>
               </Link>
-              <Button type="submit" disabled={loading} className="bg-blue-600 hover:bg-blue-700">
+              <Button type="submit" disabled={loading} className="bg-brand-600 hover:bg-brand-700">
                 {loading ? 'Creating...' : 'Create Event'}
               </Button>
             </div>

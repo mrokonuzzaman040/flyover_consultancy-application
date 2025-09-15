@@ -9,6 +9,7 @@ import { Badge } from "@/components/ui/badge"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Trash2, Edit, Eye, Plus, Search, Filter } from "lucide-react"
 import { toast } from "sonner"
+import PageHeader from "@/components/admin/PageHeader"
 
 interface Post {
   id: string
@@ -96,23 +97,26 @@ export default function AdminPostsPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-brand-600"></div>
       </div>
     )
   }
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold text-gray-900">Posts Management</h1>
-        <Button 
-          onClick={() => router.push('/admin/posts/create')}
-          className="bg-blue-600 hover:bg-blue-700"
-        >
-          <Plus className="w-4 h-4 mr-2" />
-          Create Post
-        </Button>
-      </div>
+      <PageHeader
+        title="Posts Management"
+        description="Write and publish blog posts"
+        actions={(
+          <Button 
+            onClick={() => router.push('/admin/posts/create')}
+            className="bg-brand-600 hover:bg-brand-700"
+          >
+            <Plus className="w-4 h-4 mr-2" />
+            Create Post
+          </Button>
+        )}
+      />
 
       {/* Filters */}
       <Card>
@@ -217,7 +221,7 @@ export default function AdminPostsPage() {
               {!searchTerm && statusFilter === "all" && (
                 <Button 
                   onClick={() => router.push('/admin/posts/create')}
-                  className="bg-blue-600 hover:bg-blue-700"
+                  className="bg-brand-600 hover:bg-brand-700"
                 >
                   <Plus className="w-4 h-4 mr-2" />
                   Create Post

@@ -195,7 +195,7 @@ export default function CreatePostPage() {
               <Button
                 type="submit"
                 disabled={loading}
-                className="bg-blue-600 hover:bg-blue-700"
+                className="bg-brand-600 hover:bg-brand-700"
               >
                 <Save className="w-4 h-4 mr-2" />
                 {loading ? 'Creating...' : 'Create Post'}
