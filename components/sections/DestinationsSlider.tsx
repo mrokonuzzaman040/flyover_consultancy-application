@@ -9,8 +9,6 @@ interface DestinationsSliderProps {
   destinations?: typeof sectionsData.destinations;
 }
 
-
-
 export default function DestinationsSlider({ destinations = sectionsData.destinations }: DestinationsSliderProps) {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isAutoScrolling, setIsAutoScrolling] = useState(true);

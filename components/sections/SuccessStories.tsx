@@ -9,26 +9,36 @@ interface SuccessStoriesProps {
   successStories?: typeof sectionsData.successStories;
 }
 
-
-
 export default function SuccessStories({ successStories = sectionsData.successStories }: SuccessStoriesProps) {
   const [isVisible, setIsVisible] = useState(false);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const [itemsPerSlide, setItemsPerSlide] = useState(3); // Default to desktop view
 
   useEffect(() => {
     const timer = setTimeout(() => setIsVisible(true), 200);
     return () => clearTimeout(timer);
   }, []);
 
-  const getItemsPerSlide = () => {
-    if (typeof window === 'undefined') return 3;
-    if (window.innerWidth < 768) return 1; // mobile
-    if (window.innerWidth < 1024) return 2; // tablet
-    return 3; // desktop
-  };
+  useEffect(() => {
+    const getItemsPerSlide = () => {
+      if (window.innerWidth < 768) return 1; // mobile
+      if (window.innerWidth < 1024) return 2; // tablet
+      return 3; // desktop
+    };
 
-  const itemsPerSlide = getItemsPerSlide();
+    const handleResize = () => {
+      setItemsPerSlide(getItemsPerSlide());
+    };
+
+    // Set initial value
+    handleResize();
+
+    // Add resize listener
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   const totalSlides = Math.ceil(successStories.length / itemsPerSlide);
 
   useEffect(() => {

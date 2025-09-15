@@ -8,10 +8,6 @@ interface InsightsSectionProps {
   insights?: typeof sectionsData.insights;
 }
 
-
-
-
-
 export default function InsightsSection({ insights = sectionsData.insights }: InsightsSectionProps) {
   const [isVisible, setIsVisible] = useState(false);
   const [activeCategory, setActiveCategory] = useState("All");
