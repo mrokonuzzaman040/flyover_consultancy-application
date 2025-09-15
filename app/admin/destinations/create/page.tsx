@@ -60,12 +60,14 @@ export default function CreateDestinationPage() {
   const handleCreate = async () => {
     setLoading(true)
     try {
+      const sanitizedSlug = (formData.slug || "").toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
       const response = await fetch('/api/admin/destinations', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           ...formData,
-          faqs: formData.faqs ? JSON.parse(formData.faqs) : null
+          slug: sanitizedSlug,
+          faqs: formData.faqs ? JSON.parse(formData.faqs) : []
         })
       })
 

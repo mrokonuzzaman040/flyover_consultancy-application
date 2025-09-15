@@ -5,7 +5,7 @@ import { Destination } from "@/lib/models/Destination";
 
 const schema = z.object({
   country: z.string().min(1),
-  slug: z.string().min(1).regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
+  slug: z.string().min(1).transform((s)=>s.toLowerCase()).regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
   hero: z.string().optional().nullable(),
   overviewMD: z.string().optional().nullable(),
   costsMD: z.string().optional().nullable(),

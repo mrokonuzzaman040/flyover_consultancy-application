@@ -5,7 +5,7 @@ import { Post } from "@/lib/models/Post";
 
 const schema = z.object({
   title: z.string().min(1),
-  slug: z.string().min(1).regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
+  slug: z.string().min(1).transform((s)=>s.toLowerCase()).regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
   excerpt: z.string().optional().nullable(),
   contentMD: z.string().min(1),
   tags: z.array(z.string()).default([]),

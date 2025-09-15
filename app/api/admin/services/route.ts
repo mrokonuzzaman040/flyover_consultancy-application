@@ -8,7 +8,7 @@ const processStep = z.object({ step: z.string(), title: z.string(), description:
 
 const schema = z.object({
   name: z.string().min(1),
-  slug: z.string().min(1).regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
+  slug: z.string().min(1).regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/).transform((s)=>s.toLowerCase()),
   title: z.string().optional().nullable(),
   subtitle: z.string().optional().nullable(),
   description: z.string().optional().nullable(),

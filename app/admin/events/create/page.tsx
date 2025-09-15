@@ -36,14 +36,18 @@ export default function CreateEventPage() {
     setLoading(true)
 
     try {
+      const sanitizedSlug = (formData.slug || "").toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
+      const payload: any = {
+        ...formData,
+        slug: sanitizedSlug,
+        capacity: Number(formData.capacity),
+        seatsRemaining: Number(formData.seatsRemaining)
+      }
+      if (!payload.bannerUrl) delete payload.bannerUrl
       const response = await fetch('/api/admin/events', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          ...formData,
-          capacity: Number(formData.capacity),
-          seatsRemaining: Number(formData.seatsRemaining)
-        })
+        body: JSON.stringify(payload)
       })
 
       if (response.ok) {

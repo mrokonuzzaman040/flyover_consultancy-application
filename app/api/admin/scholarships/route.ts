@@ -5,7 +5,7 @@ import { Scholarship } from "@/lib/models/Scholarship";
 
 const schema = z.object({
   title: z.string().min(1),
-  slug: z.string().min(1).regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
+  slug: z.string().min(1).regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/).transform((s)=>s.toLowerCase()),
   description: z.string().optional().nullable(),
   eligibilityMD: z.string().optional().nullable(),
   benefitsMD: z.string().optional().nullable(),

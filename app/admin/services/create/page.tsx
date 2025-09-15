@@ -53,11 +53,13 @@ export default function CreateServicePage() {
     setLoading(true)
 
     try {
+      const sanitizedSlug = (formData.slug || "").toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
       const response = await fetch('/api/admin/services', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           ...formData,
+          slug: sanitizedSlug,
           sectionsMD,
           features,
           benefits,

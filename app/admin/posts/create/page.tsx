@@ -33,14 +33,18 @@ export default function CreatePostPage() {
     setLoading(true)
 
     try {
+      const sanitizedSlug = (formData.slug || "").toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
+      const payload: any = {
+        ...formData,
+        slug: sanitizedSlug,
+        tags: formData.tags.split(',').map(tag => tag.trim()).filter(Boolean),
+        country: formData.country.split(',').map(c => c.trim()).filter(Boolean)
+      }
+      if (!payload.coverUrl) delete payload.coverUrl
       const response = await fetch('/api/admin/posts', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          ...formData,
-          tags: formData.tags.split(',').map(tag => tag.trim()).filter(Boolean),
-          country: formData.country.split(',').map(c => c.trim()).filter(Boolean)
-        })
+        body: JSON.stringify(payload)
       })
 
       if (response.ok) {
