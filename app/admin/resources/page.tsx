@@ -10,6 +10,9 @@ import { Trash2, Edit, Eye, Plus, Search, Filter } from "lucide-react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import PageHeader from "@/components/admin/PageHeader";
+import DataTable from "@/components/admin/DataTable";
+import ListToolbar from "@/components/admin/ListToolbar";
+import EmptyState from "@/components/admin/EmptyState";
 
 type Resource = {
   id: string;
@@ -95,71 +98,52 @@ export default function AdminResourcesPage() {
         )}
       />
 
-      <Card>
-        <CardContent className="pt-6">
-          <div className="flex gap-4 items-end">
-            <div className="flex-1">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
-                <Input placeholder="Search resources..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="pl-10" />
-              </div>
-            </div>
-            <div className="w-48">
-              <Select value={statusFilter} onValueChange={setStatusFilter}>
-                <SelectTrigger>
-                  <Filter className="w-4 h-4 mr-2" />
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All</SelectItem>
-                  <SelectItem value="draft">Draft</SelectItem>
-                  <SelectItem value="published">Published</SelectItem>
-                  <SelectItem value="archived">Archived</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
+      <ListToolbar search={searchTerm} onSearchChange={setSearchTerm} searchPlaceholder="Search resources...">
+        <Select value={statusFilter} onValueChange={setStatusFilter}>
+          <SelectTrigger className="w-48">
+            <Filter className="w-4 h-4 mr-2" />
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All</SelectItem>
+            <SelectItem value="draft">Draft</SelectItem>
+            <SelectItem value="published">Published</SelectItem>
+            <SelectItem value="archived">Archived</SelectItem>
+          </SelectContent>
+        </Select>
+      </ListToolbar>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filtered.map((r) => (
-          <Card key={r.id} className="hover:shadow-lg transition-shadow">
-            <CardHeader>
-              <div className="flex items-start justify-between">
-                <CardTitle className="text-lg line-clamp-2">{r.title}</CardTitle>
-                <Badge className={getStatusColor(r.status)}>{r.status}</Badge>
+      {filtered.length === 0 ? (
+        <EmptyState title="No resources found" />
+      ) : (
+        <DataTable
+          columns={[
+            { key: 'title', header: 'Title', render: (r: Resource) => (
+              <div className="flex flex-col">
+                <span className="font-medium text-slate-900 line-clamp-1">{r.title}</span>
+                <span className="text-xs text-slate-500">/{r.slug}</span>
               </div>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-3">
-                <div className="flex items-center justify-between text-sm text-gray-500">
-                  <span>{r.category || 'General'}</span>
-                  <span>{new Date(r.createdAt).toLocaleDateString()}</span>
-                </div>
-                <div className="flex gap-2 pt-2">
-                  <Button size="sm" variant="outline" onClick={() => router.push(`/admin/resources/${r.id}`)} className="flex-1">
-                    <Eye className="w-4 h-4 mr-1" /> View
-                  </Button>
-                  <Button size="sm" variant="outline" onClick={() => router.push(`/admin/resources/${r.id}/edit`)} className="flex-1">
-                    <Edit className="w-4 h-4 mr-1" /> Edit
-                  </Button>
-                  <Button size="sm" variant="outline" onClick={() => handleDelete(r)} disabled={deleteLoading === r.id} className="text-brand-600 hover:text-brand-700">
-                    <Trash2 className="w-4 h-4" />
-                  </Button>
-                </div>
+            )},
+            { key: 'category', header: 'Category', hideOn: 'sm', render: (r: Resource) => r.category || 'General' },
+            { key: 'status', header: 'Status', hideOn: 'md', render: (r: Resource) => <Badge className={getStatusColor(r.status)}>{r.status}</Badge> },
+            { key: 'createdAt', header: 'Created', hideOn: 'lg', render: (r: Resource) => new Date(r.createdAt).toLocaleDateString() },
+            { key: 'actions', header: 'Actions', headerClassName: 'text-right', cellClassName: 'text-right', render: (r: Resource) => (
+              <div className="flex justify-end gap-2">
+                <Button size="sm" variant="outline" onClick={() => router.push(`/admin/resources/${r.id}`)}>
+                  <Eye className="w-4 h-4" />
+                </Button>
+                <Button size="sm" variant="outline" onClick={() => router.push(`/admin/resources/${r.id}/edit`)}>
+                  <Edit className="w-4 h-4" />
+                </Button>
+                <Button size="sm" variant="outline" onClick={() => handleDelete(r)} disabled={deleteLoading === r.id} className="text-brand-600 hover:text-brand-700">
+                  <Trash2 className="w-4 h-4" />
+                </Button>
               </div>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
-
-      {filtered.length === 0 && (
-        <Card>
-          <CardContent className="text-center py-12">
-            <p className="text-gray-500">No resources found.</p>
-          </CardContent>
-        </Card>
+            )},
+          ]}
+          data={filtered}
+          rowKey={(r) => r.id}
+        />
       )}
     </div>
   );

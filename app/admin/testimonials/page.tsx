@@ -12,6 +12,9 @@ import { Trash2, Edit, Eye, Plus, Search, Filter, Quote } from "lucide-react"
 import { toast } from "sonner"
 import Image from "next/image"
 import PageHeader from "@/components/admin/PageHeader"
+import DataTable from "@/components/admin/DataTable"
+import ListToolbar from "@/components/admin/ListToolbar"
+import EmptyState from "@/components/admin/EmptyState"
 
 interface Testimonial {
   id: string
@@ -220,116 +223,54 @@ export default function AdminTestimonialsPage() {
         )}
       />
 
-      {/* Filters */}
-      <Card>
-        <CardContent className="pt-6">
-          <div className="flex gap-4 items-center">
-            <div className="flex-1">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-                <Input
-                  placeholder="Search testimonials..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10"
-                />
-              </div>
-            </div>
-            <div className="w-48">
-              <Select value={statusFilter} onValueChange={setStatusFilter}>
-                <SelectTrigger>
-                  <Filter className="w-4 h-4 mr-2" />
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Status</SelectItem>
-                  <SelectItem value="published">Published</SelectItem>
-                  <SelectItem value="draft">Draft</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
+      <ListToolbar search={searchTerm} onSearchChange={setSearchTerm} searchPlaceholder="Search testimonials...">
+        <Select value={statusFilter} onValueChange={setStatusFilter}>
+          <SelectTrigger className="w-48">
+            <Filter className="w-4 h-4 mr-2" />
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All Status</SelectItem>
+            <SelectItem value="published">Published</SelectItem>
+            <SelectItem value="draft">Draft</SelectItem>
+          </SelectContent>
+        </Select>
+      </ListToolbar>
 
-      {/* Testimonials Grid */}
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {filteredTestimonials.map((testimonial) => (
-          <Card key={testimonial.id} className="hover:shadow-lg transition-shadow">
-            <CardHeader className="pb-3">
-              <div className="flex justify-between items-start">
-                <div className="flex items-center space-x-3">
-                  {testimonial.avatarUrl ? (
-                    <Image 
-                      src={testimonial.avatarUrl} 
-                      alt={testimonial.author}
-                      className="w-10 h-10 rounded-full object-cover"
-                      height={120}
-                      width={120}
-                    />
-                  ) : (
-                    <div className="w-10 h-10 bg-brand-600 text-white rounded-full flex items-center justify-center text-sm font-medium">
-                      {getInitials(testimonial.author)}
-                    </div>
-                  )}
-                  <div>
-                    <CardTitle className="text-lg">{testimonial.author}</CardTitle>
-                    {testimonial.source && (
-                      <p className="text-sm text-gray-600">{testimonial.source}</p>
-                    )}
-                  </div>
-                </div>
-                {getStatusBadge(testimonial)}
-              </div>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-3">
-                <div className="flex items-start">
-                  <Quote className="w-4 h-4 text-gray-400 mr-2 mt-1 flex-shrink-0" />
-                  <p className="text-sm text-gray-700 line-clamp-4">{testimonial.quote}</p>
-                </div>
-                <div className="flex items-center justify-between text-xs text-gray-500">
-                  <span>Created: {formatDate(testimonial.createdAt)}</span>
-                  {testimonial.publishedAt && (
-                    <span>Published: {formatDate(testimonial.publishedAt)}</span>
-                  )}
+      {filteredTestimonials.length === 0 ? (
+        <EmptyState title="No testimonials found" />
+      ) : (
+        <DataTable
+          columns={[
+            { key: 'author', header: 'Author', render: (t: Testimonial) => (
+              <div className="flex items-center gap-3">
+                {t.avatarUrl ? (
+                  <Image src={t.avatarUrl} alt={t.author} height={40} width={40} className="rounded-full object-cover w-10 h-10" />
+                ) : (
+                  <div className="w-10 h-10 bg-brand-600 text-white rounded-full flex items-center justify-center text-sm font-medium">{getInitials(t.author)}</div>
+                )}
+                <div>
+                  <div className="font-medium text-slate-900">{t.author}</div>
+                  {t.source && <div className="text-xs text-slate-500">{t.source}</div>}
                 </div>
               </div>
-              <div className="flex justify-end gap-2 mt-4">
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={() => openViewModal(testimonial)}
-                >
-                  <Eye className="w-4 h-4" />
-                </Button>
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={() => openEditModal(testimonial)}
-                >
-                  <Edit className="w-4 h-4" />
-                </Button>
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={() => openDeleteModal(testimonial)}
-                  className="text-brand-600 hover:text-brand-700"
-                >
-                  <Trash2 className="w-4 h-4" />
-                </Button>
+            ) },
+            { key: 'quote', header: 'Quote', hideOn: 'md', render: (t: Testimonial) => (
+              <div className="text-slate-600 line-clamp-1 flex items-center gap-2"><Quote className="w-4 h-4" />{t.quote}</div>
+            ) },
+            { key: 'status', header: 'Status', hideOn: 'sm', render: (t: Testimonial) => getStatusBadge(t) },
+            { key: 'createdAt', header: 'Created', hideOn: 'lg', render: (t: Testimonial) => formatDate(t.createdAt) },
+            { key: 'actions', header: 'Actions', headerClassName: 'text-right', cellClassName: 'text-right', render: (t: Testimonial) => (
+              <div className="flex justify-end gap-2">
+                <Button size="sm" variant="outline" onClick={() => openViewModal(t)}><Eye className="w-4 h-4" /></Button>
+                <Button size="sm" variant="outline" onClick={() => openEditModal(t)}><Edit className="w-4 h-4" /></Button>
+                <Button size="sm" variant="outline" onClick={() => openDeleteModal(t)} className="text-brand-600 hover:text-brand-700"><Trash2 className="w-4 h-4" /></Button>
               </div>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
-
-      {filteredTestimonials.length === 0 && (
-        <Card>
-          <CardContent className="text-center py-12">
-            <p className="text-gray-500">No testimonials found matching your criteria.</p>
-          </CardContent>
-        </Card>
+            ) },
+          ]}
+          data={filteredTestimonials}
+          rowKey={(t) => t.id}
+        />
       )}
 
       {/* Create Modal */}

@@ -10,6 +10,9 @@ import { Trash2, Edit, Eye, Plus, Search, Filter, Calendar, MapPin, Users } from
 import { toast } from "sonner"
 import Link from "next/link"
 import PageHeader from "@/components/admin/PageHeader"
+import DataTable from "@/components/admin/DataTable"
+import ListToolbar from "@/components/admin/ListToolbar"
+import EmptyState from "@/components/admin/EmptyState"
 
 interface Event {
   id: string
@@ -113,112 +116,60 @@ export default function AdminEventsPage() {
       />
 
       {/* Filters */}
-      <Card>
-        <CardContent className="pt-6">
-          <div className="flex gap-4 items-center">
-            <div className="flex-1">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-                <Input
-                  placeholder="Search events..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10"
-                />
-              </div>
-            </div>
-            <div className="w-48">
-              <Select value={statusFilter} onValueChange={setStatusFilter}>
-                <SelectTrigger>
-                  <Filter className="w-4 h-4 mr-2" />
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Status</SelectItem>
-                  <SelectItem value="draft">Draft</SelectItem>
-                  <SelectItem value="published">Published</SelectItem>
-                  <SelectItem value="cancelled">Cancelled</SelectItem>
-                  <SelectItem value="completed">Completed</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
+      <ListToolbar search={searchTerm} onSearchChange={setSearchTerm} searchPlaceholder="Search events...">
+        <Select value={statusFilter} onValueChange={setStatusFilter}>
+          <SelectTrigger className="w-48">
+            <Filter className="w-4 h-4 mr-2" />
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All Status</SelectItem>
+            <SelectItem value="draft">Draft</SelectItem>
+            <SelectItem value="published">Published</SelectItem>
+            <SelectItem value="cancelled">Cancelled</SelectItem>
+            <SelectItem value="completed">Completed</SelectItem>
+          </SelectContent>
+        </Select>
+      </ListToolbar>
 
-      {/* Events Grid */}
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {filteredEvents.map((event) => (
-          <Card key={event.id} className="hover:shadow-lg transition-shadow">
-            <CardHeader className="pb-3">
-              <div className="flex justify-between items-start">
-                <CardTitle className="text-lg line-clamp-2">{event.title}</CardTitle>
-                <Badge className={getStatusColor(event.status)}>
-                  {event.status}
-                </Badge>
+      {filteredEvents.length === 0 ? (
+        <EmptyState title="No events found" description="Try adjusting your search or filters" />
+      ) : (
+        <DataTable
+          columns={[
+            { key: 'title', header: 'Title', render: (e: Event) => (
+              <div className="flex flex-col">
+                <span className="font-medium text-slate-900 line-clamp-1">{e.title}</span>
+                <span className="text-xs text-slate-500 line-clamp-1">{e.description}</span>
               </div>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-3">
-                <div className="flex items-center text-sm text-gray-600">
-                  <Calendar className="w-4 h-4 mr-2" />
-                  {formatDate(event.startAt)}
-                </div>
-                {event.city && (
-                  <div className="flex items-center text-sm text-gray-600">
-                    <MapPin className="w-4 h-4 mr-2" />
-                    {event.city}{event.venue && `, ${event.venue}`}
-                  </div>
-                )}
-                <div className="flex items-center text-sm text-gray-600">
-                  <Users className="w-4 h-4 mr-2" />
-                  {event.seatsRemaining}/{event.capacity} seats available
-                </div>
-                <p className="text-sm text-gray-700 line-clamp-3">{event.description}</p>
+            )},
+            { key: 'when', header: 'When', hideOn: 'sm', render: (e: Event) => (
+              <div className="text-slate-600 flex items-center gap-2"><Calendar className="w-4 h-4" />{formatDate(e.startAt)}</div>
+            )},
+            { key: 'where', header: 'Where', hideOn: 'md', render: (e: Event) => (
+              <div className="text-slate-600 flex items-center gap-2"><MapPin className="w-4 h-4" />{e.city || '-'}{e.venue ? `, ${e.venue}` : ''}</div>
+            )},
+            { key: 'status', header: 'Status', hideOn: 'lg', render: (e: Event) => <Badge className={getStatusColor(e.status)}>{e.status}</Badge> },
+            { key: 'capacity', header: 'Seats', hideOn: 'lg', render: (e: Event) => (
+              <div className="text-slate-600 flex items-center gap-2"><Users className="w-4 h-4" />{e.seatsRemaining}/{e.capacity}</div>
+            ) },
+            { key: 'actions', header: 'Actions', headerClassName: 'text-right', cellClassName: 'text-right', render: (e: Event) => (
+              <div className="flex justify-end gap-2">
+                <Link href={`/events/${e.slug}`}>
+                  <Button size="sm" variant="outline"><Eye className="w-4 h-4" /></Button>
+                </Link>
+                <Link href={`/admin/events/edit/${e.id}`}>
+                  <Button size="sm" variant="outline"><Edit className="w-4 h-4" /></Button>
+                </Link>
+                <Link href={`/admin/events/delete/${e.id}`}>
+                  <Button size="sm" variant="outline" className="text-brand-600 hover:text-brand-700"><Trash2 className="w-4 h-4" /></Button>
+                </Link>
               </div>
-              <div className="flex justify-between items-center mt-4">
-                <span className="text-xs text-gray-500">
-                  {new Date(event.createdAt).toLocaleDateString()}
-                </span>
-                <div className="flex gap-2">
-                  <Link href={`/events/${event.slug}`}>
-                    <Button
-                      size="sm"
-                      variant="outline"
-                    >
-                      <Eye className="w-4 h-4" />
-                    </Button>
-                  </Link>
-                  <Link href={`/admin/events/edit/${event.id}`}>
-                    <Button
-                      size="sm"
-                      variant="outline"
-                    >
-                      <Edit className="w-4 h-4" />
-                    </Button>
-                  </Link>
-                  <Link href={`/admin/events/delete/${event.id}`}>
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      className="text-brand-600 hover:text-brand-700"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </Button>
-                  </Link>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
-
-      {filteredEvents.length === 0 && (
-        <Card>
-          <CardContent className="text-center py-12">
-            <p className="text-gray-500">No events found matching your criteria.</p>
-          </CardContent>
-        </Card>
+            )},
+          ]}
+          data={filteredEvents}
+          rowKey={(e) => e.id}
+        />
       )}
 
 

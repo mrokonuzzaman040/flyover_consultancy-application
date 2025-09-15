@@ -11,6 +11,9 @@ import { Search, Download, Trash2, Eye, FileIcon, ImageIcon, AlertCircle, Refres
 import { AlertTitle } from "@/components/ui/alert"
 import { toast } from "sonner"
 import PageHeader from "@/components/admin/PageHeader"
+import DataTable from "@/components/admin/DataTable"
+import ListToolbar from "@/components/admin/ListToolbar"
+import EmptyState from "@/components/admin/EmptyState"
 
 type Upload = {
   id: string
@@ -200,42 +203,21 @@ export default function UploadsPage() {
           <div className="flex items-center justify-between">
             <div>
               <CardTitle>All Uploads ({pagination.total})</CardTitle>
-              <CardDescription>
-                Browse and manage all uploaded files
-              </CardDescription>
+              <CardDescription>Browse and manage all uploaded files</CardDescription>
             </div>
-            <Button
-              onClick={() => fetchUploads(1, searchTerm)}
-              disabled={loading}
-              variant="outline"
-              size="sm"
-            >
-              {loading ? (
-                <Loader2 className="h-4 w-4 animate-spin" />
-              ) : (
-                <RefreshCw className="h-4 w-4" />
-              )}
+            <Button onClick={() => fetchUploads(1, searchTerm)} disabled={loading} variant="outline" size="sm">
+              {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <RefreshCw className="h-4 w-4" />}
               Refresh
             </Button>
           </div>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleSearch} className="mb-6">
-            <div className="flex gap-2">
-              <div className="relative flex-1">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-                <Input
-                  type="text"
-                  placeholder="Search files..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10"
-                  disabled={loading}
-                />
-              </div>
-              <Button type="submit">Search</Button>
-            </div>
-          </form>
+          <ListToolbar
+            search={searchTerm}
+            onSearchChange={setSearchTerm}
+            searchPlaceholder="Search files..."
+            actions={<Button onClick={(e)=>{e.preventDefault(); fetchUploads(1, searchTerm)}}>Search</Button>}
+          />
 
           {loading ? (
             <div className="space-y-4">
@@ -257,76 +239,38 @@ export default function UploadsPage() {
               ))}
             </div>
           ) : uploads.length === 0 ? (
-            <div className="text-center py-12">
-              <FileIcon className="mx-auto h-12 w-12 text-gray-400 mb-4" />
-              <h3 className="text-lg font-medium text-gray-900 mb-2">No files found</h3>
-              <p className="text-gray-500 mb-4">Upload some files to get started</p>
-              <Button onClick={() => setShowUploadForm(true)}>Upload Files</Button>
-            </div>
+            <EmptyState
+              title="No files found"
+              description="Upload some files to get started"
+              action={<Button onClick={() => setShowUploadForm(true)} className="bg-brand-600 hover:bg-brand-700">Upload Files</Button>}
+            />
           ) : (
-            <div className="space-y-3">
-              {uploads.map((upload) => (
-                <div
-                  key={upload.id}
-                  className="flex items-center justify-between p-4 border rounded-lg hover:bg-gray-50"
-                >
-                  <div className="flex items-center space-x-4">
-                    {getFileIcon(upload.mimeType)}
+            <DataTable
+              columns={[
+                { key: 'file', header: 'File', render: (u: Upload) => (
+                  <div className="flex items-center gap-3">
+                    {getFileIcon(u.mimeType)}
                     <div>
-                      <h3 className="font-medium text-gray-900">{upload.filename}</h3>
-                      <div className="flex items-center space-x-4 text-sm text-gray-500">
-                        <span>{formatFileSize(upload.size)}</span>
-                        <span>•</span>
-                        <span>{upload.mimeType}</span>
-                        <span>•</span>
-                        <span>Uploaded by {upload.user.name || upload.user.email}</span>
-                        <span>•</span>
-                        <span>{formatDate(upload.createdAt)}</span>
-                      </div>
+                      <div className="font-medium text-slate-900">{u.filename}</div>
+                      <div className="text-xs text-slate-500">{u.mimeType} • {formatFileSize(u.size)}</div>
                     </div>
                   </div>
-                  <div className="flex items-center space-x-2">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => window.open(upload.url, '_blank')}
-                      disabled={deletingFile === upload.id}
-                    >
-                      <Eye className="h-4 w-4 mr-1" />
-                      View
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => {
-                        const link = document.createElement('a')
-                        link.href = upload.url
-                        link.download = upload.filename
-                        link.click()
-                      }}
-                      disabled={deletingFile === upload.id}
-                    >
-                      <Download className="h-4 w-4 mr-1" />
-                      Download
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => handleDelete(upload.id)}
-                      className="text-brand-600 hover:text-brand-700"
-                      disabled={deletingFile === upload.id}
-                    >
-                      {deletingFile === upload.id ? (
-                        <Loader2 className="h-4 w-4 mr-1 animate-spin" />
-                      ) : (
-                        <Trash2 className="h-4 w-4 mr-1" />
-                      )}
-                      Delete
+                ) },
+                { key: 'user', header: 'Uploaded By', hideOn: 'sm', render: (u: Upload) => u.user.name || u.user.email },
+                { key: 'createdAt', header: 'Created', hideOn: 'md', render: (u: Upload) => formatDate(u.createdAt) },
+                { key: 'actions', header: 'Actions', headerClassName: 'text-right', cellClassName: 'text-right', render: (u: Upload) => (
+                  <div className="flex justify-end gap-2">
+                    <Button variant="outline" size="sm" onClick={() => window.open(u.url, '_blank')} disabled={deletingFile === u.id}><Eye className="h-4 w-4" /></Button>
+                    <Button variant="outline" size="sm" onClick={() => { const a = document.createElement('a'); a.href = u.url; a.download = u.filename; a.click(); }} disabled={deletingFile === u.id}><Download className="h-4 w-4" /></Button>
+                    <Button variant="outline" size="sm" onClick={() => handleDelete(u.id)} className="text-brand-600 hover:text-brand-700" disabled={deletingFile === u.id}>
+                      {deletingFile === u.id ? <Loader2 className="h-4 w-4 animate-spin" /> : <Trash2 className="h-4 w-4" />}
                     </Button>
                   </div>
-                </div>
-              ))}
-            </div>
+                ) },
+              ]}
+              data={uploads}
+              rowKey={(u) => u.id}
+            />
           )}
 
           {pagination.pages > 1 && (
@@ -356,7 +300,7 @@ export default function UploadsPage() {
               </div>
             </div>
           )}
-        </CardContent>
+      </CardContent>
       </Card>
     </div>
   )

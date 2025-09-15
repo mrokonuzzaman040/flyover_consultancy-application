@@ -9,6 +9,9 @@ import { Trash2, Edit, Eye, Plus, Search, Globe, BookOpen, DollarSign, FileText 
 import { toast } from "sonner"
 import Link from "next/link"
 import PageHeader from "@/components/admin/PageHeader"
+import DataTable from "@/components/admin/DataTable"
+import ListToolbar from "@/components/admin/ListToolbar"
+import EmptyState from "@/components/admin/EmptyState"
 
 interface Destination {
   id: string
@@ -94,98 +97,37 @@ export default function AdminDestinationsPage() {
         )}
       />
 
-      {/* Search */}
-      <Card>
-        <CardContent className="pt-6">
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-            <Input
-              placeholder="Search destinations..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-10"
-            />
-          </div>
-        </CardContent>
-      </Card>
+      <ListToolbar search={searchTerm} onSearchChange={setSearchTerm} searchPlaceholder="Search destinations..." />
 
-      {/* Destinations Grid */}
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {filteredDestinations.map((destination) => (
-          <Card key={destination.id} className="hover:shadow-lg transition-shadow">
-            <CardHeader className="pb-3">
-              <div className="flex justify-between items-start">
-                <div className="flex items-center space-x-3">
-                  <div className="w-10 h-10 bg-brand-600 text-white rounded-full flex items-center justify-center">
-                    <Globe className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <CardTitle className="text-lg">{destination.country}</CardTitle>
-                    <p className="text-sm text-gray-600">/{destination.slug}</p>
-                  </div>
-                </div>
+      {filteredDestinations.length === 0 ? (
+        <EmptyState title="No destinations found" />
+      ) : (
+        <DataTable
+          columns={[
+            { key: 'country', header: 'Country', render: (d: Destination) => (
+              <div>
+                <div className="font-medium text-slate-900">{d.country}</div>
+                <div className="text-xs text-slate-500">/{d.slug}</div>
               </div>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-3">
-                {destination.hero && (
-                  <p className="text-sm text-gray-700 line-clamp-2">{destination.hero}</p>
-                )}
-                
-                <div className="flex flex-wrap gap-1">
-                  {destination.popularCourses.slice(0, 3).map((course, index) => (
-                    <Badge key={index} variant="secondary" className="text-xs">
-                      {course}
-                    </Badge>
-                  ))}
-                  {destination.popularCourses.length > 3 && (
-                    <Badge variant="secondary" className="text-xs">
-                      +{destination.popularCourses.length - 3} more
-                    </Badge>
-                  )}
-                </div>
-
-                <div className="flex items-center justify-between text-xs text-gray-500">
-                  <span>Created: {formatDate(destination.createdAt)}</span>
-                  <div className="flex items-center space-x-2">
-                    {destination.overviewMD && <FileText className="w-3 h-3" />}
-                    {destination.costsMD && <DollarSign className="w-3 h-3" />}
-                    {destination.popularCourses.length > 0 && <BookOpen className="w-3 h-3" />}
-                  </div>
-                </div>
+            ) },
+            { key: 'courses', header: 'Popular Courses', hideOn: 'sm', render: (d: Destination) => (
+              <div className="flex flex-wrap gap-1">
+                {d.popularCourses.slice(0,3).map((c,i) => (<span key={i} className="text-xs px-2 py-0.5 rounded bg-slate-100 text-slate-700">{c}</span>))}
+                {d.popularCourses.length > 3 && (<span className="text-xs px-2 py-0.5 rounded bg-slate-100 text-slate-700">+{d.popularCourses.length - 3} more</span>)}
               </div>
-              <div className="flex justify-end gap-2 mt-4">
-                <Link href={`http://localhost:3000/destinations/${destination.slug}`} target="_blank">
-                  <Button size="sm" variant="outline">
-                    <Eye className="w-4 h-4" />
-                  </Button>
-                </Link>
-                <Link href={`/admin/destinations/edit/${destination.id}`}>
-                  <Button size="sm" variant="outline">
-                    <Edit className="w-4 h-4" />
-                  </Button>
-                </Link>
-                <Link href={`/admin/destinations/delete/${destination.id}`}>
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    className="text-brand-600 hover:text-brand-700"
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </Button>
-                </Link>
+            ) },
+            { key: 'createdAt', header: 'Created', hideOn: 'lg', render: (d: Destination) => formatDate(d.createdAt) },
+            { key: 'actions', header: 'Actions', headerClassName: 'text-right', cellClassName: 'text-right', render: (d: Destination) => (
+              <div className="flex justify-end gap-2">
+                <Link href={`http://localhost:3000/destinations/${d.slug}`} target="_blank"><Button size="sm" variant="outline"><Eye className="w-4 h-4" /></Button></Link>
+                <Link href={`/admin/destinations/edit/${d.id}`}><Button size="sm" variant="outline"><Edit className="w-4 h-4" /></Button></Link>
+                <Link href={`/admin/destinations/delete/${d.id}`}><Button size="sm" variant="outline" className="text-brand-600 hover:text-brand-700"><Trash2 className="w-4 h-4" /></Button></Link>
               </div>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
-
-      {filteredDestinations.length === 0 && (
-        <Card>
-          <CardContent className="text-center py-12">
-            <p className="text-gray-500">No destinations found matching your criteria.</p>
-          </CardContent>
-        </Card>
+            ) },
+          ]}
+          data={filteredDestinations}
+          rowKey={(d) => d.id}
+        />
       )}
 
 

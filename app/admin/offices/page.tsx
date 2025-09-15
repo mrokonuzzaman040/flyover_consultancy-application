@@ -10,6 +10,9 @@ import { Badge } from "@/components/ui/badge"
 import { Trash2, Edit, Eye, Plus, Search, MapPin, Phone, Mail } from "lucide-react"
 import { toast } from "sonner"
 import PageHeader from "@/components/admin/PageHeader"
+import DataTable from "@/components/admin/DataTable"
+import ListToolbar from "@/components/admin/ListToolbar"
+import EmptyState from "@/components/admin/EmptyState"
 
 interface Office {
   id: string
@@ -189,98 +192,30 @@ export default function AdminOfficesPage() {
         )}
       />
 
-      {/* Search */}
-      <Card>
-        <CardContent className="pt-6">
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-            <Input
-              placeholder="Search offices..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-10"
-            />
-          </div>
-        </CardContent>
-      </Card>
+      <ListToolbar search={searchTerm} onSearchChange={setSearchTerm} searchPlaceholder="Search offices..." />
 
-      {/* Offices Grid */}
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {filteredOffices.map((office) => (
-          <Card key={office.id} className="hover:shadow-lg transition-shadow">
-            <CardHeader className="pb-3">
-              <div className="flex justify-between items-start">
-                <div className="flex items-center space-x-3">
-                  <div className="w-10 h-10 bg-brand-600 text-white rounded-full flex items-center justify-center">
-                    <MapPin className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <CardTitle className="text-lg">{office.city}</CardTitle>
-                    <p className="text-sm text-gray-600">Office Location</p>
-                  </div>
-                </div>
+      {filteredOffices.length === 0 ? (
+        <EmptyState title="No offices found" />
+      ) : (
+        <DataTable
+          columns={[
+            { key: 'city', header: 'City', render: (o: Office) => (
+              <div className="font-medium text-slate-900">{o.city}</div>
+            ) },
+            { key: 'phone', header: 'Phone', hideOn: 'sm', render: (o: Office) => o.phone },
+            { key: 'email', header: 'Email', hideOn: 'md', render: (o: Office) => o.email || '-' },
+            { key: 'createdAt', header: 'Created', hideOn: 'lg', render: (o: Office) => formatDate(o.createdAt) },
+            { key: 'actions', header: 'Actions', headerClassName: 'text-right', cellClassName: 'text-right', render: (o: Office) => (
+              <div className="flex justify-end gap-2">
+                <Button size="sm" variant="outline" onClick={() => openViewModal(o)}><Eye className="w-4 h-4" /></Button>
+                <Button size="sm" variant="outline" onClick={() => openEditModal(o)}><Edit className="w-4 h-4" /></Button>
+                <Button size="sm" variant="outline" onClick={() => openDeleteModal(o)} className="text-brand-600 hover:text-brand-700"><Trash2 className="w-4 h-4" /></Button>
               </div>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-3">
-                <div className="flex items-center space-x-2">
-                  <Phone className="w-4 h-4 text-gray-500" />
-                  <span className="text-sm text-gray-700">{office.phone}</span>
-                </div>
-                
-                {office.email && (
-                  <div className="flex items-center space-x-2">
-                    <Mail className="w-4 h-4 text-gray-500" />
-                    <span className="text-sm text-gray-700">{office.email}</span>
-                  </div>
-                )}
-
-                {office.mapEmbedUrl && (
-                  <div className="flex items-center space-x-2">
-                    <MapPin className="w-4 h-4 text-gray-500" />
-                    <Badge variant="secondary" className="text-xs">Map Available</Badge>
-                  </div>
-                )}
-
-                <div className="flex items-center justify-between text-xs text-gray-500 pt-2 border-t">
-                  <span>Created: {formatDate(office.createdAt)}</span>
-                </div>
-              </div>
-              <div className="flex justify-end gap-2 mt-4">
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={() => openViewModal(office)}
-                >
-                  <Eye className="w-4 h-4" />
-                </Button>
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={() => openEditModal(office)}
-                >
-                  <Edit className="w-4 h-4" />
-                </Button>
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={() => openDeleteModal(office)}
-                  className="text-brand-600 hover:text-brand-700"
-                >
-                  <Trash2 className="w-4 h-4" />
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
-
-      {filteredOffices.length === 0 && (
-        <Card>
-          <CardContent className="text-center py-12">
-            <p className="text-gray-500">No offices found matching your criteria.</p>
-          </CardContent>
-        </Card>
+            ) },
+          ]}
+          data={filteredOffices}
+          rowKey={(o) => o.id}
+        />
       )}
 
       {/* Create Modal */}
