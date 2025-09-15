@@ -3,64 +3,9 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import CtaButton from "@/components/cta-button";
 import Image from "next/image";
+import navigationData from "@/data/navigation-data.json";
 
-const nav = [
-  {
-    label: "About Us",
-    href: "/about",
-    dropdown: [
-      { href: "/about", label: "Our Story" },
-      { href: "/team", label: "Our Team" },
-      { href: "/mission-vision", label: "Mission & Vision" },
-      { href: "/testimonials", label: "Testimonials" },
-    ],
-  },
-  {
-    label: "Destinations",
-    href: "/destinations",
-    dropdown: [
-      { href: "/destinations", label: "All Destinations" },
-      { href: "/destinations/usa", label: "USA" },
-      { href: "/destinations/canada", label: "Canada" },
-      { href: "/destinations/uk", label: "United Kingdom" },
-      { href: "/destinations/australia", label: "Australia" },
-    ],
-  },
-  {
-    label: "Our Services",
-    href: "/services",
-    dropdown: [
-      { href: "/services", label: "All Services" },
-      { href: "/services/study-consultation", label: "Study Consultation" },
-      { href: "/services/visa-assistance", label: "Visa Assistance" },
-      { href: "/services/application-support", label: "Application Support" },
-      { href: "/services/course-selection", label: "Course Selection" },
-    ],
-  },
-  {
-    label: "Resources",
-    href: "/resources",
-    dropdown: [
-      { href: "/resources", label: "All Resources" },
-      { href: "/resources/study-guides", label: "Study Guides" },
-      { href: "/resources/application-tips", label: "Application Tips" },
-      { href: "/events", label: "Events & Webinars" },
-      { href: "/resources/faq", label: "FAQ" },
-    ],
-  },
-  {
-    label: "Scholarships",
-    href: "/scholarships",
-    dropdown: [
-      { href: "/scholarships", label: "All Scholarships" },
-      { href: "/scholarships/undergraduate", label: "Undergraduate" },
-      { href: "/scholarships/graduate", label: "Graduate" },
-      { href: "/scholarships/phd", label: "PhD Programs" },
-      { href: "/scholarships/merit", label: "Merit-based" },
-    ],
-  },
-  { href: "/contact", label: "Contact" },
-];
+const nav = navigationData;
 
 export default function SiteHeader() {
   const [open, setOpen] = useState(false);
