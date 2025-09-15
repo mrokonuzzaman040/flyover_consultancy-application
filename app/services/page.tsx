@@ -4,6 +4,7 @@ import Reveal from "@/components/ui/reveal";
 import PageHeader from "@/components/page-header";
 import CtaButton from "@/components/cta-button";
 import { GraduationCap, FileText, Plane, BookOpen, Users, Clock, CheckCircle } from "lucide-react";
+import servicesTestData from '@/data/services-test-data.json';
 
 export const metadata: Metadata = {
   title: "All Services | Flyover Consultancy",
@@ -34,11 +35,6 @@ interface Service {
 }
 
 async function getServices(): Promise<Service[]> {
-  // During build time, skip API calls and return empty array
-  if (process.env.NODE_ENV === 'production' && !process.env.NEXT_PUBLIC_BASE_URL) {
-    return [];
-  }
-  
   try {
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
     const response = await fetch(`${baseUrl}/api/services`, {
@@ -46,15 +42,15 @@ async function getServices(): Promise<Service[]> {
     });
     
     if (!response.ok) {
-      console.error('API response not ok:', response.status);
-      return [];
+      throw new Error('Failed to fetch services');
     }
     
     const data = await response.json();
     return data.services || [];
   } catch (error) {
-    console.error('Error fetching services:', error);
-    return [];
+    console.log('API fetch failed, using test data:', error);
+    // Fallback to test data
+    return servicesTestData.services;
   }
 }
 
@@ -70,6 +66,7 @@ const getServiceIcon = (serviceName: string) => {
 
 export default async function ServicesPage() {
   const services = await getServices();
+  const hasServices = services && services.length > 0;
 
   return (
     <div>
@@ -127,7 +124,7 @@ export default async function ServicesPage() {
 
         {/* Services Grid */}
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-2">
-          {services.length > 0 ? services.map((service, i) => {
+          {hasServices ? services.map((service, i) => {
             const IconComponent = getServiceIcon(service.name);
             const serviceHref = `/services/${service.slug}`;
             const serviceTitle = service.title || service.name;
@@ -136,7 +133,7 @@ export default async function ServicesPage() {
             
             return (
               <Reveal key={service.id} delay={i * 0.1}>
-                <Link href={serviceHref} className="group">
+                <Link href={serviceHref} className="group" aria-label={`Learn more about ${serviceTitle}`}>
                   <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8 hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
                     {/* Service Header */}
                     <div className="flex items-start space-x-4 mb-6">
@@ -197,9 +194,22 @@ export default async function ServicesPage() {
               </Reveal>
             );
           }) : (
-            <div className="col-span-full text-center py-12">
-              <p className="text-gray-500 text-lg">No services available at the moment.</p>
-            </div>
+            <Reveal>
+              <div className="col-span-full text-center py-16">
+                <div className="max-w-md mx-auto">
+                  <div className="mb-6">
+                    <div className="w-16 h-16 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center">
+                      <GraduationCap className="w-8 h-8 text-gray-400" />
+                    </div>
+                    <h3 className="text-xl font-semibold text-gray-900 mb-2">Services Coming Soon</h3>
+                    <p className="text-gray-600">
+                      We&apos;re preparing our comprehensive study abroad services. Check back soon for expert guidance on your educational journey.
+                    </p>
+                  </div>
+                  <CtaButton />
+                </div>
+              </div>
+            </Reveal>
           )}
         </div>
 

@@ -6,6 +6,7 @@ import CtaButton from "@/components/cta-button";
 import { CheckCircle } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import servicesTestData from '@/data/services-test-data.json'
 
 interface Feature {
   icon: string;
@@ -45,8 +46,7 @@ async function getService(slug: string): Promise<Service | null> {
     });
     
     if (!response.ok) {
-      console.error('API response not ok:', response.status);
-      return null;
+      throw new Error('Failed to fetch service');
     }
     
     const data = await response.json();
@@ -55,8 +55,10 @@ async function getService(slug: string): Promise<Service | null> {
     console.log('Found service for slug:', slug, service ? service.name : 'not found');
     return service || null;
   } catch (error) {
-    console.error('Error fetching service:', error);
-    return null;
+    console.log('API fetch failed, using test data:', error);
+    // Fallback to test data
+    const service = servicesTestData.services.find(dest => dest.slug === slug);
+    return service || null;
   }
 }
 
@@ -198,13 +200,13 @@ export default async function ServicePage({ params }: { params: { slug: string }
             <div className="grid gap-8 md:grid-cols-3">
               {service.features.map((feature, index) => {
                 // You can map icon names to actual icon components here
-                const getIconComponent = (iconName: string) => {
+                const getIconComponent = () => {
                   // For now, we'll use a generic icon
                   // You can expand this to map to specific Lucide icons
                   return CheckCircle;
                 };
                 
-                const IconComponent = getIconComponent(feature.icon);
+                const IconComponent = getIconComponent();
                 
                 return (
                   <Reveal key={index} delay={index * 0.1}>
