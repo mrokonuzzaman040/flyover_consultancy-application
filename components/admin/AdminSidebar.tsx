@@ -19,7 +19,11 @@ import {
   MapPin,
   Award,
   GraduationCap,
-  CalendarCheck
+  CalendarCheck,
+  Home,
+  BookOpen,
+  Library,
+  Phone
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Session } from "next-auth"
@@ -33,13 +37,18 @@ type NavigationItem = {
 
 const navigation: NavigationItem[] = [
   { name: "Dashboard", href: "/admin", icon: LayoutDashboard },
-  { name: "Leads", href: "/admin/leads", icon: Users },
-  { name: "Meeting Schedules", href: "/admin/meeting-schedules", icon: CalendarCheck },
-  { name: "Posts", href: "/admin/posts", icon: FileText },
+  { name: "Home Setting", href: "/admin/home-settings", icon: Home },
   { name: "Events", href: "/admin/events", icon: Calendar },
-  { name: "Testimonials", href: "/admin/testimonials", icon: MessageSquare },
   { name: "Destinations", href: "/admin/destinations", icon: MapPin },
   { name: "Services", href: "/admin/services", icon: GraduationCap },
+  { name: "Blog", href: "/admin/posts", icon: FileText },
+  { name: "Testimonials", href: "/admin/testimonials", icon: MessageSquare },
+  { name: "Contact", href: "/admin/contact", icon: Phone },
+  { name: "Resources", href: "/admin/resources", icon: Library },
+  { name: "Scholarships", href: "/admin/scholarships", icon: BookOpen },
+  { name: "Leads", href: "/admin/leads", icon: Users },
+  // Keep existing utilities
+  { name: "Meeting Schedules", href: "/admin/meeting-schedules", icon: CalendarCheck },
   { name: "Offices", href: "/admin/offices", icon: Award },
   { name: "File Uploads", href: "/admin/uploads", icon: Upload },
   { name: "Settings", href: "/admin/settings", icon: Settings },
@@ -174,7 +183,7 @@ function SidebarContent({
             </div>
             <div className="ml-4 flex-1 min-w-0">
               <p className="text-sm font-bold text-slate-900 truncate tracking-wide">{session?.user?.name || "User"}</p>
-              <p className="text-xs text-brand-600 capitalize font-semibold bg-brand-50 px-2 py-1 rounded-full inline-block mt-1">{session?.user?.role || "Admin"}</p>
+              <p className="text-xs text-brand-600 capitalize font-semibold bg-brand-50 px-2 py-1 rounded-full inline-block mt-1">{(session?.user as { role?: string } | undefined)?.role || "Admin"}</p>
             </div>
           </div>
           <Button

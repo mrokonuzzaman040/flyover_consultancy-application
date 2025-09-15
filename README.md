@@ -16,7 +16,8 @@ npm run dev
 Copy `.env.example` to `.env` and set at least:
 
 - `NEXT_PUBLIC_SITE_URL=http://localhost:3000`
-- `DATABASE_URL=postgresql://user:pass@host:5432/db?sslmode=require` (optional for local testing; API will no-op without it)
+- `MONGODB_URI=mongodb+srv://user:pass@cluster/db` (required for admin CRUD)
+- `DATABASE_URL=postgresql://user:pass@host:5432/db?sslmode=require` (legacy; not used by admin CRUD)
 
 3) Prisma models
 
@@ -47,7 +48,7 @@ npx prisma migrate dev --name init
 5) Lead handling
 
 - Client component `components/lead-form.tsx:1` posts to `/api/leads`.
-- Server handler validates with Zod and saves via Prisma when `DATABASE_URL` is set.
+- Server handlers validate with Zod and save to MongoDB via Mongoose when `MONGODB_URI` is set.
 
 6) SEO basics
 

@@ -34,7 +34,7 @@ export default function AdminLogin() {
       } else {
         // Check session to get user role
         const session = await getSession()
-        if (session?.user?.role) {
+        if ((session?.user as { role?: string } | undefined)?.role) {
           router.push("/admin")
           router.refresh()
         } else {

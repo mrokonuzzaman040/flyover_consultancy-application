@@ -50,7 +50,7 @@ export default function AdminHeader() {
                   {session?.user?.name || "User"}
                 </p>
                 <p className="text-xs text-brand-600 capitalize font-semibold">
-                  {session?.user?.role || "Admin"}
+                  {(session?.user as { role?: string } | undefined)?.role || "Admin"}
                 </p>
               </div>
             </div>
