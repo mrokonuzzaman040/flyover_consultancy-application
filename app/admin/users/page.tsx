@@ -10,6 +10,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Skeleton } from "@/components/ui/skeleton"
 import { Search, UserPlus, Edit, Trash2, Shield, User, AlertCircle, RefreshCw } from "lucide-react"
 import { toast } from "sonner"
+import PageHeader from "@/components/admin/PageHeader"
 
 type User = {
   id: string
@@ -177,18 +178,16 @@ export default function UsersPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">User Management</h1>
-          <p className="text-gray-600 mt-1">
-            Manage user accounts, roles, and permissions
-          </p>
-        </div>
-        <Button>
-          <UserPlus className="h-4 w-4 mr-2" />
-          Add User
-        </Button>
-      </div>
+      <PageHeader
+        title="User Management"
+        description="Manage user accounts, roles, and permissions"
+        actions={(
+          <Button>
+            <UserPlus className="h-4 w-4 mr-2" />
+            Add User
+          </Button>
+        )}
+      />
 
       <Card>
         <CardHeader>
