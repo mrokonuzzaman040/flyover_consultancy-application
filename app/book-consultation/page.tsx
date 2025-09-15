@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import LeadForm from "@/components/lead-form";
 import { Calendar, Clock, Users, CheckCircle } from "lucide-react";
+import PageHeader from "@/components/page-header";
 
 export const metadata: Metadata = {
   title: "Book a Free Consultation | Flyover Consultancy",
@@ -11,21 +12,11 @@ export default function BookConsultationPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-brand-50 via-white to-brand-100">
       {/* Hero Section */}
-      <div className="relative overflow-hidden bg-gradient-to-r from-brand-600 to-brand-700 py-16">
-        <div className="absolute inset-0 bg-black/10"></div>
-        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <h1 className="text-4xl font-bold tracking-tight text-white sm:text-5xl lg:text-6xl">
-              Book Your Free
-              <span className="block text-yellow-300">Consultation</span>
-            </h1>
-            <p className="mx-auto mt-6 max-w-2xl text-xl text-brand-100">
-              Get expert guidance from our certified study abroad counselors. 
-               We&apos;ll help you navigate your international education journey.
-            </p>
-          </div>
-        </div>
-      </div>
+      <PageHeader
+        title="Book a Free Consultation"
+        subtitle="Schedule your free consultation with our expert study abroad advisors. Get personalized guidance for your international education journey."
+        image="/hero/slide2.svg"
+      />
 
       {/* Benefits Section */}
       <div className="py-12">

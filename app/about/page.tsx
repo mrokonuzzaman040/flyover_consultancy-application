@@ -3,6 +3,7 @@ import Reveal from "@/components/ui/reveal";
 import PageHeader from "@/components/page-header";
 import { Users, Globe, Award, BookOpen, Target, Heart, Star, TrendingUp } from "lucide-react";
 import AnimatedCounter from "@/components/ui/animated-counter";
+import Link from "next/link";
 
 export const metadata: Metadata = { 
   title: "About Us | Flyover Consultancy",
@@ -269,12 +270,12 @@ export default function AboutPage() {
                   >
                     Get Free Consultation
                   </a>
-                  <a
+                  <Link
                     href="/services"
                     className="inline-flex items-center justify-center px-8 py-4 text-base font-semibold text-white border-2 border-white rounded-xl hover:bg-white hover:text-brand-600 transition-colors"
                   >
                     Explore Our Services
-                  </a>
+                  </Link>
                 </div>
               </div>
             </Reveal>
