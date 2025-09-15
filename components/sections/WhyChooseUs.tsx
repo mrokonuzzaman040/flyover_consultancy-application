@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useState, useEffect } from 'react';
-import { Shield, Users, Globe, Award, Clock, HeartHandshake } from 'lucide-react';
+import { Shield, Users, Globe, Award, Clock, HeartHandshake, BookOpen, CheckCircle } from 'lucide-react';
 import sectionsData from '@/data/sections-data.json';
 
 interface WhyChooseUsProps {
@@ -24,7 +24,9 @@ export default function WhyChooseUs({ features = sectionsData.whyChooseUsFeature
     Globe,
     Award,
     Clock,
-    HeartHandshake
+    HeartHandshake,
+    BookOpen,
+    CheckCircle
   };
 
   // Remove hardcoded features array - now using props
