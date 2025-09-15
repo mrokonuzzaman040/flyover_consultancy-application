@@ -1,0 +1,308 @@
+{
+  "destinations": [
+    {
+      "slug": "usa",
+      "country": "United States",
+      "flag": "🇺🇸",
+      "description": "Experience world-class education in the land of opportunities with diverse academic programs and cutting-edge research facilities.",
+      "hero": "/hero/usa-hero.jpg",
+      "color": "from-blue-600 to-red-600",
+      "students": "1.1M+",
+      "averageCost": "$25,000-$55,000",
+      "workRights": "20hrs/week",
+      "popularCities": ["New York", "Los Angeles", "Boston", "Chicago", "San Francisco"],
+      "highlights": ["Top Universities", "Research Excellence", "Innovation Hub", "Career Opportunities"],
+      "popularCourses": [
+        "Computer Science",
+        "Business Administration",
+        "Engineering",
+        "Medicine",
+        "Data Science",
+        "International Relations"
+      ],
+      "universities": [
+        {
+          "name": "Harvard University",
+          "image": "https://images.unsplash.com/photo-1562774053-701939374585?w=400&h=300&fit=crop&crop=entropy&auto=format&q=80",
+          "ranking": "#1 Global",
+          "location": "Cambridge, Massachusetts",
+          "courses": ["Medicine", "Law", "Business", "Liberal Arts"]
+        },
+        {
+          "name": "Stanford University",
+          "image": "https://images.unsplash.com/photo-1498243691581-b145c3f54a5a?w=400&h=300&fit=crop&crop=entropy&auto=format&q=80",
+          "ranking": "#2 Global",
+          "location": "Stanford, California",
+          "courses": ["Computer Science", "Engineering", "Business", "Medicine"]
+        },
+        {
+          "name": "MIT",
+          "image": "https://images.unsplash.com/photo-1564981797816-1043664bf78d?w=400&h=300&fit=crop&crop=entropy&auto=format&q=80",
+          "ranking": "#3 Global",
+          "location": "Cambridge, Massachusetts",
+          "courses": ["Engineering", "Computer Science", "Physics", "Mathematics"]
+        }
+      ],
+      "overviewMD": "# Study in the United States\n\nThe United States offers unparalleled educational opportunities with over 4,000 colleges and universities. From Ivy League institutions to innovative tech schools, the US education system emphasizes **critical thinking**, **research**, and **practical application**.\n\n## Why Choose the USA?\n\n- **World-renowned universities** with cutting-edge facilities\n- **Diverse academic programs** across all fields of study\n- **Research opportunities** at undergraduate and graduate levels\n- **Cultural diversity** with students from around the globe\n- **Strong industry connections** for internships and career opportunities\n\n## Academic Excellence\n\nUS universities consistently rank among the world's best, with flexible curriculum options and emphasis on interdisciplinary learning.",
+      "costsMD": "# Study Costs in the USA\n\n## Tuition Fees\n\n### Undergraduate Programs\n- **Public Universities (In-state)**: $10,000 - $15,000 per year\n- **Public Universities (Out-of-state)**: $25,000 - $35,000 per year\n- **Private Universities**: $35,000 - $55,000 per year\n\n### Graduate Programs\n- **Master's Programs**: $20,000 - $60,000 per year\n- **PhD Programs**: Often funded with stipends\n\n## Living Expenses\n\n- **Accommodation**: $8,000 - $15,000 per year\n- **Food**: $3,000 - $5,000 per year\n- **Transportation**: $1,000 - $2,000 per year\n- **Personal Expenses**: $2,000 - $3,000 per year\n\n**Total Annual Cost**: $30,000 - $75,000 depending on location and lifestyle.",
+      "intakesMD": "# Academic Intakes in the USA\n\n## Fall Semester (Primary Intake)\n- **Start Date**: August - September\n- **Application Deadline**: December - February\n- **Best for**: Maximum program options and scholarship opportunities\n\n## Spring Semester\n- **Start Date**: January - February\n- **Application Deadline**: September - October\n- **Note**: Limited program availability\n\n## Summer Sessions\n- **Start Date**: May - June\n- **Application Deadline**: February - March\n- **Duration**: Shorter intensive programs\n\n## Application Timeline\n\n1. **12-18 months before**: Research programs and prepare for standardized tests\n2. **8-12 months before**: Take TOEFL/IELTS, GRE/GMAT\n3. **6-8 months before**: Submit applications\n4. **3-6 months before**: Receive decisions and apply for visa",
+      "visaMD": "# Student Visa Information for USA\n\n## F-1 Student Visa\n\nThe F-1 visa is the most common student visa for academic studies in the United States.\n\n### Requirements\n\n- **Form I-20** from SEVIS-approved school\n- **SEVIS fee payment** ($350)\n- **DS-160 form** completed online\n- **Visa interview** at US embassy/consulate\n- **Financial documentation** showing ability to pay\n- **Academic transcripts** and test scores\n\n### Work Authorization\n\n- **On-campus work**: Up to 20 hours per week during studies\n- **CPT (Curricular Practical Training)**: Work related to studies\n- **OPT (Optional Practical Training)**: 12 months post-graduation (36 months for STEM)\n\n### Processing Time\n\n- **Visa processing**: 3-5 weeks\n- **SEVIS processing**: 1-2 weeks\n- **Interview wait time**: Varies by location\n\n### Important Notes\n\n- Apply early due to high demand\n- Demonstrate strong ties to home country\n- Show clear academic and career goals",
+      "scholarshipsMD": "# Scholarships for International Students in USA\n\n## University-Specific Scholarships\n\n### Merit-Based Scholarships\n- **Coverage**: Partial to full tuition\n- **Criteria**: Academic excellence, test scores\n- **Application**: Usually automatic with admission application\n\n### Need-Based Financial Aid\n- **Coverage**: Varies based on family income\n- **Criteria**: Demonstrated financial need\n- **Application**: CSS Profile or FAFSA\n\n## External Scholarships\n\n### Fulbright Program\n- **Coverage**: Full funding including living expenses\n- **Eligibility**: Varies by country\n- **Application**: Through Fulbright Commission\n\n### Private Foundation Scholarships\n- **Gates Cambridge Scholarship**\n- **Rhodes Scholarship**\n- **Rotary Foundation Scholarships**\n\n## Tips for Scholarship Applications\n\n1. **Start early** - Many deadlines are 6-12 months before enrollment\n2. **Maintain high GPA** - Most scholarships require 3.5+ GPA\n3. **Demonstrate leadership** - Extracurricular activities matter\n4. **Write compelling essays** - Personal statements are crucial\n5. **Get strong recommendations** - From professors or employers",
+      "faqs": [
+        {
+          "question": "What are the English language requirements for studying in the USA?",
+          "answer": "Most universities require TOEFL (minimum 80-100) or IELTS (minimum 6.5-7.0). Some may accept Duolingo English Test or waive requirements for students from English-speaking countries."
+        },
+        {
+          "question": "Can I work while studying in the USA?",
+          "answer": "Yes, F-1 students can work up to 20 hours per week on-campus during studies. Off-campus work requires special authorization through CPT or OPT programs."
+        },
+        {
+          "question": "How much does it cost to study in the USA?",
+          "answer": "Total annual costs range from $30,000-$75,000 including tuition, accommodation, and living expenses. Public universities are generally less expensive than private institutions."
+        },
+        {
+          "question": "What is the difference between SAT and ACT?",
+          "answer": "Both are standardized tests for undergraduate admission. SAT focuses more on reasoning and problem-solving, while ACT includes a science section. Most universities accept either test."
+        },
+        {
+          "question": "How long does the student visa process take?",
+          "answer": "The entire process typically takes 2-4 months. This includes SEVIS processing, visa application, and interview scheduling. Apply early, especially during peak seasons."
+        }
+      ]
+    },
+    {
+      "slug": "canada",
+      "country": "Canada",
+      "flag": "🇨🇦",
+      "description": "Discover world-class education in a welcoming, multicultural environment with excellent post-graduation opportunities.",
+      "hero": "/hero/canada-hero.jpg",
+      "color": "from-red-500 to-red-700",
+      "students": "800K+",
+      "averageCost": "CAD $15,000-$35,000",
+      "workRights": "20hrs/week",
+      "popularCities": ["Toronto", "Vancouver", "Montreal", "Ottawa", "Calgary"],
+      "highlights": ["High Quality Education", "Affordable Tuition", "Immigration Pathways", "Safe Environment"],
+      "popularCourses": [
+        "Information Technology",
+        "Business Management",
+        "Healthcare",
+        "Engineering",
+        "Natural Resources",
+        "Hospitality"
+      ],
+      "universities": [
+        {
+          "name": "University of Toronto",
+          "image": "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=400&h=300&fit=crop&crop=entropy&auto=format&q=80",
+          "ranking": "#1 in Canada",
+          "location": "Toronto, Ontario",
+          "courses": ["Medicine", "Engineering", "Business", "Arts & Science"]
+        },
+        {
+          "name": "University of British Columbia",
+          "image": "https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=400&h=300&fit=crop&crop=entropy&auto=format&q=80",
+          "ranking": "#2 in Canada",
+          "location": "Vancouver, British Columbia",
+          "courses": ["Computer Science", "Forestry", "Medicine", "Business"]
+        },
+        {
+          "name": "McGill University",
+          "image": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=300&fit=crop&crop=entropy&auto=format&q=80",
+          "ranking": "#3 in Canada",
+          "location": "Montreal, Quebec",
+          "courses": ["Medicine", "Law", "Engineering", "Arts"]
+        }
+      ],
+      "overviewMD": "# Study in Canada\n\nCanada is renowned for its high-quality education system, welcoming immigration policies, and multicultural society. With over 100 universities and 150 colleges, Canada offers diverse academic programs in both English and French.\n\n## Why Choose Canada?\n\n- **World-class education** with globally recognized degrees\n- **Affordable tuition** compared to other English-speaking countries\n- **Post-graduation work permits** up to 3 years\n- **Pathway to permanent residence** through various immigration programs\n- **Safe and inclusive** multicultural environment\n- **Beautiful natural landscapes** and modern cities\n\n## Education System\n\nCanadian education emphasizes practical learning, research, and innovation with strong industry partnerships.",
+      "faqs": [
+        {
+          "question": "What are the language requirements for studying in Canada?",
+          "answer": "Most English-taught programs require IELTS (6.5 overall) or TOEFL (90+ iBT). French programs may require TEF or DALF. Some universities offer pathway programs for students who don't meet language requirements."
+        },
+        {
+          "question": "Can I get permanent residence after studying in Canada?",
+          "answer": "Yes, Canada offers several immigration pathways for international graduates including Provincial Nominee Programs (PNP), Canadian Experience Class (CEC), and Quebec programs."
+        },
+        {
+          "question": "What is a Post-Graduation Work Permit (PGWP)?",
+          "answer": "PGWP allows international graduates to work in Canada for up to 3 years after completing their studies at eligible institutions. The duration depends on the length of your study program."
+        }
+      ]
+    },
+    {
+      "slug": "uk",
+      "country": "United Kingdom",
+      "flag": "🇬🇧",
+      "description": "Experience centuries of academic tradition with innovative teaching methods in the birthplace of the English language.",
+      "hero": "/hero/uk-hero.jpg",
+      "color": "from-blue-800 to-red-600",
+      "students": "500K+",
+      "averageCost": "£15,000-£35,000",
+      "workRights": "20hrs/week",
+      "popularCities": ["London", "Edinburgh", "Manchester", "Birmingham", "Glasgow"],
+      "highlights": ["Historic Universities", "Shorter Degrees", "Research Excellence", "Cultural Heritage"],
+      "popularCourses": [
+        "Business & Management",
+        "Engineering",
+        "Medicine",
+        "Law",
+        "Creative Arts",
+        "Computer Science"
+      ],
+      "universities": [
+        {
+          "name": "University of Oxford",
+          "image": "https://images.unsplash.com/photo-1520637836862-4d197d17c93a?w=400&h=300&fit=crop&crop=entropy&auto=format&q=80",
+          "ranking": "#1 Global",
+          "location": "Oxford, England",
+          "courses": ["Philosophy", "Medicine", "Law", "Literature"]
+        },
+        {
+          "name": "University of Cambridge",
+          "image": "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=400&h=300&fit=crop&crop=entropy&auto=format&q=80",
+          "ranking": "#2 Global",
+          "location": "Cambridge, England",
+          "courses": ["Mathematics", "Natural Sciences", "Engineering", "Medicine"]
+        },
+        {
+          "name": "Imperial College London",
+          "image": "https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?w=400&h=300&fit=crop&crop=entropy&auto=format&q=80",
+          "ranking": "#3 in UK",
+          "location": "London, England",
+          "courses": ["Engineering", "Medicine", "Natural Sciences", "Business"]
+        }
+      ],
+      "faqs": [
+        {
+          "question": "How long are degree programs in the UK?",
+          "answer": "Undergraduate degrees are typically 3 years (4 years in Scotland), Master's degrees are 1 year, and PhD programs are 3-4 years. This makes UK education more time and cost-effective."
+        },
+        {
+          "question": "What is the Graduate Route visa?",
+          "answer": "The Graduate Route allows international students to stay and work in the UK for 2 years after completing an undergraduate or master's degree, or 3 years after completing a PhD."
+        },
+        {
+          "question": "Do I need to take IELTS for UK universities?",
+          "answer": "Most universities require IELTS (6.5-7.0 overall) or equivalent. Some may accept other tests like TOEFL, PTE, or Duolingo. Requirements vary by institution and program level."
+        }
+      ]
+    },
+    {
+      "slug": "australia",
+      "country": "Australia",
+      "flag": "🇦🇺",
+      "description": "Study in a vibrant, diverse country known for its high-quality education, beautiful landscapes, and laid-back lifestyle.",
+      "hero": "/hero/australia-hero.jpg",
+      "color": "from-green-500 to-yellow-500",
+      "students": "700K+",
+      "averageCost": "AUD $20,000-$45,000",
+      "workRights": "48hrs/fortnight",
+      "popularCities": ["Sydney", "Melbourne", "Brisbane", "Perth", "Adelaide"],
+      "highlights": ["Group of Eight Universities", "Work Opportunities", "Beautiful Climate", "Innovation Focus"],
+      "popularCourses": [
+        "Engineering",
+        "Business",
+        "Information Technology",
+        "Health Sciences",
+        "Environmental Studies",
+        "Mining"
+      ],
+      "universities": [
+        {
+          "name": "Australian National University",
+          "image": "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=400&h=300&fit=crop&crop=entropy&auto=format&q=80",
+          "ranking": "#1 in Australia",
+          "location": "Canberra, ACT",
+          "courses": ["Political Science", "International Relations", "Economics", "Science"]
+        },
+        {
+          "name": "University of Sydney",
+          "image": "https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=400&h=300&fit=crop&crop=entropy&auto=format&q=80",
+          "ranking": "#2 in Australia",
+          "location": "Sydney, NSW",
+          "courses": ["Medicine", "Engineering", "Business", "Arts"]
+        },
+        {
+          "name": "University of Melbourne",
+          "image": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=300&fit=crop&crop=entropy&auto=format&q=80",
+          "ranking": "#3 in Australia",
+          "location": "Melbourne, VIC",
+          "courses": ["Medicine", "Law", "Business", "Engineering"]
+        }
+      ],
+      "faqs": [
+        {
+          "question": "What is the Temporary Graduate visa (subclass 485)?",
+          "answer": "This visa allows international graduates to live, work, and study in Australia temporarily after completing their studies. Duration varies from 18 months to 4 years depending on qualifications and study location."
+        },
+        {
+          "question": "Can I work while studying in Australia?",
+          "answer": "Yes, student visa holders can work up to 48 hours per fortnight during study periods and unlimited hours during scheduled breaks. This was recently increased from 40 hours."
+        },
+        {
+          "question": "What are the English language requirements?",
+          "answer": "Most universities require IELTS (6.5 overall), TOEFL (79+ iBT), or PTE (58+). Some programs may have higher requirements, especially for medicine, law, and education courses."
+        }
+      ]
+    },
+    {
+      "slug": "germany",
+      "country": "Germany",
+      "flag": "🇩🇪",
+      "description": "Experience tuition-free education in Europe's economic powerhouse with strong industry connections and research opportunities.",
+      "hero": "/hero/germany-hero.jpg",
+      "color": "from-black to-red-600",
+      "students": "400K+",
+      "averageCost": "€0-€20,000",
+      "workRights": "120 full days/year",
+      "popularCities": ["Berlin", "Munich", "Hamburg", "Frankfurt", "Cologne"],
+      "highlights": ["Tuition-Free Education", "Strong Economy", "Research Excellence", "Industry Connections"],
+      "popularCourses": [
+        "Engineering",
+        "Computer Science",
+        "Business",
+        "Medicine",
+        "Natural Sciences",
+        "Automotive Technology"
+      ],
+      "universities": [
+        {
+          "name": "Technical University of Munich",
+          "image": "https://images.unsplash.com/photo-1564981797816-1043664bf78d?w=400&h=300&fit=crop&crop=entropy&auto=format&q=80",
+          "ranking": "#1 in Germany",
+          "location": "Munich, Bavaria",
+          "courses": ["Engineering", "Computer Science", "Natural Sciences", "Medicine"]
+        },
+        {
+          "name": "Ludwig Maximilian University",
+          "image": "https://images.unsplash.com/photo-1498243691581-b145c3f54a5a?w=400&h=300&fit=crop&crop=entropy&auto=format&q=80",
+          "ranking": "#2 in Germany",
+          "location": "Munich, Bavaria",
+          "courses": ["Medicine", "Law", "Philosophy", "Natural Sciences"]
+        },
+        {
+          "name": "Heidelberg University",
+          "image": "https://images.unsplash.com/photo-1562774053-701939374585?w=400&h=300&fit=crop&crop=entropy&auto=format&q=80",
+          "ranking": "#3 in Germany",
+          "location": "Heidelberg, Baden-Württemberg",
+          "courses": ["Medicine", "Natural Sciences", "Law", "Philosophy"]
+        }
+      ],
+      "faqs": [
+        {
+          "question": "Is education really free in Germany?",
+          "answer": "Yes, most public universities in Germany charge no tuition fees for both domestic and international students. You only pay small administrative fees (€150-€350 per semester) and living expenses."
+        },
+        {
+          "question": "Do I need to speak German to study in Germany?",
+          "answer": "Not necessarily. Many universities offer programs in English, especially at the master's and PhD levels. However, learning German can enhance your experience and job prospects."
+        },
+        {
+          "question": "What are the job prospects after graduation?",
+          "answer": "Germany offers an 18-month job search visa for graduates. The country has a strong economy with excellent opportunities in engineering, IT, healthcare, and research sectors."
+        }
+      ]
+    }
+  ]
+}
