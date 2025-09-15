@@ -5,7 +5,7 @@ import { Resource } from "@/lib/models/Resource";
 
 const schema = z.object({
   title: z.string().min(1),
-  slug: z.string().min(1).transform((s)=>s.toLowerCase()).regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
+  slug: z.string().min(1).regex(/^[a-zA-Z0-9]+(?:-[a-zA-Z0-9]+)*$/).transform((s)=>s.toLowerCase()),
   contentMD: z.string().min(1),
   tags: z.array(z.string()).default([]),
   category: z.string().optional().nullable(),

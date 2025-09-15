@@ -72,7 +72,7 @@ export default function DataTable<T>({ columns, data, rowKey, empty }: DataTable
                     col.cellClassName || ""
                   } ${visibilityClass(col.hideOn)}`}
                 >
-                  {col.render ? (col.render(row, i) as React.ReactNode) : (row as any)[col.key]}
+                  {col.render ? (col.render(row, i) as React.ReactNode) : String((row as Record<string, unknown>)[col.key] ?? '')}
                 </td>
               ))}
             </tr>
