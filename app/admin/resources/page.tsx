@@ -2,11 +2,9 @@
 
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Trash2, Edit, Eye, Plus, Search, Filter } from "lucide-react";
+import { Trash2, Edit, Eye, Plus, Filter } from "lucide-react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import PageHeader from "@/components/admin/PageHeader";
