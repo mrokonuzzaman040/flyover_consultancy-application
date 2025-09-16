@@ -8,6 +8,18 @@ const patchSchema = z.object({
   title: z.string().min(1).optional(),
   slug: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/).optional(),
   description: z.string().min(1).optional(),
+  // Legacy fields
+  date: z.string().optional(),
+  time: z.string().optional(),
+  location: z.string().optional(),
+  image: z.string().optional(),
+  registrationLink: z.string().optional(),
+  type: z.string().optional(),
+  attendees: z.string().optional(),
+  featured: z.boolean().optional(),
+  icon: z.string().optional(),
+  color: z.string().optional(),
+  // New fields
   startAt: z.string().or(z.date()).optional().transform((v) => (v ? new Date(v) : undefined)),
   endAt: z.string().or(z.date()).optional().transform((v) => (v ? new Date(v) : undefined)),
   venue: z.string().optional().nullable(),

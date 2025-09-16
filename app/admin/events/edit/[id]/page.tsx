@@ -13,19 +13,33 @@ import { toast } from "sonner"
 import Link from "next/link"
 
 interface Event {
+  _id?: string
   id: string
   title: string
   slug: string
-  startAt: string
+  description: string
+  // Legacy fields
+  date?: string
+  time?: string
+  location?: string
+  image?: string
+  registrationLink?: string
+  type?: string
+  attendees?: string
+  featured?: boolean
+  icon?: string
+  color?: string
+  // New fields
+  startAt?: string
   endAt?: string
   venue?: string
   city?: string
-  description: string
   bannerUrl?: string
   status: string
   capacity: number
   seatsRemaining: number
   createdAt: string
+  updatedAt: string
 }
 
 type EventStatus = "draft" | "published" | "cancelled" | "completed"
@@ -60,18 +74,39 @@ export default function EditEventPage({ params }: { params: Promise<{ id: string
       if (response.ok) {
         const data = await response.json()
         setEvent(data.event)
+        // Handle both legacy and new data structures
+        const event = data.event;
+        let startAtValue = "";
+        let endAtValue = "";
+        
+        if (event.startAt) {
+          startAtValue = new Date(event.startAt).toISOString().slice(0, 16);
+        } else if (event.date && event.time) {
+          // Convert legacy date/time to datetime-local format
+          try {
+            const dateTimeString = `${event.date} ${event.time}`;
+            startAtValue = new Date(dateTimeString).toISOString().slice(0, 16);
+          } catch (error) {
+            console.error('Error parsing legacy date/time:', error);
+          }
+        }
+        
+        if (event.endAt) {
+          endAtValue = new Date(event.endAt).toISOString().slice(0, 16);
+        }
+
         setFormData({
-          title: data.event.title,
-          slug: data.event.slug,
-          startAt: new Date(data.event.startAt).toISOString().slice(0, 16),
-          endAt: data.event.endAt ? new Date(data.event.endAt).toISOString().slice(0, 16) : "",
-          venue: data.event.venue || "",
-          city: data.event.city || "",
-          description: data.event.description,
-          bannerUrl: data.event.bannerUrl || "",
-          status: data.event.status as EventStatus,
-          capacity: data.event.capacity,
-          seatsRemaining: data.event.seatsRemaining
+          title: event.title,
+          slug: event.slug || "",
+          startAt: startAtValue,
+          endAt: endAtValue,
+          venue: event.venue || "",
+          city: event.city || event.location || "",
+          description: event.description,
+          bannerUrl: event.bannerUrl || event.image || "",
+          status: (event.status || "published") as EventStatus,
+          capacity: event.capacity || 0,
+          seatsRemaining: event.seatsRemaining || 0
         })
       } else {
         toast.error('Failed to fetch event')
@@ -90,14 +125,32 @@ export default function EditEventPage({ params }: { params: Promise<{ id: string
     setSaving(true)
 
     try {
+      // Convert datetime-local back to legacy format if needed
+      const updateData = {
+        ...formData,
+        capacity: Number(formData.capacity),
+        seatsRemaining: Number(formData.seatsRemaining)
+      };
+
+      // If we have startAt, also update legacy date/time fields
+      if (formData.startAt) {
+        const startDate = new Date(formData.startAt);
+        updateData.date = startDate.toLocaleDateString('en-US', {
+          year: 'numeric',
+          month: 'short',
+          day: 'numeric'
+        });
+        updateData.time = startDate.toLocaleTimeString('en-US', {
+          hour: '2-digit',
+          minute: '2-digit',
+          hour12: true
+        });
+      }
+
       const response = await fetch(`/api/admin/events/${id}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          ...formData,
-          capacity: Number(formData.capacity),
-          seatsRemaining: Number(formData.seatsRemaining)
-        })
+        body: JSON.stringify(updateData)
       })
 
       if (response.ok) {
