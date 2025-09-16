@@ -13,6 +13,7 @@ import EmptyState from "@/components/admin/EmptyState";
 import Image from "next/image";
 
 interface Partner {
+  _id: string;
   id: number;
   name: string;
   logo: string;
@@ -165,20 +166,34 @@ export default function PartnersPage() {
     {
       key: 'logo',
       header: 'Logo',
-      render: (partner: Partner) => (
-        <div className="w-12 h-12 rounded-lg overflow-hidden bg-gray-100">
-          <Image 
-            src={partner.logo} 
-            alt={partner.name}
-            width={48}
-            height={48}
-            className="w-full h-full object-cover"
-            onError={(e) => {
-              e.currentTarget.src = '/placeholder-image.png';
-            }}
-          />
-        </div>
-      )
+      render: (partner: Partner) => {
+        // Check if logo is a URL or just text
+        const isUrl = partner.logo && (partner.logo.startsWith('http') || partner.logo.startsWith('/'));
+        
+        if (isUrl) {
+          return (
+            <div className="w-12 h-12 rounded-lg overflow-hidden bg-gray-100">
+              <Image 
+                src={partner.logo} 
+                alt={partner.name}
+                width={48}
+                height={48}
+                className="w-full h-full object-cover"
+                onError={(e) => {
+                  e.currentTarget.src = '/logo.png';
+                }}
+              />
+            </div>
+          );
+        } else {
+          // Display text as a badge/placeholder
+          return (
+            <div className="w-12 h-12 rounded-lg bg-gradient-to-r from-blue-500 to-blue-600 flex items-center justify-center text-white text-xs font-semibold">
+              {partner.logo || partner.name.substring(0, 2).toUpperCase()}
+            </div>
+          );
+        }
+      }
     },
     {
       key: 'actions',
@@ -280,7 +295,7 @@ export default function PartnersPage() {
           description="Get started by adding your first partner organization."
         />
       ) : (
-        <DataTable data={partners} columns={columns} rowKey={(partner) => partner.id.toString()} />
+        <DataTable data={partners} columns={columns} rowKey={(partner) => partner._id} />
       )}
     </div>
   );

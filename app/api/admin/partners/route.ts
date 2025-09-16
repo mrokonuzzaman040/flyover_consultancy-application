@@ -1,60 +1,139 @@
 import { NextRequest, NextResponse } from "next/server";
-import { z } from "zod";
-import { dbConnect, toObject } from "@/lib/mongoose";
+import { dbConnect } from "@/lib/mongoose";
 import Partner from "@/lib/models/Partner";
 
-const schema = z.object({
-  name: z.string().min(1),
-  logo: z.string().min(1),
-});
-
+// GET - Fetch all partners
 export async function GET() {
   try {
-    // Check if we're in build mode or if MongoDB is not available
-    if (process.env.NODE_ENV === 'production' && !process.env.MONGODB_URI) {
-      return NextResponse.json(
-        { partners: [], error: 'Database not available during build' },
-        { status: 503 }
-      );
-    }
-
     await dbConnect();
-    const docs = await Partner.find({}).sort({ createdAt: -1 }).lean();
-    return NextResponse.json({ partners: docs.map((d) => ({ ...toObject(d as { _id: unknown }) })) });
-  } catch (e: unknown) {
-    // Handle MongoDB connection errors gracefully during build
-    if (e instanceof Error && e.message.includes('ECONNREFUSED')) {
-      return NextResponse.json(
-        { partners: [], error: 'Database connection not available' },
-        { status: 503 }
-      );
-    }
+    const partners = await Partner.find().sort({ id: 1 });
     
-    console.error(e);
-    return NextResponse.json({ error: "Failed to fetch partners" }, { status: 500 });
+    // Transform the data to match the expected interface
+    const transformedPartners = partners.map(partner => ({
+      _id: partner._id,
+      id: partner.id || 0,
+      name: partner.name,
+      logo: partner.logo,
+      createdAt: partner.createdAt,
+      updatedAt: partner.updatedAt
+    }));
+    
+    return NextResponse.json({ partners: transformedPartners });
+  } catch (error) {
+    console.error("Error fetching partners:", error);
+    return NextResponse.json(
+      { error: "Failed to fetch partners" },
+      { status: 500 }
+    );
   }
 }
 
-export async function POST(req: NextRequest) {
+// POST - Create a new partner
+export async function POST(request: NextRequest) {
   try {
     await dbConnect();
-    const json = await req.json();
-    const parsed = schema.safeParse(json);
-    if (!parsed.success) return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 });
+    const body = await request.json();
     
-    // Generate next ID
-    const lastPartner = await Partner.findOne({}).sort({ id: -1 }).lean() as { id: number } | null;
-    const nextId = lastPartner ? lastPartner.id + 1 : 1;
-    
-    const partnerData = {
-      ...parsed.data,
-      id: nextId
-    };
-    
-    const doc = await Partner.create(partnerData);
-    return NextResponse.json({ partner: toObject(doc.toObject()) }, { status: 201 });
-  } catch (e: unknown) {
-    console.error(e);
-    return NextResponse.json({ error: "Failed to create partner" }, { status: 500 });
+    const {
+      name,
+      logo
+    } = body;
+
+    // Validate required fields
+    if (!name) {
+      return NextResponse.json(
+        { error: "Name is required" },
+        { status: 400 }
+      );
+    }
+
+    // Get the next ID
+    const lastPartner = await Partner.findOne().sort({ id: -1 });
+    const nextId = lastPartner && lastPartner.id > 0 ? lastPartner.id + 1 : 1;
+
+    const newPartner = new Partner({
+      id: nextId,
+      name,
+      logo: logo || "https://via.placeholder.com/100x100?text=Logo" // Default placeholder if no logo provided
+    });
+
+    await newPartner.save();
+    return NextResponse.json(newPartner, { status: 201 });
+  } catch (error) {
+    console.error("Error creating partner:", error);
+    return NextResponse.json(
+      { error: "Failed to create partner" },
+      { status: 500 }
+    );
+  }
+}
+
+// PUT - Update a partner
+export async function PUT(request: NextRequest) {
+  try {
+    await dbConnect();
+    const body = await request.json();
+    const { id, ...updateData } = body;
+
+    if (!id) {
+      return NextResponse.json(
+        { error: "Partner ID is required" },
+        { status: 400 }
+      );
+    }
+
+    const updatedPartner = await Partner.findOneAndUpdate(
+      { id: parseInt(id) },
+      updateData,
+      { new: true }
+    );
+
+    if (!updatedPartner) {
+      return NextResponse.json(
+        { error: "Partner not found" },
+        { status: 404 }
+      );
+    }
+
+    return NextResponse.json(updatedPartner);
+  } catch (error) {
+    console.error("Error updating partner:", error);
+    return NextResponse.json(
+      { error: "Failed to update partner" },
+      { status: 500 }
+    );
+  }
+}
+
+// DELETE - Delete a partner
+export async function DELETE(request: NextRequest) {
+  try {
+    await dbConnect();
+    const { searchParams } = new URL(request.url);
+    const id = searchParams.get("id");
+
+    if (!id) {
+      return NextResponse.json(
+        { error: "Partner ID is required" },
+        { status: 400 }
+      );
+    }
+
+    const deletedPartner = await Partner.findOneAndDelete({ id: parseInt(id) });
+
+    if (!deletedPartner) {
+      return NextResponse.json(
+        { error: "Partner not found" },
+        { status: 404 }
+      );
+    }
+
+    return NextResponse.json({ message: "Partner deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting partner:", error);
+    return NextResponse.json(
+      { error: "Failed to delete partner" },
+      { status: 500 }
+    );
   }
 }

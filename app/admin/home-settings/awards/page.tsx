@@ -179,7 +179,7 @@ export default function AwardsPage() {
             width={48}
             height={48}
             onError={(e) => {
-              e.currentTarget.src = '/placeholder-image.png';
+              e.currentTarget.src = '/logo.png';
             }}
           />
         </div>
