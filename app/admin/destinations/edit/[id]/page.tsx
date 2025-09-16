@@ -36,11 +36,11 @@ interface Destination {
   workRights?: string
   color?: string
   hero?: string
-  overviewMD?: string
-  costsMD?: string
-  intakesMD?: string
-  visaMD?: string
-  scholarshipsMD?: string
+  overviewText?: string
+  costsText?: string
+  intakesText?: string
+  visaText?: string
+  scholarshipsText?: string
   popularCourses: string[]
   faqs?: {
     question: string
@@ -69,11 +69,11 @@ export default function EditDestinationPage() {
     workRights: "",
     color: "",
     hero: "",
-    overviewMD: "",
-    costsMD: "",
-    intakesMD: "",
-    visaMD: "",
-    scholarshipsMD: "",
+    overviewText: "",
+    costsText: "",
+    intakesText: "",
+    visaText: "",
+    scholarshipsText: "",
     popularCourses: [] as string[],
     faqs: ""
   })
@@ -118,11 +118,11 @@ export default function EditDestinationPage() {
           workRights: destination.workRights || "",
           color: destination.color || "",
           hero: destination.hero || "",
-          overviewMD: destination.overviewMD || "",
-          costsMD: destination.costsMD || "",
-          intakesMD: destination.intakesMD || "",
-          visaMD: destination.visaMD || "",
-          scholarshipsMD: destination.scholarshipsMD || "",
+          overviewText: destination.overviewText || "",
+          costsText: destination.costsText || "",
+          intakesText: destination.intakesText || "",
+          visaText: destination.visaText || "",
+          scholarshipsText: destination.scholarshipsText || "",
           popularCourses: destination.popularCourses || [],
           faqs: destination.faqs ? JSON.stringify(destination.faqs, null, 2) : ""
         })
@@ -527,29 +527,29 @@ export default function EditDestinationPage() {
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <Label htmlFor="overviewMD">Overview (Markdown)</Label>
+              <Label htmlFor="overviewText">Overview Content</Label>
               {viewMode ? (
-                <div className="p-2 bg-gray-50 rounded border min-h-[100px] whitespace-pre-wrap">{formData.overviewMD || 'No overview content'}</div>
+                <div className="p-2 bg-gray-50 rounded border min-h-[100px] whitespace-pre-wrap">{formData.overviewText || 'No overview content'}</div>
               ) : (
                 <Textarea
-                  id="overviewMD"
-                  value={formData.overviewMD}
-                  onChange={(e) => setFormData({...formData, overviewMD: e.target.value})}
-                  placeholder="Overview content in markdown..."
+                  id="overviewText"
+                  value={formData.overviewText}
+                  onChange={(e) => setFormData({...formData, overviewText: e.target.value})}
+                  placeholder="Overview content for the destination..."
                   rows={4}
                 />
               )}
             </div>
             <div>
-              <Label htmlFor="costsMD">Costs Information (Markdown)</Label>
+              <Label htmlFor="costsText">Costs Information</Label>
               {viewMode ? (
-                <div className="p-2 bg-gray-50 rounded border min-h-[100px] whitespace-pre-wrap">{formData.costsMD || 'No costs information'}</div>
+                <div className="p-2 bg-gray-50 rounded border min-h-[100px] whitespace-pre-wrap">{formData.costsText || 'No costs information'}</div>
               ) : (
                 <Textarea
-                  id="costsMD"
-                  value={formData.costsMD}
-                  onChange={(e) => setFormData({...formData, costsMD: e.target.value})}
-                  placeholder="Cost information in markdown..."
+                  id="costsText"
+                  value={formData.costsText}
+                  onChange={(e) => setFormData({...formData, costsText: e.target.value})}
+                  placeholder="Cost information for the destination..."
                   rows={4}
                 />
               )}
@@ -558,29 +558,29 @@ export default function EditDestinationPage() {
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <Label htmlFor="intakesMD">Intakes Information (Markdown)</Label>
+              <Label htmlFor="intakesText">Intakes Information</Label>
               {viewMode ? (
-                <div className="p-2 bg-gray-50 rounded border min-h-[100px] whitespace-pre-wrap">{formData.intakesMD || 'No intakes information'}</div>
+                <div className="p-2 bg-gray-50 rounded border min-h-[100px] whitespace-pre-wrap">{formData.intakesText || 'No intakes information'}</div>
               ) : (
                 <Textarea
-                  id="intakesMD"
-                  value={formData.intakesMD}
-                  onChange={(e) => setFormData({...formData, intakesMD: e.target.value})}
-                  placeholder="Intake information in markdown..."
+                  id="intakesText"
+                  value={formData.intakesText}
+                  onChange={(e) => setFormData({...formData, intakesText: e.target.value})}
+                  placeholder="Intake information for the destination..."
                   rows={4}
                 />
               )}
             </div>
             <div>
-              <Label htmlFor="visaMD">Visa Information (Markdown)</Label>
+              <Label htmlFor="visaText">Visa Information</Label>
               {viewMode ? (
-                <div className="p-2 bg-gray-50 rounded border min-h-[100px] whitespace-pre-wrap">{formData.visaMD || 'No visa information'}</div>
+                <div className="p-2 bg-gray-50 rounded border min-h-[100px] whitespace-pre-wrap">{formData.visaText || 'No visa information'}</div>
               ) : (
                 <Textarea
-                  id="visaMD"
-                  value={formData.visaMD}
-                  onChange={(e) => setFormData({...formData, visaMD: e.target.value})}
-                  placeholder="Visa information in markdown..."
+                  id="visaText"
+                  value={formData.visaText}
+                  onChange={(e) => setFormData({...formData, visaText: e.target.value})}
+                  placeholder="Visa information for the destination..."
                   rows={4}
                 />
               )}
@@ -588,15 +588,15 @@ export default function EditDestinationPage() {
           </div>
 
           <div>
-            <Label htmlFor="scholarshipsMD">Scholarships Information (Markdown)</Label>
+            <Label htmlFor="scholarshipsText">Scholarships Information</Label>
             {viewMode ? (
-              <div className="p-2 bg-gray-50 rounded border min-h-[80px] whitespace-pre-wrap">{formData.scholarshipsMD || 'No scholarships information'}</div>
+              <div className="p-2 bg-gray-50 rounded border min-h-[80px] whitespace-pre-wrap">{formData.scholarshipsText || 'No scholarships information'}</div>
             ) : (
               <Textarea
-                id="scholarshipsMD"
-                value={formData.scholarshipsMD}
-                onChange={(e) => setFormData({...formData, scholarshipsMD: e.target.value})}
-                placeholder="Scholarship information in markdown..."
+                id="scholarshipsText"
+                value={formData.scholarshipsText}
+                onChange={(e) => setFormData({...formData, scholarshipsText: e.target.value})}
+                placeholder="Scholarship information for the destination..."
                 rows={3}
               />
             )}

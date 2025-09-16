@@ -2,10 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Trash2, Edit, Eye, Plus, Search, Globe, BookOpen, DollarSign, FileText } from "lucide-react"
+import { Trash2, Edit, Eye, Plus, Users } from "lucide-react"
 import { toast } from "sonner"
 import Link from "next/link"
 import PageHeader from "@/components/admin/PageHeader"
@@ -17,6 +14,7 @@ interface Destination {
   id: string
   country: string
   slug: string
+  students?: string
   hero?: string
   overviewMD?: string
   costsMD?: string
@@ -29,6 +27,22 @@ interface Destination {
     answer: string
   }[]
   createdAt: string
+}
+
+// Utility function to format student numbers with K
+const formatStudentCount = (students?: string) => {
+  if (!students) return 'N/A'
+  
+  // Extract numbers from the string
+  const match = students.match(/([0-9,]+)/)
+  if (!match) return students
+  
+  const number = parseInt(match[1].replace(/,/g, ''))
+  if (number >= 1000) {
+    const kValue = Math.floor(number / 1000)
+    return students.replace(match[1], `${kValue}K`)
+  }
+  return students
 }
 
 export default function AdminDestinationsPage() {
@@ -108,6 +122,12 @@ export default function AdminDestinationsPage() {
               <div>
                 <div className="font-medium text-slate-900">{d.country}</div>
                 <div className="text-xs text-slate-500">/{d.slug}</div>
+              </div>
+            ) },
+            { key: 'students', header: 'Students', hideOn: 'md', render: (d: Destination) => (
+              <div className="flex items-center gap-2">
+                <Users className="w-4 h-4 text-slate-500" />
+                <span className="text-sm font-medium">{formatStudentCount(d.students)}</span>
               </div>
             ) },
             { key: 'courses', header: 'Popular Courses', hideOn: 'sm', render: (d: Destination) => (
