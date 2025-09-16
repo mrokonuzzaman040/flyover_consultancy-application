@@ -11,18 +11,15 @@ import {
   FileText,
   Calendar,
   MessageSquare,
-  Settings,
   LogOut,
   Menu,
   X,
-  Upload,
   MapPin,
   Award,
   GraduationCap,
   CalendarCheck,
   Home,
   BookOpen,
-  Phone,
   ChevronDown,
   ChevronRight,
   Sliders,
@@ -68,7 +65,6 @@ const navigation: NavigationItem[] = [
   { name: "Services", href: "/admin/services", icon: GraduationCap },
   { name: "Blog", href: "/admin/posts", icon: FileText },
   { name: "Testimonials", href: "/admin/testimonials", icon: MessageSquare },
-  { name: "Contact", href: "/admin/contact", icon: Phone },
   { name: "Scholarships", href: "/admin/scholarships", icon: BookOpen },
   { 
     name: "Leads", 
@@ -77,10 +73,7 @@ const navigation: NavigationItem[] = [
       { name: "Leads", href: "/admin/leads", icon: Users },
       { name: "Meeting Schedules", href: "/admin/meeting-schedules", icon: CalendarCheck },
     ]
-  },
-  { name: "Offices", href: "/admin/offices", icon: Award },
-  { name: "File Uploads", href: "/admin/uploads", icon: Upload },
-  { name: "Settings", href: "/admin/settings", icon: Settings },
+  }
 ]
 
 export default function AdminSidebar() {
