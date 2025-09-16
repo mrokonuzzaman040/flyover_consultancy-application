@@ -68,6 +68,7 @@ const navigation: NavigationItem[] = [
     children: [
       { name: "Leads", href: "/admin/leads", icon: Users },
       { name: "Meeting Schedules", href: "/admin/meeting-schedules", icon: CalendarCheck },
+      { name: "Event Lead", href: "/admin/event-leads", icon: Calendar },
     ]
   },
   { name: "Services", href: "/admin/services", icon: GraduationCap },

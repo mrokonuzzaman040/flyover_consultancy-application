@@ -101,20 +101,7 @@ export default function Home() {
       <AwardsSection awards={data.awards} />
 
       {/* 7. Upcoming Events */}
-      <UpcomingEvents 
-        events={data.upcomingEvents?.map(event => ({
-          date: event.date,
-          time: event.time,
-          location: event.location,
-          title: event.title,
-          description: event.description,
-          type: 'Workshop', // Default type
-          attendees: '50+', // Default attendees
-          featured: event.featured || false,
-          icon: 'Calendar', // Default icon
-          color: '#10B981' // Default green color
-        }))}
-      />
+      <UpcomingEvents />
 
       {/* 8. Our Industry{/* 8. Partnerships */}
       <PartnershipsSection 
