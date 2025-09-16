@@ -285,7 +285,7 @@ export default function StatsPage() {
           description="Get started by adding your first company statistic."
         />
       ) : (
-        <DataTable data={stats} columns={columns} rowKey={(stat) => stat._id} />
+        <DataTable data={stats} columns={columns} rowKey={(stat) => stat._id || stat.id.toString() || `stat-${stats.indexOf(stat)}`} />
       )}
     </div>
   );

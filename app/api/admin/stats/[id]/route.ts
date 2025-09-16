@@ -44,6 +44,10 @@ export async function GET(request: Request, { params }: { params: Promise<{ id: 
     if (!transformed.description) {
       transformed.description = `Description for ${transformed.label}`;
     }
+    // Ensure _id is present for React key
+    if (!transformed._id && stat._id) {
+      transformed._id = stat._id.toString();
+    }
     
     return NextResponse.json({ stat: transformed });
   } catch (e: unknown) {
@@ -99,6 +103,10 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
     }
     if (!transformed.description) {
       transformed.description = `Description for ${transformed.label}`;
+    }
+    // Ensure _id is present for React key
+    if (!transformed._id && stat._id) {
+      transformed._id = stat._id.toString();
     }
     
     return NextResponse.json({ 

@@ -47,6 +47,10 @@ export async function GET() {
       if (!transformed.description) {
         transformed.description = `Description for ${transformed.label}`;
       }
+      // Ensure _id is present for React key
+      if (!transformed._id && doc._id) {
+        transformed._id = doc._id.toString();
+      }
       return transformed;
     });
     
