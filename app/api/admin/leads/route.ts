@@ -5,11 +5,14 @@ import { Lead } from "@/lib/models/Lead";
 
 const schema = z.object({
   name: z.string().min(1),
-  email: z.string().email(),
-  phone: z.string().optional().nullable(),
+  email: z.string().email().optional().or(z.literal("")),
+  phone: z.string().min(1, "Phone number is required").refine((val) => /^\+[1-9]\d{1,14}$/.test(val.replace(/[\s-()]/g, '')), {
+    message: "Please enter a valid phone number with country code (e.g., +1234567890)"
+  }),
   countryInterest: z.array(z.string()).default([]),
   serviceInterest: z.array(z.string()).default([]),
   message: z.string().optional().nullable(),
+  purpose: z.enum(["consultation", "enquiry"]).default("consultation"),
   utmSource: z.string().optional().nullable(),
   utmMedium: z.string().optional().nullable(),
   utmCampaign: z.string().optional().nullable(),
