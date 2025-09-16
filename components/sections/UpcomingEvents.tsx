@@ -83,7 +83,7 @@ export default function UpcomingEvents({ events = sectionsData.upcomingEvents }:
                 <div className="p-8">
                   {/* Date Card */}
                   <div className="flex items-start justify-between mb-6">
-                    <div className={`flex-shrink-0 w-16 h-16 bg-gradient-to-br ${event.color} rounded-xl flex flex-col items-center justify-center text-white shadow-lg group-hover:scale-110 transition-transform duration-300`}>
+                    <div className={`flex-shrink-0 w-16 h-16 bg-gradient-to-br ${event.color} rounded-xl flex flex-col items-center justify-center text-brand-600 shadow-lg group-hover:scale-110 transition-transform duration-300`}>
                       <div className="text-xs font-semibold uppercase">{month}</div>
                       <div className="text-lg font-bold">{day}</div>
                     </div>
