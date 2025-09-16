@@ -4,6 +4,14 @@ import { Service } from "@/lib/models/Service";
 
 export async function GET(request: NextRequest) {
   try {
+    // Check if we're in build mode or if MongoDB is not available
+    if (process.env.NODE_ENV === 'production' && !process.env.MONGODB_URI) {
+      return NextResponse.json(
+        { services: [], count: 0, error: 'Database not available during build' },
+        { status: 503 }
+      );
+    }
+
     await dbConnect();
     
     const { searchParams } = new URL(request.url);
@@ -44,6 +52,14 @@ export async function GET(request: NextRequest) {
       count: docs.length
     });
   } catch (e: unknown) {
+    // Handle MongoDB connection errors gracefully during build
+    if (e instanceof Error && e.message.includes('ECONNREFUSED')) {
+      return NextResponse.json(
+        { services: [], count: 0, error: 'Database connection not available' },
+        { status: 503 }
+      );
+    }
+    
     console.error(e);
     return NextResponse.json({ error: "Failed to fetch services" }, { status: 500 });
   }

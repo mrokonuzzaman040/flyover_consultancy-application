@@ -4,6 +4,14 @@ import { Destination } from "@/lib/models/Destination";
 
 export async function GET(request: Request, { params }: { params: Promise<{ slug: string }> }) {
   try {
+    // Check if we're in build mode or if MongoDB is not available
+    if (process.env.NODE_ENV === 'production' && !process.env.MONGODB_URI) {
+      return NextResponse.json(
+        { destination: null, error: 'Database not available during build' },
+        { status: 503 }
+      );
+    }
+
     await dbConnect();
     const { slug } = await params;
     const destination = await Destination.findOne({ slug }).lean();
@@ -14,6 +22,14 @@ export async function GET(request: Request, { params }: { params: Promise<{ slug
     
     return NextResponse.json({ destination: toObject(destination as { _id: unknown }) });
   } catch (e: unknown) {
+    // Handle MongoDB connection errors gracefully during build
+    if (e instanceof Error && e.message.includes('ECONNREFUSED')) {
+      return NextResponse.json(
+        { destination: null, error: 'Database connection not available' },
+        { status: 503 }
+      );
+    }
+    
     console.error(e);
     return NextResponse.json({ error: "Failed to fetch destination" }, { status: 500 });
   }

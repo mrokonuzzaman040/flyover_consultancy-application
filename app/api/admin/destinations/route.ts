@@ -18,10 +18,26 @@ const schema = z.object({
 
 export async function GET() {
   try {
+    // Check if we're in build mode or if MongoDB is not available
+    if (process.env.NODE_ENV === 'production' && !process.env.MONGODB_URI) {
+      return NextResponse.json(
+        { destinations: [], error: 'Database not available during build' },
+        { status: 503 }
+      );
+    }
+
     await dbConnect();
     const docs = await Destination.find({}).sort({ createdAt: -1 }).lean();
     return NextResponse.json({ destinations: docs.map((d) => ({ ...toObject(d as { _id: unknown }) })) });
   } catch (e: unknown) {
+    // Handle MongoDB connection errors gracefully during build
+    if (e instanceof Error && e.message.includes('ECONNREFUSED')) {
+      return NextResponse.json(
+        { destinations: [], error: 'Database connection not available' },
+        { status: 503 }
+      );
+    }
+    
     console.error(e);
     return NextResponse.json({ error: "Failed to fetch destinations" }, { status: 500 });
   }

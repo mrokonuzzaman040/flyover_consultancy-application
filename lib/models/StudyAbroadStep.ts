@@ -15,8 +15,7 @@ const StudyAbroadStepSchema = new Schema<IStudyAbroadStep>({
   id: {
     type: Number,
     required: true,
-    unique: true,
-    index: true
+    unique: true
   },
   icon: {
     type: String,
@@ -41,7 +40,6 @@ const StudyAbroadStepSchema = new Schema<IStudyAbroadStep>({
 });
 
 // Indexes
-StudyAbroadStepSchema.index({ id: 1 });
 StudyAbroadStepSchema.index({ title: 'text', description: 'text' });
 
 // Ensure virtual fields are serialized

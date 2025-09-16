@@ -71,8 +71,7 @@ const SlideSchema = new Schema<ISlide>({
   order: {
     type: Number,
     required: true,
-    default: 0,
-    index: true
+    default: 0
   },
   active: {
     type: Boolean,

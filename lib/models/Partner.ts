@@ -14,15 +14,13 @@ const PartnerSchema = new Schema<IPartner>({
   id: {
     type: Number,
     required: true,
-    unique: true,
-    index: true
+    unique: true
   },
   name: {
     type: String,
     required: true,
     trim: true,
-    maxlength: 200,
-    index: true
+    maxlength: 200
   },
   logo: {
     type: String,

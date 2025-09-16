@@ -3,6 +3,8 @@ import Link from "next/link";
 import Reveal from "@/components/ui/reveal";
 import PageHeader from "@/components/page-header";
 import LazyImage from "@/components/ui/lazy-image";
+import { dbConnect, toObject } from "@/lib/mongoose";
+import DestinationModel from "@/lib/models/Destination";
 import { Users, GraduationCap, Globe, Star, ArrowRight } from "lucide-react";
 
 interface University {
@@ -20,7 +22,7 @@ interface FAQ {
 }
 
 interface Destination {
-  id: string;
+  id?: string;
   country: string;
   slug: string;
   flag?: string;
@@ -41,7 +43,7 @@ interface Destination {
   scholarshipsMD?: string;
   popularCourses?: string[];
   faqs?: FAQ[] | null;
-  createdAt: string;
+  createdAt?: string;
 }
 
 export const metadata: Metadata = {
@@ -58,32 +60,40 @@ const stats = [
   { icon: Star, label: "Success Rate", value: "98%" }
 ];
 
-async function getDestinations() {
-  try {
-    // First try to fetch from API
-    const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/admin/destinations`, {
-      next: { revalidate: 3600 }, // Revalidate every hour
-      cache: 'force-cache'
-    });
-    
-    if (response.ok) {
-      const data = await response.json();
-      if (data.destinations && data.destinations.length > 0) {
-        return data.destinations;
-      }
-    }
-  } catch (error) {
-    console.log('API not available, using test data:', error instanceof Error ? error.message : 'Unknown error');
-  }
-  
-  // Fallback to test data
+let cachedDestinations: Destination[] | null = null;
+
+async function loadFallbackDestinations() {
+  if (cachedDestinations) return cachedDestinations;
+
   try {
     const testData = await import('@/data/destinations-test-data.json');
-    return testData.destinations || [];
+    cachedDestinations = testData.destinations || [];
+    return cachedDestinations;
   } catch (error) {
     console.error('Error loading test data:', error);
-    return [];
+    cachedDestinations = [];
+    return cachedDestinations;
   }
+}
+
+async function getDestinations() {
+  if (process.env.MONGODB_URI) {
+    try {
+      await dbConnect();
+      const docs = await DestinationModel.find({}).sort({ createdAt: -1 }).lean();
+      if (docs.length) {
+        const normalized = docs.map((doc) => toObject(doc as { _id: unknown }));
+        return normalized as unknown as Destination[];
+      }
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Unknown error';
+      if (process.env.NODE_ENV !== 'production') {
+        console.warn('Failed to load destinations from database, using test data:', message);
+      }
+    }
+  }
+
+  return loadFallbackDestinations();
 }
 
 export default async function DestinationsPage() {

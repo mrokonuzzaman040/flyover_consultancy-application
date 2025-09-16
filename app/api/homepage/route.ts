@@ -15,6 +15,14 @@ import { ContactInfo } from '@/lib/models/ContactInfo';
 
 export async function GET() {
   try {
+    // Check if we're in build mode or if MongoDB is not available
+    if (process.env.NODE_ENV === 'production' && !process.env.MONGODB_URI) {
+      return NextResponse.json(
+        { success: false, error: 'Database not available during build' },
+        { status: 503 }
+      );
+    }
+
     await dbConnect();
 
     // Fetch all homepage data in parallel for maximum performance
@@ -53,6 +61,14 @@ export async function GET() {
       }
     });
   } catch (error) {
+    // Handle MongoDB connection errors gracefully during build
+    if (error instanceof Error && error.message.includes('ECONNREFUSED')) {
+      return NextResponse.json(
+        { success: false, error: 'Database connection not available' },
+        { status: 503 }
+      );
+    }
+    
     console.error('Homepage API error:', error);
     return NextResponse.json(
       { success: false, error: 'Failed to fetch homepage data' },

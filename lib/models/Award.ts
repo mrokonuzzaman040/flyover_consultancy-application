@@ -15,8 +15,7 @@ const AwardSchema = new Schema<IAward>({
   id: {
     type: Number,
     required: true,
-    unique: true,
-    index: true
+    unique: true
   },
   image: {
     type: String,
@@ -33,8 +32,7 @@ const AwardSchema = new Schema<IAward>({
     type: Number,
     required: true,
     min: 1900,
-    max: new Date().getFullYear() + 10,
-    index: true
+    max: new Date().getFullYear() + 10
   }
 }, {
   timestamps: true,

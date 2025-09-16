@@ -2,35 +2,84 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Reveal from "@/components/ui/reveal";
 import PageHeader from "@/components/page-header";
+import { dbConnect, toObject } from "@/lib/mongoose";
+import DestinationModel from "@/lib/models/Destination";
 import { MapPin, Users, GraduationCap, ArrowRight, Calendar, DollarSign, FileText, Award, Heart, Star, TrendingUp, Clock, Shield, BookOpen, Building2} from "lucide-react";
 import { UniversityImage } from "@/components/ui/lazy-image";
 
-async function getDestination(slug: string) {
-  try {
-    // First try to fetch from API
-    const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/destinations/${slug}`, {
-      cache: 'no-store'
-    });
-    
-    if (response.ok) {
-      const data = await response.json();
-      if (data.destination) {
-        return data.destination;
-      }
-    }
-  } catch (error) {
-    console.log('API not available for destination, using test data:', error instanceof Error ? error.message : 'Unknown error');
-  }
-  
-  // Fallback to test data
+type University = {
+  name: string;
+  location?: string;
+  ranking?: string;
+  image?: string;
+  courses?: string[];
+};
+
+type FAQ = {
+  question: string;
+  answer: string;
+};
+
+type Destination = {
+  id?: string;
+  country: string;
+  slug: string;
+  flag?: string;
+  image?: string;
+  description?: string;
+  highlights?: string[];
+  universities?: University[] | string | null;
+  students?: string;
+  popularCities?: string[];
+  averageCost?: string;
+  workRights?: string;
+  color?: string;
+  hero?: string;
+  overviewMD?: string;
+  costsMD?: string;
+  intakesMD?: string;
+  visaMD?: string;
+  scholarshipsMD?: string;
+  popularCourses?: string[];
+  faqs?: FAQ[] | string | null;
+  createdAt?: string;
+};
+
+let cachedFallback: Destination[] | null = null;
+
+async function loadFallbackDestinations() {
+  if (cachedFallback) return cachedFallback;
+
   try {
     const testData = await import('@/data/destinations-test-data.json');
-    const destination = testData.destinations.find((dest) => dest.slug === slug);
-    return destination || null;
+    cachedFallback = testData.destinations || [];
+    return cachedFallback;
   } catch (error) {
     console.error('Error loading test data for destination:', error);
-    return null;
+    cachedFallback = [];
+    return cachedFallback;
   }
+}
+
+async function getDestination(slug: string) {
+  if (process.env.MONGODB_URI) {
+    try {
+      await dbConnect();
+      const doc = await DestinationModel.findOne({ slug }).lean();
+      if (doc) {
+        const normalized = toObject(doc as { _id: unknown });
+        return normalized as unknown as Destination;
+      }
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Unknown error';
+      if (process.env.NODE_ENV !== 'production') {
+        console.warn('Failed to load destination from database, using test data:', message);
+      }
+    }
+  }
+
+  const destinations = await loadFallbackDestinations();
+  return destinations.find((dest) => dest.slug === slug) || null;
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {

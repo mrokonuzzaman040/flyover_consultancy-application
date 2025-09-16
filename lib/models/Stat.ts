@@ -15,8 +15,7 @@ const StatSchema = new Schema<IStat>({
   id: {
     type: Number,
     required: true,
-    unique: true,
-    index: true
+    unique: true
   },
   number: {
     type: String,

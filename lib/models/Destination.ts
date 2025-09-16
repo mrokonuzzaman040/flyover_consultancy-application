@@ -59,15 +59,13 @@ const DestinationSchema = new Schema<IDestination>({
     required: true,
     unique: true,
     lowercase: true,
-    trim: true,
-    index: true
+    trim: true
   },
   country: {
     type: String,
     required: true,
     trim: true,
-    maxlength: 100,
-    index: true
+    maxlength: 100
   },
   flag: {
     type: String,
@@ -105,11 +103,10 @@ DestinationSchema.pre('save', function(next) {
   next();
 });
 
-// Index for efficient querying
+// Indexes
+DestinationSchema.index({ country: 1 });
 DestinationSchema.index({ country: 1, slug: 1 });
 DestinationSchema.index({ 'universities.name': 1 });
-
-// Indexes
 DestinationSchema.index({ universities: -1 });
 DestinationSchema.index({ students: -1 });
 

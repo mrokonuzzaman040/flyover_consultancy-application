@@ -16,8 +16,7 @@ const InsightCategorySchema = new Schema<IInsightCategory>({
     required: true,
     trim: true,
     maxlength: 100,
-    unique: true,
-    index: true
+    unique: true
   },
   count: {
     type: Number,
@@ -30,8 +29,7 @@ const InsightCategorySchema = new Schema<IInsightCategory>({
     required: true,
     unique: true,
     lowercase: true,
-    trim: true,
-    index: true
+    trim: true
   }
 }, {
   timestamps: true,

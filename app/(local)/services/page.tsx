@@ -3,6 +3,8 @@ import Link from "next/link";
 import Reveal from "@/components/ui/reveal";
 import PageHeader from "@/components/page-header";
 import CtaButton from "@/components/cta-button";
+import { dbConnect, toObject } from "@/lib/mongoose";
+import { Service as ServiceModel } from "@/lib/models/Service";
 import { GraduationCap, FileText, Plane, BookOpen, Users, Clock, CheckCircle } from "lucide-react";
 import servicesTestData from '@/data/services-test-data.json';
 
@@ -35,23 +37,23 @@ interface Service {
 }
 
 async function getServices(): Promise<Service[]> {
-  try {
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
-    const response = await fetch(`${baseUrl}/api/services`, {
-      next: { revalidate: 3600 } // Revalidate every hour
-    });
-    
-    if (!response.ok) {
-      throw new Error('Failed to fetch services');
+  if (process.env.MONGODB_URI) {
+    try {
+      await dbConnect();
+      const docs = await ServiceModel.find({}).sort({ createdAt: -1 }).lean();
+      if (docs.length) {
+        const normalized = docs.map((doc) => toObject(doc as { _id: unknown }));
+        return normalized as unknown as Service[];
+      }
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Unknown error';
+      if (process.env.NODE_ENV !== 'production') {
+        console.warn('Failed to load services from database, using test data:', message);
+      }
     }
-    
-    const data = await response.json();
-    return data.services || [];
-  } catch (error) {
-    console.log('API fetch failed, using test data:', error);
-    // Fallback to test data
-    return servicesTestData.services;
   }
+
+  return servicesTestData.services;
 }
 
 // Icon mapping for services

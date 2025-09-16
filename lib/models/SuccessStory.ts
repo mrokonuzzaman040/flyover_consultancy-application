@@ -18,8 +18,7 @@ const SuccessStorySchema = new Schema<ISuccessStory>({
   id: {
     type: Number,
     required: true,
-    unique: true,
-    index: true
+    unique: true
   },
   name: {
     type: String,
@@ -36,8 +35,7 @@ const SuccessStorySchema = new Schema<ISuccessStory>({
     type: String,
     required: true,
     trim: true,
-    maxlength: 200,
-    index: true
+    maxlength: 200
   },
   course: {
     type: String,
@@ -49,8 +47,7 @@ const SuccessStorySchema = new Schema<ISuccessStory>({
     type: String,
     required: true,
     trim: true,
-    maxlength: 100,
-    index: true
+    maxlength: 100
   },
   testimonial: {
     type: String,

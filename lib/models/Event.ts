@@ -28,8 +28,7 @@ const EventSchema = new Schema<IEvent>({
   id: {
     type: Number,
     required: true,
-    unique: true,
-    index: true
+    unique: true
   },
   title: {
     type: String,

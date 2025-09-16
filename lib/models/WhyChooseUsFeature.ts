@@ -15,8 +15,7 @@ const WhyChooseUsFeatureSchema = new Schema<IWhyChooseUsFeature>({
   id: {
     type: Number,
     required: true,
-    unique: true,
-    index: true
+    unique: true
   },
   icon: {
     type: String,

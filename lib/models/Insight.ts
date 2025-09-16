@@ -27,8 +27,7 @@ const InsightSchema = new Schema<IInsight>({
   id: {
     type: Number,
     required: true,
-    unique: true,
-    index: true
+    unique: true
   },
   title: {
     type: String,
@@ -60,8 +59,7 @@ const InsightSchema = new Schema<IInsight>({
   },
   publishedAt: {
     type: Date,
-    required: true,
-    index: true
+    required: true
   },
   category: {
     type: String,

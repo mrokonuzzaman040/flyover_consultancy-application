@@ -3,6 +3,8 @@ import { notFound } from "next/navigation";
 import PageHeader from "@/components/page-header";
 import Reveal from "@/components/ui/reveal";
 import CtaButton from "@/components/cta-button";
+import { dbConnect, toObject } from "@/lib/mongoose";
+import { Service as ServiceModel } from "@/lib/models/Service";
 import { CheckCircle } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
@@ -39,27 +41,24 @@ interface Service {
 }
 
 async function getService(slug: string): Promise<Service | null> {
-  try {
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
-    const response = await fetch(`${baseUrl}/api/services`, {
-      cache: 'no-store'
-    });
-    
-    if (!response.ok) {
-      throw new Error('Failed to fetch service');
+  if (process.env.MONGODB_URI) {
+    try {
+      await dbConnect();
+      const doc = await ServiceModel.findOne({ slug }).lean();
+      if (doc) {
+        const normalized = toObject(doc as { _id: unknown });
+        return normalized as unknown as Service;
+      }
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Unknown error';
+      if (process.env.NODE_ENV !== 'production') {
+        console.warn('Failed to load service from database, using test data:', message);
+      }
     }
-    
-    const data = await response.json();
-    console.log('Fetched services:', data.services?.length || 0);
-    const service = data.services?.find((s: Service) => s.slug === slug);
-    console.log('Found service for slug:', slug, service ? service.name : 'not found');
-    return service || null;
-  } catch (error) {
-    console.log('API fetch failed, using test data:', error);
-    // Fallback to test data
-    const service = servicesTestData.services.find(dest => dest.slug === slug);
-    return service || null;
   }
+
+  const service = servicesTestData.services.find(dest => dest.slug === slug);
+  return service || null;
 }
 
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
