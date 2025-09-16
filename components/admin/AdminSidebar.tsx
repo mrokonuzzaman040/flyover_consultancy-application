@@ -23,7 +23,17 @@ import {
   Home,
   BookOpen,
   Library,
-  Phone
+  Phone,
+  ChevronDown,
+  ChevronRight,
+  Sliders,
+  Tag,
+  Lightbulb,
+  Trophy,
+  Handshake,
+  Target,
+  Route,
+  BarChart3
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Session } from "next-auth"
@@ -31,13 +41,29 @@ import Image from "next/image"
 
 type NavigationItem = {
   name: string
-  href: string
+  href?: string
   icon: React.ComponentType<{ className?: string }>
+  children?: NavigationItem[]
 }
 
 const navigation: NavigationItem[] = [
   { name: "Dashboard", href: "/admin", icon: LayoutDashboard },
-  { name: "Home Setting", href: "/admin/home-settings", icon: Home },
+  { 
+    name: "Home Settings", 
+    icon: Home,
+    children: [
+      { name: "Slider", href: "/admin/home-settings/slider", icon: Sliders },
+      { name: "Insight Categories", href: "/admin/home-settings/insight-categories", icon: Tag },
+      { name: "Insights", href: "/admin/home-settings/insights", icon: Lightbulb },
+      { name: "Success Stories", href: "/admin/home-settings/success-stories", icon: Trophy },
+      { name: "Partners", href: "/admin/home-settings/partners", icon: Handshake },
+      { name: "Awards", href: "/admin/home-settings/awards", icon: Award },
+      { name: "Why Choose Us Features", href: "/admin/home-settings/why-choose-us-features", icon: Target },
+      { name: "Study Abroad Steps", href: "/admin/home-settings/study-abroad-steps", icon: Route },
+      { name: "Stats", href: "/admin/home-settings/stats", icon: BarChart3 },
+      { name: "Services", href: "/admin/home-settings/services", icon: GraduationCap },
+    ]
+  },
   { name: "Events", href: "/admin/events", icon: Calendar },
   { name: "Destinations", href: "/admin/destinations", icon: MapPin },
   { name: "Services", href: "/admin/services", icon: GraduationCap },
@@ -122,6 +148,103 @@ function SidebarContent({
   onSignOut: () => void
   onClose?: () => void
 }) {
+  const [openDropdowns, setOpenDropdowns] = useState<string[]>([])
+
+  const toggleDropdown = (itemName: string) => {
+    setOpenDropdowns(prev => 
+      prev.includes(itemName) 
+        ? prev.filter(name => name !== itemName)
+        : [...prev, itemName]
+    )
+  }
+
+  const renderNavigationItem = (item: NavigationItem) => {
+    if (item.children) {
+      const isOpen = openDropdowns.includes(item.name)
+      const hasActiveChild = item.children.some(child => pathname === child.href)
+      
+      return (
+        <div key={item.name}>
+          <button
+            onClick={() => toggleDropdown(item.name)}
+            className={cn(
+              "group flex items-center justify-between w-full px-3 py-2.5 text-sm rounded-md transition-colors",
+              hasActiveChild
+                ? "bg-slate-100 text-slate-900"
+                : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+            )}
+          >
+            <div className="flex items-center">
+              <item.icon
+                className={cn(
+                  "mr-3 h-5 w-5 flex-shrink-0",
+                  hasActiveChild ? "text-slate-900" : "text-slate-400 group-hover:text-slate-600"
+                )}
+              />
+              <span className="font-medium">{item.name}</span>
+            </div>
+            {isOpen ? (
+              <ChevronDown className="h-4 w-4" />
+            ) : (
+              <ChevronRight className="h-4 w-4" />
+            )}
+          </button>
+          {isOpen && (
+            <div className="ml-6 mt-1 space-y-1">
+              {item.children.map((child) => {
+                const isActive = pathname === child.href
+                return (
+                  <Link
+                    key={child.name}
+                    href={child.href!}
+                    className={cn(
+                      "group flex items-center px-3 py-2 text-sm rounded-md transition-colors",
+                      isActive
+                        ? "bg-slate-100 text-slate-900"
+                        : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+                    )}
+                    onClick={onClose}
+                  >
+                    <child.icon
+                      className={cn(
+                        "mr-3 h-4 w-4 flex-shrink-0",
+                        isActive ? "text-slate-900" : "text-slate-400 group-hover:text-slate-600"
+                      )}
+                    />
+                    <span className="font-medium">{child.name}</span>
+                  </Link>
+                )
+              })}
+            </div>
+          )}
+        </div>
+      )
+    }
+
+    const isActive = pathname === item.href
+    return (
+      <Link
+        key={item.name}
+        href={item.href!}
+        className={cn(
+          "group flex items-center px-3 py-2.5 text-sm rounded-md transition-colors",
+          isActive
+            ? "bg-slate-100 text-slate-900"
+            : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+        )}
+        onClick={onClose}
+      >
+        <item.icon
+          className={cn(
+            "mr-3 h-5 w-5 flex-shrink-0",
+            isActive ? "text-slate-900" : "text-slate-400 group-hover:text-slate-600"
+          )}
+        />
+        <span className="font-medium">{item.name}</span>
+      </Link>
+    )
+  }
+
   return (
     <>
       <div className="flex items-center justify-between h-16 px-4 border-b border-slate-200">
@@ -139,30 +262,7 @@ function SidebarContent({
       
       <div className="flex-1 flex flex-col overflow-y-auto bg-white">
         <nav className="flex-1 px-3 py-4 space-y-1">
-          {navigation.map((item: NavigationItem) => {
-            const isActive = pathname === item.href
-            return (
-              <Link
-                key={item.name}
-                href={item.href}
-                className={cn(
-                  "group flex items-center px-3 py-2.5 text-sm rounded-md transition-colors",
-                  isActive
-                    ? "bg-slate-100 text-slate-900"
-                    : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
-                )}
-                onClick={onClose}
-              >
-                <item.icon
-                  className={cn(
-                    "mr-3 h-5 w-5 flex-shrink-0",
-                    isActive ? "text-slate-900" : "text-slate-400 group-hover:text-slate-600"
-                  )}
-                />
-                <span className="font-medium">{item.name}</span>
-              </Link>
-            )
-          })}
+          {navigation.map(renderNavigationItem)}
         </nav>
         
         <div className="flex-shrink-0 p-4 border-t border-slate-200 bg-white">
