@@ -60,7 +60,6 @@ const navigation: NavigationItem[] = [
       { name: "Why Choose Us Features", href: "/admin/home-settings/why-choose-us-features", icon: Target },
       { name: "Study Abroad Steps", href: "/admin/home-settings/study-abroad-steps", icon: Route },
       { name: "Stats", href: "/admin/home-settings/stats", icon: BarChart3 },
-      { name: "Services", href: "/admin/home-settings/services", icon: GraduationCap },
     ]
   },
   { 

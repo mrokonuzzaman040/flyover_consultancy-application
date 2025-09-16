@@ -40,6 +40,8 @@ export default function Home() {
     return null;
   }
 
+  console.log(data.successStories);
+
   return (
     <div>
       {/* 1. Hero (image + text slider) */}

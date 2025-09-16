@@ -21,13 +21,31 @@ export async function GET(request: Request, { params }: { params: Promise<{ id: 
 
     await dbConnect();
     const { id } = await params;
-    const stat = await Stat.findOne({ id: parseInt(id) }).lean();
+    
+    // Try to find by numeric id first, then by _id if not found
+    let stat = await Stat.findOne({ id: parseInt(id) }).lean();
+    if (!stat) {
+      stat = await Stat.findById(id).lean();
+    }
     
     if (!stat) {
       return NextResponse.json({ error: "Stat not found" }, { status: 404 });
     }
     
-    return NextResponse.json({ stat: toObject(stat as { _id: unknown }) });
+    const transformed = toObject(stat as { _id: unknown });
+    // Apply same transformation as in the main route
+    if (transformed.value && !transformed.number) {
+      transformed.number = transformed.value;
+      delete transformed.value;
+    }
+    if (transformed.icon) {
+      delete transformed.icon;
+    }
+    if (!transformed.description) {
+      transformed.description = `Description for ${transformed.label}`;
+    }
+    
+    return NextResponse.json({ stat: transformed });
   } catch (e: unknown) {
     // Handle MongoDB connection errors gracefully during build
     if (e instanceof Error && e.message.includes('ECONNREFUSED')) {
@@ -51,19 +69,41 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
     const parsed = schema.safeParse(body);
     if (!parsed.success) return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 });
     
-    const stat = await Stat.findOneAndUpdate(
+    // Try to find by numeric id first, then by _id if not found
+    let stat = await Stat.findOneAndUpdate(
       { id: parseInt(id) },
       { $set: parsed.data },
       { new: true, runValidators: true }
     ).lean();
     
     if (!stat) {
+      stat = await Stat.findByIdAndUpdate(
+        id,
+        { $set: parsed.data },
+        { new: true, runValidators: true }
+      ).lean();
+    }
+    
+    if (!stat) {
       return NextResponse.json({ error: "Stat not found" }, { status: 404 });
+    }
+    
+    const transformed = toObject(stat as { _id: unknown });
+    // Apply same transformation as in the main route
+    if (transformed.value && !transformed.number) {
+      transformed.number = transformed.value;
+      delete transformed.value;
+    }
+    if (transformed.icon) {
+      delete transformed.icon;
+    }
+    if (!transformed.description) {
+      transformed.description = `Description for ${transformed.label}`;
     }
     
     return NextResponse.json({ 
       message: "Stat updated successfully", 
-      stat: toObject(stat as { _id: unknown }) 
+      stat: transformed 
     });
   } catch (e: unknown) {
     console.error(e);
@@ -79,7 +119,11 @@ export async function DELETE(request: Request, { params }: { params: Promise<{ i
     await dbConnect();
     const { id } = await params;
     
-    const stat = await Stat.findOneAndDelete({ id: parseInt(id) }).lean();
+    // Try to find by numeric id first, then by _id if not found
+    let stat = await Stat.findOneAndDelete({ id: parseInt(id) }).lean();
+    if (!stat) {
+      stat = await Stat.findByIdAndDelete(id).lean();
+    }
     
     if (!stat) {
       return NextResponse.json({ error: "Stat not found" }, { status: 404 });

@@ -6,21 +6,18 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Badge } from "@/components/ui/badge";
-import { Plus, Edit, Trash2, TrendingUp, Hash } from "lucide-react";
+import { Plus, Edit, Trash2, TrendingUp } from "lucide-react";
 import { toast } from "sonner";
 import PageHeader from "@/components/admin/PageHeader";
 import DataTable from "@/components/admin/DataTable";
 import EmptyState from "@/components/admin/EmptyState";
 
 interface Stat {
+  _id: string;
   id: number;
-  title: string;
+  label: string;
   number: string;
   description: string;
-  icon?: string;
-  color?: string;
-  order?: number;
   createdAt: string;
   updatedAt: string;
 }
@@ -34,12 +31,9 @@ export default function StatsPage() {
   const [deleteLoading, setDeleteLoading] = useState<number | null>(null);
 
   const [formData, setFormData] = useState({
-    title: "",
+    label: "",
     number: "",
     description: "",
-    icon: "",
-    color: "",
-    order: 0,
   });
 
   const fetchStats = async () => {
@@ -63,12 +57,9 @@ export default function StatsPage() {
 
   const resetForm = () => {
     setFormData({
-      title: "",
+      label: "",
       number: "",
       description: "",
-      icon: "",
-      color: "",
-      order: 0,
     });
     setEditingStat(null);
   };
@@ -102,12 +93,9 @@ export default function StatsPage() {
   const handleEdit = (stat: Stat) => {
     setEditingStat(stat);
     setFormData({
-      title: stat.title,
+      label: stat.label,
       number: stat.number,
       description: stat.description,
-      icon: stat.icon || "",
-      color: stat.color || "",
-      order: stat.order || 0,
     });
     setIsDialogOpen(true);
   };
@@ -166,7 +154,7 @@ export default function StatsPage() {
 
   const columns = [
     {
-      key: 'title',
+      key: 'label',
       header: 'Statistic',
       render: (stat: Stat) => (
         <div className="flex items-center gap-3">
@@ -174,7 +162,7 @@ export default function StatsPage() {
             <TrendingUp className="h-5 w-5 text-white" />
           </div>
           <div>
-            <div className="font-medium">{stat.title}</div>
+            <div className="font-medium">{stat.label}</div>
             <div className="text-sm text-gray-500">{stat.description}</div>
           </div>
         </div>
@@ -185,16 +173,6 @@ export default function StatsPage() {
       header: 'Value',
       render: (stat: Stat) => (
         <div className="text-2xl font-bold text-green-600">{stat.number}</div>
-      )
-    },
-    {
-      key: 'order',
-      header: 'Order',
-      render: (stat: Stat) => (
-        <Badge variant="secondary">
-          <Hash className="h-3 w-3 mr-1" />
-          {stat.order || 0}
-        </Badge>
       )
     },
     {
@@ -257,11 +235,11 @@ export default function StatsPage() {
             <div className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <Label htmlFor="title">Title *</Label>
+                  <Label htmlFor="label">Label *</Label>
                   <Input
-                    id="title"
-                    value={formData.title}
-                    onChange={(e) => setFormData({...formData, title: e.target.value})}
+                    id="label"
+                    value={formData.label}
+                    onChange={(e) => setFormData({...formData, label: e.target.value})}
                     placeholder="e.g., Students Placed"
                   />
                 </div>
@@ -274,36 +252,6 @@ export default function StatsPage() {
                     placeholder="e.g., 22,000+"
                   />
                 </div>
-              </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <Label htmlFor="order">Order</Label>
-                  <Input
-                    id="order"
-                    type="number"
-                    value={formData.order}
-                    onChange={(e) => setFormData({...formData, order: parseInt(e.target.value) || 0})}
-                    placeholder="Display order"
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="color">Color</Label>
-                  <Input
-                    id="color"
-                    value={formData.color}
-                    onChange={(e) => setFormData({...formData, color: e.target.value})}
-                    placeholder="#3B82F6"
-                  />
-                </div>
-              </div>
-              <div>
-                <Label htmlFor="icon">Icon</Label>
-                <Input
-                  id="icon"
-                  value={formData.icon}
-                  onChange={(e) => setFormData({...formData, icon: e.target.value})}
-                  placeholder="Icon name or class"
-                />
               </div>
               <div>
                 <Label htmlFor="description">Description *</Label>
@@ -321,7 +269,7 @@ export default function StatsPage() {
                 </Button>
                 <Button 
                   onClick={editingStat ? handleUpdate : handleCreate}
-                  disabled={saving || !formData.title || !formData.number || !formData.description}
+                  disabled={saving || !formData.label || !formData.number || !formData.description}
                 >
                   {saving ? 'Saving...' : editingStat ? 'Update' : 'Create'}
                 </Button>
@@ -337,7 +285,7 @@ export default function StatsPage() {
           description="Get started by adding your first company statistic."
         />
       ) : (
-        <DataTable data={stats} columns={columns} rowKey={(stat) => stat.id.toString()} />
+        <DataTable data={stats} columns={columns} rowKey={(stat) => stat._id} />
       )}
     </div>
   );
