@@ -36,18 +36,22 @@ interface Insight {
   _id: string
   id: number
   category: string
-  categoryColor: string
+  categoryColor?: string
   author: string
-  authorRole: string
+  authorRole?: string
   readTime: string
-  publishDate: string
+  publishedAt: string
   title: string
   excerpt: string
+  content: string
   image: string
-  featured: boolean
-  views: string
-  likes: string
+  featured?: boolean
+  views?: number
+  likes?: number
+  tags: string[]
+  slug?: string
   createdAt: string
+  updatedAt: string
 }
 
 export default function InsightsPage() {
@@ -74,10 +78,12 @@ export default function InsightsPage() {
     publishDate: "",
     title: "",
     excerpt: "",
+    content: "",
     image: "",
     featured: false,
     views: "0",
-    likes: "0"
+    likes: "0",
+    tags: [] as string[]
   })
 
   useEffect(() => {
@@ -184,10 +190,12 @@ export default function InsightsPage() {
       publishDate: "",
       title: "",
       excerpt: "",
+      content: "",
       image: "",
       featured: false,
       views: "0",
-      likes: "0"
+      likes: "0",
+      tags: []
     })
     setSelectedInsight(null)
   }
@@ -201,17 +209,19 @@ export default function InsightsPage() {
     setSelectedInsight(insight)
     setFormData({
       category: insight.category,
-      categoryColor: insight.categoryColor,
+      categoryColor: insight.categoryColor || "bg-blue-100 text-blue-800",
       author: insight.author,
-      authorRole: insight.authorRole,
+      authorRole: insight.authorRole || "",
       readTime: insight.readTime,
-      publishDate: insight.publishDate,
+      publishDate: insight.publishedAt,
       title: insight.title,
       excerpt: insight.excerpt,
+      content: insight.content,
       image: insight.image,
-      featured: insight.featured,
-      views: insight.views,
-      likes: insight.likes
+      featured: insight.featured || false,
+      views: insight.views?.toString() || "0",
+      likes: insight.likes?.toString() || "0",
+      tags: insight.tags || []
     })
     setShowEditModal(true)
   }
@@ -263,8 +273,8 @@ export default function InsightsPage() {
       header: "Stats",
       render: (insight: Insight) => (
         <div className="text-sm">
-          <div>{insight.views} views</div>
-          <div>{insight.likes} likes</div>
+          <div>{insight.views || 0} views</div>
+          <div>{insight.likes || 0} likes</div>
         </div>
       )
     },
@@ -284,7 +294,7 @@ export default function InsightsPage() {
       header: "Published",
       render: (insight: Insight) => (
         <div className="text-sm">
-          <div>{insight.publishDate}</div>
+          <div>{new Date(insight.publishedAt).toLocaleDateString()}</div>
           <div className="text-muted-foreground">{insight.readTime}</div>
         </div>
       )
@@ -376,7 +386,7 @@ export default function InsightsPage() {
           <DataTable<Insight>
             data={filteredInsights}
             columns={columns}
-            rowKey={(insight) => insight.id.toString()}
+            rowKey={(insight) => insight._id}
           />
         )}
       </div>
@@ -472,6 +482,17 @@ export default function InsightsPage() {
                 onChange={(e) => setFormData({ ...formData, excerpt: e.target.value })}
                 placeholder="Brief description of the insight"
                 rows={3}
+              />
+            </div>
+            
+            <div className="space-y-2">
+              <Label htmlFor="content">Content *</Label>
+              <Textarea
+                id="content"
+                value={formData.content}
+                onChange={(e) => setFormData({ ...formData, content: e.target.value })}
+                placeholder="Full content of the insight"
+                rows={6}
               />
             </div>
             
@@ -626,6 +647,17 @@ export default function InsightsPage() {
               />
             </div>
             
+            <div className="space-y-2">
+              <Label htmlFor="edit-content">Content *</Label>
+              <Textarea
+                id="edit-content"
+                value={formData.content}
+                onChange={(e) => setFormData({ ...formData, content: e.target.value })}
+                placeholder="Full content of the insight"
+                rows={6}
+              />
+            </div>
+            
             <div className="grid grid-cols-3 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="edit-categoryColor">Category Color</Label>
@@ -713,7 +745,7 @@ export default function InsightsPage() {
                   <strong>Read Time:</strong> {selectedInsight.readTime}
                 </div>
                 <div>
-                  <strong>Published:</strong> {selectedInsight.publishDate}
+                  <strong>Published:</strong> {new Date(selectedInsight.publishedAt).toLocaleDateString()}
                 </div>
                 <div>
                   <strong>Views:</strong> {selectedInsight.views}
@@ -726,6 +758,11 @@ export default function InsightsPage() {
               <div>
                 <strong>Excerpt:</strong>
                 <p className="mt-1 text-muted-foreground">{selectedInsight.excerpt}</p>
+              </div>
+              
+              <div>
+                <strong>Content:</strong>
+                <p className="mt-1 text-muted-foreground whitespace-pre-wrap">{selectedInsight.content}</p>
               </div>
               
               {selectedInsight.featured && (
