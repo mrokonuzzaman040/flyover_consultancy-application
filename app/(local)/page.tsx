@@ -74,7 +74,7 @@ export default function Home() {
 
       {/* 4. Study abroad in just 5 steps - Professional Infographic */}
       <StudyAbroadSteps 
-        steps={data.studyAbroadSteps?.map((step) => ({
+        steps={data.studyabroadsteps?.map((step) => ({
           id: step.step,
           title: step.title,
           description: step.description,
@@ -86,7 +86,7 @@ export default function Home() {
 
       {/* 5. Why Choose Us */}
       <WhyChooseUs 
-        features={data.whyChooseUsFeatures?.map(feature => ({
+        features={data.whychooseusfeatures?.map(feature => ({
           icon: feature.icon,
           title: feature.title,
           description: feature.description,

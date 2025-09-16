@@ -6,10 +6,10 @@ import { Shield, Users, Globe, Award, Clock, HeartHandshake, BookOpen, CheckCirc
 import sectionsData from '@/data/sections-data.json';
 
 interface WhyChooseUsProps {
-  features?: typeof sectionsData.whyChooseUsFeatures;
+  features?: typeof sectionsData.whychooseusfeatures;
 }
 
-export default function WhyChooseUs({ features = sectionsData.whyChooseUsFeatures }: WhyChooseUsProps) {
+export default function WhyChooseUs({ features = sectionsData.whychooseusfeatures }: WhyChooseUsProps) {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {

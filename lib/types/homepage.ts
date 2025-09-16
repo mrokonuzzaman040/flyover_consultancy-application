@@ -198,8 +198,8 @@ export interface HomepageData {
   slides: ISlide[];
   services: IService[];
   destinations: IDestination[];
-  whyChooseUsFeatures: IWhyChooseUsFeature[];
-  studyAbroadSteps: IStudyAbroadStep[];
+  whychooseusfeatures: IWhyChooseUsFeature[];
+  studyabroadsteps: IStudyAbroadStep[];
   successStories: ISuccessStory[];
   insights: IInsight[];
   events: IEvent[];

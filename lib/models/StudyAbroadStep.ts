@@ -37,7 +37,7 @@ const StudyAbroadStepSchema = new Schema<IStudyAbroadStep>({
   }
 }, {
   timestamps: true,
-  collection: 'studyAbroadSteps'
+  collection: 'studyabroadsteps'
 });
 
 // Indexes

@@ -270,7 +270,7 @@ async function seedStudyAbroadSteps() {
   console.log('Seeding study abroad steps...');
   await StudyAbroadStep.deleteMany({});
   
-  const steps = sectionsData.studyAbroadSteps.map(step => ({
+  const steps = sectionsData.studyabroadsteps.map(step => ({
     stepId: step.id,
     title: step.title,
     description: step.description,
@@ -286,8 +286,8 @@ async function seedStudyAbroadSteps() {
 async function seedWhyChooseUsFeatures() {
   console.log('Seeding why choose us features...');
   await WhyChooseUsFeature.deleteMany({});
-  await WhyChooseUsFeature.insertMany(sectionsData.whyChooseUsFeatures);
-  console.log(`✓ Seeded ${sectionsData.whyChooseUsFeatures.length} why choose us features`);
+  await WhyChooseUsFeature.insertMany(sectionsData.whychooseusfeatures);
+  console.log(`✓ Seeded ${sectionsData.whychooseusfeatures.length} why choose us features`);
 }
 
 async function seedAwards() {

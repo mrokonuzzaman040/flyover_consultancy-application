@@ -79,7 +79,7 @@
       "description": "Discover Southeast Asian culture and growing opportunities"
     }
   ],
-  "studyAbroadSteps": [
+  "studyabroadsteps": [
     {
       "id": 1,
       "title": "Initial Consultation",
@@ -121,7 +121,7 @@
       "textColor": "text-green-600"
     }
   ],
-  "whyChooseUsFeatures": [
+  "whychooseusfeatures": [
     {
       "icon": "BookOpen",
       "title": "End-to-End FREE Assistance",

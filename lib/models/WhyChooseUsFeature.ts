@@ -37,7 +37,7 @@ const WhyChooseUsFeatureSchema = new Schema<IWhyChooseUsFeature>({
   }
 }, {
   timestamps: true,
-  collection: 'whyChooseUsFeatures'
+  collection: 'whychooseusfeatures'
 });
 
 // Indexes

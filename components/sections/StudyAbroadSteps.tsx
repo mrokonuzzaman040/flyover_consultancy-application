@@ -5,10 +5,10 @@ import { useState } from "react";
 import { CheckCircle, Circle, ArrowRight } from "lucide-react";
 import sectionsData from '@/data/sections-data.json';
 interface StudyAbroadStepsProps {
-  steps?: typeof sectionsData.studyAbroadSteps;
+  steps?: typeof sectionsData.studyabroadsteps;
 }
 
-export default function StudyAbroadSteps({ steps = sectionsData.studyAbroadSteps }: StudyAbroadStepsProps) {
+export default function StudyAbroadSteps({ steps = sectionsData.studyabroadsteps }: StudyAbroadStepsProps) {
   const [activeStep, setActiveStep] = useState(1);
 
   return (

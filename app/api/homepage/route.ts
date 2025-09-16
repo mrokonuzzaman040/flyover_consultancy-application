@@ -18,7 +18,7 @@ export async function GET() {
     await dbConnect();
 
     // Fetch all homepage data in parallel for maximum performance
-    const [slides, services, destinations, whyChooseUsFeatures, studyAbroadSteps, successStories, insights, events, partners, awards, stats, contactInfo] = await Promise.all([
+    const [slides, services, destinations, whychooseusfeatures, studyabroadsteps, successStories, insights, events, partners, awards, stats, contactInfo] = await Promise.all([
       Slide.find({}).lean(),
       Service.find({}).lean(),
       Destination.find({}).lean(),
@@ -40,8 +40,8 @@ export async function GET() {
         slides,
         services,
         destinations,
-        whyChooseUsFeatures,
-        studyAbroadSteps,
+        whychooseusfeatures,
+        studyabroadsteps,
         successStories,
         insights,
         events,
