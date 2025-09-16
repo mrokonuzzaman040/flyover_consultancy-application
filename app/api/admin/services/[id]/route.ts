@@ -10,16 +10,17 @@ const processStep = z.object({ step: z.string(), title: z.string(), description:
 const patchSchema = z.object({
   name: z.string().min(1).optional(),
   slug: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/).optional(),
-  title: z.string().optional().nullable(),
-  subtitle: z.string().optional().nullable(),
-  description: z.string().optional().nullable(),
-  image: z.string().optional().nullable(),
-  ctaLabel: z.string().optional().nullable(),
-  ctaText: z.string().optional().nullable(),
-  sectionsMD: z.array(z.string()).optional(),
-  features: z.array(feature).optional(),
-  benefits: z.array(z.string()).optional(),
-  process: z.array(processStep).optional(),
+  title: z.string().min(1).optional(),
+  subtitle: z.string().min(1).optional(),
+  description: z.string().min(1).optional(),
+  image: z.string().min(1).optional(),
+  ctaLabel: z.string().min(1).optional(),
+  ctaText: z.string().min(1).optional(),
+  sectionsMD: z.array(z.string()).min(1).optional(),
+  features: z.array(feature).min(1).optional(),
+  benefits: z.array(z.string()).min(1).optional(),
+  process: z.array(processStep).min(1).optional(),
+  popular: z.boolean().optional(),
 });
 
 function isValid(id: string) {

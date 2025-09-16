@@ -9,16 +9,17 @@ const processStep = z.object({ step: z.string(), title: z.string(), description:
 const schema = z.object({
   name: z.string().min(1),
   slug: z.string().min(1).regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/).transform((s)=>s.toLowerCase()),
-  title: z.string().optional().nullable(),
-  subtitle: z.string().optional().nullable(),
-  description: z.string().optional().nullable(),
-  image: z.string().optional().nullable(),
-  ctaLabel: z.string().optional().nullable(),
-  ctaText: z.string().optional().nullable(),
-  sectionsMD: z.array(z.string()).default([]),
-  features: z.array(feature).default([]),
-  benefits: z.array(z.string()).default([]),
-  process: z.array(processStep).default([]),
+  title: z.string().min(1),
+  subtitle: z.string().min(1),
+  description: z.string().min(1),
+  image: z.string().min(1),
+  ctaLabel: z.string().min(1),
+  ctaText: z.string().min(1),
+  sectionsMD: z.array(z.string()).min(1),
+  features: z.array(feature).min(1),
+  benefits: z.array(z.string()).min(1),
+  process: z.array(processStep).min(1),
+  popular: z.boolean().optional().default(false),
 });
 
 export async function GET() {
