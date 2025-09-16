@@ -45,8 +45,8 @@ export async function GET(request: Request, { params }: { params: Promise<{ id: 
       transformed.description = `Description for ${transformed.label}`;
     }
     // Ensure _id is present for React key
-    if (!transformed._id && stat._id) {
-      transformed._id = stat._id.toString();
+    if (!transformed._id && (stat as any)._id) {
+      transformed._id = (stat as any)._id.toString();
     }
     
     return NextResponse.json({ stat: transformed });
@@ -105,8 +105,8 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
       transformed.description = `Description for ${transformed.label}`;
     }
     // Ensure _id is present for React key
-    if (!transformed._id && stat._id) {
-      transformed._id = stat._id.toString();
+    if (!transformed._id && (stat as any)._id) {
+      transformed._id = (stat as any)._id.toString();
     }
     
     return NextResponse.json({ 

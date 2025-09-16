@@ -28,6 +28,69 @@ const patchSchema = z.object({
   status: z.enum(["draft", "published", "cancelled", "completed"]).optional(),
   capacity: z.number().int().nonnegative().optional(),
   seatsRemaining: z.number().int().nonnegative().optional(),
+  // Enhanced fields
+  eventType: z.enum(['workshop', 'seminar', 'conference', 'webinar', 'fair', 'exhibition', 'networking', 'other']).optional(),
+  category: z.enum(['education', 'career', 'networking', 'training', 'information', 'other']).optional(),
+  targetAudience: z.array(z.string()).optional(),
+  organizer: z.string().optional(),
+  organizerEmail: z.string().email().optional(),
+  organizerPhone: z.string().optional(),
+  price: z.number().min(0).optional(),
+  currency: z.string().optional(),
+  isFree: z.boolean().optional(),
+  registrationDeadline: z.string().or(z.date()).optional().transform((v) => (v ? new Date(v) : undefined)),
+  maxAttendees: z.number().int().min(1).optional(),
+  minAttendees: z.number().int().min(1).optional(),
+  requirements: z.array(z.string()).optional(),
+  agenda: z.array(z.object({
+    time: z.string(),
+    title: z.string(),
+    description: z.string().optional(),
+    speaker: z.string().optional()
+  })).optional(),
+  speakers: z.array(z.object({
+    name: z.string(),
+    title: z.string(),
+    company: z.string().optional(),
+    bio: z.string().optional(),
+    image: z.string().optional(),
+    socialLinks: z.object({
+      linkedin: z.string().optional(),
+      twitter: z.string().optional(),
+      website: z.string().optional()
+    }).optional()
+  })).optional(),
+  tags: z.array(z.string()).optional(),
+  priority: z.enum(['low', 'medium', 'high']).optional(),
+  locationDetails: z.object({
+    address: z.string().optional(),
+    coordinates: z.object({
+      lat: z.number(),
+      lng: z.number()
+    }).optional(),
+    parking: z.boolean().optional(),
+    accessibility: z.boolean().optional(),
+    directions: z.string().optional()
+  }).optional(),
+  onlineDetails: z.object({
+    platform: z.string().optional(),
+    meetingLink: z.string().optional(),
+    meetingId: z.string().optional(),
+    password: z.string().optional(),
+    instructions: z.string().optional()
+  }).optional(),
+  materials: z.array(z.object({
+    title: z.string(),
+    type: z.enum(['document', 'video', 'link', 'other']),
+    url: z.string(),
+    description: z.string().optional()
+  })).optional(),
+  socialMedia: z.object({
+    facebook: z.string().optional(),
+    twitter: z.string().optional(),
+    linkedin: z.string().optional(),
+    instagram: z.string().optional()
+  }).optional(),
 });
 
 function validateId(id: string) {

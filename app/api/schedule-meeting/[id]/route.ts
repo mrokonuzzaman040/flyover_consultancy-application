@@ -72,7 +72,7 @@ export async function PUT(
         );
       }
       
-      updateData.scheduledDateTime = scheduledDate;
+      (updateData as any).scheduledDateTime = scheduledDate;
     }
     
     const meeting = await ScheduleMeeting.findByIdAndUpdate(

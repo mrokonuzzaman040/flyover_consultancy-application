@@ -20,6 +20,70 @@ export interface IEvent extends Document {
   status?: 'draft' | 'published' | 'cancelled' | 'completed';
   capacity?: number;
   seatsRemaining?: number;
+  // Enhanced event information
+  eventType?: 'workshop' | 'seminar' | 'conference' | 'webinar' | 'fair' | 'exhibition' | 'networking' | 'other';
+  category?: 'education' | 'career' | 'networking' | 'training' | 'information' | 'other';
+  targetAudience?: string[];
+  organizer?: string;
+  organizerEmail?: string;
+  organizerPhone?: string;
+  price?: number;
+  currency?: string;
+  isFree?: boolean;
+  registrationDeadline?: Date;
+  maxAttendees?: number;
+  minAttendees?: number;
+  requirements?: string[];
+  agenda?: Array<{
+    time: string;
+    title: string;
+    description?: string;
+    speaker?: string;
+  }>;
+  speakers?: Array<{
+    name: string;
+    title: string;
+    company?: string;
+    bio?: string;
+    image?: string;
+    socialLinks?: {
+      linkedin?: string;
+      twitter?: string;
+      website?: string;
+    };
+  }>;
+  tags?: string[];
+  featured?: boolean;
+  priority?: 'low' | 'medium' | 'high';
+  locationDetails?: {
+    address?: string;
+    coordinates?: {
+      lat: number;
+      lng: number;
+    };
+    parking?: boolean;
+    accessibility?: boolean;
+    directions?: string;
+  };
+  onlineDetails?: {
+    platform?: string;
+    meetingLink?: string;
+    meetingId?: string;
+    password?: string;
+    instructions?: string;
+  };
+  materials?: Array<{
+    title: string;
+    type: 'document' | 'video' | 'link' | 'other';
+    url: string;
+    description?: string;
+  }>;
+  socialMedia?: {
+    facebook?: string;
+    twitter?: string;
+    linkedin?: string;
+    instagram?: string;
+  };
   createdAt: Date;
   updatedAt: Date;
 }
@@ -82,7 +146,87 @@ const EventSchema = new Schema<IEvent>({
     default: 'published'
   },
   capacity: { type: Number, default: 0, min: 0 },
-  seatsRemaining: { type: Number, default: 0, min: 0 }
+  seatsRemaining: { type: Number, default: 0, min: 0 },
+  // Enhanced event information
+  eventType: {
+    type: String,
+    enum: ['workshop', 'seminar', 'conference', 'webinar', 'fair', 'exhibition', 'networking', 'other'],
+    default: 'other'
+  },
+  category: {
+    type: String,
+    enum: ['education', 'career', 'networking', 'training', 'information', 'other'],
+    default: 'education'
+  },
+  targetAudience: [{ type: String }],
+  organizer: { type: String, trim: true },
+  organizerEmail: { type: String, trim: true, lowercase: true },
+  organizerPhone: { type: String, trim: true },
+  price: { type: Number, min: 0, default: 0 },
+  currency: { type: String, default: 'USD' },
+  isFree: { type: Boolean, default: true },
+  registrationDeadline: { type: Date },
+  maxAttendees: { type: Number, min: 1 },
+  minAttendees: { type: Number, min: 1, default: 1 },
+  requirements: [{ type: String }],
+  agenda: [{
+    time: { type: String, required: true },
+    title: { type: String, required: true },
+    description: { type: String },
+    speaker: { type: String }
+  }],
+  speakers: [{
+    name: { type: String, required: true },
+    title: { type: String, required: true },
+    company: { type: String },
+    bio: { type: String },
+    image: { type: String },
+    socialLinks: {
+      linkedin: { type: String },
+      twitter: { type: String },
+      website: { type: String }
+    }
+  }],
+  tags: [{ type: String }],
+  featured: { type: Boolean, default: false },
+  priority: {
+    type: String,
+    enum: ['low', 'medium', 'high'],
+    default: 'medium'
+  },
+  locationDetails: {
+    address: { type: String },
+    coordinates: {
+      lat: { type: Number },
+      lng: { type: Number }
+    },
+    parking: { type: Boolean, default: false },
+    accessibility: { type: Boolean, default: false },
+    directions: { type: String }
+  },
+  onlineDetails: {
+    platform: { type: String },
+    meetingLink: { type: String },
+    meetingId: { type: String },
+    password: { type: String },
+    instructions: { type: String }
+  },
+  materials: [{
+    title: { type: String, required: true },
+    type: {
+      type: String,
+      enum: ['document', 'video', 'link', 'other'],
+      required: true
+    },
+    url: { type: String, required: true },
+    description: { type: String }
+  }],
+  socialMedia: {
+    facebook: { type: String },
+    twitter: { type: String },
+    linkedin: { type: String },
+    instagram: { type: String }
+  }
 }, {
   timestamps: true,
   collection: 'events'
@@ -116,7 +260,14 @@ EventSchema.pre('save', function(next) {
 EventSchema.index({ date: 1, time: 1 });
 EventSchema.index({ location: 1 });
 EventSchema.index({ status: 1 });
-EventSchema.index({ title: 'text', description: 'text', location: 'text' });
+EventSchema.index({ eventType: 1 });
+EventSchema.index({ category: 1 });
+EventSchema.index({ featured: 1 });
+EventSchema.index({ priority: 1 });
+EventSchema.index({ startAt: 1 });
+EventSchema.index({ registrationDeadline: 1 });
+EventSchema.index({ tags: 1 });
+EventSchema.index({ title: 'text', description: 'text', location: 'text', organizer: 'text' });
 
 // Virtual for formatted date-time
 EventSchema.virtual('formattedDateTime').get(function() {

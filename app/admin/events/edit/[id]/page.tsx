@@ -126,7 +126,7 @@ export default function EditEventPage({ params }: { params: Promise<{ id: string
 
     try {
       // Convert datetime-local back to legacy format if needed
-      const updateData = {
+      const updateData: any = {
         ...formData,
         capacity: Number(formData.capacity),
         seatsRemaining: Number(formData.seatsRemaining)
