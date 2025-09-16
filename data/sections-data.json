@@ -483,7 +483,7 @@
     { "name": "Cost of Living", "count": 1 },
     { "name": "Career Guidance", "count": 1 }
   ],
-    "slides": [
+  "slides": [
     {
       "image": "/hero/slide1.svg",
       "headline": "Your Global Study Partner",
