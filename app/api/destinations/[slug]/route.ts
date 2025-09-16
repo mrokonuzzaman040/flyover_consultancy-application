@@ -1,0 +1,95 @@
+import { NextRequest, NextResponse } from "next/server";
+import { dbConnect, toObject } from "@/lib/mongoose";
+import { Destination } from "@/lib/models/Destination";
+
+export async function GET(request: Request, { params }: { params: { slug: string } }) {
+  try {
+    await dbConnect();
+    const destination = await Destination.findOne({ slug: params.slug }).lean();
+    
+    if (!destination) {
+      return NextResponse.json({ error: "Destination not found" }, { status: 404 });
+    }
+    
+    return NextResponse.json({ destination: toObject(destination as { _id: unknown }) });
+  } catch (e: unknown) {
+    console.error(e);
+    return NextResponse.json({ error: "Failed to fetch destination" }, { status: 500 });
+  }
+}
+
+export async function PUT(request: NextRequest, { params }: { params: { slug: string } }) {
+  try {
+    await dbConnect();
+    const body = await request.json();
+    
+    const destination = await Destination.findOneAndUpdate(
+      { slug: params.slug },
+      { $set: body },
+      { new: true, runValidators: true }
+    ).lean();
+    
+    if (!destination) {
+      return NextResponse.json({ error: "Destination not found" }, { status: 404 });
+    }
+    
+    return NextResponse.json({ 
+      message: "Destination updated successfully", 
+      destination: toObject(destination as { _id: unknown }) 
+    });
+  } catch (e: unknown) {
+    console.error(e);
+    if (e instanceof Error) {
+      return NextResponse.json({ error: e.message }, { status: 400 });
+    }
+    return NextResponse.json({ error: "Failed to update destination" }, { status: 500 });
+  }
+}
+
+export async function PATCH(request: NextRequest, { params }: { params: { slug: string } }) {
+  try {
+    await dbConnect();
+    const body = await request.json();
+    
+    const destination = await Destination.findOneAndUpdate(
+      { slug: params.slug },
+      { $set: body },
+      { new: true, runValidators: true }
+    ).lean();
+    
+    if (!destination) {
+      return NextResponse.json({ error: "Destination not found" }, { status: 404 });
+    }
+    
+    return NextResponse.json({ 
+      message: "Destination updated successfully", 
+      destination: toObject(destination as { _id: unknown }) 
+    });
+  } catch (e: unknown) {
+    console.error(e);
+    if (e instanceof Error) {
+      return NextResponse.json({ error: e.message }, { status: 400 });
+    }
+    return NextResponse.json({ error: "Failed to update destination" }, { status: 500 });
+  }
+}
+
+export async function DELETE(request: Request, { params }: { params: { slug: string } }) {
+  try {
+    await dbConnect();
+    
+    const destination = await Destination.findOneAndDelete({ slug: params.slug }).lean();
+    
+    if (!destination) {
+      return NextResponse.json({ error: "Destination not found" }, { status: 404 });
+    }
+    
+    return NextResponse.json({ 
+      message: "Destination deleted successfully", 
+      destination: toObject(destination as { _id: unknown }) 
+    });
+  } catch (e: unknown) {
+    console.error(e);
+    return NextResponse.json({ error: "Failed to delete destination" }, { status: 500 });
+  }
+}

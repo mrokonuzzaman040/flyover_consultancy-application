@@ -6,17 +6,33 @@ export interface IFAQ {
   answer: string;
 }
 
+// Interface for University
+export interface IUniversity {
+  name: string;
+  image: string;
+  ranking: string;
+  location: string;
+  courses: string[];
+}
+
 // Interface for Destination document
 export interface IDestination extends Document {
   id: number;
   name: string;
   flag: string;
-  universities: number;
-  students: number;
+  universities: IUniversity[];
+  students: number | string;
   // Additional fields for detailed destination info
   country?: string;
   slug?: string;
+  description?: string;
+  image?: string;
   hero?: string;
+  color?: string;
+  averageCost?: string;
+  workRights?: string;
+  popularCities?: string[];
+  highlights?: string[];
   overviewMD?: string;
   costsMD?: string;
   intakesMD?: string;
@@ -31,6 +47,14 @@ export interface IDestination extends Document {
 const FAQSchema = new Schema<IFAQ>({
   question: { type: String, required: true },
   answer: { type: String, required: true }
+}, { _id: false });
+
+const UniversitySchema = new Schema<IUniversity>({
+  name: { type: String, required: true },
+  image: { type: String, required: true },
+  ranking: { type: String, required: true },
+  location: { type: String, required: true },
+  courses: { type: [String], required: true }
 }, { _id: false });
 
 const DestinationSchema = new Schema<IDestination>({
@@ -53,19 +77,24 @@ const DestinationSchema = new Schema<IDestination>({
     trim: true
   },
   universities: {
-    type: Number,
-    required: true,
-    min: 0
+    type: [UniversitySchema],
+    required: true
   },
   students: {
-    type: Number,
-    required: true,
-    min: 0
+    type: Schema.Types.Mixed,
+    required: true
   },
   // Additional optional fields for detailed destination info
   country: { type: String, trim: true },
   slug: { type: String, unique: true, lowercase: true, trim: true, sparse: true },
+  description: { type: String },
+  image: { type: String },
   hero: { type: String },
+  color: { type: String },
+  averageCost: { type: String },
+  workRights: { type: String },
+  popularCities: { type: [String], default: [] },
+  highlights: { type: [String], default: [] },
   overviewMD: { type: String },
   costsMD: { type: String },
   intakesMD: { type: String },
@@ -101,7 +130,7 @@ DestinationSchema.index({ students: -1 });
 
 // Virtual for total capacity
 DestinationSchema.virtual('totalCapacity').get(function() {
-  return this.universities * 1000; // Estimated capacity
+  return this.universities.length * 1000; // Estimated capacity
 });
 
 // Ensure virtual fields are serialized
