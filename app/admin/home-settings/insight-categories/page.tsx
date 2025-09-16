@@ -15,6 +15,7 @@ interface InsightCategory {
   id: string
   name: string
   count: number
+  slug: string
 }
 
 interface CategoryFormData {
@@ -40,11 +41,18 @@ export default function InsightCategoriesPage() {
     fetchCategories()
   }, [])
 
+  useEffect(() => {
+    console.log('Categories state updated:', categories)
+  }, [categories])
+
   const fetchCategories = async () => {
     try {
+      console.log('Fetching categories...')
       const response = await fetch('/api/admin/insight-categories')
+      console.log('Response status:', response.status)
       if (!response.ok) throw new Error('Failed to fetch categories')
       const data = await response.json()
+      console.log('Fetched data:', data)
       setCategories(data.categories || [])
     } catch (error) {
       console.error('Error fetching categories:', error)

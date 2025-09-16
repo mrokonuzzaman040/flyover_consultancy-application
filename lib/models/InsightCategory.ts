@@ -33,7 +33,7 @@ const InsightCategorySchema = new Schema<IInsightCategory>({
   }
 }, {
   timestamps: true,
-  collection: 'insightCategories'
+  collection: 'insightcategories'
 });
 
 // Pre-save middleware to generate slug from name

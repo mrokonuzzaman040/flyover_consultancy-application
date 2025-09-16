@@ -24,11 +24,12 @@ interface SlideData {
 // GET - Fetch single slide
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await dbConnect()
-    const slide = await Slide.findById(params.id)
+    const { id } = await params
+    const slide = await Slide.findById(id)
     
     if (!slide) {
       return NextResponse.json(
@@ -61,14 +62,15 @@ export async function GET(
 // PUT - Update single slide
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const slideData: SlideData = await request.json()
     await dbConnect()
+    const { id } = await params
     
     const updatedSlide = await Slide.findByIdAndUpdate(
-      params.id,
+      id,
       {
         image: slideData.image,
         headline: slideData.headline,
@@ -112,12 +114,13 @@ export async function PUT(
 // DELETE - Delete single slide
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await dbConnect()
+    const { id } = await params
     
-    const deletedSlide = await Slide.findByIdAndDelete(params.id)
+    const deletedSlide = await Slide.findByIdAndDelete(id)
     
     if (!deletedSlide) {
       return NextResponse.json(

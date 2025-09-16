@@ -43,7 +43,10 @@ type NavigationItem = {
 }
 
 const navigation: NavigationItem[] = [
+  { name: "Blog", href: "/admin/posts", icon: FileText },
   { name: "Dashboard", href: "/admin", icon: LayoutDashboard },
+  { name: "Destinations", href: "/admin/destinations", icon: MapPin },
+  { name: "Events", href: "/admin/events", icon: Calendar },
   { 
     name: "Home Settings", 
     icon: Home,
@@ -60,12 +63,6 @@ const navigation: NavigationItem[] = [
       { name: "Services", href: "/admin/home-settings/services", icon: GraduationCap },
     ]
   },
-  { name: "Events", href: "/admin/events", icon: Calendar },
-  { name: "Destinations", href: "/admin/destinations", icon: MapPin },
-  { name: "Services", href: "/admin/services", icon: GraduationCap },
-  { name: "Blog", href: "/admin/posts", icon: FileText },
-  { name: "Testimonials", href: "/admin/testimonials", icon: MessageSquare },
-  { name: "Scholarships", href: "/admin/scholarships", icon: BookOpen },
   { 
     name: "Leads", 
     icon: Users,
@@ -73,7 +70,10 @@ const navigation: NavigationItem[] = [
       { name: "Leads", href: "/admin/leads", icon: Users },
       { name: "Meeting Schedules", href: "/admin/meeting-schedules", icon: CalendarCheck },
     ]
-  }
+  },
+  { name: "Services", href: "/admin/services", icon: GraduationCap },
+  { name: "Scholarships", href: "/admin/scholarships", icon: BookOpen },
+  { name: "Testimonials", href: "/admin/testimonials", icon: MessageSquare }
 ]
 
 export default function AdminSidebar() {

@@ -1,46 +1,28 @@
 import { NextRequest, NextResponse } from "next/server";
 import { dbConnect } from "@/lib/mongoose";
-import { HomeSettings } from "@/lib/models/HomeSettings";
+import InsightCategory from "@/lib/models/InsightCategory";
 
-interface InsightCategory {
+interface InsightCategoryData {
   id: string;
   name: string;
   count: number;
-}
-
-interface DatabaseInsightCategory {
-  name: string;
-  count: number;
-}
-
-async function getHomeSettings() {
-  await dbConnect();
-  let homeSettings = await HomeSettings.findOne();
-  
-  if (!homeSettings) {
-    homeSettings = new HomeSettings({
-      insightCategories: []
-    });
-    await homeSettings.save();
-  }
-  
-  return homeSettings;
+  slug: string;
 }
 
 // GET - Fetch all insight categories
 export async function GET() {
   try {
-    const homeSettings = await getHomeSettings();
+    await dbConnect();
+    const categories = await InsightCategory.find().sort({ count: -1 });
     
-    const categories: InsightCategory[] = homeSettings.insightCategories.map(
-      (category: DatabaseInsightCategory, index: number) => ({
-        id: `category-${index + 1}`,
-        name: category.name,
-        count: category.count,
-      })
-    );
+    const categoriesData: InsightCategoryData[] = categories.map((category) => ({
+      id: category._id.toString(),
+      name: category.name,
+      count: category.count,
+      slug: category.slug,
+    }));
 
-    return NextResponse.json({ categories });
+    return NextResponse.json({ categories: categoriesData });
   } catch (error) {
     console.error("Error fetching insight categories:", error);
     return NextResponse.json(
@@ -63,37 +45,31 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const homeSettings = await getHomeSettings();
+    await dbConnect();
     
-    // Check if category already exists
-    const existingCategory = homeSettings.insightCategories.find(
-      (cat: DatabaseInsightCategory) => cat.name.toLowerCase() === name.toLowerCase()
-    );
-    
-    if (existingCategory) {
+    const newCategory = new InsightCategory({
+      name,
+      count: parseInt(count) || 0,
+    });
+
+    const savedCategory = await newCategory.save();
+
+    const categoryData: InsightCategoryData = {
+      id: savedCategory._id.toString(),
+      name: savedCategory.name,
+      count: savedCategory.count,
+      slug: savedCategory.slug,
+    };
+
+    return NextResponse.json(categoryData, { status: 201 });
+  } catch (error) {
+    console.error("Error creating insight category:", error);
+    if (error instanceof Error && error.message.includes('duplicate key')) {
       return NextResponse.json(
         { error: "Category with this name already exists" },
         { status: 400 }
       );
     }
-
-    const newCategory: DatabaseInsightCategory = {
-      name,
-      count: parseInt(count) || 0,
-    };
-
-    homeSettings.insightCategories.push(newCategory);
-    await homeSettings.save();
-
-    const savedCategory: InsightCategory = {
-      id: `category-${homeSettings.insightCategories.length}`,
-      name: newCategory.name,
-      count: newCategory.count,
-    };
-
-    return NextResponse.json(savedCategory, { status: 201 });
-  } catch (error) {
-    console.error("Error creating insight category:", error);
     return NextResponse.json(
       { error: "Failed to create insight category" },
       { status: 500 }
@@ -114,45 +90,40 @@ export async function PUT(request: NextRequest) {
       );
     }
 
-    const homeSettings = await getHomeSettings();
-    const categoryIndex = parseInt(id.replace('category-', '')) - 1;
+    await dbConnect();
 
-    if (categoryIndex < 0 || categoryIndex >= homeSettings.insightCategories.length) {
+    const updatedCategory = await InsightCategory.findByIdAndUpdate(
+      id,
+      {
+        name,
+        count: parseInt(count) || 0,
+      },
+      { new: true }
+    );
+
+    if (!updatedCategory) {
       return NextResponse.json(
         { error: "Category not found" },
         { status: 404 }
       );
     }
 
-    // Check if another category with the same name exists (excluding current)
-    const existingCategory = homeSettings.insightCategories.find(
-      (cat: DatabaseInsightCategory, index: number) => 
-        cat.name.toLowerCase() === name.toLowerCase() && index !== categoryIndex
-    );
-    
-    if (existingCategory) {
+    const categoryData: InsightCategoryData = {
+      id: updatedCategory._id.toString(),
+      name: updatedCategory.name,
+      count: updatedCategory.count,
+      slug: updatedCategory.slug,
+    };
+
+    return NextResponse.json(categoryData);
+  } catch (error) {
+    console.error("Error updating insight category:", error);
+    if (error instanceof Error && error.message.includes('duplicate key')) {
       return NextResponse.json(
         { error: "Another category with this name already exists" },
         { status: 400 }
       );
     }
-
-    homeSettings.insightCategories[categoryIndex] = {
-      name,
-      count: parseInt(count) || 0,
-    };
-
-    await homeSettings.save();
-
-    const updatedCategory: InsightCategory = {
-      id,
-      name,
-      count: parseInt(count) || 0,
-    };
-
-    return NextResponse.json(updatedCategory);
-  } catch (error) {
-    console.error("Error updating insight category:", error);
     return NextResponse.json(
       { error: "Failed to update insight category" },
       { status: 500 }
@@ -173,20 +144,16 @@ export async function DELETE(request: NextRequest) {
       );
     }
 
-    const homeSettings = await getHomeSettings();
-    const categoryIndex = parseInt(id.replace('category-', '')) - 1;
+    await dbConnect();
 
-    if (categoryIndex < 0 || categoryIndex >= homeSettings.insightCategories.length) {
+    const deletedCategory = await InsightCategory.findByIdAndDelete(id);
+
+    if (!deletedCategory) {
       return NextResponse.json(
         { error: "Category not found" },
         { status: 404 }
       );
     }
-
-    // Allow deleting any category as all data comes from database
-
-    homeSettings.insightCategories.splice(categoryIndex, 1);
-    await homeSettings.save();
 
     return NextResponse.json({ message: "Category deleted successfully" });
   } catch (error) {
