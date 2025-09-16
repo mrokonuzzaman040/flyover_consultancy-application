@@ -1,8 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
-import fs from 'fs'
-import path from 'path'
-
-const DATA_FILE_PATH = path.join(process.cwd(), 'data', 'sections-data.json')
+import { dbConnect } from '@/lib/mongoose'
+import { HomeSettings } from '@/lib/models/HomeSettings'
 
 interface Slide {
   id?: string
@@ -21,40 +19,39 @@ interface Slide {
   }
 }
 
-function readData() {
-  try {
-    const fileContent = fs.readFileSync(DATA_FILE_PATH, 'utf8')
-    return JSON.parse(fileContent)
-  } catch (error) {
-    console.error('Error reading data file:', error)
-    return { slides: [] }
+async function getHomeSettings() {
+  await dbConnect()
+  let homeSettings = await HomeSettings.findOne()
+  
+  if (!homeSettings) {
+    homeSettings = new HomeSettings({
+      heroSlider: []
+    })
+    await homeSettings.save()
   }
-}
-
-function writeData(data: { slides: Slide[] }) {
-  try {
-    fs.writeFileSync(DATA_FILE_PATH, JSON.stringify(data, null, 2))
-    return true
-  } catch (error) {
-    console.error('Error writing data file:', error)
-    return false
-  }
+  
+  return homeSettings
 }
 
 // GET - Fetch all slides
 export async function GET() {
   try {
-    const data = readData()
-    const slides = data.slides || []
+    const homeSettings = await getHomeSettings()
+    const slides = homeSettings.heroSlider || []
     
-    // Add IDs to slides if they don't have them
-    const slidesWithIds = slides.map((slide: Slide, index: number) => ({
-      ...slide,
-      id: slide.id || `slide-${index + 1}`
+    // Add IDs to slides if they don't have them and convert to expected format
+     const slidesWithIds = slides.map((slide: Record<string, unknown>, index: number) => ({
+      id: slide._id?.toString() || `slide-${index + 1}`,
+      image: slide.image || slide.imageUrl || '',
+      headline: slide.headline || slide.title || '',
+      sub: slide.sub || slide.subtitle || '',
+      primary: slide.primaryButton || { label: '', href: '', isModal: false },
+      secondary: slide.secondaryButton || { label: '', href: '', isModal: false }
     }))
     
     return NextResponse.json({ slides: slidesWithIds })
-  } catch {
+  } catch (error) {
+    console.error('Error fetching slides:', error)
     return NextResponse.json(
       { error: 'Failed to fetch slides' },
       { status: 500 }
@@ -66,27 +63,31 @@ export async function GET() {
 export async function POST(request: NextRequest) {
   try {
     const newSlide: Slide = await request.json()
-    const data = readData()
+    const homeSettings = await getHomeSettings()
     
-    if (!data.slides) {
-      data.slides = []
+    // Convert to database format
+    const slideForDB = {
+      image: newSlide.image,
+      imageUrl: newSlide.image,
+      headline: newSlide.headline,
+      title: newSlide.headline,
+      sub: newSlide.sub,
+      subtitle: newSlide.sub,
+      primaryButton: newSlide.primary,
+      secondaryButton: newSlide.secondary
     }
     
-    // Generate ID for new slide
-    const newId = `slide-${Date.now()}`
-    const slideWithId = { ...newSlide, id: newId }
+    homeSettings.heroSlider.push(slideForDB)
+    await homeSettings.save()
     
-    data.slides.push(slideWithId)
-    
-    if (writeData(data)) {
-      return NextResponse.json({ slide: slideWithId }, { status: 201 })
-    } else {
-      return NextResponse.json(
-        { error: 'Failed to save slide' },
-        { status: 500 }
-      )
+    const savedSlide = {
+      ...newSlide,
+      id: `slide-${Date.now()}`
     }
-  } catch {
+    
+    return NextResponse.json({ slide: savedSlide }, { status: 201 })
+  } catch (error) {
+    console.error('Error creating slide:', error)
     return NextResponse.json(
       { error: 'Invalid request data' },
       { status: 400 }
@@ -98,17 +99,17 @@ export async function POST(request: NextRequest) {
 export async function PUT(request: NextRequest) {
   try {
     const updatedSlide: Slide = await request.json()
-    const data = readData()
+    const homeSettings = await getHomeSettings()
     
-    if (!data.slides || !updatedSlide.id) {
+    if (!updatedSlide.id) {
       return NextResponse.json(
-        { error: 'Slide not found or invalid ID' },
-        { status: 404 }
+        { error: 'Slide ID is required' },
+        { status: 400 }
       )
     }
     
-    const slideIndex = data.slides.findIndex((slide: Slide) => 
-      slide.id === updatedSlide.id || data.slides.indexOf(slide).toString() === updatedSlide.id
+    const slideIndex = homeSettings.heroSlider.findIndex(
+      (slide: Record<string, unknown>) => slide._id?.toString() === updatedSlide.id
     )
     
     if (slideIndex === -1) {
@@ -118,17 +119,25 @@ export async function PUT(request: NextRequest) {
       )
     }
     
-    data.slides[slideIndex] = updatedSlide
-    
-    if (writeData(data)) {
-      return NextResponse.json({ slide: updatedSlide })
-    } else {
-      return NextResponse.json(
-        { error: 'Failed to update slide' },
-        { status: 500 }
-      )
+    // Convert to database format
+    const slideForDB = {
+      _id: homeSettings.heroSlider[slideIndex]._id,
+      image: updatedSlide.image,
+      imageUrl: updatedSlide.image,
+      headline: updatedSlide.headline,
+      title: updatedSlide.headline,
+      sub: updatedSlide.sub,
+      subtitle: updatedSlide.sub,
+      primaryButton: updatedSlide.primary,
+      secondaryButton: updatedSlide.secondary
     }
-  } catch {
+    
+    homeSettings.heroSlider[slideIndex] = slideForDB
+    await homeSettings.save()
+    
+    return NextResponse.json({ slide: updatedSlide })
+  } catch (error) {
+    console.error('Error updating slide:', error)
     return NextResponse.json(
       { error: 'Invalid request data' },
       { status: 400 }
@@ -149,17 +158,10 @@ export async function DELETE(request: NextRequest) {
       )
     }
     
-    const data = readData()
+    const homeSettings = await getHomeSettings()
     
-    if (!data.slides) {
-      return NextResponse.json(
-        { error: 'No slides found' },
-        { status: 404 }
-      )
-    }
-    
-    const slideIndex = data.slides.findIndex((slide: Slide, index: number) => 
-      slide.id === slideId || index.toString() === slideId
+    const slideIndex = homeSettings.heroSlider.findIndex(
+      (slide: Record<string, unknown>) => slide._id?.toString() === slideId
     )
     
     if (slideIndex === -1) {
@@ -169,17 +171,12 @@ export async function DELETE(request: NextRequest) {
       )
     }
     
-    data.slides.splice(slideIndex, 1)
+    homeSettings.heroSlider.splice(slideIndex, 1)
+    await homeSettings.save()
     
-    if (writeData(data)) {
-      return NextResponse.json({ message: 'Slide deleted successfully' })
-    } else {
-      return NextResponse.json(
-        { error: 'Failed to delete slide' },
-        { status: 500 }
-      )
-    }
-  } catch {
+    return NextResponse.json({ message: 'Slide deleted successfully' })
+  } catch (error) {
+    console.error('Error deleting slide:', error)
     return NextResponse.json(
       { error: 'Failed to delete slide' },
       { status: 500 }
