@@ -38,6 +38,45 @@ interface Event {
   status: string
   capacity: number
   seatsRemaining: number
+  // Enhanced fields
+  eventType?: string
+  category?: string
+  targetAudience?: string[]
+  organizer?: string
+  organizerEmail?: string
+  organizerPhone?: string
+  price?: number
+  currency?: string
+  isFree?: boolean
+  registrationDeadline?: string
+  maxAttendees?: number
+  minAttendees?: number
+  requirements?: string[]
+  agenda?: Array<{ time: string; title: string; description?: string; speaker?: string }>
+  speakers?: Array<{ name: string; title: string; company?: string; bio?: string; image?: string; socialLinks?: { linkedin?: string; twitter?: string; website?: string } }>
+  tags?: string[]
+  priority?: string
+  locationDetails?: {
+    address?: string
+    coordinates?: { lat: number; lng: number }
+    parking?: boolean
+    accessibility?: boolean
+    directions?: string
+  }
+  onlineDetails?: {
+    platform?: string
+    meetingLink?: string
+    meetingId?: string
+    password?: string
+    instructions?: string
+  }
+  materials?: Array<{ title: string; type: string; url: string; description?: string }>
+  socialMedia?: {
+    facebook?: string
+    twitter?: string
+    linkedin?: string
+    instagram?: string
+  }
   createdAt: string
   updatedAt: string
 }
@@ -61,7 +100,47 @@ export default function EditEventPage({ params }: { params: Promise<{ id: string
     bannerUrl: "",
     status: "draft" as EventStatus,
     capacity: 0,
-    seatsRemaining: 0
+    seatsRemaining: 0,
+    // Enhanced fields
+    eventType: "other" as "workshop" | "seminar" | "conference" | "webinar" | "fair" | "exhibition" | "networking" | "other",
+    category: "education" as "education" | "career" | "networking" | "training" | "information" | "other",
+    targetAudience: [] as string[],
+    organizer: "",
+    organizerEmail: "",
+    organizerPhone: "",
+    price: 0,
+    currency: "USD",
+    isFree: true,
+    registrationDeadline: "",
+    maxAttendees: 0,
+    minAttendees: 1,
+    requirements: [] as string[],
+    agenda: [] as Array<{ time: string; title: string; description?: string; speaker?: string }>,
+    speakers: [] as Array<{ name: string; title: string; company?: string; bio?: string; image?: string; socialLinks?: { linkedin?: string; twitter?: string; website?: string } }>,
+    tags: [] as string[],
+    featured: false,
+    priority: "medium" as "low" | "medium" | "high",
+    locationDetails: {
+      address: "",
+      coordinates: { lat: 0, lng: 0 },
+      parking: false,
+      accessibility: false,
+      directions: ""
+    },
+    onlineDetails: {
+      platform: "",
+      meetingLink: "",
+      meetingId: "",
+      password: "",
+      instructions: ""
+    },
+    materials: [] as Array<{ title: string; type: "document" | "video" | "link" | "other"; url: string; description?: string }>,
+    socialMedia: {
+      facebook: "",
+      twitter: "",
+      linkedin: "",
+      instagram: ""
+    }
   })
 
   useEffect(() => {
@@ -106,7 +185,50 @@ export default function EditEventPage({ params }: { params: Promise<{ id: string
           bannerUrl: event.bannerUrl || event.image || "",
           status: (event.status || "published") as EventStatus,
           capacity: event.capacity || 0,
-          seatsRemaining: event.seatsRemaining || 0
+          seatsRemaining: event.seatsRemaining || 0,
+          // Enhanced fields
+          eventType: event.eventType || "other",
+          category: event.category || "education",
+          targetAudience: event.targetAudience || [],
+          organizer: event.organizer || "",
+          organizerEmail: event.organizerEmail || "",
+          organizerPhone: event.organizerPhone || "",
+          price: event.price || 0,
+          currency: event.currency || "USD",
+          isFree: event.isFree !== undefined ? event.isFree : true,
+          registrationDeadline: event.registrationDeadline ? new Date(event.registrationDeadline).toISOString().slice(0, 16) : "",
+          maxAttendees: event.maxAttendees || 0,
+          minAttendees: event.minAttendees || 1,
+          requirements: event.requirements || [],
+          agenda: event.agenda || [],
+          speakers: event.speakers || [],
+          tags: event.tags || [],
+          featured: event.featured || false,
+          priority: event.priority || "medium",
+          locationDetails: {
+            address: event.locationDetails?.address || "",
+            coordinates: {
+              lat: event.locationDetails?.coordinates?.lat || 0,
+              lng: event.locationDetails?.coordinates?.lng || 0
+            },
+            parking: event.locationDetails?.parking || false,
+            accessibility: event.locationDetails?.accessibility || false,
+            directions: event.locationDetails?.directions || ""
+          },
+          onlineDetails: {
+            platform: event.onlineDetails?.platform || "",
+            meetingLink: event.onlineDetails?.meetingLink || "",
+            meetingId: event.onlineDetails?.meetingId || "",
+            password: event.onlineDetails?.password || "",
+            instructions: event.onlineDetails?.instructions || ""
+          },
+          materials: event.materials || [],
+          socialMedia: {
+            facebook: event.socialMedia?.facebook || "",
+            twitter: event.socialMedia?.twitter || "",
+            linkedin: event.socialMedia?.linkedin || "",
+            instagram: event.socialMedia?.instagram || ""
+          }
         })
       } else {
         toast.error('Failed to fetch event')
@@ -129,7 +251,10 @@ export default function EditEventPage({ params }: { params: Promise<{ id: string
       const updateData: any = {
         ...formData,
         capacity: Number(formData.capacity),
-        seatsRemaining: Number(formData.seatsRemaining)
+        seatsRemaining: Number(formData.seatsRemaining),
+        price: Number(formData.price),
+        maxAttendees: Number(formData.maxAttendees),
+        minAttendees: Number(formData.minAttendees)
       };
 
       // If we have startAt, also update legacy date/time fields
@@ -146,6 +271,19 @@ export default function EditEventPage({ params }: { params: Promise<{ id: string
           hour12: true
         });
       }
+
+      // Clean up empty fields
+      if (!updateData.bannerUrl) delete updateData.bannerUrl
+      if (!updateData.organizer) delete updateData.organizer
+      if (!updateData.organizerEmail) delete updateData.organizerEmail
+      if (!updateData.organizerPhone) delete updateData.organizerPhone
+      if (!updateData.registrationDeadline) delete updateData.registrationDeadline
+      if (updateData.targetAudience.length === 0) delete updateData.targetAudience
+      if (updateData.requirements.length === 0) delete updateData.requirements
+      if (updateData.agenda.length === 0) delete updateData.agenda
+      if (updateData.speakers.length === 0) delete updateData.speakers
+      if (updateData.tags.length === 0) delete updateData.tags
+      if (updateData.materials.length === 0) delete updateData.materials
 
       const response = await fetch(`/api/admin/events/${id}`, {
         method: 'PATCH',
