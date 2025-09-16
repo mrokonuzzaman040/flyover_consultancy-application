@@ -52,6 +52,14 @@ const ItemSchema = new Schema(
   { _id: false }
 );
 
+const InsightCategorySchema = new Schema(
+  {
+    name: { type: String, required: true },
+    count: { type: Number, default: 0 },
+  },
+  { _id: false }
+);
+
 const ContentSectionSchema = new Schema(
   {
     title: { type: String },
@@ -66,6 +74,7 @@ const ContentSectionSchema = new Schema(
 const HomeSettingsSchema = new Schema(
   {
     heroSlider: { type: [SlideSchema], default: [] },
+    insightCategories: { type: [InsightCategorySchema], default: [] },
     transformSection: { type: ContentSectionSchema, default: {} },
     servicesSection: { type: ContentSectionSchema, default: {} },
     destinationsSection: { type: ContentSectionSchema, default: {} },

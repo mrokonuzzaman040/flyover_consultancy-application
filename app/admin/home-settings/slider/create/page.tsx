@@ -10,6 +10,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Checkbox } from "@/components/ui/checkbox"
 import { ArrowLeft } from "lucide-react"
 import { toast } from "sonner"
+import Image from "next/image"
 
 interface SlideFormData {
   image: string
@@ -214,10 +215,12 @@ export default function CreateSlidePage() {
               <div>
                 <Label>Preview</Label>
                 <div className="mt-2 border rounded-lg p-4">
-                  <img
+                  <Image
                     src={formData.image}
                     alt="Slide preview"
-                    className="w-full h-48 object-cover rounded"
+                    className="object-cover rounded"
+                    width={400}
+                    height={200}
                     onError={(e) => {
                       e.currentTarget.src = '/placeholder-image.jpg'
                     }}

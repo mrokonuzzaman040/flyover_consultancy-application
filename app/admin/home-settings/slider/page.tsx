@@ -58,7 +58,7 @@ export default function SliderPage() {
       } else {
         toast.error('Failed to fetch slides')
       }
-    } catch (error) {
+    } catch {
       toast.error('Error fetching slides')
     } finally {
       setLoading(false)
@@ -84,7 +84,7 @@ export default function SliderPage() {
       } else {
         toast.error('Failed to delete slide')
       }
-    } catch (error) {
+    } catch {
       toast.error('Error deleting slide')
     }
   }
