@@ -2,13 +2,15 @@
   "name": "flyover",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build --turbopack",
     "start": "next start",
     "lint": "eslint",
     "create-admin": "node scripts/create-admin.js",
-    "seed-services": "node scripts/seed-services.mjs"
+    "seed-services": "node scripts/seed-services.mjs",
+    "seed-sections": "node scripts/seed-sections-data.mjs"
   },
   "dependencies": {
     "@playwright/test": "^1.55.0",
