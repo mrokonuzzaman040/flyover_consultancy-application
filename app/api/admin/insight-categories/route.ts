@@ -19,26 +19,8 @@ async function getHomeSettings() {
   
   if (!homeSettings) {
     homeSettings = new HomeSettings({
-      insightCategories: [
-        { name: "All", count: 6 },
-        { name: "University Rankings", count: 1 },
-        { name: "Visa Guide", count: 1 },
-        { name: "Scholarships", count: 1 },
-        { name: "Cost of Living", count: 1 },
-        { name: "Career Guidance", count: 1 }
-      ]
+      insightCategories: []
     });
-    await homeSettings.save();
-  } else if (!homeSettings.insightCategories || homeSettings.insightCategories.length === 0) {
-    // Initialize insightCategories if it doesn't exist or is empty
-    homeSettings.insightCategories = [
-      { name: "All", count: 6 },
-      { name: "University Rankings", count: 1 },
-      { name: "Visa Guide", count: 1 },
-      { name: "Scholarships", count: 1 },
-      { name: "Cost of Living", count: 1 },
-      { name: "Career Guidance", count: 1 }
-    ];
     await homeSettings.save();
   }
   
@@ -201,13 +183,7 @@ export async function DELETE(request: NextRequest) {
       );
     }
 
-    // Don't allow deleting "All" category
-    if (homeSettings.insightCategories[categoryIndex].name === "All") {
-      return NextResponse.json(
-        { error: "Cannot delete the 'All' category" },
-        { status: 400 }
-      );
-    }
+    // Allow deleting any category as all data comes from database
 
     homeSettings.insightCategories.splice(categoryIndex, 1);
     await homeSettings.save();
