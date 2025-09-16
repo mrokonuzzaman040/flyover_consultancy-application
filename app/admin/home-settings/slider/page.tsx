@@ -41,6 +41,8 @@ interface Slide {
     href?: string
     isModal?: boolean
   }
+  order?: number
+  active?: boolean
 }
 
 export default function SliderPage() {
@@ -74,7 +76,7 @@ export default function SliderPage() {
   // Handle delete
   const handleDelete = async (slideId: string) => {
     try {
-      const response = await fetch(`/api/admin/slides?id=${slideId}`, {
+      const response = await fetch(`/api/admin/slides/${slideId}`, {
         method: 'DELETE',
       })
 
@@ -140,6 +142,8 @@ export default function SliderPage() {
                   <TableHead>Subtitle</TableHead>
                   <TableHead>Primary Button</TableHead>
                   <TableHead>Secondary Button</TableHead>
+                  <TableHead>Order</TableHead>
+                  <TableHead>Status</TableHead>
                   <TableHead className="text-right">Actions</TableHead>
                 </TableRow>
               </TableHeader>
@@ -181,6 +185,16 @@ export default function SliderPage() {
                           <ExternalLink className="h-3 w-3 text-muted-foreground" />
                         )}
                       </div>
+                    </TableCell>
+                    <TableCell>
+                      <span className="text-sm font-mono">{slide.order || 0}</span>
+                    </TableCell>
+                    <TableCell>
+                      <span className={`text-xs px-2 py-1 rounded-full ${
+                        slide.active ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'
+                      }`}>
+                        {slide.active ? 'Active' : 'Inactive'}
+                      </span>
                     </TableCell>
                     <TableCell className="text-right">
                       <div className="flex items-center justify-end space-x-2">

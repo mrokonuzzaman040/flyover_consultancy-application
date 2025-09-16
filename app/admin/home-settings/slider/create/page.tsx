@@ -22,6 +22,8 @@ interface SlideFormData {
   secondaryLabel: string
   secondaryHref: string
   secondaryIsModal: boolean
+  order: number
+  active: boolean
 }
 
 const initialFormData: SlideFormData = {
@@ -34,6 +36,8 @@ const initialFormData: SlideFormData = {
   secondaryLabel: "",
   secondaryHref: "",
   secondaryIsModal: false,
+  order: 0,
+  active: true,
 }
 
 export default function CreateSlidePage() {
@@ -41,7 +45,7 @@ export default function CreateSlidePage() {
   const [formData, setFormData] = useState<SlideFormData>(initialFormData)
   const [isLoading, setIsLoading] = useState(false)
 
-  const handleInputChange = (field: keyof SlideFormData, value: string | boolean) => {
+  const handleInputChange = (field: keyof SlideFormData, value: string | boolean | number) => {
     setFormData(prev => ({ ...prev, [field]: value }))
   }
 
@@ -64,6 +68,8 @@ export default function CreateSlidePage() {
           href: formData.secondaryHref,
           isModal: formData.secondaryIsModal,
         },
+        order: formData.order,
+        active: formData.active,
       }
 
       const response = await fetch('/api/admin/slides', {
@@ -207,6 +213,31 @@ export default function CreateSlidePage() {
                     />
                     <Label htmlFor="secondaryIsModal">Open as Modal</Label>
                   </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold">Settings</h3>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <Label htmlFor="order">Order</Label>
+                  <Input
+                    id="order"
+                    type="number"
+                    value={formData.order}
+                    onChange={(e) => handleInputChange('order', parseInt(e.target.value) || 0)}
+                    placeholder="0"
+                    min="0"
+                  />
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Checkbox
+                    id="active"
+                    checked={formData.active}
+                    onCheckedChange={(checked: boolean) => handleInputChange('active', checked)}
+                  />
+                  <Label htmlFor="active">Active</Label>
                 </div>
               </div>
             </div>

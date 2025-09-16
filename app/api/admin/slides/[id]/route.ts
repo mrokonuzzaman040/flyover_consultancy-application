@@ -21,13 +21,23 @@ interface SlideData {
   active?: boolean
 }
 
-// GET - Fetch all slides
-export async function GET() {
+// GET - Fetch single slide
+export async function GET(
+  request: NextRequest,
+  { params }: { params: { id: string } }
+) {
   try {
     await dbConnect()
-    const slides = await Slide.find().sort({ order: 1 })
+    const slide = await Slide.findById(params.id)
     
-    const slidesWithIds = slides.map((slide) => ({
+    if (!slide) {
+      return NextResponse.json(
+        { error: 'Slide not found' },
+        { status: 404 }
+      )
+    }
+    
+    const responseSlide = {
       id: slide._id.toString(),
       image: slide.image,
       headline: slide.headline,
@@ -36,72 +46,29 @@ export async function GET() {
       secondary: slide.secondary,
       order: slide.order,
       active: slide.active
-    }))
+    }
     
-    return NextResponse.json({ slides: slidesWithIds })
+    return NextResponse.json({ slide: responseSlide })
   } catch (error) {
-    console.error('Error fetching slides:', error)
+    console.error('Error fetching slide:', error)
     return NextResponse.json(
-      { error: 'Failed to fetch slides' },
+      { error: 'Failed to fetch slide' },
       { status: 500 }
     )
   }
 }
 
-// POST - Create new slide
-export async function POST(request: NextRequest) {
+// PUT - Update single slide
+export async function PUT(
+  request: NextRequest,
+  { params }: { params: { id: string } }
+) {
   try {
     const slideData: SlideData = await request.json()
     await dbConnect()
-    
-    const newSlide = new Slide({
-      image: slideData.image,
-      headline: slideData.headline,
-      sub: slideData.sub,
-      primary: slideData.primary,
-      secondary: slideData.secondary,
-      order: slideData.order || 0,
-      active: slideData.active !== undefined ? slideData.active : true
-    })
-    
-    const savedSlide = await newSlide.save()
-    
-    const responseSlide = {
-      id: savedSlide._id.toString(),
-      image: savedSlide.image,
-      headline: savedSlide.headline,
-      sub: savedSlide.sub,
-      primary: savedSlide.primary,
-      secondary: savedSlide.secondary,
-      order: savedSlide.order,
-      active: savedSlide.active
-    }
-    
-    return NextResponse.json({ slide: responseSlide }, { status: 201 })
-  } catch (error) {
-    console.error('Error creating slide:', error)
-    return NextResponse.json(
-      { error: 'Invalid request data' },
-      { status: 400 }
-    )
-  }
-}
-
-// PUT - Update existing slide
-export async function PUT(request: NextRequest) {
-  try {
-    const slideData: SlideData = await request.json()
-    await dbConnect()
-    
-    if (!slideData.id) {
-      return NextResponse.json(
-        { error: 'Slide ID is required' },
-        { status: 400 }
-      )
-    }
     
     const updatedSlide = await Slide.findByIdAndUpdate(
-      slideData.id,
+      params.id,
       {
         image: slideData.image,
         headline: slideData.headline,
@@ -142,22 +109,15 @@ export async function PUT(request: NextRequest) {
   }
 }
 
-// DELETE - Delete slide
-export async function DELETE(request: NextRequest) {
+// DELETE - Delete single slide
+export async function DELETE(
+  request: NextRequest,
+  { params }: { params: { id: string } }
+) {
   try {
-    const { searchParams } = new URL(request.url)
-    const slideId = searchParams.get('id')
-    
-    if (!slideId) {
-      return NextResponse.json(
-        { error: 'Slide ID is required' },
-        { status: 400 }
-      )
-    }
-    
     await dbConnect()
     
-    const deletedSlide = await Slide.findByIdAndDelete(slideId)
+    const deletedSlide = await Slide.findByIdAndDelete(params.id)
     
     if (!deletedSlide) {
       return NextResponse.json(

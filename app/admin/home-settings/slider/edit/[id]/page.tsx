@@ -27,6 +27,8 @@ interface Slide {
     href?: string
     isModal?: boolean
   }
+  order?: number
+  active?: boolean
 }
 
 interface SlideFormData {
@@ -39,6 +41,8 @@ interface SlideFormData {
   secondaryLabel: string
   secondaryHref: string
   secondaryIsModal: boolean
+  order: number
+  active: boolean
 }
 
 const initialFormData: SlideFormData = {
@@ -51,6 +55,8 @@ const initialFormData: SlideFormData = {
   secondaryLabel: "",
   secondaryHref: "",
   secondaryIsModal: false,
+  order: 0,
+  active: true,
 }
 
 export default function EditSlidePage() {
@@ -65,14 +71,13 @@ export default function EditSlidePage() {
   useEffect(() => {
     const fetchSlide = async () => {
       try {
-        const response = await fetch('/api/admin/slides')
+        const response = await fetch(`/api/admin/slides/${slideId}`)
         if (!response.ok) {
-          throw new Error('Failed to fetch slides')
+          throw new Error('Failed to fetch slide')
         }
         
         const data = await response.json()
-        const slides: Slide[] = data.slides || []
-        const slide = slides.find(s => s.id === slideId)
+        const slide: Slide = data.slide
         
         if (!slide) {
           toast.error('Slide not found')
@@ -90,6 +95,8 @@ export default function EditSlidePage() {
           secondaryLabel: slide.secondary.label,
           secondaryHref: slide.secondary.href || '',
           secondaryIsModal: slide.secondary.isModal || false,
+          order: slide.order || 0,
+          active: slide.active !== undefined ? slide.active : true,
         })
       } catch (error) {
         console.error('Error fetching slide:', error)
@@ -105,7 +112,7 @@ export default function EditSlidePage() {
     }
   }, [slideId, router])
 
-  const handleInputChange = (field: keyof SlideFormData, value: string | boolean) => {
+  const handleInputChange = (field: keyof SlideFormData, value: string | boolean | number) => {
     setFormData(prev => ({ ...prev, [field]: value }))
   }
 
@@ -115,6 +122,7 @@ export default function EditSlidePage() {
 
     try {
       const slideData = {
+        id: slideId,
         image: formData.image,
         headline: formData.headline,
         sub: formData.sub,
@@ -128,6 +136,8 @@ export default function EditSlidePage() {
           href: formData.secondaryHref,
           isModal: formData.secondaryIsModal,
         },
+        order: formData.order,
+        active: formData.active,
       }
 
       const response = await fetch(`/api/admin/slides/${slideId}`, {
@@ -284,6 +294,31 @@ export default function EditSlidePage() {
                     />
                     <Label htmlFor="secondaryIsModal">Open as Modal</Label>
                   </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold">Settings</h3>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <Label htmlFor="order">Order</Label>
+                  <Input
+                    id="order"
+                    type="number"
+                    value={formData.order}
+                    onChange={(e) => handleInputChange('order', parseInt(e.target.value) || 0)}
+                    placeholder="0"
+                    min="0"
+                  />
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Checkbox
+                    id="active"
+                    checked={formData.active}
+                    onCheckedChange={(checked: boolean) => handleInputChange('active', checked)}
+                  />
+                  <Label htmlFor="active">Active</Label>
                 </div>
               </div>
             </div>
