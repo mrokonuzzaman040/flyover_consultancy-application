@@ -527,7 +527,7 @@ export default function LeadForm({ purpose = "consultation" }: { purpose?: "cons
                    {COUNTRY_CODES.filter(country => 
                      country.name.toLowerCase().includes(countryCodeSearchTerm.toLowerCase()) ||
                      country.code.toLowerCase().includes(countryCodeSearchTerm.toLowerCase())
-                   ).map((country, index) => (
+                   ).map((country) => (
                      <button
                        key={`${country.code}-${country.country}`}
                        type="button"
