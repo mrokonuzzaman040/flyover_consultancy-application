@@ -80,6 +80,7 @@ export default function ScheduleMeetingModal({ isOpen, onClose }: ScheduleMeetin
       }
       
       console.log('Sending request with data:', requestData)
+      console.log('API URL:', '/api/schedule-meeting')
       
       const response = await fetch('/api/schedule-meeting', {
         method: 'POST',
@@ -90,8 +91,17 @@ export default function ScheduleMeetingModal({ isOpen, onClose }: ScheduleMeetin
       })
 
       console.log('Response status:', response.status)
-      const responseData = await response.json()
-      console.log('Response data:', responseData)
+      console.log('Response ok:', response.ok)
+      
+      let responseData
+      try {
+        responseData = await response.json()
+        console.log('Response data:', responseData)
+      } catch (parseError) {
+        console.error('Error parsing response:', parseError)
+        toast.error('Invalid response from server')
+        return
+      }
 
       if (response.ok) {
         toast.success('Meeting scheduled successfully! We will contact you soon.')
@@ -107,6 +117,7 @@ export default function ScheduleMeetingModal({ isOpen, onClose }: ScheduleMeetin
         })
         onClose()
       } else {
+        console.error('API Error:', responseData)
         toast.error(responseData.message || responseData.error || 'Failed to schedule meeting')
       }
     } catch (error) {
@@ -291,13 +302,6 @@ export default function ScheduleMeetingModal({ isOpen, onClose }: ScheduleMeetin
                 type="submit"
                 disabled={isSubmitting}
                 className="flex-1 bg-brand-600 hover:bg-brand-700"
-                onClick={(e) => {
-                  console.log('Button clicked')
-                  if (isSubmitting) {
-                    e.preventDefault()
-                    return
-                  }
-                }}
               >
                 {isSubmitting ? 'Scheduling...' : 'Schedule Meeting'}
               </Button>

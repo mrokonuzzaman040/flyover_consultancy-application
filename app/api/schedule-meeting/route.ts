@@ -10,7 +10,7 @@ const scheduleMeetingSchema = z.object({
   email: z.string().email("Invalid email format").optional().or(z.literal("")),
   scheduledDateTime: z.string().datetime("Invalid date format"),
   message: z.string().max(1000, "Message too long").optional(),
-  preferredService: z.enum(['study-consultation', 'application-support', 'visa-assistance', 'course-selection', 'general-inquiry']).optional(),
+  preferredService: z.enum(['study-consultation', 'application-support', 'visa-assistance', 'course-selection', 'general-inquiry']).optional().or(z.literal("")),
   urgency: z.enum(['LOW', 'MEDIUM', 'HIGH']).default('LOW')
 });
 
