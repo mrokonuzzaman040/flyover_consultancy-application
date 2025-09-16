@@ -26,10 +26,10 @@ interface Destination {
   flag?: string;
   image?: string;
   description?: string;
-  highlights: string[];
+  highlights?: string[];
   universities?: University[] | string | null;
   students?: string;
-  popularCities: string[];
+  popularCities?: string[];
   averageCost?: string;
   workRights?: string;
   color?: string;
@@ -39,7 +39,7 @@ interface Destination {
   intakesMD?: string;
   visaMD?: string;
   scholarshipsMD?: string;
-  popularCourses: string[];
+  popularCourses?: string[];
   faqs?: FAQ[] | null;
   createdAt: string;
 }
@@ -213,11 +213,11 @@ export default async function DestinationsPage() {
                     <div className="mb-6 flex-1">
                       <div className="text-xs text-gray-500 uppercase tracking-wide mb-2">Key Highlights</div>
                       <div className="flex flex-wrap gap-2">
-                        {country.highlights.map((highlight: string, idx: number) => (
+                        {country.highlights?.map((highlight: string, idx: number) => (
                           <span key={idx} className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-brand-100 text-brand-800">
                             {highlight}
                           </span>
-                        ))}
+                        )) || <span className="text-gray-500 text-sm">No highlights available</span>}
                       </div>
                     </div>
                     
@@ -233,7 +233,7 @@ export default async function DestinationsPage() {
                       </div>
                       <div className="flex justify-between items-start">
                         <span className="text-gray-500">Popular Cities:</span>
-                        <span className="font-medium text-gray-900 text-right">{country.popularCities.join(", ")}</span>
+                        <span className="font-medium text-gray-900 text-right">{country.popularCities?.join(", ") || "Not available"}</span>
                       </div>
                     </div>
                   </div>

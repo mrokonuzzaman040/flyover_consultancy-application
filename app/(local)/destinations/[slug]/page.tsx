@@ -475,12 +475,16 @@ export default async function DestinationPage({ params }: { params: Promise<{ sl
             </Reveal>
             <Reveal delay={0.1}>
               <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                {destination.popularCourses.map((course: string, index: number) => (
+                {destination.popularCourses?.map((course: string, index: number) => (
                   <div key={index} className="bg-white rounded-lg p-6 shadow-lg text-center">
                     <GraduationCap className="w-12 h-12 text-brand-600 mx-auto mb-4" />
                     <h3 className="text-lg font-bold text-gray-900">{course}</h3>
                   </div>
-                ))}
+                )) || (
+                  <div className="col-span-full text-center text-gray-500">
+                    <p>No popular courses available</p>
+                  </div>
+                )}
               </div>
             </Reveal>
           </div>
