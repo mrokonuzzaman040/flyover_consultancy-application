@@ -9,36 +9,32 @@ export interface IFAQ {
 // Interface for University
 export interface IUniversity {
   name: string;
-  image: string;
-  ranking: string;
-  location: string;
-  courses: string[];
+  image?: string;
+  ranking?: string;
+  location?: string;
+  courses?: string[];
 }
 
 // Interface for Destination document
 export interface IDestination extends Document {
-  id: number;
-  name: string;
-  flag: string;
-  universities: IUniversity[];
-  students: number | string;
-  // Additional fields for detailed destination info
-  country?: string;
-  slug?: string;
+  slug: string;
+  country: string;
+  flag?: string;
   description?: string;
-  image?: string;
   hero?: string;
   color?: string;
+  students?: string;
   averageCost?: string;
   workRights?: string;
   popularCities?: string[];
   highlights?: string[];
+  popularCourses?: string[];
+  universities?: IUniversity[];
   overviewMD?: string;
   costsMD?: string;
   intakesMD?: string;
   visaMD?: string;
   scholarshipsMD?: string;
-  popularCourses?: string[];
   faqs?: IFAQ[];
   createdAt: Date;
   updatedAt: Date;
@@ -51,20 +47,22 @@ const FAQSchema = new Schema<IFAQ>({
 
 const UniversitySchema = new Schema<IUniversity>({
   name: { type: String, required: true },
-  image: { type: String, required: true },
-  ranking: { type: String, required: true },
-  location: { type: String, required: true },
-  courses: { type: [String], required: true }
+  image: { type: String },
+  ranking: { type: String },
+  location: { type: String },
+  courses: { type: [String], default: [] }
 }, { _id: false });
 
 const DestinationSchema = new Schema<IDestination>({
-  id: {
-    type: Number,
+  slug: {
+    type: String,
     required: true,
     unique: true,
+    lowercase: true,
+    trim: true,
     index: true
   },
-  name: {
+  country: {
     type: String,
     required: true,
     trim: true,
@@ -73,64 +71,63 @@ const DestinationSchema = new Schema<IDestination>({
   },
   flag: {
     type: String,
-    required: true,
     trim: true
   },
-  universities: {
-    type: [UniversitySchema],
-    required: true
-  },
-  students: {
-    type: Schema.Types.Mixed,
-    required: true
-  },
-  // Additional optional fields for detailed destination info
-  country: { type: String, trim: true },
-  slug: { type: String, unique: true, lowercase: true, trim: true, sparse: true },
   description: { type: String },
-  image: { type: String },
   hero: { type: String },
   color: { type: String },
+  students: { type: String },
   averageCost: { type: String },
   workRights: { type: String },
   popularCities: { type: [String], default: [] },
   highlights: { type: [String], default: [] },
+  popularCourses: { type: [String], default: [] },
+  universities: {
+    type: [UniversitySchema],
+    default: []
+  },
   overviewMD: { type: String },
   costsMD: { type: String },
   intakesMD: { type: String },
   visaMD: { type: String },
   scholarshipsMD: { type: String },
-  popularCourses: { type: [String], default: [] },
   faqs: { type: [FAQSchema], default: [] }
 }, {
   timestamps: true,
   collection: 'destinations'
 });
 
-// Pre-save middleware to generate slug from name if not provided
+// Pre-save hook to ensure slug is properly formatted
 DestinationSchema.pre('save', function(next) {
-  if (!this.slug && this.name) {
-    this.slug = this.name
-      .toLowerCase()
-      .replace(/[^a-z0-9\s-]/g, '')
-      .replace(/\s+/g, '-')
-      .replace(/-+/g, '-')
-      .trim();
-  }
-  if (!this.country && this.name) {
-    this.country = this.name;
+  if (this.isModified('slug') || this.isNew) {
+    this.slug = this.slug.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
   }
   next();
 });
 
+// Index for efficient querying
+DestinationSchema.index({ country: 1, slug: 1 });
+DestinationSchema.index({ 'universities.name': 1 });
+
 // Indexes
-DestinationSchema.index({ name: 'text', country: 'text' });
 DestinationSchema.index({ universities: -1 });
 DestinationSchema.index({ students: -1 });
 
+// Virtual for formatted country name
+DestinationSchema.virtual('formattedCountry').get(function() {
+  return this.country.charAt(0).toUpperCase() + this.country.slice(1);
+});
+
+// Virtual for display name (using country as the main name)
+DestinationSchema.virtual('displayName').get(function() {
+  return this.country;
+});
+
 // Virtual for total capacity
 DestinationSchema.virtual('totalCapacity').get(function() {
-  return this.universities.length * 1000; // Estimated capacity
+  return this.universities?.reduce((total, uni) => {
+    return total + (uni.courses ? uni.courses.length : 0);
+  }, 0) || 0;
 });
 
 // Ensure virtual fields are serialized

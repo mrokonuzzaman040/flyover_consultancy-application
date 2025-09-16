@@ -75,7 +75,7 @@ export default async function DestinationPage({ params }: { params: Promise<{ sl
       <PageHeader
         title={`Study in ${destination.country}`}
         subtitle={destination.description}
-        image={destination.hero || "/hero/slide1.svg"}
+        image={"/hero/slide1.svg"}
       />
 
       {/* Quick Overview */}
