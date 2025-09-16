@@ -33,7 +33,7 @@ export default function ScheduleMeetingModal({ isOpen, onClose }: ScheduleMeetin
     time: '',
     message: '',
     preferredService: '',
-    urgency: 'normal'
+    urgency: 'LOW'
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
 
@@ -93,7 +93,7 @@ export default function ScheduleMeetingModal({ isOpen, onClose }: ScheduleMeetin
           time: '',
           message: '',
           preferredService: '',
-          urgency: 'normal'
+          urgency: 'LOW'
         })
         onClose()
       } else {
@@ -246,9 +246,9 @@ export default function ScheduleMeetingModal({ isOpen, onClose }: ScheduleMeetin
                   onChange={handleInputChange}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-500"
                 >
-                  <option value="normal">Normal</option>
-                  <option value="urgent">Urgent</option>
-                  <option value="very-urgent">Very Urgent</option>
+                  <option value="LOW">Low</option>
+                  <option value="MEDIUM">Medium</option>
+                  <option value="HIGH">High</option>
                 </select>
               </div>
             </div>
