@@ -1,11 +1,16 @@
 "use client";
 
 import HeroSlider from "@/components/hero-slider";
+import { ISlide } from "@/lib/types/homepage";
 
-export default function HeroSection() {
+interface HeroSectionProps {
+  slides?: ISlide[];
+}
+
+export default function HeroSection({ slides }: HeroSectionProps) {
   return (
     <section className="relative">
-      <HeroSlider />
+      <HeroSlider slides={slides} />
     </section>
   );
 }

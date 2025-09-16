@@ -1,8 +1,9 @@
 "use client";
 
 import LeadForm from "@/components/lead-form";
+import { IContactInfo } from "@/lib/types/homepage";
 
-const offices = [
+const defaultOffices = [
   {
     city: "Dhaka",
     phone: "+8801703666064"
@@ -13,7 +14,16 @@ const offices = [
   }
 ];
 
-export default function ContactSection() {
+interface ContactSectionProps {
+  contactInfo?: IContactInfo | null;
+}
+
+export default function ContactSection({ contactInfo }: ContactSectionProps) {
+  // Create office-like structure from contact info or use defaults
+  const offices = contactInfo?.phones?.map((phone: string, index: number) => ({
+    city: index === 0 ? contactInfo.city || "Dhaka" : "Chittagong",
+    phone
+  })) || defaultOffices;
   return (
     <section className="section-muted">
       <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
