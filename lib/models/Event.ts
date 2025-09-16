@@ -2,7 +2,7 @@ import mongoose, { Document, Schema } from 'mongoose';
 
 // Interface for Event document
 export interface IEvent extends Document {
-  id: number;
+  id?: number | string;
   title: string;
   date: string;
   time: string;
@@ -26,9 +26,10 @@ export interface IEvent extends Document {
 
 const EventSchema = new Schema<IEvent>({
   id: {
-    type: Number,
-    required: true,
-    unique: true
+    type: Schema.Types.Mixed,
+    required: false,
+    unique: true,
+    sparse: true
   },
   title: {
     type: String,
@@ -38,17 +39,17 @@ const EventSchema = new Schema<IEvent>({
   },
   date: {
     type: String,
-    required: true,
+    required: false,
     trim: true
   },
   time: {
     type: String,
-    required: true,
+    required: false,
     trim: true
   },
   location: {
     type: String,
-    required: true,
+    required: false,
     trim: true,
     maxlength: 200
   },
@@ -60,12 +61,12 @@ const EventSchema = new Schema<IEvent>({
   },
   image: {
     type: String,
-    required: true,
+    required: false,
     trim: true
   },
   registrationLink: {
     type: String,
-    required: true,
+    required: false,
     trim: true
   },
   // Additional optional fields for detailed event management

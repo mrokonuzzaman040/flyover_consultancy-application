@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import mongoose from "mongoose";
 import { z } from "zod";
 import { dbConnect, toObject } from "@/lib/mongoose";
-import { Event } from "@/lib/models/Event";
+import Event from "@/lib/models/Event";
 
 const patchSchema = z.object({
   title: z.string().min(1).optional(),

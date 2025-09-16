@@ -15,19 +15,33 @@ import ListToolbar from "@/components/admin/ListToolbar"
 import EmptyState from "@/components/admin/EmptyState"
 
 interface Event {
+  _id?: string
   id: string
   title: string
   slug: string
-  startAt: string
+  description: string
+  // Legacy fields
+  date?: string
+  time?: string
+  location?: string
+  image?: string
+  registrationLink?: string
+  type?: string
+  attendees?: string
+  featured?: boolean
+  icon?: string
+  color?: string
+  // New fields
+  startAt?: string
   endAt?: string
   venue?: string
   city?: string
-  description: string
   bannerUrl?: string
   status: string
   capacity: number
   seatsRemaining: number
   createdAt: string
+  updatedAt: string
 }
 
 export default function AdminEventsPage() {
@@ -82,14 +96,20 @@ export default function AdminEventsPage() {
     }
   }
 
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    })
+  const formatDate = (event: Event) => {
+    // Use startAt if available, otherwise use legacy date/time
+    if (event.startAt) {
+      return new Date(event.startAt).toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      })
+    } else if (event.date) {
+      return event.date + (event.time ? ` ${event.time}` : '')
+    }
+    return 'No date set'
   }
 
   if (loading) {
@@ -144,10 +164,10 @@ export default function AdminEventsPage() {
               </div>
             )},
             { key: 'when', header: 'When', hideOn: 'sm', render: (e: Event) => (
-              <div className="text-slate-600 flex items-center gap-2"><Calendar className="w-4 h-4" />{formatDate(e.startAt)}</div>
+              <div className="text-slate-600 flex items-center gap-2"><Calendar className="w-4 h-4" />{formatDate(e)}</div>
             )},
             { key: 'where', header: 'Where', hideOn: 'md', render: (e: Event) => (
-              <div className="text-slate-600 flex items-center gap-2"><MapPin className="w-4 h-4" />{e.city || '-'}{e.venue ? `, ${e.venue}` : ''}</div>
+              <div className="text-slate-600 flex items-center gap-2"><MapPin className="w-4 h-4" />{e.location || e.city || '-'}{e.venue ? `, ${e.venue}` : ''}</div>
             )},
             { key: 'status', header: 'Status', hideOn: 'lg', render: (e: Event) => <Badge className={getStatusColor(e.status)}>{e.status}</Badge> },
             { key: 'capacity', header: 'Seats', hideOn: 'lg', render: (e: Event) => (
@@ -168,7 +188,7 @@ export default function AdminEventsPage() {
             )},
           ]}
           data={filteredEvents}
-          rowKey={(e) => e.id}
+          rowKey={(e) => e.id || e._id || `event-${events.indexOf(e)}`}
         />
       )}
 
