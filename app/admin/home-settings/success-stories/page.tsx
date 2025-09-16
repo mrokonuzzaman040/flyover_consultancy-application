@@ -14,16 +14,19 @@ import DataTable from "@/components/admin/DataTable";
 import EmptyState from "@/components/admin/EmptyState";
 
 interface SuccessStory {
-  id: number;
-  name: string;
+  _id: string;
+  storyId: number;
+  rating: number;
+  text: string;
+  author: string;
   university: string;
+  program: string;
   country: string;
-  course: string;
-  testimonial: string;
-  imageUrl?: string;
-  rating?: number;
-  year?: number;
-  program?: string;
+  scholarship: string;
+  year: string;
+  avatar: string;
+  flag: string;
+  color: string;
   createdAt: string;
   updatedAt: string;
 }
@@ -37,15 +40,17 @@ export default function SuccessStoriesPage() {
   const [deleteLoading, setDeleteLoading] = useState<number | null>(null);
 
   const [formData, setFormData] = useState({
-    name: "",
+    author: "",
     university: "",
     country: "",
-    course: "",
-    testimonial: "",
-    imageUrl: "",
-    rating: 5,
-    year: new Date().getFullYear(),
     program: "",
+    text: "",
+    rating: 5,
+    year: new Date().getFullYear().toString(),
+    scholarship: "",
+    avatar: "",
+    flag: "",
+    color: "from-blue-600 to-blue-800",
   });
 
   const fetchStories = async () => {
@@ -69,15 +74,17 @@ export default function SuccessStoriesPage() {
 
   const resetForm = () => {
     setFormData({
-      name: "",
+      author: "",
       university: "",
       country: "",
-      course: "",
-      testimonial: "",
-      imageUrl: "",
-      rating: 5,
-      year: new Date().getFullYear(),
       program: "",
+      text: "",
+      rating: 5,
+      year: new Date().getFullYear().toString(),
+      scholarship: "",
+      avatar: "",
+      flag: "",
+      color: "from-blue-600 to-blue-800",
     });
     setEditingStory(null);
   };
@@ -111,15 +118,17 @@ export default function SuccessStoriesPage() {
   const handleEdit = (story: SuccessStory) => {
     setEditingStory(story);
     setFormData({
-      name: story.name,
+      author: story.author,
       university: story.university,
       country: story.country,
-      course: story.course,
-      testimonial: story.testimonial,
-      imageUrl: story.imageUrl || "",
-      rating: story.rating || 5,
-      year: story.year || new Date().getFullYear(),
-      program: story.program || "",
+      program: story.program,
+      text: story.text,
+      rating: story.rating,
+      year: story.year,
+      scholarship: story.scholarship,
+      avatar: story.avatar,
+      flag: story.flag,
+      color: story.color,
     });
     setIsDialogOpen(true);
   };
@@ -129,7 +138,7 @@ export default function SuccessStoriesPage() {
     
     try {
       setSaving(true);
-      const response = await fetch(`/api/admin/success-stories/${editingStory.id}`, {
+      const response = await fetch(`/api/admin/success-stories/${editingStory.storyId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData)
@@ -155,9 +164,9 @@ export default function SuccessStoriesPage() {
   const handleDelete = async (story: SuccessStory) => {
     if (!confirm('Are you sure you want to delete this success story?')) return;
     
-    setDeleteLoading(story.id);
+    setDeleteLoading(story.storyId);
     try {
-      const response = await fetch(`/api/admin/success-stories/${story.id}`, {
+      const response = await fetch(`/api/admin/success-stories/${story.storyId}`, {
         method: 'DELETE'
       });
 
@@ -178,27 +187,27 @@ export default function SuccessStoriesPage() {
 
   const columns = [
     {
-      key: 'name',
+      key: 'author',
       header: 'Student',
       render: (story: SuccessStory) => (
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-gradient-to-r from-emerald-400 to-emerald-600 rounded-full flex items-center justify-center">
-            <GraduationCap className="h-5 w-5 text-white" />
+          <div className={`w-10 h-10 bg-gradient-to-r ${story.color} rounded-full flex items-center justify-center text-white text-sm font-semibold`}>
+            {story.avatar}
           </div>
           <div>
-            <div className="font-medium">{story.name}</div>
+            <div className="font-medium">{story.author}</div>
             <div className="text-sm text-gray-500">{story.university}</div>
           </div>
         </div>
       )
     },
     {
-      key: 'course',
-      header: 'Course',
+      key: 'program',
+      header: 'Program',
       render: (story: SuccessStory) => (
         <div>
-          <div className="font-medium">{story.course}</div>
-          <div className="text-sm text-gray-500">{story.country}</div>
+          <div className="font-medium">{story.program}</div>
+          <div className="text-sm text-gray-500">{story.country} {story.flag}</div>
         </div>
       )
     },
@@ -211,11 +220,11 @@ export default function SuccessStoriesPage() {
             <Star
               key={i}
               className={`h-4 w-4 ${
-                i < (story.rating || 0) ? 'text-yellow-400 fill-current' : 'text-gray-300'
+                i < story.rating ? 'text-yellow-400 fill-current' : 'text-gray-300'
               }`}
             />
           ))}
-          <span className="text-sm text-gray-500 ml-1">({story.rating || 0})</span>
+          <span className="text-sm text-gray-500 ml-1">({story.rating})</span>
         </div>
       )
     },
@@ -223,7 +232,18 @@ export default function SuccessStoriesPage() {
       key: 'year',
       header: 'Year',
       render: (story: SuccessStory) => (
-        <Badge variant="secondary">{story.year || 'N/A'}</Badge>
+        <Badge variant="secondary">{story.year}</Badge>
+      )
+    },
+    {
+      key: 'text',
+      header: 'Testimonial',
+      render: (story: SuccessStory) => (
+        <div className="max-w-xs">
+          <p className="text-sm text-gray-600 truncate">
+            {story.text}
+          </p>
+        </div>
       )
     },
     {
@@ -242,7 +262,7 @@ export default function SuccessStoriesPage() {
             variant="outline"
             size="sm"
             onClick={() => handleDelete(story)}
-            disabled={deleteLoading === story.id}
+            disabled={deleteLoading === story.storyId}
           >
             <Trash2 className="h-4 w-4" />
           </Button>
@@ -286,11 +306,11 @@ export default function SuccessStoriesPage() {
             <div className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <Label htmlFor="name">Student Name *</Label>
+                  <Label htmlFor="author">Author Name *</Label>
                   <Input
-                    id="name"
-                    value={formData.name}
-                    onChange={(e) => setFormData({...formData, name: e.target.value})}
+                    id="author"
+                    value={formData.author}
+                    onChange={(e) => setFormData({...formData, author: e.target.value})}
                     placeholder="Student name"
                   />
                 </div>
@@ -315,25 +335,23 @@ export default function SuccessStoriesPage() {
                   />
                 </div>
                 <div>
-                  <Label htmlFor="course">Course *</Label>
+                  <Label htmlFor="program">Program *</Label>
                   <Input
-                    id="course"
-                    value={formData.course}
-                    onChange={(e) => setFormData({...formData, course: e.target.value})}
-                    placeholder="Course name"
+                    id="program"
+                    value={formData.program}
+                    onChange={(e) => setFormData({...formData, program: e.target.value})}
+                    placeholder="Program name"
                   />
                 </div>
               </div>
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-3 gap-4">
                 <div>
-                  <Label htmlFor="year">Year</Label>
+                  <Label htmlFor="year">Year *</Label>
                   <Input
                     id="year"
-                    type="number"
                     value={formData.year}
-                    onChange={(e) => setFormData({...formData, year: parseInt(e.target.value)})}
-                    min="1900"
-                    max={new Date().getFullYear() + 10}
+                    onChange={(e) => setFormData({...formData, year: e.target.value})}
+                    placeholder="2023"
                   />
                 </div>
                 <div>
@@ -341,37 +359,57 @@ export default function SuccessStoriesPage() {
                   <Input
                     id="rating"
                     type="number"
-                    value={formData.rating}
-                    onChange={(e) => setFormData({...formData, rating: parseInt(e.target.value)})}
                     min="1"
                     max="5"
+                    value={formData.rating}
+                    onChange={(e) => setFormData({...formData, rating: parseInt(e.target.value)})}
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="scholarship">Scholarship</Label>
+                  <Input
+                    id="scholarship"
+                    value={formData.scholarship}
+                    onChange={(e) => setFormData({...formData, scholarship: e.target.value})}
+                    placeholder="Scholarship type"
+                  />
+                </div>
+              </div>
+              <div className="grid grid-cols-3 gap-4">
+                <div>
+                  <Label htmlFor="avatar">Avatar</Label>
+                  <Input
+                    id="avatar"
+                    value={formData.avatar}
+                    onChange={(e) => setFormData({...formData, avatar: e.target.value})}
+                    placeholder="MH"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="flag">Flag</Label>
+                  <Input
+                    id="flag"
+                    value={formData.flag}
+                    onChange={(e) => setFormData({...formData, flag: e.target.value})}
+                    placeholder="🇬🇧"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="color">Color</Label>
+                  <Input
+                    id="color"
+                    value={formData.color}
+                    onChange={(e) => setFormData({...formData, color: e.target.value})}
+                    placeholder="from-blue-600 to-blue-800"
                   />
                 </div>
               </div>
               <div>
-                <Label htmlFor="program">Program</Label>
-                <Input
-                  id="program"
-                  value={formData.program}
-                  onChange={(e) => setFormData({...formData, program: e.target.value})}
-                  placeholder="Program type (e.g., Bachelor's, Master's)"
-                />
-              </div>
-              <div>
-                <Label htmlFor="imageUrl">Image URL</Label>
-                <Input
-                  id="imageUrl"
-                  value={formData.imageUrl}
-                  onChange={(e) => setFormData({...formData, imageUrl: e.target.value})}
-                  placeholder="https://example.com/image.jpg"
-                />
-              </div>
-              <div>
-                <Label htmlFor="testimonial">Testimonial *</Label>
+                <Label htmlFor="text">Testimonial *</Label>
                 <Textarea
-                  id="testimonial"
-                  value={formData.testimonial}
-                  onChange={(e) => setFormData({...formData, testimonial: e.target.value})}
+                  id="text"
+                  value={formData.text}
+                  onChange={(e) => setFormData({...formData, text: e.target.value})}
                   placeholder="Student testimonial"
                   rows={4}
                 />
@@ -382,7 +420,7 @@ export default function SuccessStoriesPage() {
                 </Button>
                 <Button 
                   onClick={editingStory ? handleUpdate : handleCreate}
-                  disabled={saving || !formData.name || !formData.university || !formData.country || !formData.course || !formData.testimonial}
+                  disabled={saving || !formData.author || !formData.university || !formData.country || !formData.program || !formData.text}
                 >
                   {saving ? 'Saving...' : editingStory ? 'Update' : 'Create'}
                 </Button>
@@ -398,7 +436,7 @@ export default function SuccessStoriesPage() {
           description="Get started by adding your first student success story."
         />
       ) : (
-        <DataTable data={stories} columns={columns} rowKey={(story) => story.id.toString()} />
+        <DataTable data={stories} columns={columns} rowKey={(story) => story._id} />
       )}
     </div>
   );

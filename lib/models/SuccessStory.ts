@@ -2,34 +2,47 @@ import mongoose, { Document, Schema } from 'mongoose';
 
 // Interface for SuccessStory document
 export interface ISuccessStory extends Document {
-  id: number;
-  name: string;
-  image: string;
+  storyId: number;
+  rating: number;
+  text: string;
+  author: string;
   university: string;
-  course: string;
+  program: string;
   country: string;
-  testimonial: string;
+  scholarship: string;
+  year: string;
+  avatar: string;
+  flag: string;
+  color: string;
   createdAt: Date;
   updatedAt: Date;
 }
 
 // SuccessStory Schema
 const SuccessStorySchema = new Schema<ISuccessStory>({
-  id: {
+  storyId: {
     type: Number,
     required: true,
     unique: true
   },
-  name: {
+  rating: {
+    type: Number,
+    required: true,
+    min: 1,
+    max: 5,
+    default: 5
+  },
+  text: {
+    type: String,
+    required: true,
+    trim: true,
+    maxlength: 2000
+  },
+  author: {
     type: String,
     required: true,
     trim: true,
     maxlength: 100
-  },
-  image: {
-    type: String,
-    required: true,
-    trim: true
   },
   university: {
     type: String,
@@ -37,7 +50,7 @@ const SuccessStorySchema = new Schema<ISuccessStory>({
     trim: true,
     maxlength: 200
   },
-  course: {
+  program: {
     type: String,
     required: true,
     trim: true,
@@ -49,21 +62,45 @@ const SuccessStorySchema = new Schema<ISuccessStory>({
     trim: true,
     maxlength: 100
   },
-  testimonial: {
+  scholarship: {
     type: String,
     required: true,
     trim: true,
-    maxlength: 2000
+    maxlength: 100
+  },
+  year: {
+    type: String,
+    required: true,
+    trim: true,
+    maxlength: 10
+  },
+  avatar: {
+    type: String,
+    required: true,
+    trim: true,
+    maxlength: 10
+  },
+  flag: {
+    type: String,
+    required: true,
+    trim: true,
+    maxlength: 10
+  },
+  color: {
+    type: String,
+    required: true,
+    trim: true,
+    maxlength: 50
   }
 }, {
   timestamps: true,
-  collection: 'successStories'
+  collection: 'successstories'
 });
 
 // Indexes
 SuccessStorySchema.index({ country: 1 });
 SuccessStorySchema.index({ university: 1 });
-SuccessStorySchema.index({ name: 'text', university: 'text', course: 'text', testimonial: 'text' });
+SuccessStorySchema.index({ author: 'text', university: 'text', program: 'text', text: 'text' });
 
 // Ensure virtual fields are serialized
 SuccessStorySchema.set('toJSON', {
