@@ -88,8 +88,7 @@ const ServiceSchema = new Schema<IService>({
     required: true,
     unique: true,
     trim: true,
-    lowercase: true,
-    index: true
+    lowercase: true
   },
   title: {
     type: String,
@@ -176,7 +175,6 @@ const ServiceSchema = new Schema<IService>({
 });
 
 // Indexes
-ServiceSchema.index({ slug: 1 });
 ServiceSchema.index({ popular: -1 });
 ServiceSchema.index({ name: 'text', title: 'text', description: 'text' });
 ServiceSchema.index({ createdAt: -1 });

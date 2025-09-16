@@ -67,8 +67,7 @@ const InsightSchema = new Schema<IInsight>({
     type: String,
     required: true,
     trim: true,
-    maxlength: 100,
-    index: true
+    maxlength: 100
   },
   readTime: {
     type: String,

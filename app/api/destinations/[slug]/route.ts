@@ -2,10 +2,11 @@ import { NextRequest, NextResponse } from "next/server";
 import { dbConnect, toObject } from "@/lib/mongoose";
 import { Destination } from "@/lib/models/Destination";
 
-export async function GET(request: Request, { params }: { params: { slug: string } }) {
+export async function GET(request: Request, { params }: { params: Promise<{ slug: string }> }) {
   try {
     await dbConnect();
-    const destination = await Destination.findOne({ slug: params.slug }).lean();
+    const { slug } = await params;
+    const destination = await Destination.findOne({ slug }).lean();
     
     if (!destination) {
       return NextResponse.json({ error: "Destination not found" }, { status: 404 });
@@ -18,13 +19,14 @@ export async function GET(request: Request, { params }: { params: { slug: string
   }
 }
 
-export async function PUT(request: NextRequest, { params }: { params: { slug: string } }) {
+export async function PUT(request: NextRequest, { params }: { params: Promise<{ slug: string }> }) {
   try {
     await dbConnect();
     const body = await request.json();
+    const { slug } = await params;
     
     const destination = await Destination.findOneAndUpdate(
-      { slug: params.slug },
+      { slug },
       { $set: body },
       { new: true, runValidators: true }
     ).lean();
@@ -46,13 +48,14 @@ export async function PUT(request: NextRequest, { params }: { params: { slug: st
   }
 }
 
-export async function PATCH(request: NextRequest, { params }: { params: { slug: string } }) {
+export async function PATCH(request: NextRequest, { params }: { params: Promise<{ slug: string }> }) {
   try {
+    const { slug } = await params;
     await dbConnect();
     const body = await request.json();
     
     const destination = await Destination.findOneAndUpdate(
-      { slug: params.slug },
+      { slug },
       { $set: body },
       { new: true, runValidators: true }
     ).lean();
@@ -74,11 +77,12 @@ export async function PATCH(request: NextRequest, { params }: { params: { slug: 
   }
 }
 
-export async function DELETE(request: Request, { params }: { params: { slug: string } }) {
+export async function DELETE(request: Request, { params }: { params: Promise<{ slug: string }> }) {
   try {
     await dbConnect();
+    const { slug } = await params;
     
-    const destination = await Destination.findOneAndDelete({ slug: params.slug }).lean();
+    const destination = await Destination.findOneAndDelete({ slug }).lean();
     
     if (!destination) {
       return NextResponse.json({ error: "Destination not found" }, { status: 404 });
