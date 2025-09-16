@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { dbConnect, toObject } from "@/lib/mongoose";
-import { Service } from "@/lib/models/Service";
+import Service from "@/lib/models/Service";
 
 const feature = z.object({ icon: z.string().optional(), title: z.string(), description: z.string() });
 const processStep = z.object({ step: z.string(), title: z.string(), description: z.string() });

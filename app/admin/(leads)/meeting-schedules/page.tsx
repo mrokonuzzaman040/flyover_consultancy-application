@@ -17,7 +17,6 @@ import {
   Search,
   Filter,
   Eye,
-  Edit,
   Trash2,
   Mail,
   Phone,
@@ -86,7 +85,7 @@ export default function AdminMeetingSchedulesPage() {
         ...(urgencyFilter !== "all" && { urgency: urgencyFilter }),
       });
 
-      const response = await fetch(`/api/meeting-schedules?${params}`);
+      const response = await fetch(`/api/schedule-meeting?${params}`);
       
       if (!response.ok) {
         throw new Error(`Failed to fetch meetings: ${response.statusText}`);
@@ -108,7 +107,7 @@ export default function AdminMeetingSchedulesPage() {
     try {
       setUpdatingStatus(meetingId);
       
-      const response = await fetch(`/api/meeting-schedules/${meetingId}`, {
+      const response = await fetch(`/api/schedule-meeting/${meetingId}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
@@ -136,7 +135,7 @@ export default function AdminMeetingSchedulesPage() {
     }
 
     try {
-      const response = await fetch(`/api/meeting-schedules/${meetingId}`, {
+      const response = await fetch(`/api/schedule-meeting/${meetingId}`, {
         method: "DELETE",
       });
 

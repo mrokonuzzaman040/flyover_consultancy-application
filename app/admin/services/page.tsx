@@ -14,6 +14,7 @@ import ListToolbar from "@/components/admin/ListToolbar"
 import EmptyState from "@/components/admin/EmptyState"
 
 interface Service {
+  _id?: string
   id: string
   name: string
   slug: string
@@ -143,7 +144,7 @@ export default function AdminServicesPage() {
             ) },
           ]}
           data={filteredServices}
-          rowKey={(s) => s.id}
+          rowKey={(s) => s.id || s._id || `service-${services.indexOf(s)}`}
         />
       )}
     </div>

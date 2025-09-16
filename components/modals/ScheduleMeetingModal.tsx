@@ -52,6 +52,8 @@ export default function ScheduleMeetingModal({ isOpen, onClose }: ScheduleMeetin
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     
+    console.log('Form submitted with data:', formData)
+    
     // Validation
     if (!formData.fullName || !formData.phoneNumber || !formData.date || !formData.time) {
       toast.error('Please fill in all required fields')
@@ -72,16 +74,24 @@ export default function ScheduleMeetingModal({ isOpen, onClose }: ScheduleMeetin
     setIsSubmitting(true)
 
     try {
+      const requestData = {
+        ...formData,
+        scheduledDateTime: `${formData.date}T${formData.time}:00.000Z`
+      }
+      
+      console.log('Sending request with data:', requestData)
+      
       const response = await fetch('/api/schedule-meeting', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          ...formData,
-          scheduledDateTime: `${formData.date}T${formData.time}:00.000Z`
-        }),
+        body: JSON.stringify(requestData),
       })
+
+      console.log('Response status:', response.status)
+      const responseData = await response.json()
+      console.log('Response data:', responseData)
 
       if (response.ok) {
         toast.success('Meeting scheduled successfully! We will contact you soon.')
@@ -97,8 +107,7 @@ export default function ScheduleMeetingModal({ isOpen, onClose }: ScheduleMeetin
         })
         onClose()
       } else {
-        const error = await response.json()
-        toast.error(error.message || 'Failed to schedule meeting')
+        toast.error(responseData.message || responseData.error || 'Failed to schedule meeting')
       }
     } catch (error) {
       console.error('Error scheduling meeting:', error)
@@ -282,6 +291,13 @@ export default function ScheduleMeetingModal({ isOpen, onClose }: ScheduleMeetin
                 type="submit"
                 disabled={isSubmitting}
                 className="flex-1 bg-brand-600 hover:bg-brand-700"
+                onClick={(e) => {
+                  console.log('Button clicked')
+                  if (isSubmitting) {
+                    e.preventDefault()
+                    return
+                  }
+                }}
               >
                 {isSubmitting ? 'Scheduling...' : 'Schedule Meeting'}
               </Button>
