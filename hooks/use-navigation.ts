@@ -11,7 +11,8 @@ interface NavigationItem {
 
 interface Destination {
   _id: string;
-  title: string;
+  title?: string;
+  country: string;
   slug: string;
 }
 
@@ -64,7 +65,7 @@ export function useNavigation() {
             label: 'Destinations',
             href: '/destinations',
             dropdown: destinationsData.destinations?.map((dest: Destination) => ({
-              label: dest.title,
+              label: dest.country,
               href: `/destinations/${dest.slug}`
             })) || []
           },

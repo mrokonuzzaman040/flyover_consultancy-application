@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import CtaButton from "@/components/cta-button";
 import Image from "next/image";
 import { useNavigation } from "@/hooks/use-navigation";
+import { DropdownMenu, MobileDropdownMenu } from "@/components/ui/dropdown-menu";
 
 interface NavigationItem {
   label: string;
@@ -62,50 +63,60 @@ export default function SiteHeader() {
             ))
           ) : (
             nav.map((item: NavigationItem) => (
-            <div
-              key={item.label}
-              className="relative"
-              onMouseEnter={() => item.dropdown && handleMouseEnter(item.label)}
-              onMouseLeave={handleMouseLeave}
-            >
-              <Link
-                href={item.href}
-                className="flex items-center gap-1 text-gray-800 hover:text-brand transition-colors font-medium py-2"
-              >
-                {item.label}
-                {item.dropdown && (
-                  <svg
-                    className="h-4 w-4 transition-transform duration-200"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                  </svg>
-                )}
-              </Link>
-              
-              {item.dropdown && activeDropdown === item.label && (
-                <div 
-                  className="absolute top-full left-0 mt-1 w-56 bg-white border border-gray-200 rounded-lg shadow-lg z-50"
+              item.dropdown && item.dropdown.length > 0 ? (
+                <div
+                  key={item.label}
+                  className="relative"
                   onMouseEnter={() => handleMouseEnter(item.label)}
                   onMouseLeave={handleMouseLeave}
                 >
-                  <div className="py-2">
-                    {item.dropdown.map((dropdownItem: { label: string; href: string }) => (
-                      <Link
-                        key={dropdownItem.href}
-                        href={dropdownItem.href}
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-brand/10 hover:text-brand transition-colors"
-                      >
-                        {dropdownItem.label}
-                      </Link>
-                    ))}
-                  </div>
+                  <Link
+                    href={item.href}
+                    className="flex items-center gap-1 text-gray-800 hover:text-brand transition-colors font-medium py-2"
+                  >
+                    {item.label}
+                    <svg
+                      className={`h-4 w-4 transition-transform duration-200 ${
+                        activeDropdown === item.label ? 'rotate-180' : ''
+                      }`}
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </Link>
+                  
+                  {activeDropdown === item.label && (
+                    <div 
+                      className="absolute top-full left-0 mt-1 w-56 bg-white border border-gray-200 rounded-lg shadow-lg z-50"
+                      onMouseEnter={() => handleMouseEnter(item.label)}
+                      onMouseLeave={handleMouseLeave}
+                    >
+                      <div className="py-2">
+                        {item.dropdown.map((dropdownItem: { label: string; href: string }) => (
+                          <Link
+                            key={dropdownItem.href}
+                            href={dropdownItem.href}
+                            className="block px-4 py-2.5 text-sm text-gray-700 hover:bg-brand/10 hover:text-brand transition-colors duration-150"
+                          >
+                            {dropdownItem.label}
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
-              )}
-            </div>
-          ))
+              ) : (
+                <Link
+                  key={item.label}
+                  href={item.href}
+                  className="flex items-center gap-1 text-gray-800 hover:text-brand transition-colors font-medium py-2"
+                >
+                  {item.label}
+                </Link>
+              )
+            ))
           )}
         </nav>
 
@@ -139,9 +150,13 @@ export default function SiteHeader() {
                 ))
               ) : (
                 nav.map((item: NavigationItem) => (
-                <div key={item.label}>
-                  {item.dropdown ? (
-                    <div>
+                  item.dropdown && item.dropdown.length > 0 ? (
+                    <MobileDropdownMenu
+                      key={item.label}
+                      items={item.dropdown}
+                      isOpen={activeDropdown === item.label}
+                      onItemClick={() => setOpen(false)}
+                    >
                       <button
                         className="flex w-full items-center justify-between rounded-md px-3 py-3 text-gray-800 hover:bg-brand/10 hover:text-brand transition-colors font-medium text-left"
                         onClick={() => setActiveDropdown(activeDropdown === item.label ? null : item.label)}
@@ -158,32 +173,18 @@ export default function SiteHeader() {
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                         </svg>
                       </button>
-                      {activeDropdown === item.label && (
-                        <div className="ml-4 mt-1 space-y-1">
-                          {item.dropdown.map((dropdownItem: { label: string; href: string }) => (
-                            <Link
-                              key={dropdownItem.href}
-                              href={dropdownItem.href}
-                              className="block rounded-md px-3 py-2 text-sm text-gray-600 hover:bg-brand/10 hover:text-brand transition-colors"
-                              onClick={() => setOpen(false)}
-                            >
-                              {dropdownItem.label}
-                            </Link>
-                          ))}
-                        </div>
-                      )}
-                    </div>
+                    </MobileDropdownMenu>
                   ) : (
                     <Link
+                      key={item.label}
                       href={item.href}
                       className="block rounded-md px-3 py-3 text-gray-800 hover:bg-brand/10 hover:text-brand transition-colors font-medium"
                       onClick={() => setOpen(false)}
                     >
                       {item.label}
                     </Link>
-                  )}
-                </div>
-              ))
+                  )
+                ))
               )}
               <div className="mt-3 pt-3 border-t border-gray-200">
                 <CtaButton className="w-full justify-center" />

@@ -4,12 +4,13 @@ import { Scholarship } from "@/lib/models/Scholarship";
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { slug: string } }
+  { params }: { params: Promise<{ slug: string }> }
 ) {
   try {
     await dbConnect();
-
-    const scholarship = await Scholarship.findOne({ slug: params.slug });
+    
+    const resolvedParams = await params;
+    const scholarship = await Scholarship.findOne({ slug: resolvedParams.slug });
 
     if (!scholarship) {
       return NextResponse.json(
