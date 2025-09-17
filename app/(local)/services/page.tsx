@@ -6,7 +6,6 @@ import CtaButton from "@/components/cta-button";
 import { dbConnect, toObject } from "@/lib/mongoose";
 import { Service as ServiceModel } from "@/lib/models/Service";
 import { GraduationCap, FileText, Plane, BookOpen, Users, Clock, CheckCircle } from "lucide-react";
-import servicesTestData from '@/data/services-test-data.json';
 
 export const metadata: Metadata = {
   title: "All Services | Flyover Consultancy",
@@ -37,23 +36,16 @@ interface Service {
 }
 
 async function getServices(): Promise<Service[]> {
-  if (process.env.MONGODB_URI) {
-    try {
-      await dbConnect();
-      const docs = await ServiceModel.find({}).sort({ createdAt: -1 }).lean();
-      if (docs.length) {
-        const normalized = docs.map((doc) => toObject(doc as { _id: unknown }));
-        return normalized as unknown as Service[];
-      }
-    } catch (error) {
-      const message = error instanceof Error ? error.message : 'Unknown error';
-      if (process.env.NODE_ENV !== 'production') {
-        console.warn('Failed to load services from database, using test data:', message);
-      }
-    }
+  try {
+    await dbConnect();
+    const docs = await ServiceModel.find({}).sort({ createdAt: -1 }).lean();
+    const normalized = docs.map((doc) => toObject(doc as { _id: unknown }));
+    return normalized as unknown as Service[];
+  } catch (error) {
+    const message = error instanceof Error ? error.message : 'Unknown error';
+    console.error('Failed to load services from database:', message);
+    return [];
   }
-
-  return servicesTestData.services;
 }
 
 // Icon mapping for services
@@ -218,7 +210,7 @@ export default async function ServicesPage() {
         {/* CTA Section */}
         <Reveal delay={0.4}>
           <div className="mt-16 bg-gradient-to-r from-brand to-brand/90 rounded-2xl p-8 md:p-12 text-center text-brand">
-            <h2 className="text-3xl font-bold mb-4">Ready to Start Your Journey?</h2>
+            <h2 className="text-3xl text-white font-bold mb-4">Ready to Start Your Journey?</h2>
             <p className="text-xl mb-8 text-brand-50">
               Get personalized guidance from our expert counselors. Book your free consultation today!
             </p>
