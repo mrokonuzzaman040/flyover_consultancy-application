@@ -11,6 +11,7 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { ArrowLeft } from "lucide-react"
 import { toast } from "sonner"
 import Image from "next/image"
+import ImageBBUpload from "@/components/admin/ImageBBUpload"
 
 interface SlideFormData {
   image: string
@@ -118,15 +119,17 @@ export default function CreateSlidePage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-4">
                 <div>
-                  <Label htmlFor="image">Image URL</Label>
-                  <Input
-                    id="image"
-                    type="url"
-                    value={formData.image}
-                    onChange={(e) => handleInputChange('image', e.target.value)}
-                    placeholder="https://example.com/image.jpg"
+                  <ImageBBUpload
+                    label="Slide Image"
+                    currentImage={formData.image}
+                    onUpload={(image) => handleInputChange('image', image.url)}
+                    onRemove={() => handleInputChange('image', '')}
+                    maxSize={5 * 1024 * 1024} // 5MB for hero images
                     required
                   />
+                  <p className="text-xs text-gray-500 mt-1">
+                    Upload a high-quality hero image (recommended: 1920x1080px, max 5MB)
+                  </p>
                 </div>
 
                 <div>

@@ -11,6 +11,7 @@ import PageHeader from "@/components/admin/PageHeader";
 import DataTable from "@/components/admin/DataTable";
 import EmptyState from "@/components/admin/EmptyState";
 import Image from "next/image";
+import ImageBBUpload from "@/components/admin/ImageBBUpload";
 
 interface Partner {
   _id: string;
@@ -246,44 +247,88 @@ export default function PartnersPage() {
               Add Partner
             </Button>
           </DialogTrigger>
-          <DialogContent className="max-w-2xl">
-            <DialogHeader>
-              <DialogTitle>
+          <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+            <DialogHeader className="pb-4 border-b">
+              <DialogTitle className="text-xl font-semibold">
                 {editingPartner ? 'Edit Partner' : 'Add New Partner'}
               </DialogTitle>
+              <p className="text-sm text-gray-600 mt-1">
+                {editingPartner ? 'Update partner information' : 'Add a new partner organization'}
+              </p>
             </DialogHeader>
-            <div className="space-y-4">
-              <div>
-                <Label htmlFor="name">Name *</Label>
+            <div className="space-y-6 py-4">
+              <div className="space-y-2">
+                <Label htmlFor="name" className="text-sm font-medium">
+                  Partner Name <span className="text-red-500">*</span>
+                </Label>
                 <Input
                   id="name"
                   value={formData.name}
                   onChange={(e) => setFormData({...formData, name: e.target.value})}
-                  placeholder="Partner organization name"
+                  placeholder="Enter partner organization name"
+                  className="h-10"
                 />
+                <p className="text-xs text-gray-500">
+                  The official name of the partner organization
+                </p>
               </div>
-              <div className="grid grid-cols-2 gap-4">
-              </div>
-              <div>
-                <Label htmlFor="logo">Logo URL</Label>
-                <Input
-                  id="logo"
-                  value={formData.logo}
-                  onChange={(e) => setFormData({...formData, logo: e.target.value})}
-                  placeholder="https://example.com/logo.png"
+              
+              <div className="space-y-2">
+                <ImageBBUpload
+                  label="Partner Logo"
+                  currentImage={formData.logo}
+                  onUpload={(image) => setFormData({...formData, logo: image.url})}
+                  onRemove={() => setFormData({...formData, logo: ""})}
+                  maxSize={2 * 1024 * 1024} // 2MB
+                  required
                 />
+                <p className="text-xs text-gray-500">
+                  Upload a high-quality logo image (recommended: square format, max 2MB)
+                </p>
               </div>
-              <div className="flex justify-end gap-2">
-                <Button variant="outline" onClick={() => setIsDialogOpen(false)}>
-                  Cancel
-                </Button>
-                <Button 
-                  onClick={editingPartner ? handleUpdate : handleCreate}
-                  disabled={saving || !formData.name}
-                >
-                  {saving ? 'Saving...' : editingPartner ? 'Update' : 'Create'}
-                </Button>
-              </div>
+              
+              {formData.logo && (
+                <div className="p-4 bg-gray-50 rounded-lg">
+                  <p className="text-sm font-medium text-gray-700 mb-2">Preview:</p>
+                  <div className="w-16 h-16 rounded-lg overflow-hidden bg-white border">
+                    <Image
+                      src={formData.logo}
+                      alt="Partner logo preview"
+                      width={64}
+                      height={64}
+                      className="w-full h-full object-cover"
+                      onError={(e) => {
+                        e.currentTarget.src = '/logo.png';
+                      }}
+                    />
+                  </div>
+                </div>
+              )}
+            </div>
+            
+            <div className="flex justify-end gap-3 pt-4 border-t">
+              <Button 
+                variant="outline" 
+                onClick={() => setIsDialogOpen(false)}
+                disabled={saving}
+                className="px-6"
+              >
+                Cancel
+              </Button>
+              <Button 
+                onClick={editingPartner ? handleUpdate : handleCreate}
+                disabled={saving || !formData.name || !formData.logo}
+                className="px-6"
+              >
+                {saving ? (
+                  <>
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                    {editingPartner ? 'Updating...' : 'Creating...'}
+                  </>
+                ) : (
+                  editingPartner ? 'Update Partner' : 'Create Partner'
+                )}
+              </Button>
             </div>
           </DialogContent>
         </Dialog>

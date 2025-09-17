@@ -5,12 +5,12 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Trash2, Edit, Eye, Plus, Search, Filter, Quote } from "lucide-react"
 import { toast } from "sonner"
 import Image from "next/image"
+import ImageBBUpload from "@/components/admin/ImageBBUpload"
 import PageHeader from "@/components/admin/PageHeader"
 import DataTable from "@/components/admin/DataTable"
 import ListToolbar from "@/components/admin/ListToolbar"
@@ -312,13 +312,17 @@ export default function AdminTestimonialsPage() {
                 />
               </div>
               <div>
-                <Label htmlFor="avatarUrl">Avatar Image URL (Optional)</Label>
-                <Input
-                  id="avatarUrl"
-                  value={formData.avatarUrl}
-                  onChange={(e) => setFormData({...formData, avatarUrl: e.target.value})}
-                  placeholder="https://example.com/avatar.jpg"
+                <ImageBBUpload
+                  label="Avatar Image (Optional)"
+                  currentImage={formData.avatarUrl}
+                  onUpload={(image) => setFormData({...formData, avatarUrl: image.url})}
+                  onRemove={() => setFormData({...formData, avatarUrl: ""})}
+                  maxSize={1 * 1024 * 1024} // 1MB for avatars
+                  required={false}
                 />
+                <p className="text-xs text-gray-500 mt-1">
+                  Upload an avatar image (recommended: square format, max 1MB)
+                </p>
               </div>
               <div>
                 <Label htmlFor="publishedAt">Publish Date (Optional)</Label>
@@ -382,13 +386,17 @@ export default function AdminTestimonialsPage() {
                 />
               </div>
               <div>
-                <Label htmlFor="edit-avatarUrl">Avatar Image URL (Optional)</Label>
-                <Input
-                  id="edit-avatarUrl"
-                  value={formData.avatarUrl}
-                  onChange={(e) => setFormData({...formData, avatarUrl: e.target.value})}
-                  placeholder="https://example.com/avatar.jpg"
+                <ImageBBUpload
+                  label="Avatar Image (Optional)"
+                  currentImage={formData.avatarUrl}
+                  onUpload={(image) => setFormData({...formData, avatarUrl: image.url})}
+                  onRemove={() => setFormData({...formData, avatarUrl: ""})}
+                  maxSize={1 * 1024 * 1024} // 1MB for avatars
+                  required={false}
                 />
+                <p className="text-xs text-gray-500 mt-1">
+                  Upload an avatar image (recommended: square format, max 1MB)
+                </p>
               </div>
               <div>
                 <Label htmlFor="edit-publishedAt">Publish Date (Optional)</Label>
