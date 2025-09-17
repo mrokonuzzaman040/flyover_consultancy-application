@@ -3,15 +3,27 @@
 import { useState, useEffect } from 'react';
 import ScheduleMeetingModal from "@/components/modals/ScheduleMeetingModal";
 import { usePartners } from '@/hooks/use-partners';
-import { Loader2, Globe, Award, Users, TrendingUp } from 'lucide-react';
+import { Loader2, Globe, Award, Users, TrendingUp, ChevronLeft, ChevronRight } from 'lucide-react';
 import Image from 'next/image';
 
 export default function PartnershipsSection() {
   const [isVisible, setIsVisible] = useState(false);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState<string>('All');
+  const [currentSlide, setCurrentSlide] = useState(0);
   const { partners, loading, error } = usePartners();
+
+  // Slider configuration
+  const partnersPerSlide = 6; // Show 6 partners per slide for larger cards
+  const totalSlides = Math.ceil(partners.length / partnersPerSlide);
+
+  const nextSlide = () => {
+    setCurrentSlide((prev) => (prev + 1) % totalSlides);
+  };
+
+  const prevSlide = () => {
+    setCurrentSlide((prev) => (prev - 1 + totalSlides) % totalSlides);
+  };
 
   const handleScheduleClick = () => {
     setIsModalOpen(true);
@@ -25,6 +37,17 @@ export default function PartnershipsSection() {
     const timer = setTimeout(() => setIsVisible(true), 300);
     return () => clearTimeout(timer);
   }, []);
+
+  // Auto-play slider
+  useEffect(() => {
+    if (totalSlides <= 1) return;
+    
+    const interval = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % totalSlides);
+    }, 4000); // Change slide every 4 seconds
+
+    return () => clearInterval(interval);
+  }, [totalSlides]);
 
   // Create partners with proper logos from MongoDB data
   const partnersWithLogos = partners.map(partner => ({
@@ -98,7 +121,7 @@ export default function PartnershipsSection() {
   }
 
   return (
-    <section className="bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 py-24 relative overflow-hidden">
+    <section className="bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 py-12 relative overflow-hidden">
       {/* Background Pattern */}
       <div className="absolute inset-0 opacity-5">
         <div className="absolute top-0 left-0 w-96 h-96 bg-gradient-to-br from-brand-500 to-blue-500 rounded-full blur-3xl transform -translate-x-1/2 -translate-y-1/2"></div>
@@ -106,41 +129,30 @@ export default function PartnershipsSection() {
       </div>
       
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative">
-        {/* Header */}
-        <div className="text-center mb-16">
-          <div className="inline-flex items-center px-4 py-2 bg-white/80 backdrop-blur-sm rounded-full border border-brand-200 mb-6">
+        {/* Compact Header */}
+        <div className="text-center mb-8">
+          <div className="inline-flex items-center px-4 py-2 bg-white/80 backdrop-blur-sm rounded-full border border-brand-200 mb-4">
             <Globe className="w-4 h-4 text-brand-600 mr-2" />
-            <span className="text-sm font-medium text-brand-700">Global University Network</span>
+            <span className="text-sm font-medium text-brand-700">Trusted by {partners.length}+ Partners</span>
           </div>
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6 leading-tight">
-            Our Prestigious <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-600 via-blue-600 to-purple-600">University Partners</span>
+          <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-3 leading-tight">
+            Our <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-600 via-blue-600 to-purple-600">Global Partners</span>
           </h2>
-          <p className="text-lg text-gray-600 max-w-3xl mx-auto leading-relaxed">
-            We have established partnerships with world-renowned universities across the globe, 
-            opening doors to exceptional educational opportunities and ensuring your academic success.
+          <p className="text-base text-gray-600 max-w-2xl mx-auto leading-relaxed">
+            Connecting students with world-renowned institutions across {uniqueCountries.length} countries.
           </p>
         </div>
 
-        {/* Enhanced Stats */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12">
+        {/* Compact Stats Row */}
+        <div className="flex justify-center items-center gap-8 mb-8">
           {stats.map((stat, index) => {
             const IconComponent = stat.icon;
             return (
-              <div 
-                key={index}
-                className={`group bg-white/80 backdrop-blur-sm rounded-2xl p-6 text-center transform transition-all duration-500 hover:scale-105 hover:shadow-2xl border border-white/20 ${
-                  isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
-                }`}
-                style={{ transitionDelay: `${index * 100}ms` }}
-              >
-                <div className={`w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-br ${stat.color} flex items-center justify-center group-hover:scale-110 transition-transform duration-300`}>
-                  <IconComponent className="w-8 h-8 text-white" />
-                </div>
-                <div className={`text-2xl md:text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r ${stat.color} mb-2`}>
+              <div key={index} className="text-center">
+                <div className={`text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r ${stat.color} mb-1`}>
                   {stat.number}
                 </div>
-                <div className="text-sm text-gray-600 font-medium">
+                <div className="text-xs text-gray-600 font-medium">
                   {stat.label}
                 </div>
               </div>
@@ -148,149 +160,155 @@ export default function PartnershipsSection() {
           })}
         </div>
 
-        {/* Category Filter */}
-        <div className="flex flex-wrap justify-center gap-3 mb-10">
-          <button
-            onClick={() => setSelectedCategory('All')}
-            className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
-              selectedCategory === 'All'
-                ? 'bg-brand-600 text-white shadow-lg'
-                : 'bg-white/80 text-gray-600 hover:bg-white hover:text-brand-600 border border-gray-200'
-            }`}
-          >
-            All Partners ({partners.length})
-          </button>
-          {uniqueCategories.map((category) => {
-            const categoryCount = partners.filter(p => p.category === category).length;
-            return (
+        {/* Partners Slider */}
+        <div className="relative min-h-[200px]">
+          {/* Navigation Buttons */}
+          {totalSlides > 1 && (
+            <>
               <button
-                key={category}
-                onClick={() => setSelectedCategory(category)}
-                className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
-                  selectedCategory === category
-                    ? 'bg-brand-600 text-white shadow-lg'
-                    : 'bg-white/80 text-gray-600 hover:bg-white hover:text-brand-600 border border-gray-200'
-                }`}
+                onClick={prevSlide}
+                className="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 bg-white/90 backdrop-blur-sm rounded-full shadow-lg border border-gray-200/50 flex items-center justify-center text-gray-600 hover:text-brand-600 transition-all duration-300 hover:scale-110"
               >
-                {category} ({categoryCount})
+                <ChevronLeft className="w-4 h-4" />
               </button>
-            );
-          })}
-        </div>
+              <button
+                onClick={nextSlide}
+                className="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 bg-white/90 backdrop-blur-sm rounded-full shadow-lg border border-gray-200/50 flex items-center justify-center text-gray-600 hover:text-brand-600 transition-all duration-300 hover:scale-110"
+              >
+                <ChevronRight className="w-4 h-4" />
+              </button>
+            </>
+          )}
 
-        {/* Enhanced Partners Grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6 mb-16">
-          {partnersWithLogos.filter(partner => 
-            selectedCategory === 'All' || partner.category === selectedCategory
-          ).map((partner, index) => (
-            <div
-              key={partner._id || partner.id}
-              className={`group relative bg-white/90 backdrop-blur-sm rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-500 transform hover:-translate-y-2 hover:rotate-1 border border-white/30 ${
-                isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'
-              }`}
-              style={{
-                transitionDelay: `${index * 150}ms`
-              }}
-              onMouseEnter={() => setHoveredIndex(index)}
-              onMouseLeave={() => setHoveredIndex(null)}
+          {/* Partners Container */}
+          <div className="overflow-hidden rounded-xl">
+            <div 
+              className="flex transition-transform duration-500 ease-in-out"
+              style={{ transform: `translateX(-${currentSlide * 100}%)` }}
             >
-              {/* Animated Background */}
-              <div 
-                className="absolute inset-0 opacity-0 group-hover:opacity-10 transition-all duration-500 rounded-3xl"
-                style={{ 
-                  background: `linear-gradient(135deg, ${partner.color || '#1F4E79'}, ${partner.color || '#1F4E79'}80)` 
-                }}
-              />
-              <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl" />
-              
-              {/* Content */}
-              <div className="relative z-10 text-center">
-                {/* Logo */}
-                <div className="flex justify-center mb-4 group-hover:scale-110 transition-transform duration-500">
-                  {partner.logoComponent}
-                </div>
-                
-                {/* University Name */}
-                <h3 className="text-xs font-semibold text-gray-900 mb-2 leading-tight group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r transition-all duration-500"
-                    style={{
-                      '--tw-gradient-from': partner.color || '#1F4E79',
-                      '--tw-gradient-to': `${partner.color || '#1F4E79'}80`
-                    } as React.CSSProperties}
-                >
-                  {partner.name}
-                </h3>
-                
-                {/* Category & Country */}
-                <div className="space-y-1">
-                  <div 
-                    className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium text-white opacity-90 group-hover:opacity-100 transition-opacity duration-300"
-                    style={{ backgroundColor: partner.color || '#1F4E79' }}
-                  >
-                    {partner.category}
+              {Array.from({ length: totalSlides }, (_, slideIndex) => (
+                <div key={slideIndex} className="w-full flex-shrink-0">
+                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 px-4">
+                    {partners
+                      .slice(slideIndex * partnersPerSlide, (slideIndex + 1) * partnersPerSlide)
+                      .map((partner, index) => (
+                        <div
+                          key={partner._id || partner.id}
+                          className={`group relative bg-white/90 backdrop-blur-sm rounded-xl p-4 shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 border border-white/30 ${
+                            isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+                          }`}
+                          style={{
+                            transitionDelay: `${index * 50}ms`
+                          }}
+                          onMouseEnter={() => setHoveredIndex(slideIndex * partnersPerSlide + index)}
+                          onMouseLeave={() => setHoveredIndex(null)}
+                        >
+                          {/* Partner Logo */}
+                          <div className="flex justify-center mb-3">
+                            <div className="w-16 h-16 rounded-lg bg-white shadow-sm flex items-center justify-center p-2 border border-gray-100">
+                              {partner.logo && (partner.logo.startsWith('http') || partner.logo.startsWith('/')) ? (
+                                <Image
+                                  src={partner.logo}
+                                  alt={partner.name}
+                                  width={56}
+                                  height={56}
+                                  className="w-full h-full object-contain"
+                                  onError={(e) => {
+                                    e.currentTarget.style.display = 'none';
+                                    const fallback = e.currentTarget.parentElement?.nextElementSibling as HTMLElement;
+                                    if (fallback) fallback.style.display = 'flex';
+                                  }}
+                                />
+                              ) : null}
+                              <div 
+                                className="w-full h-full rounded-lg flex items-center justify-center"
+                                style={{ 
+                                  backgroundColor: partner.color || '#1F4E79',
+                                  display: partner.logo && (partner.logo.startsWith('http') || partner.logo.startsWith('/')) ? 'none' : 'flex'
+                                }}
+                              >
+                                <span className="text-white text-sm font-bold">
+                                  {partner.name.split(' ').map(word => word[0]).join('').substring(0, 2)}
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                          
+                          {/* Partner Name */}
+                          <h3 className="text-sm font-semibold text-gray-900 text-center leading-tight mb-2 min-h-[2.5rem] flex items-center justify-center">
+                            <span className="text-center" style={{ 
+                              display: '-webkit-box',
+                              WebkitLineClamp: 2,
+                              WebkitBoxOrient: 'vertical',
+                              overflow: 'hidden'
+                            }}>
+                              {partner.name}
+                            </span>
+                          </h3>
+                          
+                          {/* Category & Country */}
+                          <div className="space-y-1">
+                            <div className="flex justify-center">
+                              <div 
+                                className="px-2 py-1 rounded-full text-xs font-medium text-white text-center"
+                                style={{ backgroundColor: partner.color || '#1F4E79' }}
+                                title={partner.category}
+                              >
+                                <span className="block max-w-full overflow-hidden text-ellipsis whitespace-nowrap">
+                                  {partner.category}
+                                </span>
+                              </div>
+                            </div>
+                            <div className="text-xs text-gray-500 font-normal text-center" title={partner.country}>
+                              <span className="block max-w-full overflow-hidden text-ellipsis whitespace-nowrap">
+                                {partner.country}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
                   </div>
-                  <div className="text-xs text-gray-500 font-normal flex items-center justify-center">
-                    <Globe className="w-3 h-3 mr-1" />
-                    {partner.country}
-                  </div>
                 </div>
-
-                {/* Hover Glow Effect */}
-                {hoveredIndex === index && (
-                  <div 
-                    className="absolute inset-0 opacity-20 rounded-3xl animate-pulse blur-sm"
-                    style={{ 
-                      background: `linear-gradient(135deg, ${partner.color || '#1F4E79'}, ${partner.color || '#1F4E79'}40)` 
-                    }}
-                  />
-                )}
-              </div>
+              ))}
             </div>
-          ))}
+          </div>
+
+          {/* Slide Indicators */}
+          {totalSlides > 1 && (
+            <div className="flex justify-center mt-4 gap-1">
+              {Array.from({ length: totalSlides }, (_, index) => (
+                <button
+                  key={index}
+                  onClick={() => setCurrentSlide(index)}
+                  className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                    currentSlide === index
+                      ? 'bg-brand-600 w-6'
+                      : 'bg-gray-300 hover:bg-gray-400'
+                  }`}
+                />
+              ))}
+            </div>
+          )}
         </div>
 
-        {/* Enhanced Bottom CTA */}
-        <div className="text-center">
-          <div className="relative bg-gradient-to-br from-white/95 to-white/80 backdrop-blur-sm rounded-3xl p-12 shadow-2xl border border-white/30 overflow-hidden">
-            {/* Background Pattern */}
-            <div className="absolute inset-0 opacity-5">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-brand-500 to-purple-500 rounded-full blur-2xl"></div>
-              <div className="absolute bottom-0 left-0 w-32 h-32 bg-gradient-to-br from-blue-500 to-green-500 rounded-full blur-2xl"></div>
-            </div>
-            
-            <div className="relative z-10">
-              <div className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-brand-500 to-purple-500 text-white rounded-full text-sm font-semibold mb-6 shadow-lg">
-                <Award className="w-4 h-4 mr-2" />
-                Premium University Access
-              </div>
-              
-              <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4 leading-tight">
-                Ready to Join a <br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-600 via-purple-600 to-blue-600">World-Class University?</span>
-              </h3>
-              
-              <p className="text-base text-gray-600 mb-6 max-w-2xl mx-auto leading-relaxed">
-                Our exclusive partnerships ensure you get direct access to top universities with streamlined application processes, 
-                scholarship opportunities, and personalized guidance every step of the way.
-              </p>
-              
-              <div className="flex flex-col sm:flex-row gap-6 justify-center">
-                <button className="group px-8 py-3 bg-gradient-to-r from-brand-600 via-purple-600 to-blue-600 text-white rounded-xl font-semibold hover:from-brand-700 hover:via-purple-700 hover:to-blue-700 transition-all duration-500 transform hover:scale-105 shadow-xl hover:shadow-2xl">
-                  <span className="flex items-center justify-center">
-                    <Globe className="w-4 h-4 mr-2 group-hover:rotate-12 transition-transform duration-300" />
-                    Explore Universities
-                  </span>
-                </button>
-                <button 
-                  onClick={handleScheduleClick}
-                  className="group px-8 py-3 bg-white border-2 border-brand-600 text-brand-600 rounded-xl font-semibold hover:bg-brand-600 hover:text-white transition-all duration-500 transform hover:scale-105 shadow-lg hover:shadow-xl"
-                >
-                  <span className="flex items-center justify-center">
-                    <Users className="w-4 h-4 mr-2 group-hover:scale-110 transition-transform duration-300" />
-                    Schedule Consultation
-                  </span>
-                </button>
-              </div>
-            </div>
+        {/* Compact CTA */}
+        <div className="text-center mt-8">
+          <div className="inline-flex flex-col sm:flex-row gap-4 justify-center">
+            <button className="group px-6 py-2 bg-gradient-to-r from-brand-600 to-blue-600 text-white rounded-lg font-semibold hover:from-brand-700 hover:to-blue-700 transition-all duration-300 transform hover:scale-105 shadow-lg">
+              <span className="flex items-center justify-center">
+                <Globe className="w-4 h-4 mr-2" />
+                Explore Universities
+              </span>
+            </button>
+            <button 
+              onClick={handleScheduleClick}
+              className="group px-6 py-2 bg-white border border-brand-600 text-brand-600 rounded-lg font-semibold hover:bg-brand-600 hover:text-white transition-all duration-300 transform hover:scale-105 shadow-lg"
+            >
+              <span className="flex items-center justify-center">
+                <Users className="w-4 h-4 mr-2" />
+                Schedule Consultation
+              </span>
+            </button>
           </div>
         </div>
       </div>
