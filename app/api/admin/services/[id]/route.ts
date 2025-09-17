@@ -16,7 +16,7 @@ const patchSchema = z.object({
   image: z.string().min(1).optional(),
   ctaLabel: z.string().min(1).optional(),
   ctaText: z.string().min(1).optional(),
-  sectionsMD: z.array(z.string()).min(1).optional(),
+  sectionsMD: z.array(z.string()).optional(),
   features: z.array(feature).min(1).optional(),
   benefits: z.array(z.string()).min(1).optional(),
   process: z.array(processStep).min(1).optional(),

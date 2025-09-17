@@ -15,7 +15,7 @@ const schema = z.object({
   image: z.string().min(1),
   ctaLabel: z.string().min(1),
   ctaText: z.string().min(1),
-  sectionsMD: z.array(z.string()).min(1),
+  sectionsMD: z.array(z.string()).optional().default([]),
   features: z.array(feature).min(1),
   benefits: z.array(z.string()).min(1),
   process: z.array(processStep).min(1),

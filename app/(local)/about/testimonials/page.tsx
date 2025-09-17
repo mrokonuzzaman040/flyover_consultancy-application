@@ -4,68 +4,54 @@ import PageHeader from "@/components/page-header";
 import Slider from "@/components/ui/slider";
 import StarRating from "@/components/ui/star-rating";
 import { Quote, Users, Award, Globe } from "lucide-react";
+import { dbConnect, toObject } from "@/lib/mongoose";
+import SuccessStory from "@/lib/models/SuccessStory";
 
 export const metadata: Metadata = {
   title: "Testimonials | Flyover Consultancy",
   description: "Read success stories from over 22,000 students who achieved their dreams with Flyover Consultancy's expert guidance.",
 };
 
-const testimonials = [
-  {
-    name: "Sarah Johnson",
-    country: "USA",
-    university: "Harvard University",
-    program: "MBA",
-    rating: 5,
-    text: "Flyover Consultancy made my dream of studying at Harvard a reality. Their personalized guidance and expert knowledge of the admission process were invaluable. I couldn't have done it without them!",
-    image: "/testimonials/sarah.jpg"
-  },
-  {
-    name: "Raj Patel",
-    country: "Canada",
-    university: "University of Toronto",
-    program: "Computer Science",
-    rating: 5,
-    text: "The team at Flyover helped me navigate the complex visa process seamlessly. Their attention to detail and constant support gave me confidence throughout my journey to Canada.",
-    image: "/testimonials/raj.jpg"
-  },
-  {
-    name: "Emma Chen",
-    country: "Australia",
-    university: "University of Melbourne",
-    program: "Medicine",
-    rating: 5,
-    text: "From application to arrival, Flyover was with me every step of the way. Their expertise in Australian education system and visa requirements was exceptional. Highly recommended!",
-    image: "/testimonials/emma.jpg"
-  },
-  {
-    name: "Ahmed Hassan",
-    country: "UK",
-    university: "Oxford University",
-    program: "Engineering",
-    rating: 5,
-    text: "Flyover's counselors are truly professional and knowledgeable. They helped me secure admission to Oxford and guided me through the entire process with patience and expertise.",
-    image: "/testimonials/ahmed.jpg"
-  },
-  {
-    name: "Maria Rodriguez",
-    country: "Germany",
-    university: "Technical University of Munich",
-    program: "Data Science",
-    rating: 5,
-    text: "The scholarship guidance I received from Flyover was outstanding. They helped me secure a full scholarship for my Master's program in Germany. Forever grateful!",
-    image: "/testimonials/maria.jpg"
-  },
-  {
-    name: "David Kim",
-    country: "New Zealand",
-    university: "University of Auckland",
-    program: "Business Administration",
-    rating: 5,
-    text: "Flyover's comprehensive support system is unmatched. From university selection to visa approval, they made the entire process smooth and stress-free.",
-    image: "/testimonials/david.jpg"
+interface Testimonial {
+  id: string;
+  name: string;
+  country: string;
+  university: string;
+  program: string;
+  rating: number;
+  text: string;
+  scholarship: string;
+  year: string;
+  avatar: string;
+  flag: string;
+  color: string;
+}
+
+async function getTestimonials(): Promise<Testimonial[]> {
+  try {
+    await dbConnect();
+    const docs = await SuccessStory.find({}).sort({ createdAt: -1 }).lean();
+    const normalized = docs.map((doc) => toObject(doc as { _id: unknown }));
+    return normalized.map((story: Record<string, unknown>) => ({
+      id: (story.id as string) || (story._id as string) || '',
+      name: story.author as string,
+      country: story.country as string,
+      university: story.university as string,
+      program: story.program as string,
+      rating: story.rating as number,
+      text: story.text as string,
+      scholarship: story.scholarship as string,
+      year: story.year as string,
+      avatar: story.avatar as string,
+      flag: story.flag as string,
+      color: story.color as string
+    }));
+  } catch (error) {
+    const message = error instanceof Error ? error.message : 'Unknown error';
+    console.error('Failed to load testimonials from database:', message);
+    return [];
   }
-];
+}
 
 const stats = [
   { icon: Users, label: "Students Placed", value: "22,000+" },
@@ -74,7 +60,8 @@ const stats = [
   { icon: Quote, label: "5-Star Reviews", value: "15,000+" }
 ];
 
-export default function TestimonialsPage() {
+export default async function TestimonialsPage() {
+  const testimonials = await getTestimonials();
   return (
     <div>
       <PageHeader 
@@ -125,16 +112,17 @@ export default function TestimonialsPage() {
             </div>
           </Reveal>
           
-          <Slider autoplayMs={8000}>
-            {[0, 1].map((slideIndex) => (
+          {testimonials.length > 0 ? (
+            <Slider autoplayMs={8000}>
+              {[0, 1].map((slideIndex) => (
               <div key={slideIndex} className="px-2">
                 <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-                  {testimonials.slice(slideIndex * 3, (slideIndex + 1) * 3).map((testimonial, index) => (
+                  {testimonials.slice(slideIndex * 3, (slideIndex + 1) * 3).map((testimonial: Testimonial, index: number) => (
                     <Reveal key={index} delay={index * 0.1}>
                       <div className="bg-white rounded-xl shadow-lg p-8 hover:shadow-xl transition-shadow duration-300">
                         <div className="flex items-center mb-6">
                           <div className="w-16 h-16 bg-gradient-to-br from-brand-400 to-brand-600 rounded-full flex items-center justify-center text-white font-bold text-xl">
-                            {testimonial.name.split(' ').map(n => n[0]).join('')}
+                            {testimonial.name.split(' ').map((n: string) => n[0]).join('')}
                           </div>
                           <div className="ml-4">
                             <h3 className="font-semibold text-gray-900">{testimonial.name}</h3>
@@ -156,8 +144,21 @@ export default function TestimonialsPage() {
                   ))}
                 </div>
               </div>
-            ))}
-          </Slider>
+              ))}
+            </Slider>
+          ) : (
+            <div className="text-center py-16">
+              <div className="max-w-md mx-auto">
+                <div className="w-16 h-16 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center">
+                  <Quote className="w-8 h-8 text-gray-400" />
+                </div>
+                <h3 className="text-xl font-semibold text-gray-900 mb-2">No Testimonials Available</h3>
+                <p className="text-gray-600">
+                  We&apos;re collecting success stories from our students. Check back soon to read inspiring testimonials!
+                </p>
+              </div>
+            </div>
+          )}
         </div>
       </section>
 

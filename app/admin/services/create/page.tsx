@@ -10,6 +10,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { ArrowLeft, Plus, Trash2 } from "lucide-react"
 import { toast } from "sonner"
 import PageHeader from "@/components/admin/PageHeader"
+import ImageBBUpload from "@/components/admin/ImageBBUpload"
 
 interface Feature {
   icon: string
@@ -207,13 +208,17 @@ export default function CreateServicePage() {
             </div>
 
             <div>
-              <Label htmlFor="image">Hero Image URL</Label>
-              <Input
-                id="image"
-                value={formData.image}
-                onChange={(e) => setFormData({...formData, image: e.target.value})}
-                placeholder="e.g., /hero/slide1.svg"
+              <ImageBBUpload
+                label="Service Image"
+                currentImage={formData.image}
+                onUpload={(image) => setFormData({...formData, image: image.url})}
+                onRemove={() => setFormData({...formData, image: ""})}
+                maxSize={5 * 1024 * 1024} // 5MB
+                required
               />
+              <p className="text-xs text-gray-500 mt-1">
+                Upload a service image (recommended: 400x300px, max 5MB)
+              </p>
             </div>
           </CardContent>
         </Card>

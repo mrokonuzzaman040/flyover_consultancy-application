@@ -115,13 +115,7 @@ const ServiceSchema = new Schema<IService>({
   },
   sectionsMD: {
     type: [String],
-    required: true,
-    validate: {
-      validator: function(sections: string[]) {
-        return sections.length > 0;
-      },
-      message: 'At least one section is required'
-    }
+    default: []
   },
   features: {
     type: [FeatureSchema],
