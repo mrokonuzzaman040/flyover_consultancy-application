@@ -96,69 +96,82 @@ export default async function BlogsPage() {
           </div>
         </Reveal>
 
+        {/* No Posts Message */}
+        {blogPosts.length === 0 && (
+          <Reveal>
+            <div className="text-center py-16">
+              <h2 className="text-2xl font-bold text-gray-900 mb-4">No Blog Posts Available</h2>
+              <p className="text-gray-600">Check back later for new articles and insights.</p>
+            </div>
+          </Reveal>
+        )}
+
         {/* Featured Post */}
-        <Reveal>
-          <div className="mb-16">
-            <h2 className="text-2xl font-bold text-gray-900 mb-8">Featured Article</h2>
-            <Card className="overflow-hidden hover:shadow-lg transition-shadow duration-300">
-              <div className="md:flex">
-                <div className="md:w-1/2">
-                  <div className="h-64 md:h-full bg-gradient-to-br from-brand-100 to-brand-200 flex items-center justify-center overflow-hidden">
-                    {blogPosts[0].featuredImage ? (
-                      <Image
-                        src={blogPosts[0].featuredImage} 
-                        alt={blogPosts[0].title}
-                        className="w-full h-full object-cover"
-                        width={400}
-                        height={300}
-                      />
-                    ) : (
-                      <div className="text-brand-600 text-6xl font-bold opacity-20">FEATURED</div>
-                    )}
-                  </div>
-                </div>
-                <div className="md:w-1/2 p-8">
-                  <div className="flex items-center gap-4 mb-4">
-                    <Badge variant="secondary" className="bg-brand-100 text-brand-700">
-                      {blogPosts[0].category}
-                    </Badge>
-                    <div className="flex items-center text-sm text-gray-500">
-                      <Calendar className="w-4 h-4 mr-1" />
-                      {formatDate(blogPosts[0].publishedAt)}
+        {blogPosts.length > 0 && (
+          <Reveal>
+            <div className="mb-16">
+              <h2 className="text-2xl font-bold text-gray-900 mb-8">Featured Article</h2>
+              <Card className="overflow-hidden hover:shadow-lg transition-shadow duration-300">
+                <div className="md:flex">
+                  <div className="md:w-1/2">
+                    <div className="h-64 md:h-full bg-gradient-to-br from-brand-100 to-brand-200 flex items-center justify-center overflow-hidden">
+                      {blogPosts[0]?.featuredImage ? (
+                        <Image
+                          src={blogPosts[0].featuredImage} 
+                          alt={blogPosts[0].title}
+                          className="w-full h-full object-cover"
+                          width={400}
+                          height={300}
+                        />
+                      ) : (
+                        <div className="text-brand-600 text-6xl font-bold opacity-20">FEATURED</div>
+                      )}
                     </div>
                   </div>
-                  <h3 className="text-2xl font-bold text-gray-900 mb-4 line-clamp-2">
-                    {blogPosts[0].title}
-                  </h3>
-                  <p className="text-gray-600 mb-6 line-clamp-3">
-                    {blogPosts[0].excerpt}
-                  </p>
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center text-sm text-gray-500">
-                      <User className="w-4 h-4 mr-1" />
-                      {blogPosts[0].author}
-                      <Clock className="w-4 h-4 ml-4 mr-1" />
-                      {blogPosts[0].readTime}
+                  <div className="md:w-1/2 p-8">
+                    <div className="flex items-center gap-4 mb-4">
+                      <Badge variant="secondary" className="bg-brand-100 text-brand-700">
+                        {blogPosts[0]?.category}
+                      </Badge>
+                      <div className="flex items-center text-sm text-gray-500">
+                        <Calendar className="w-4 h-4 mr-1" />
+                        {blogPosts[0]?.publishedAt && formatDate(blogPosts[0].publishedAt)}
+                      </div>
                     </div>
-                    <Link href={`/blogs/${blogPosts[0].slug}`}>
-                      <Button className="bg-brand-600 hover:bg-brand-700">
-                        Read More
-                        <ArrowRight className="w-4 h-4 ml-2" />
-                      </Button>
-                    </Link>
+                    <h3 className="text-2xl font-bold text-gray-900 mb-4 line-clamp-2">
+                      {blogPosts[0]?.title}
+                    </h3>
+                    <p className="text-gray-600 mb-6 line-clamp-3">
+                      {blogPosts[0]?.excerpt}
+                    </p>
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center text-sm text-gray-500">
+                        <User className="w-4 h-4 mr-1" />
+                        {blogPosts[0]?.author}
+                        <Clock className="w-4 h-4 ml-4 mr-1" />
+                        {blogPosts[0]?.readTime}
+                      </div>
+                      <Link href={`/blogs/${blogPosts[0]?.slug}`}>
+                        <Button className="bg-brand-600 hover:bg-brand-700">
+                          Read More
+                          <ArrowRight className="w-4 h-4 ml-2" />
+                        </Button>
+                      </Link>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </Card>
-          </div>
-        </Reveal>
+              </Card>
+            </div>
+          </Reveal>
+        )}
 
         {/* Blog Posts Grid */}
-        <Reveal>
-          <div className="mb-12">
-            <h2 className="text-2xl font-bold text-gray-900 mb-8">Latest Articles</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {blogPosts.slice(1).map((post: BlogPost) => (
+        {blogPosts.length > 1 && (
+          <Reveal>
+            <div className="mb-12">
+              <h2 className="text-2xl font-bold text-gray-900 mb-8">Latest Articles</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {blogPosts.slice(1).map((post: BlogPost) => (
                 <Card key={post._id} className="overflow-hidden hover:shadow-lg transition-shadow duration-300 group">
                   <div className="h-48 bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center overflow-hidden">
                     {post.featuredImage ? (
@@ -218,6 +231,7 @@ export default async function BlogsPage() {
             </div>
           </div>
         </Reveal>
+        )}
 
         {/* Load More Button */}
         <Reveal>
