@@ -22,6 +22,8 @@ type BlogPost = {
   status: string;
 };
 
+export const dynamic = 'force-dynamic'
+
 interface BlogPostPageProps {
   params: Promise<{
     slug: string
@@ -35,30 +37,23 @@ async function getAllBlogs(): Promise<BlogPost[]> {
     });
     
     if (!response.ok) {
-      throw new Error('Failed to fetch blogs');
+      return [];
     }
     
     const data = await response.json();
     return data.blogs || [];
   } catch (error) {
-    console.error('Error fetching blogs:', error);
+    if (process.env.NODE_ENV !== 'production') {
+      console.error('Error fetching blogs:', error);
+    }
     return [];
   }
-}
-
-// Generate static params for all blog posts
-export async function generateStaticParams() {
-  const blogs = await getAllBlogs();
-  return blogs.map((post: BlogPost) => ({
-    slug: post.slug,
-  }))
 }
 
 // Generate metadata for each blog post
 export async function generateMetadata({ params }: BlogPostPageProps): Promise<Metadata> {
   const { slug } = await params
-  const blogs = await getAllBlogs();
-  const post = blogs.find((post: BlogPost) => post.slug === slug)
+  const post = await getBlogPost(slug)
   
   if (!post) {
     return {
@@ -100,7 +95,9 @@ async function getBlogPost(slug: string): Promise<BlogPost | null> {
     const data = await response.json();
     return data.blog || null;
   } catch (error) {
-    console.error('Error fetching blog:', error);
+    if (process.env.NODE_ENV !== 'production') {
+      console.error('Error fetching blog:', error);
+    }
     return null;
   }
 }

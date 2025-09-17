@@ -61,8 +61,9 @@ async function getService(slug: string): Promise<Service | null> {
   return service || null;
 }
 
-export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
-  const service = await getService(params.slug);
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params;
+  const service = await getService(slug);
   
   if (!service) {
     return {
@@ -77,8 +78,9 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   };
 }
 
-export default async function ServicePage({ params }: { params: { slug: string } }) {
-  const service = await getService(params.slug);
+export default async function ServicePage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  const service = await getService(slug);
 
   if (!service) {
     notFound();

@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { use, useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -27,7 +27,8 @@ interface Destination {
   createdAt: string
 }
 
-export default function DeleteDestinationPage({ params }: { params: { id: string } }) {
+export default function DeleteDestinationPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = use(params)
   const [destination, setDestination] = useState<Destination | null>(null)
   const [loading, setLoading] = useState(true)
   const [deleting, setDeleting] = useState(false)
@@ -35,11 +36,11 @@ export default function DeleteDestinationPage({ params }: { params: { id: string
 
   useEffect(() => {
     fetchDestination()
-  }, [])
+  }, [id])
 
   const fetchDestination = async () => {
     try {
-      const response = await fetch(`/api/admin/destinations/${params.id}`)
+      const response = await fetch(`/api/admin/destinations/${id}`)
       if (response.ok) {
         const data = await response.json()
         setDestination(data.destination)

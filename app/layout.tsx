@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import ScrollProgress from "@/components/ui/scroll-progress";
@@ -20,12 +20,6 @@ export const metadata: Metadata = {
   description:
     "Flyover Consultancy helps students study abroad with end-to-end assistance across admissions, visas, scholarships, and more.",
   metadataBase: new URL("https://www.flyover.example"),
-  viewport: {
-    width: 'device-width',
-    initialScale: 1,
-    maximumScale: 1,
-    userScalable: false,
-  },
   openGraph: {
     title: "Flyover Consultancy — Study Abroad Advisors",
     description:
@@ -44,6 +38,13 @@ export const metadata: Metadata = {
       "End-to-end assistance for studying abroad. 22,000+ students, 550+ partners.",
     images: ["/logo.png"],
   },
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
 };
 
 export default function RootLayout({

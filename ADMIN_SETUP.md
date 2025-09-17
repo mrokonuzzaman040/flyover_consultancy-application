@@ -14,7 +14,7 @@ Make sure your `.env.local` file contains:
 
 ```env
 NEXTAUTH_SECRET=your-secret-key
-NEXTAUTH_URL=http://localhost:3000
+NEXT_PUBLIC_SITE_URL=http://localhost:3000
 MONGDB_URI=mongodb://localhost:27017/flyover
 ```
 

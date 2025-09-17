@@ -14,6 +14,8 @@ export const metadata: Metadata = {
   keywords: "study abroad blog, university tips, visa guides, student success stories, education insights",
 };
 
+export const dynamic = "force-dynamic";
+
 type BlogPost = {
   _id: string;
   title: string;
@@ -55,13 +57,12 @@ async function getBlogs(): Promise<BlogPost[]> {
     });
     
     if (!response.ok) {
-      throw new Error('Failed to fetch blogs');
+      return [];
     }
     
     const data = await response.json();
     return data.blogs || [];
   } catch (error) {
-    console.error('Error fetching blogs:', error);
     return [];
   }
 }

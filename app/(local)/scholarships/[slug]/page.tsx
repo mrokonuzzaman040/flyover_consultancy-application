@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { use, useState, useEffect } from "react";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -34,23 +34,24 @@ interface Scholarship {
 }
 
 interface ScholarshipDetailPageProps {
-  params: {
+  params: Promise<{
     slug: string;
-  };
+  }>;
 }
 
 export default function ScholarshipDetailPage({ params }: ScholarshipDetailPageProps) {
+  const { slug } = use(params);
   const [scholarship, setScholarship] = useState<Scholarship | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     fetchScholarship();
-  }, [params.slug]);
+  }, [slug]);
 
   const fetchScholarship = async () => {
     try {
-      const response = await fetch(`/api/scholarships/${params.slug}`);
+      const response = await fetch(`/api/scholarships/${slug}`);
       if (!response.ok) {
         if (response.status === 404) {
           notFound();
