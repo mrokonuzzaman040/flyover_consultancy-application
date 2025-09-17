@@ -6,23 +6,16 @@ import Slider from "@/components/ui/slider";
 import CtaButton from "@/components/cta-button";
 import Reveal from "@/components/ui/reveal";
 import ScheduleMeetingModal from "@/components/modals/ScheduleMeetingModal";
-import heroSlidesData from "@/data/sections-data.json";
-
-type Slide = {
-  image: string;
-  headline: string;
-  sub: string;
-  primary?: { label: string; href?: string; isModal?: boolean };
-  secondary?: { label: string; href: string };
-};
-
-
+import { useHomepageData } from "@/lib/hooks/useHomepageData";
+import type { ISlide } from "@/lib/types/homepage";
 
 interface HeroSliderProps {
-  slides?: Slide[];
+  slides?: ISlide[];
 }
 
-export default function HeroSlider({ slides = heroSlidesData.slides }: HeroSliderProps) {
+export default function HeroSlider({ slides: propSlides }: HeroSliderProps) {
+  const { data, loading, error } = useHomepageData();
+  const slides = propSlides || data?.slides || [];
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleScheduleClick = () => {
@@ -32,6 +25,40 @@ export default function HeroSlider({ slides = heroSlidesData.slides }: HeroSlide
   const handleCloseModal = () => {
     setIsModalOpen(false);
   };
+
+  // Show loading state
+  if (loading) {
+    return (
+      <div className="relative h-[400px] sm:h-[520px] md:h-[600px] bg-gray-200 animate-pulse">
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="text-gray-500">Loading slides...</div>
+        </div>
+      </div>
+    );
+  }
+
+  // Show error state
+  if (error) {
+    return (
+      <div className="relative h-[400px] sm:h-[520px] md:h-[600px] bg-gray-100 flex items-center justify-center">
+        <div className="text-center text-gray-600">
+          <p>Unable to load slides</p>
+          <p className="text-sm mt-1">{error}</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Show empty state if no slides
+  if (!slides || slides.length === 0) {
+    return (
+      <div className="relative h-[400px] sm:h-[520px] md:h-[600px] bg-gray-100 flex items-center justify-center">
+        <div className="text-center text-gray-600">
+          <p>No slides available</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="relative">
@@ -67,7 +94,7 @@ export default function HeroSlider({ slides = heroSlidesData.slides }: HeroSlide
                           <CtaButton href={s.primary.href} className="text-sm sm:text-base px-6 py-3">{s.primary.label}</CtaButton>
                         )
                       ) : null}
-                      {s.secondary ? (
+                      {s.secondary && s.secondary.href ? (
                         <Link
                           href={s.secondary.href}
                           className="inline-flex items-center justify-center rounded-md border-2 border-white/40 bg-white/15 px-6 py-3 text-sm sm:text-base font-semibold text-white backdrop-blur hover:bg-white/25 transition-all duration-200 drop-shadow touch-manipulation min-h-[48px]"
