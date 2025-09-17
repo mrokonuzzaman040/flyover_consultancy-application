@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useCallback } from "react"
+import { useState, useCallback, useEffect } from "react"
 import { useDropzone } from "react-dropzone"
 import { X, ImageIcon, Loader2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -35,7 +35,25 @@ export default function ImageBBUpload({
   required = false
 }: ImageBBUploadProps) {
   const { uploading, uploadImage } = useImageBBUpload()
-  const [previewUrl, setPreviewUrl] = useState<string | null>(currentImage || null)
+  
+  // Validate currentImage URL before setting it
+  const getValidImageUrl = (url?: string): string | null => {
+    if (!url || url.trim() === '') return null
+    
+    try {
+      new URL(url)
+      return url
+    } catch {
+      return null
+    }
+  }
+  
+  const [previewUrl, setPreviewUrl] = useState<string | null>(getValidImageUrl(currentImage))
+
+  // Update previewUrl when currentImage prop changes
+  useEffect(() => {
+    setPreviewUrl(getValidImageUrl(currentImage))
+  }, [currentImage])
 
   const onDrop = useCallback(async (acceptedFiles: File[]) => {
     if (acceptedFiles.length === 0) return

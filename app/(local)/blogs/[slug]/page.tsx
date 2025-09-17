@@ -24,6 +24,19 @@ type BlogPost = {
 
 export const dynamic = 'force-dynamic'
 
+// Generate static params for build time
+export async function generateStaticParams() {
+  try {
+    const blogs = await getAllBlogs()
+    return blogs.map((blog) => ({
+      slug: blog.slug,
+    }))
+  } catch (error) {
+    console.error('Error generating static params:', error)
+    return []
+  }
+}
+
 interface BlogPostPageProps {
   params: Promise<{
     slug: string

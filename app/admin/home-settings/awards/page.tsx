@@ -172,16 +172,22 @@ export default function AwardsPage() {
       header: 'Image',
       render: (award: Award) => (
         <div className="w-12 h-12 rounded-lg overflow-hidden bg-gray-100">
-          <Image 
-            src={award.image} 
-            alt={award.title}
-            className="w-full h-full object-cover"
-            width={48}
-            height={48}
-            onError={(e) => {
-              e.currentTarget.src = '/logo.png';
-            }}
-          />
+          {award.image && award.image.trim() !== '' ? (
+            <Image 
+              src={award.image} 
+              alt={award.title || 'Award image'}
+              className="w-full h-full object-cover"
+              width={48}
+              height={48}
+              onError={(e) => {
+                e.currentTarget.src = '/logo.png';
+              }}
+            />
+          ) : (
+            <div className="w-full h-full flex items-center justify-center text-gray-400 text-xs">
+              No Image
+            </div>
+          )}
         </div>
       )
     },

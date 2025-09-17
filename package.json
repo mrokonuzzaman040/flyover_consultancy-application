@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build --turbopack",
+    "build:no-turbo": "next build",
     "start": "next start",
     "lint": "eslint",
     "create-admin": "node scripts/create-admin.js",
