@@ -12,22 +12,15 @@ export const metadata: Metadata = {
   description: "Read success stories from over 22,000 students who achieved their dreams with Flyover Consultancy's expert guidance.",
 };
 
-interface Testimonial {
-  id: string;
-  name: string;
-  country: string;
-  university: string;
-  program: string;
-  rating: number;
-  text: string;
-  scholarship: string;
-  year: string;
-  avatar: string;
-  flag: string;
-  color: string;
-}
 
-async function getTestimonials(): Promise<Testimonial[]> {
+const stats = [
+  { icon: Users, label: "Students Placed", value: "22,000+" },
+  { icon: Globe, label: "Countries", value: "50+" },
+  { icon: Award, label: "Success Rate", value: "98%" },
+  { icon: Quote, label: "5-Star Reviews", value: "15,000+" }
+];
+
+async function getTestimonials() {
   try {
     await dbConnect();
     const docs = await SuccessStory.find({}).sort({ createdAt: -1 }).lean();
@@ -47,26 +40,26 @@ async function getTestimonials(): Promise<Testimonial[]> {
       color: story.color as string
     }));
   } catch (error) {
-    const message = error instanceof Error ? error.message : 'Unknown error';
-    console.error('Failed to load testimonials from database:', message);
+    console.error('Failed to load testimonials from database:', error);
     return [];
   }
 }
 
-const stats = [
-  { icon: Users, label: "Students Placed", value: "22,000+" },
-  { icon: Globe, label: "Countries", value: "50+" },
-  { icon: Award, label: "Success Rate", value: "98%" },
-  { icon: Quote, label: "5-Star Reviews", value: "15,000+" }
-];
-
 export default async function TestimonialsPage() {
   const testimonials = await getTestimonials();
+  
+  // Update stats with dynamic data
+  const dynamicStats = [
+    { icon: Users, label: "Students Placed", value: `${testimonials.length}+` },
+    { icon: Globe, label: "Countries", value: "50+" },
+    { icon: Award, label: "Success Rate", value: "98%" },
+    { icon: Quote, label: "5-Star Reviews", value: "15,000+" }
+  ];
   return (
     <div>
       <PageHeader 
         title="Student Success Stories" 
-        subtitle="Over 22,000 students have achieved their dreams with our expert guidance. Read their inspiring journeys." 
+        subtitle={`Over ${testimonials.length} students have achieved their dreams with our expert guidance. Read their inspiring journeys.`} 
         image="/hero/slide3.svg" 
       />
       
@@ -82,7 +75,7 @@ export default async function TestimonialsPage() {
             </div>
           </Reveal>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
-            {stats.map((stat, index) => {
+            {dynamicStats.map((stat, index) => {
               const IconComponent = stat.icon;
               return (
                 <Reveal key={index} delay={index * 0.1}>
@@ -117,17 +110,21 @@ export default async function TestimonialsPage() {
               {[0, 1].map((slideIndex) => (
               <div key={slideIndex} className="px-2">
                 <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-                  {testimonials.slice(slideIndex * 3, (slideIndex + 1) * 3).map((testimonial: Testimonial, index: number) => (
+                  {testimonials.slice(slideIndex * 3, (slideIndex + 1) * 3).map((testimonial, index: number) => (
                     <Reveal key={index} delay={index * 0.1}>
                       <div className="bg-white rounded-xl shadow-lg p-8 hover:shadow-xl transition-shadow duration-300">
                         <div className="flex items-center mb-6">
-                          <div className="w-16 h-16 bg-gradient-to-br from-brand-400 to-brand-600 rounded-full flex items-center justify-center text-white font-bold text-xl">
-                            {testimonial.name.split(' ').map((n: string) => n[0]).join('')}
+                          <div className={`w-16 h-16 bg-gradient-to-br ${testimonial.color} rounded-full flex items-center justify-center text-white font-bold text-xl`}>
+                            {testimonial.avatar}
                           </div>
-                          <div className="ml-4">
-                            <h3 className="font-semibold text-gray-900">{testimonial.name}</h3>
-                            <p className="text-sm text-gray-600">{testimonial.program} • {testimonial.university}</p>
-                            <p className="text-sm text-brand-600 font-medium">{testimonial.country}</p>
+                          <div className="ml-4 flex-1">
+                            <div className="flex items-center gap-2">
+                              <h3 className="font-semibold text-gray-900">{testimonial.name}</h3>
+                              <span className="text-lg">{testimonial.flag}</span>
+                            </div>
+                            <p className="text-sm text-gray-600">{testimonial.program}</p>
+                            <p className="text-sm text-gray-600">{testimonial.university}</p>
+                            <p className="text-xs text-green-600 font-medium mt-1">{testimonial.scholarship}</p>
                           </div>
                         </div>
                         

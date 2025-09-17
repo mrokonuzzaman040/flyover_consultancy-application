@@ -12,7 +12,8 @@
     "create-admin": "node scripts/create-admin.js",
     "seed-services": "node scripts/seed-services.mjs",
     "seed-sections": "node scripts/seed-sections-data.mjs",
-    "seed-success-stories": "node scripts/seed-success-stories.mjs"
+    "seed-success-stories": "node scripts/seed-success-stories.mjs",
+    "seed-all": "npm run seed-sections && npm run seed-success-stories"
   },
   "dependencies": {
     "@playwright/test": "^1.55.0",
