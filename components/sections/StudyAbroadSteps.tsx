@@ -34,9 +34,9 @@ export default function StudyAbroadSteps({ steps = sectionsData.studyabroadsteps
         <div className="relative mb-16">
           <div className="absolute top-1/2 left-0 right-0 h-1 bg-gradient-to-r from-brand-200 via-yellow-200 to-green-200 rounded-full transform -translate-y-1/2"></div>
           <div className="relative flex justify-between">
-            {steps.map((step) => (
+            {steps.map((step, index) => (
               <button
-                key={step.id}
+                key={index}
                 onClick={() => setActiveStep(step.id)}
                 className={`relative z-10 w-12 h-12 rounded-full border-4 border-white shadow-lg transition-all duration-300 hover:scale-110 ${
                   activeStep >= step.id 
@@ -56,9 +56,9 @@ export default function StudyAbroadSteps({ steps = sectionsData.studyabroadsteps
         
         {/* Step cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-16">
-          {steps.map((step) => (
+          {steps.map((step, index) => (
             <div
-              key={step.id}
+              key={index}
               className={`relative p-6 rounded-2xl border-2 transition-all duration-300 cursor-pointer hover:shadow-xl hover:-translate-y-2 ${
                 activeStep === step.id
                   ? `${step.bgColor} border-current ${step.textColor} shadow-lg scale-105`

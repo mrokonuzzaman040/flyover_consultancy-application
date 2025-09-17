@@ -125,7 +125,7 @@ export default function DestinationsSlider({ destinations = sectionsData.destina
                       <Image
                         width={40}
                         height={40}
-                        src={imageErrors[index] ? "/logo.png" : destination.universityLogo}
+                        src={imageErrors[index] ? "/logo.png" : (destination.universityLogo || "/logo.png")}
                         alt={`${destination.name} University Logo`}
                         className="w-full h-full object-contain"
                         onError={() => handleImageError(index)}
