@@ -228,8 +228,9 @@ export default function CreateTeamMemberPage() {
           </CardHeader>
           <CardContent>
             <ImageBBUpload
-              value={form.image}
-              onChange={(url) => setForm(prev => ({ ...prev, image: url }))}
+              currentImage={form.image}
+              onUpload={(image) => setForm(prev => ({ ...prev, image: image.url }))}
+              onRemove={() => setForm(prev => ({ ...prev, image: '' }))}
               label="Upload Profile Image"
             />
           </CardContent>

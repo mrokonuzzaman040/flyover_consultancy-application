@@ -3,6 +3,8 @@ import Reveal from '@/components/ui/reveal'
 import PageHeader from '@/components/page-header'
 import { Mail, Linkedin, Phone, MapPin, Award, Users, Target, Heart } from 'lucide-react'
 import Image from 'next/image'
+import { dbConnect, toObject } from '@/lib/mongoose'
+import Team from '@/lib/models/Team'
 
 export const metadata: Metadata = {
   title: 'Our Team | Flyover Education',
@@ -26,17 +28,9 @@ interface TeamMember {
 
 async function getTeamMembers(): Promise<TeamMember[]> {
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/team`, {
-      next: { revalidate: 300 } // Revalidate every 5 minutes
-    })
-    
-    if (!response.ok) {
-      console.error('Failed to fetch team members')
-      return []
-    }
-    
-    const data = await response.json()
-    return data.team || []
+    await dbConnect()
+    const docs = await Team.find({ isActive: true }).sort({ order: 1, createdAt: -1 }).lean()
+    return docs.map((d) => ({ ...toObject(d as { _id: unknown }) })) as unknown as TeamMember[]
   } catch (error) {
     console.error('Error fetching team members:', error)
     return []
