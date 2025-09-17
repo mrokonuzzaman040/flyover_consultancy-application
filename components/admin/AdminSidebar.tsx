@@ -42,8 +42,8 @@ type NavigationItem = {
 }
 
 const navigation: NavigationItem[] = [
-  { name: "Blog", href: "/admin/posts", icon: FileText },
   { name: "Dashboard", href: "/admin", icon: LayoutDashboard },
+  { name: "Blogs", href: "/admin/blogs", icon: FileText },
   { name: "Destinations", href: "/admin/destinations", icon: MapPin },
   { name: "Events", href: "/admin/events", icon: Calendar },
   { 
