@@ -107,23 +107,23 @@ export default function PartnershipsSection() {
       
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative">
         {/* Header */}
-        <div className="text-center mb-20">
+        <div className="text-center mb-16">
           <div className="inline-flex items-center px-4 py-2 bg-white/80 backdrop-blur-sm rounded-full border border-brand-200 mb-6">
             <Globe className="w-4 h-4 text-brand-600 mr-2" />
             <span className="text-sm font-medium text-brand-700">Global University Network</span>
           </div>
-          <h2 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6 leading-tight">
             Our Prestigious <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-600 via-blue-600 to-purple-600">University Partners</span>
           </h2>
-          <p className="text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
+          <p className="text-lg text-gray-600 max-w-3xl mx-auto leading-relaxed">
             We have established partnerships with world-renowned universities across the globe, 
             opening doors to exceptional educational opportunities and ensuring your academic success.
           </p>
         </div>
 
         {/* Enhanced Stats */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-20">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12">
           {stats.map((stat, index) => {
             const IconComponent = stat.icon;
             return (
@@ -137,10 +137,10 @@ export default function PartnershipsSection() {
                 <div className={`w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-br ${stat.color} flex items-center justify-center group-hover:scale-110 transition-transform duration-300`}>
                   <IconComponent className="w-8 h-8 text-white" />
                 </div>
-                <div className={`text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r ${stat.color} mb-2`}>
+                <div className={`text-2xl md:text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r ${stat.color} mb-2`}>
                   {stat.number}
                 </div>
-                <div className="text-gray-600 font-semibold">
+                <div className="text-sm text-gray-600 font-medium">
                   {stat.label}
                 </div>
               </div>
@@ -149,10 +149,10 @@ export default function PartnershipsSection() {
         </div>
 
         {/* Category Filter */}
-        <div className="flex flex-wrap justify-center gap-4 mb-12">
+        <div className="flex flex-wrap justify-center gap-3 mb-10">
           <button
             onClick={() => setSelectedCategory('All')}
-            className={`px-6 py-3 rounded-full font-semibold transition-all duration-300 ${
+            className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
               selectedCategory === 'All'
                 ? 'bg-brand-600 text-white shadow-lg'
                 : 'bg-white/80 text-gray-600 hover:bg-white hover:text-brand-600 border border-gray-200'
@@ -166,7 +166,7 @@ export default function PartnershipsSection() {
               <button
                 key={category}
                 onClick={() => setSelectedCategory(category)}
-                className={`px-6 py-3 rounded-full font-semibold transition-all duration-300 ${
+                className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
                   selectedCategory === category
                     ? 'bg-brand-600 text-white shadow-lg'
                     : 'bg-white/80 text-gray-600 hover:bg-white hover:text-brand-600 border border-gray-200'
@@ -179,13 +179,13 @@ export default function PartnershipsSection() {
         </div>
 
         {/* Enhanced Partners Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-8 mb-20">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6 mb-16">
           {partnersWithLogos.filter(partner => 
             selectedCategory === 'All' || partner.category === selectedCategory
           ).map((partner, index) => (
             <div
               key={partner._id || partner.id}
-              className={`group relative bg-white/90 backdrop-blur-sm rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all duration-700 transform hover:-translate-y-3 hover:rotate-1 border border-white/30 ${
+              className={`group relative bg-white/90 backdrop-blur-sm rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-500 transform hover:-translate-y-2 hover:rotate-1 border border-white/30 ${
                 isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'
               }`}
               style={{
@@ -206,12 +206,12 @@ export default function PartnershipsSection() {
               {/* Content */}
               <div className="relative z-10 text-center">
                 {/* Logo */}
-                <div className="flex justify-center mb-6 group-hover:scale-110 transition-transform duration-500">
+                <div className="flex justify-center mb-4 group-hover:scale-110 transition-transform duration-500">
                   {partner.logoComponent}
                 </div>
                 
                 {/* University Name */}
-                <h3 className="text-sm font-bold text-gray-900 mb-3 leading-tight group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r transition-all duration-500"
+                <h3 className="text-xs font-semibold text-gray-900 mb-2 leading-tight group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r transition-all duration-500"
                     style={{
                       '--tw-gradient-from': partner.color || '#1F4E79',
                       '--tw-gradient-to': `${partner.color || '#1F4E79'}80`
@@ -221,14 +221,14 @@ export default function PartnershipsSection() {
                 </h3>
                 
                 {/* Category & Country */}
-                <div className="space-y-2">
+                <div className="space-y-1">
                   <div 
-                    className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium text-white opacity-90 group-hover:opacity-100 transition-opacity duration-300"
+                    className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium text-white opacity-90 group-hover:opacity-100 transition-opacity duration-300"
                     style={{ backgroundColor: partner.color || '#1F4E79' }}
                   >
                     {partner.category}
                   </div>
-                  <div className="text-xs text-gray-500 font-medium flex items-center justify-center">
+                  <div className="text-xs text-gray-500 font-normal flex items-center justify-center">
                     <Globe className="w-3 h-3 mr-1" />
                     {partner.country}
                   </div>
@@ -263,29 +263,29 @@ export default function PartnershipsSection() {
                 Premium University Access
               </div>
               
-              <h3 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6 leading-tight">
+              <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4 leading-tight">
                 Ready to Join a <br />
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-600 via-purple-600 to-blue-600">World-Class University?</span>
               </h3>
               
-              <p className="text-lg text-gray-600 mb-8 max-w-3xl mx-auto leading-relaxed">
+              <p className="text-base text-gray-600 mb-6 max-w-2xl mx-auto leading-relaxed">
                 Our exclusive partnerships ensure you get direct access to top universities with streamlined application processes, 
                 scholarship opportunities, and personalized guidance every step of the way.
               </p>
               
               <div className="flex flex-col sm:flex-row gap-6 justify-center">
-                <button className="group px-10 py-4 bg-gradient-to-r from-brand-600 via-purple-600 to-blue-600 text-white rounded-2xl font-bold hover:from-brand-700 hover:via-purple-700 hover:to-blue-700 transition-all duration-500 transform hover:scale-105 shadow-xl hover:shadow-2xl">
+                <button className="group px-8 py-3 bg-gradient-to-r from-brand-600 via-purple-600 to-blue-600 text-white rounded-xl font-semibold hover:from-brand-700 hover:via-purple-700 hover:to-blue-700 transition-all duration-500 transform hover:scale-105 shadow-xl hover:shadow-2xl">
                   <span className="flex items-center justify-center">
-                    <Globe className="w-5 h-5 mr-2 group-hover:rotate-12 transition-transform duration-300" />
+                    <Globe className="w-4 h-4 mr-2 group-hover:rotate-12 transition-transform duration-300" />
                     Explore Universities
                   </span>
                 </button>
                 <button 
                   onClick={handleScheduleClick}
-                  className="group px-10 py-4 bg-white border-2 border-brand-600 text-brand-600 rounded-2xl font-bold hover:bg-brand-600 hover:text-white transition-all duration-500 transform hover:scale-105 shadow-lg hover:shadow-xl"
+                  className="group px-8 py-3 bg-white border-2 border-brand-600 text-brand-600 rounded-xl font-semibold hover:bg-brand-600 hover:text-white transition-all duration-500 transform hover:scale-105 shadow-lg hover:shadow-xl"
                 >
                   <span className="flex items-center justify-center">
-                    <Users className="w-5 h-5 mr-2 group-hover:scale-110 transition-transform duration-300" />
+                    <Users className="w-4 h-4 mr-2 group-hover:scale-110 transition-transform duration-300" />
                     Schedule Consultation
                   </span>
                 </button>
