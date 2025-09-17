@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect, use } from "react"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -9,16 +9,74 @@ import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Checkbox } from "@/components/ui/checkbox"
-import { ArrowLeft, MapPin, Users, Calendar, Clock } from "lucide-react"
+import { ArrowLeft, Calendar, Clock, MapPin, Users } from "lucide-react"
 import { toast } from "sonner"
 import Link from "next/link"
 import ImageBBUpload from "@/components/admin/ImageBBUpload"
 
+interface Event {
+  _id?: string
+  id: string
+  title: string
+  slug: string
+  description: string
+  startAt: string
+  endAt?: string
+  venue?: string
+  city?: string
+  bannerUrl?: string
+  status: string
+  capacity: number
+  seatsRemaining: number
+  // Enhanced fields
+  eventType?: string
+  category?: string
+  targetAudience?: string[]
+  organizer?: string
+  organizerEmail?: string
+  organizerPhone?: string
+  price?: number
+  currency?: string
+  isFree?: boolean
+  registrationDeadline?: string
+  maxAttendees?: number
+  minAttendees?: number
+  requirements?: string[]
+  agenda?: Array<{ time: string; title: string; description?: string; speaker?: string }>
+  speakers?: Array<{ name: string; title: string; company?: string; bio?: string; image?: string; socialLinks?: { linkedin?: string; twitter?: string; website?: string } }>
+  tags?: string[]
+  featured?: boolean
+  priority?: string
+  locationDetails?: {
+    address: string
+    coordinates: { lat: number; lng: number }
+    parking: boolean
+    accessibility: boolean
+    directions: string
+  }
+  onlineDetails?: {
+    platform: string
+    meetingLink: string
+    meetingId: string
+    password: string
+    instructions: string
+  }
+  socialMedia?: {
+    facebook: string
+    twitter: string
+    linkedin: string
+    instagram: string
+  }
+}
+
 type EventStatus = "draft" | "published" | "cancelled" | "completed"
 
-export default function CreateEventPage() {
+export default function EditEventPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = use(params)
   const router = useRouter()
-  const [loading, setLoading] = useState(false)
+  const [event, setEvent] = useState<Event | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [saving, setSaving] = useState(false)
 
   const handleImageUpload = (image: { url: string; name: string; size: number }) => {
     setFormData(prev => ({
@@ -35,6 +93,7 @@ export default function CreateEventPage() {
     }));
     toast.success('Image removed successfully!');
   };
+
   const [formData, setFormData] = useState({
     title: "",
     slug: "",
@@ -80,7 +139,6 @@ export default function CreateEventPage() {
       password: "",
       instructions: ""
     },
-    materials: [] as Array<{ title: string; type: "document" | "video" | "link" | "other"; url: string; description?: string }>,
     socialMedia: {
       facebook: "",
       twitter: "",
@@ -89,64 +147,168 @@ export default function CreateEventPage() {
     }
   })
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setLoading(true)
+  useEffect(() => {
+    if (id) {
+      fetchEvent()
+    }
+  }, [id])
 
+  const fetchEvent = async () => {
     try {
-      const sanitizedSlug = (formData.slug || "").toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
-      const payload: Record<string, unknown> = {
-        ...formData,
-        slug: sanitizedSlug,
-        capacity: Number(formData.capacity),
-        seatsRemaining: Number(formData.seatsRemaining),
-        price: Number(formData.price),
-        maxAttendees: Number(formData.maxAttendees),
-        minAttendees: Number(formData.minAttendees)
-      }
+      const response = await fetch(`/api/admin/events/${id}`)
+      const data = await response.json()
       
-      // Clean up empty fields
-      if (!payload.bannerUrl) delete payload.bannerUrl
-      if (!payload.organizer) delete payload.organizer
-      if (!payload.organizerEmail) delete payload.organizerEmail
-      if (!payload.organizerPhone) delete payload.organizerPhone
-      if (!payload.registrationDeadline) delete payload.registrationDeadline
-      if (Array.isArray(payload.targetAudience) && payload.targetAudience.length === 0) delete payload.targetAudience
-      if (Array.isArray(payload.requirements) && payload.requirements.length === 0) delete payload.requirements
-      if (Array.isArray(payload.agenda) && payload.agenda.length === 0) delete payload.agenda
-      if (Array.isArray(payload.speakers) && payload.speakers.length === 0) delete payload.speakers
-      if (Array.isArray(payload.tags) && payload.tags.length === 0) delete payload.tags
-      if (Array.isArray(payload.materials) && payload.materials.length === 0) delete payload.materials
-      
-      const response = await fetch('/api/admin/events', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      })
-
-      if (response.ok) {
-        toast.success('Event created successfully')
-        router.push('/admin/events')
+      if (data.success) {
+        const event = data.event
+        setEvent(event)
+        setFormData({
+          title: event.title || "",
+          slug: event.slug || "",
+          startAt: event.startAt ? new Date(event.startAt).toISOString().slice(0, 16) : "",
+          endAt: event.endAt ? new Date(event.endAt).toISOString().slice(0, 16) : "",
+          venue: event.venue || "",
+          city: event.city || event.location || "",
+          description: event.description,
+          bannerUrl: event.bannerUrl || event.image || "",
+          status: (event.status || "published") as EventStatus,
+          capacity: event.capacity || 0,
+          seatsRemaining: event.seatsRemaining || 0,
+          // Enhanced fields
+          eventType: event.eventType || "other",
+          category: event.category || "education",
+          targetAudience: event.targetAudience || [],
+          organizer: event.organizer || "",
+          organizerEmail: event.organizerEmail || "",
+          organizerPhone: event.organizerPhone || "",
+          price: event.price || 0,
+          currency: event.currency || "USD",
+          isFree: event.isFree !== undefined ? event.isFree : true,
+          registrationDeadline: event.registrationDeadline ? new Date(event.registrationDeadline).toISOString().slice(0, 16) : "",
+          maxAttendees: event.maxAttendees || 0,
+          minAttendees: event.minAttendees || 1,
+          requirements: event.requirements || [],
+          agenda: event.agenda || [],
+          speakers: event.speakers || [],
+          tags: event.tags || [],
+          featured: event.featured || false,
+          priority: event.priority || "medium",
+          locationDetails: {
+            address: event.locationDetails?.address || "",
+            coordinates: {
+              lat: event.locationDetails?.coordinates?.lat || 0,
+              lng: event.locationDetails?.coordinates?.lng || 0
+            },
+            parking: event.locationDetails?.parking || false,
+            accessibility: event.locationDetails?.accessibility || false,
+            directions: event.locationDetails?.directions || ""
+          },
+          onlineDetails: {
+            platform: event.onlineDetails?.platform || "",
+            meetingLink: event.onlineDetails?.meetingLink || "",
+            meetingId: event.onlineDetails?.meetingId || "",
+            password: event.onlineDetails?.password || "",
+            instructions: event.onlineDetails?.instructions || ""
+          },
+          socialMedia: {
+            facebook: event.socialMedia?.facebook || "",
+            twitter: event.socialMedia?.twitter || "",
+            linkedin: event.socialMedia?.linkedin || "",
+            instagram: event.socialMedia?.instagram || ""
+          }
+        })
       } else {
-        toast.error('Failed to create event')
+        toast.error('Event not found')
+        router.push('/admin/events')
       }
-    } catch {
-      toast.error('Error creating event')
+    } catch (error) {
+      console.error('Error fetching event:', error)
+      toast.error('Failed to fetch event')
+      router.push('/admin/events')
     } finally {
       setLoading(false)
     }
   }
 
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setSaving(true)
+
+    try {
+      const updateData = { ...formData }
+
+      // Clean up empty fields
+      if (!updateData.bannerUrl) delete updateData.bannerUrl
+      if (!updateData.organizer) delete updateData.organizer
+      if (!updateData.organizerEmail) delete updateData.organizerEmail
+      if (!updateData.organizerPhone) delete updateData.organizerPhone
+      if (!updateData.registrationDeadline) delete updateData.registrationDeadline
+      if (updateData.targetAudience && updateData.targetAudience.length === 0) delete updateData.targetAudience
+      if (updateData.requirements && updateData.requirements.length === 0) delete updateData.requirements
+      if (updateData.agenda && updateData.agenda.length === 0) delete updateData.agenda
+      if (updateData.speakers && updateData.speakers.length === 0) delete updateData.speakers
+      if (updateData.tags && updateData.tags.length === 0) delete updateData.tags
+
+      const response = await fetch(`/api/admin/events/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(updateData)
+      })
+
+      const data = await response.json()
+
+      if (data.success) {
+        toast.success('Event updated successfully')
+        router.push('/admin/events')
+      } else {
+        toast.error(data.error || 'Failed to update event')
+      }
+    } catch (error) {
+      console.error('Error updating event:', error)
+      toast.error('Failed to update event')
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-brand-600"></div>
+      </div>
+    )
+  }
+
+  if (!event) {
+    return (
+      <div className="container mx-auto px-4 py-8 max-w-4xl">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold text-gray-900 mb-4">Event not found</h1>
+          <Link href="/admin/events">
+            <Button variant="outline">
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              Back to Events
+            </Button>
+          </Link>
+        </div>
+      </div>
+    )
+  }
+
   return (
-    <div className="space-y-6">
-      <div className="flex items-center gap-4">
+    <div className="container mx-auto px-4 py-8 max-w-4xl">
+      <div className="flex items-center gap-4 mb-8">
         <Link href="/admin/events">
           <Button variant="outline" size="sm">
             <ArrowLeft className="w-4 h-4 mr-2" />
             Back to Events
           </Button>
         </Link>
-        <h1 className="text-3xl font-bold text-gray-900">Create New Event</h1>
+        <div>
+          <h1 className="text-3xl font-bold text-gray-900">Edit Event</h1>
+          <p className="text-gray-600 mt-1">Update event information</p>
+        </div>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
@@ -185,7 +347,7 @@ export default function CreateEventPage() {
             <div className="grid grid-cols-3 gap-4">
               <div>
                 <Label htmlFor="eventType">Event Type</Label>
-                <Select value={formData.eventType} onValueChange={(value) => setFormData({...formData, eventType: value as typeof formData.eventType})}>
+                <Select value={formData.eventType} onValueChange={(value: any) => setFormData({...formData, eventType: value})}>
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
@@ -203,7 +365,7 @@ export default function CreateEventPage() {
               </div>
               <div>
                 <Label htmlFor="category">Category</Label>
-                <Select value={formData.category} onValueChange={(value) => setFormData({...formData, category: value as typeof formData.category})}>
+                <Select value={formData.category} onValueChange={(value: any) => setFormData({...formData, category: value})}>
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
@@ -219,7 +381,7 @@ export default function CreateEventPage() {
               </div>
               <div>
                 <Label htmlFor="priority">Priority</Label>
-                <Select value={formData.priority} onValueChange={(value) => setFormData({...formData, priority: value as typeof formData.priority})}>
+                <Select value={formData.priority} onValueChange={(value: any) => setFormData({...formData, priority: value})}>
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
@@ -722,8 +884,8 @@ export default function CreateEventPage() {
               Cancel
             </Button>
           </Link>
-          <Button type="submit" disabled={loading} className="bg-brand-600 hover:bg-brand-700">
-            {loading ? 'Creating...' : 'Create Event'}
+          <Button type="submit" disabled={saving} className="bg-brand-600 hover:bg-brand-700">
+            {saving ? 'Saving...' : 'Save Changes'}
           </Button>
         </div>
       </form>
