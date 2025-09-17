@@ -13,6 +13,7 @@ import { ArrowLeft, Save, Eye } from 'lucide-react';
 import Link from 'next/link';
 import { CreateBlogRequest, blogCategories } from '@/lib/models/Blog';
 import { toast } from 'sonner';
+import ImageBBUpload from '@/components/admin/ImageBBUpload';
 
 export default function CreateBlogPage() {
   const router = useRouter();
@@ -25,6 +26,7 @@ export default function CreateBlogPage() {
     category: '',
     tags: [],
     image: '',
+    featuredImage: '',
     featured: false,
     status: 'draft'
   });
@@ -45,6 +47,22 @@ export default function CreateBlogPage() {
       }));
       setTagInput('');
     }
+  };
+
+  const handleImageUpload = (image: { url: string; name: string; size: number }) => {
+    setFormData(prev => ({
+      ...prev,
+      featuredImage: image.url
+    }));
+    toast.success('Image uploaded successfully!');
+  };
+
+  const handleImageRemove = () => {
+    setFormData(prev => ({
+      ...prev,
+      featuredImage: ''
+    }));
+    toast.success('Image removed successfully!');
   };
 
   const handleRemoveTag = (tagToRemove: string) => {
@@ -163,6 +181,17 @@ export default function CreateBlogPage() {
                   value={formData.author}
                   onChange={(e) => handleInputChange('author', e.target.value)}
                   placeholder="Author name"
+                  className="mt-1"
+                />
+              </div>
+              
+              <div>
+                <Label>Featured Image</Label>
+                <ImageBBUpload
+                  onUpload={handleImageUpload}
+                  onRemove={handleImageRemove}
+                  currentImage={formData.featuredImage}
+                  label="Featured Image"
                   className="mt-1"
                 />
               </div>

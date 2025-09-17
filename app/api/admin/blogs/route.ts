@@ -12,6 +12,7 @@ const createBlogSchema = z.object({
   category: z.string().min(1, 'Category is required'),
   tags: z.array(z.string()),
   image: z.string().url('Invalid image URL'),
+  featuredImage: z.string().url('Invalid featured image URL').optional(),
   featured: z.boolean(),
   status: z.enum(['draft', 'published'])
 });

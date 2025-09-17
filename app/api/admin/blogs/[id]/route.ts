@@ -12,6 +12,7 @@ const updateBlogSchema = z.object({
   category: z.string().min(1, 'Category is required').optional(),
   tags: z.array(z.string()).optional(),
   image: z.string().url('Invalid image URL').optional(),
+  featuredImage: z.string().url('Invalid featured image URL').optional(),
   featured: z.boolean().optional(),
   status: z.enum(['draft', 'published', 'archived']).optional(),
   slug: z.string().optional(),

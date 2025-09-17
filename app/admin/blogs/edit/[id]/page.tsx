@@ -13,6 +13,8 @@ import { ArrowLeft, Save, Eye, Trash2 } from 'lucide-react';
 import Link from 'next/link';
 import { Blog, UpdateBlogRequest, blogCategories } from '@/lib/models/Blog';
 import { toast } from 'sonner';
+import ImageBBUpload from '@/components/admin/ImageBBUpload';
+import Image from 'next/image';
 
 export default function EditBlogPage() {
   const router = useRouter();
@@ -31,6 +33,7 @@ export default function EditBlogPage() {
     category: '',
     tags: [],
     image: '',
+    featuredImage: '',
     featured: false,
     status: 'draft'
   });
@@ -58,6 +61,7 @@ export default function EditBlogPage() {
           category: blogData.category || '',
           tags: blogData.tags || [],
           image: blogData.image || '',
+          featuredImage: blogData.featuredImage || '',
           featured: blogData.featured || false,
           status: blogData.status || 'draft'
         });
@@ -96,6 +100,22 @@ export default function EditBlogPage() {
       ...prev,
       tags: (prev.tags || []).filter(tag => tag !== tagToRemove)
     }));
+  };
+
+  const handleImageUpload = (image: { url: string; name: string; size: number }) => {
+    setFormData(prev => ({
+      ...prev,
+      featuredImage: image.url
+    }));
+    toast.success('Image uploaded successfully!');
+  };
+
+  const handleImageRemove = () => {
+    setFormData(prev => ({
+      ...prev,
+      featuredImage: ''
+    }));
+    toast.success('Image removed successfully!');
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
@@ -289,6 +309,16 @@ export default function EditBlogPage() {
                   className="mt-1"
                 />
               </div>
+              
+              <div>
+                <Label>Featured Image</Label>
+                <ImageBBUpload
+                  onUpload={handleImageUpload}
+                  onRemove={handleImageRemove}
+                  currentImage={formData.featuredImage}
+                  className="mt-1"
+                />
+              </div>
             </CardContent>
           </Card>
 
@@ -448,7 +478,9 @@ export default function EditBlogPage() {
               </div>
               {formData.image && (
                 <div className="mt-3">
-                  <img
+                  <Image
+                    width={400}
+                    height={300}
                     src={formData.image}
                     alt="Preview"
                     className="w-full h-32 object-cover rounded-md border"

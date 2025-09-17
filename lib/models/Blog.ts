@@ -10,6 +10,7 @@ export interface Blog {
   category: string;
   tags: string[];
   image: string;
+  featuredImage?: string;
   featured: boolean;
   readTime: string;
   status: 'draft' | 'published' | 'archived';
@@ -25,6 +26,7 @@ export interface CreateBlogRequest {
   category: string;
   tags: string[];
   image: string;
+  featuredImage?: string;
   featured: boolean;
   status: 'draft' | 'published';
 }

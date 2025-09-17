@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Calendar, User, ArrowRight, Clock } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import blogsData from "@/data/blogs-data.json";
+import Image from "next/image";
 
 export const metadata: Metadata = {
   title: "Blogs | Flyover Consultancy",
@@ -14,7 +14,20 @@ export const metadata: Metadata = {
   keywords: "study abroad blog, university tips, visa guides, student success stories, education insights",
 };
 
-const blogPosts = blogsData;
+type BlogPost = {
+  _id: string;
+  title: string;
+  slug: string;
+  excerpt: string;
+  content: string;
+  author: string;
+  category: string;
+  tags: string[];
+  featuredImage?: string;
+  publishedAt: string;
+  readTime: string;
+  status: string;
+};
 
 const categories = [
   "All Categories",
@@ -35,7 +48,26 @@ function formatDate(dateString: string) {
   });
 }
 
-export default function BlogsPage() {
+async function getBlogs(): Promise<BlogPost[]> {
+  try {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/blogs`, {
+      cache: 'no-store'
+    });
+    
+    if (!response.ok) {
+      throw new Error('Failed to fetch blogs');
+    }
+    
+    const data = await response.json();
+    return data.blogs || [];
+  } catch (error) {
+    console.error('Error fetching blogs:', error);
+    return [];
+  }
+}
+
+export default async function BlogsPage() {
+  const blogPosts = await getBlogs();
   return (
     <div className="min-h-screen">
       <PageHeader
@@ -71,8 +103,18 @@ export default function BlogsPage() {
             <Card className="overflow-hidden hover:shadow-lg transition-shadow duration-300">
               <div className="md:flex">
                 <div className="md:w-1/2">
-                  <div className="h-64 md:h-full bg-gradient-to-br from-brand-100 to-brand-200 flex items-center justify-center">
-                    <div className="text-brand-600 text-6xl font-bold opacity-20">FEATURED</div>
+                  <div className="h-64 md:h-full bg-gradient-to-br from-brand-100 to-brand-200 flex items-center justify-center overflow-hidden">
+                    {blogPosts[0].featuredImage ? (
+                      <Image
+                        src={blogPosts[0].featuredImage} 
+                        alt={blogPosts[0].title}
+                        className="w-full h-full object-cover"
+                        width={400}
+                        height={300}
+                      />
+                    ) : (
+                      <div className="text-brand-600 text-6xl font-bold opacity-20">FEATURED</div>
+                    )}
                   </div>
                 </div>
                 <div className="md:w-1/2 p-8">
@@ -116,10 +158,20 @@ export default function BlogsPage() {
           <div className="mb-12">
             <h2 className="text-2xl font-bold text-gray-900 mb-8">Latest Articles</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {blogPosts.slice(1).map((post) => (
-                <Card key={post.id} className="overflow-hidden hover:shadow-lg transition-shadow duration-300 group">
-                  <div className="h-48 bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
-                    <div className="text-gray-400 text-4xl font-bold opacity-30">{post.category.toUpperCase()}</div>
+              {blogPosts.slice(1).map((post: BlogPost) => (
+                <Card key={post._id} className="overflow-hidden hover:shadow-lg transition-shadow duration-300 group">
+                  <div className="h-48 bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center overflow-hidden">
+                    {post.featuredImage ? (
+                      <Image
+                        width={400}
+                        height={300}
+                        src={post.featuredImage} 
+                        alt={post.title}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      />
+                    ) : (
+                      <div className="text-gray-400 text-4xl font-bold opacity-30">{post.category.toUpperCase()}</div>
+                    )}
                   </div>
                   <CardHeader className="pb-3">
                     <div className="flex items-center gap-2 mb-2">

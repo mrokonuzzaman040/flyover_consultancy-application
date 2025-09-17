@@ -99,7 +99,9 @@ export default function EditServicePage() {
         router.push('/admin/services')
       }
     } catch (error) {
-      toast.error('Error fetching service')
+      toast.error('Error fetching service', {
+        description: error instanceof Error ? error.message : 'Unknown error'
+      })
       router.push('/admin/services')
     } finally {
       setLoading(false)
@@ -135,7 +137,9 @@ export default function EditServicePage() {
         toast.error(errorData.error || 'Failed to update service')
       }
     } catch (error) {
-      toast.error('Error updating service')
+      toast.error('Error updating service', {
+        description: error instanceof Error ? error.message : 'Unknown error'
+      })
     } finally {
       setSaving(false)
     }

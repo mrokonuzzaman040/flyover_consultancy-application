@@ -5,8 +5,22 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { CalendarDays, Clock, User, ArrowLeft, Share2, BookOpen, Eye, Heart, MessageCircle } from 'lucide-react'
 import Link from 'next/link'
-import blogsData from '@/data/blogs-data.json'
 import Image from 'next/image'
+
+type BlogPost = {
+  _id: string;
+  title: string;
+  slug: string;
+  excerpt: string;
+  content: string;
+  author: string;
+  category: string;
+  tags: string[];
+  featuredImage?: string;
+  publishedAt: string;
+  readTime: string;
+  status: string;
+};
 
 interface BlogPostPageProps {
   params: Promise<{
@@ -14,9 +28,28 @@ interface BlogPostPageProps {
   }>
 }
 
+async function getAllBlogs(): Promise<BlogPost[]> {
+  try {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/blogs`, {
+      cache: 'no-store'
+    });
+    
+    if (!response.ok) {
+      throw new Error('Failed to fetch blogs');
+    }
+    
+    const data = await response.json();
+    return data.blogs || [];
+  } catch (error) {
+    console.error('Error fetching blogs:', error);
+    return [];
+  }
+}
+
 // Generate static params for all blog posts
 export async function generateStaticParams() {
-  return blogsData.map((post) => ({
+  const blogs = await getAllBlogs();
+  return blogs.map((post: BlogPost) => ({
     slug: post.slug,
   }))
 }
@@ -24,7 +57,8 @@ export async function generateStaticParams() {
 // Generate metadata for each blog post
 export async function generateMetadata({ params }: BlogPostPageProps): Promise<Metadata> {
   const { slug } = await params
-  const post = blogsData.find((post) => post.slug === slug)
+  const blogs = await getAllBlogs();
+  const post = blogs.find((post: BlogPost) => post.slug === slug)
   
   if (!post) {
     return {
@@ -36,6 +70,7 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
   return {
     title: `${post.title} | Flyover Education`,
     description: post.excerpt,
+    keywords: post.tags?.join(', '),
     openGraph: {
       title: post.title,
       description: post.excerpt,
@@ -44,16 +79,36 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
       authors: [post.author],
       tags: post.tags,
     },
+    twitter: {
+      card: 'summary_large_image',
+      title: post.title,
+      description: post.excerpt,
+    },
   }
 }
 
-function getBlogPost(slug: string) {
-  return blogsData.find((post) => post.slug === slug)
+async function getBlogPost(slug: string): Promise<BlogPost | null> {
+  try {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/blogs/${slug}`, {
+      cache: 'no-store'
+    });
+    
+    if (!response.ok) {
+      return null;
+    }
+    
+    const data = await response.json();
+    return data.blog || null;
+  } catch (error) {
+    console.error('Error fetching blog:', error);
+    return null;
+  }
 }
 
-function getRelatedPosts(currentSlug: string, category: string) {
-  return blogsData
-    .filter((post) => post.slug !== currentSlug && post.category === category)
+async function getRelatedPosts(currentSlug: string, category: string): Promise<BlogPost[]> {
+  const blogs = await getAllBlogs();
+  return blogs
+    .filter((post: BlogPost) => post.slug !== currentSlug && post.category === category)
     .slice(0, 3)
 }
 
@@ -67,13 +122,13 @@ function formatDate(dateString: string) {
 
 export default async function BlogPostPage({ params }: BlogPostPageProps) {
   const { slug } = await params
-  const post = getBlogPost(slug)
+  const post = await getBlogPost(slug)
   
   if (!post) {
     notFound()
   }
 
-  const relatedPosts = getRelatedPosts(post.slug, post.category)
+  const relatedPosts = await getRelatedPosts(post.slug, post.category)
 
   return (
     <div className="min-h-screen bg-white">
@@ -140,7 +195,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
       </div>
 
       {/* Featured Image */}
-      {post.image && (
+      {post.featuredImage && (
         <div className="relative -mt-16 z-10">
           <div className="container mx-auto px-4">
             <div className="max-w-5xl mx-auto">
@@ -148,7 +203,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                 <Image
                   width={1000}
                   height={600}
-                  src={post.image}
+                  src={post.featuredImage}
                   alt={post.title}
                   className="w-full h-64 md:h-96 object-cover rounded-xl"
                 />
@@ -277,19 +332,34 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
               
               <div className="grid md:grid-cols-3 gap-8">
                 {relatedPosts.map((relatedPost, index) => (
-                  <Card key={relatedPost.id} className="group hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 border-0 shadow-lg bg-white overflow-hidden">
+                  <Card key={relatedPost._id} className="group hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 border-0 shadow-lg bg-white overflow-hidden">
                     <CardContent className="p-0">
                       <div className="relative aspect-video bg-gradient-to-br from-brand-500 via-brand-600 to-brand-700 flex items-center justify-center overflow-hidden">
-                        <div className="absolute inset-0 bg-black/20"></div>
-                        <div className="relative z-10 text-center text-white">
-                          <div className="text-5xl font-bold mb-2 opacity-90">
-                            {relatedPost.category.charAt(0)}
-                          </div>
-                          <div className="text-sm font-medium opacity-80">
-                            {relatedPost.category}
-                          </div>
-                        </div>
-                        <div className="absolute top-4 right-4">
+                        {relatedPost.featuredImage ? (
+                          <>
+                            <Image 
+                              src={relatedPost.featuredImage} 
+                              width={400}
+                              height={300}
+                              alt={relatedPost.title}
+                              className="w-full h-full object-cover"
+                            />
+                            <div className="absolute inset-0 bg-black/20"></div>
+                          </>
+                        ) : (
+                          <>
+                            <div className="absolute inset-0 bg-black/20"></div>
+                            <div className="relative z-10 text-center text-white">
+                              <div className="text-5xl font-bold mb-2 opacity-90">
+                                {relatedPost.category.charAt(0)}
+                              </div>
+                              <div className="text-sm font-medium opacity-80">
+                                {relatedPost.category}
+                              </div>
+                            </div>
+                          </>
+                        )}
+                        <div className="absolute top-4 right-4 z-20">
                           <Badge className="bg-white/20 text-white border-white/30">
                             #{index + 1}
                           </Badge>
