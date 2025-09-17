@@ -14,14 +14,28 @@ interface Destination {
   id: string
   country: string
   slug: string
-  students?: string
+  flag?: string
+  description?: string
   hero?: string
+  color?: string
+  students?: string
+  averageCost?: string
+  workRights?: string
+  popularCities?: string[]
+  highlights?: string[]
+  popularCourses: string[]
+  universities?: {
+    name: string
+    image?: string
+    ranking?: string
+    location?: string
+    courses: string[]
+  }[]
   overviewMD?: string
   costsMD?: string
   intakesMD?: string
   visaMD?: string
   scholarshipsMD?: string
-  popularCourses: string[]
   faqs?: {
     question: string
     answer: string
@@ -119,9 +133,17 @@ export default function AdminDestinationsPage() {
         <DataTable
           columns={[
             { key: 'country', header: 'Country', render: (d: Destination) => (
-              <div>
-                <div className="font-medium text-slate-900">{d.country}</div>
-                <div className="text-xs text-slate-500">/{d.slug}</div>
+              <div className="flex items-center gap-2">
+                {d.flag && <span className="text-lg">{d.flag}</span>}
+                <div>
+                  <div className="font-medium text-slate-900">{d.country}</div>
+                  <div className="text-xs text-slate-500">/{d.slug}</div>
+                </div>
+              </div>
+            ) },
+            { key: 'description', header: 'Description', hideOn: 'lg', render: (d: Destination) => (
+              <div className="max-w-xs">
+                <p className="text-sm text-slate-600 truncate">{d.description || 'No description'}</p>
               </div>
             ) },
             { key: 'students', header: 'Students', hideOn: 'md', render: (d: Destination) => (
@@ -130,10 +152,16 @@ export default function AdminDestinationsPage() {
                 <span className="text-sm font-medium">{formatStudentCount(d.students)}</span>
               </div>
             ) },
+            { key: 'cities', header: 'Popular Cities', hideOn: 'sm', render: (d: Destination) => (
+              <div className="flex flex-wrap gap-1">
+                {(d.popularCities || []).slice(0,2).map((c,i) => (<span key={i} className="text-xs px-2 py-0.5 rounded bg-blue-100 text-blue-700">{c}</span>))}
+                {(d.popularCities || []).length > 2 && (<span className="text-xs px-2 py-0.5 rounded bg-blue-100 text-blue-700">+{(d.popularCities || []).length - 2} more</span>)}
+              </div>
+            ) },
             { key: 'courses', header: 'Popular Courses', hideOn: 'sm', render: (d: Destination) => (
               <div className="flex flex-wrap gap-1">
-                {d.popularCourses.slice(0,3).map((c,i) => (<span key={i} className="text-xs px-2 py-0.5 rounded bg-slate-100 text-slate-700">{c}</span>))}
-                {d.popularCourses.length > 3 && (<span className="text-xs px-2 py-0.5 rounded bg-slate-100 text-slate-700">+{d.popularCourses.length - 3} more</span>)}
+                {d.popularCourses.slice(0,2).map((c,i) => (<span key={i} className="text-xs px-2 py-0.5 rounded bg-slate-100 text-slate-700">{c}</span>))}
+                {d.popularCourses.length > 2 && (<span className="text-xs px-2 py-0.5 rounded bg-slate-100 text-slate-700">+{d.popularCourses.length - 2} more</span>)}
               </div>
             ) },
             { key: 'createdAt', header: 'Created', hideOn: 'lg', render: (d: Destination) => formatDate(d.createdAt) },

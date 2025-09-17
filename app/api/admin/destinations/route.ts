@@ -6,13 +6,28 @@ import { Destination } from "@/lib/models/Destination";
 const schema = z.object({
   country: z.string().min(1),
   slug: z.string().min(1).regex(/^[a-zA-Z0-9]+(?:-[a-zA-Z0-9]+)*$/).transform((s)=>s.toLowerCase()),
+  flag: z.string().optional(),
+  description: z.string().optional(),
   hero: z.string().optional().nullable(),
+  color: z.string().optional(),
+  students: z.string().optional(),
+  averageCost: z.string().optional(),
+  workRights: z.string().optional(),
+  popularCities: z.array(z.string()).default([]),
+  highlights: z.array(z.string()).default([]),
+  popularCourses: z.array(z.string()).default([]),
+  universities: z.array(z.object({
+    name: z.string(),
+    image: z.string().optional(),
+    ranking: z.string().optional(),
+    location: z.string().optional(),
+    courses: z.array(z.string()).default([])
+  })).default([]),
   overviewMD: z.string().optional().nullable(),
   costsMD: z.string().optional().nullable(),
   intakesMD: z.string().optional().nullable(),
   visaMD: z.string().optional().nullable(),
   scholarshipsMD: z.string().optional().nullable(),
-  popularCourses: z.array(z.string()).default([]),
   faqs: z.array(z.object({ question: z.string(), answer: z.string() })).default([]),
 });
 

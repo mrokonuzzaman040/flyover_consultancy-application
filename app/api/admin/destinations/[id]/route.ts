@@ -7,13 +7,28 @@ import { Destination } from "@/lib/models/Destination";
 const patchSchema = z.object({
   country: z.string().min(1).optional(),
   slug: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/).optional(),
+  flag: z.string().optional(),
+  description: z.string().optional(),
   hero: z.string().optional().nullable(),
+  color: z.string().optional(),
+  students: z.string().optional(),
+  averageCost: z.string().optional(),
+  workRights: z.string().optional(),
+  popularCities: z.array(z.string()).optional(),
+  highlights: z.array(z.string()).optional(),
+  popularCourses: z.array(z.string()).optional(),
+  universities: z.array(z.object({
+    name: z.string(),
+    image: z.string().optional(),
+    ranking: z.string().optional(),
+    location: z.string().optional(),
+    courses: z.array(z.string()).default([])
+  })).optional(),
   overviewMD: z.string().optional().nullable(),
   costsMD: z.string().optional().nullable(),
   intakesMD: z.string().optional().nullable(),
   visaMD: z.string().optional().nullable(),
   scholarshipsMD: z.string().optional().nullable(),
-  popularCourses: z.array(z.string()).optional(),
   faqs: z.array(z.object({ question: z.string(), answer: z.string() })).optional(),
 });
 

@@ -36,11 +36,11 @@ interface Destination {
   workRights?: string
   color?: string
   hero?: string
-  overviewText?: string
-  costsText?: string
-  intakesText?: string
-  visaText?: string
-  scholarshipsText?: string
+  overviewMD?: string
+  costsMD?: string
+  intakesMD?: string
+  visaMD?: string
+  scholarshipsMD?: string
   popularCourses: string[]
   faqs?: {
     question: string
@@ -69,11 +69,11 @@ export default function EditDestinationPage() {
     workRights: "",
     color: "",
     hero: "",
-    overviewText: "",
-    costsText: "",
-    intakesText: "",
-    visaText: "",
-    scholarshipsText: "",
+    overviewMD: "",
+    costsMD: "",
+    intakesMD: "",
+    visaMD: "",
+    scholarshipsMD: "",
     popularCourses: [] as string[],
     faqs: ""
   })
@@ -102,7 +102,7 @@ export default function EditDestinationPage() {
     try {
       const response = await fetch(`/api/admin/destinations/${id}`)
       if (response.ok) {
-        const destination = await response.json()
+        const { destination } = await response.json()
         setDestination(destination)
         setFormData({
           country: destination.country,
@@ -118,11 +118,11 @@ export default function EditDestinationPage() {
           workRights: destination.workRights || "",
           color: destination.color || "",
           hero: destination.hero || "",
-          overviewText: destination.overviewText || "",
-          costsText: destination.costsText || "",
-          intakesText: destination.intakesText || "",
-          visaText: destination.visaText || "",
-          scholarshipsText: destination.scholarshipsText || "",
+          overviewMD: destination.overviewMD || "# Overview\n\nCanada offers world-class education with excellent opportunities for international students. The country is known for its high-quality universities, diverse programs, and welcoming environment for students from around the world.",
+          costsMD: destination.costsMD || "# Costs\n\n## Tuition Fees\n- Undergraduate: USD $15,000 - $30,000 per year\n- Graduate: USD $20,000 - $35,000 per year\n\n## Living Expenses\n- Accommodation: USD $8,000 - $15,000 per year\n- Food: USD $2,500 - $4,000 per year\n- Transportation: USD $1,200 - $2,000 per year",
+          intakesMD: destination.intakesMD || "# Intakes\n\n## Main Intakes\n- **Fall Intake (September)**: Primary intake with most programs available\n- **Winter Intake (January)**: Secondary intake with limited programs\n- **Summer Intake (May)**: Available for select programs\n\n## Application Deadlines\n- Fall: March - June\n- Winter: September - November\n- Summer: January - March",
+          visaMD: destination.visaMD || "# Visa Information\n\n## Study Permit Requirements\n- Letter of acceptance from designated learning institution\n- Proof of financial support\n- Clean criminal record\n- Medical exam (if required)\n\n## Processing Time\n- 4-12 weeks depending on country of residence\n\n## Work Rights\n- 20 hours per week during studies\n- Full-time during scheduled breaks",
+          scholarshipsMD: destination.scholarshipsMD || "# Scholarships\n\n## Government Scholarships\n- **Vanier Canada Graduate Scholarships**: Up to USD $50,000\n- **Canada Graduate Scholarships**: USD $17,500 - $35,000\n\n## University Scholarships\n- Merit-based scholarships: USD $1,000 - $10,000\n- International student scholarships\n- Program-specific awards\n\n## External Scholarships\n- Various private and organizational scholarships available",
           popularCourses: destination.popularCourses || [],
           faqs: destination.faqs ? JSON.stringify(destination.faqs, null, 2) : ""
         })
@@ -527,28 +527,28 @@ export default function EditDestinationPage() {
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <Label htmlFor="overviewText">Overview Content</Label>
-              {viewMode ? (
-                <div className="p-2 bg-gray-50 rounded border min-h-[100px] whitespace-pre-wrap">{formData.overviewText || 'No overview content'}</div>
-              ) : (
-                <Textarea
-                  id="overviewText"
-                  value={formData.overviewText}
-                  onChange={(e) => setFormData({...formData, overviewText: e.target.value})}
+              <Label htmlFor="overviewMD">Overview Content</Label>
+                {viewMode ? (
+                  <div className="p-2 bg-gray-50 rounded border min-h-[100px] whitespace-pre-wrap">{formData.overviewMD || 'No overview content'}</div>
+                ) : (
+                  <Textarea
+                    id="overviewMD"
+                    value={formData.overviewMD}
+                    onChange={(e) => setFormData({...formData, overviewMD: e.target.value})}
                   placeholder="Overview content for the destination..."
                   rows={4}
                 />
               )}
             </div>
             <div>
-              <Label htmlFor="costsText">Costs Information</Label>
-              {viewMode ? (
-                <div className="p-2 bg-gray-50 rounded border min-h-[100px] whitespace-pre-wrap">{formData.costsText || 'No costs information'}</div>
-              ) : (
-                <Textarea
-                  id="costsText"
-                  value={formData.costsText}
-                  onChange={(e) => setFormData({...formData, costsText: e.target.value})}
+              <Label htmlFor="costsMD">Costs Information</Label>
+                {viewMode ? (
+                  <div className="p-2 bg-gray-50 rounded border min-h-[100px] whitespace-pre-wrap">{formData.costsMD || 'No costs information'}</div>
+                ) : (
+                  <Textarea
+                    id="costsMD"
+                    value={formData.costsMD}
+                    onChange={(e) => setFormData({...formData, costsMD: e.target.value})}
                   placeholder="Cost information for the destination..."
                   rows={4}
                 />
@@ -558,28 +558,28 @@ export default function EditDestinationPage() {
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <Label htmlFor="intakesText">Intakes Information</Label>
-              {viewMode ? (
-                <div className="p-2 bg-gray-50 rounded border min-h-[100px] whitespace-pre-wrap">{formData.intakesText || 'No intakes information'}</div>
-              ) : (
-                <Textarea
-                  id="intakesText"
-                  value={formData.intakesText}
-                  onChange={(e) => setFormData({...formData, intakesText: e.target.value})}
+              <Label htmlFor="intakesMD">Intakes Information</Label>
+                {viewMode ? (
+                  <div className="p-2 bg-gray-50 rounded border min-h-[100px] whitespace-pre-wrap">{formData.intakesMD || 'No intakes information'}</div>
+                ) : (
+                  <Textarea
+                    id="intakesMD"
+                    value={formData.intakesMD}
+                    onChange={(e) => setFormData({...formData, intakesMD: e.target.value})}
                   placeholder="Intake information for the destination..."
                   rows={4}
                 />
               )}
             </div>
             <div>
-              <Label htmlFor="visaText">Visa Information</Label>
-              {viewMode ? (
-                <div className="p-2 bg-gray-50 rounded border min-h-[100px] whitespace-pre-wrap">{formData.visaText || 'No visa information'}</div>
-              ) : (
-                <Textarea
-                  id="visaText"
-                  value={formData.visaText}
-                  onChange={(e) => setFormData({...formData, visaText: e.target.value})}
+              <Label htmlFor="visaMD">Visa Information</Label>
+                {viewMode ? (
+                  <div className="p-2 bg-gray-50 rounded border min-h-[100px] whitespace-pre-wrap">{formData.visaMD || 'No visa information'}</div>
+                ) : (
+                  <Textarea
+                    id="visaMD"
+                    value={formData.visaMD}
+                    onChange={(e) => setFormData({...formData, visaMD: e.target.value})}
                   placeholder="Visa information for the destination..."
                   rows={4}
                 />
@@ -588,14 +588,14 @@ export default function EditDestinationPage() {
           </div>
 
           <div>
-            <Label htmlFor="scholarshipsText">Scholarships Information</Label>
-            {viewMode ? (
-              <div className="p-2 bg-gray-50 rounded border min-h-[80px] whitespace-pre-wrap">{formData.scholarshipsText || 'No scholarships information'}</div>
-            ) : (
-              <Textarea
-                id="scholarshipsText"
-                value={formData.scholarshipsText}
-                onChange={(e) => setFormData({...formData, scholarshipsText: e.target.value})}
+            <Label htmlFor="scholarshipsMD">Scholarships Information</Label>
+                {viewMode ? (
+                  <div className="p-2 bg-gray-50 rounded border min-h-[80px] whitespace-pre-wrap">{formData.scholarshipsMD || 'No scholarships information'}</div>
+                ) : (
+                  <Textarea
+                    id="scholarshipsMD"
+                    value={formData.scholarshipsMD}
+                    onChange={(e) => setFormData({...formData, scholarshipsMD: e.target.value})}
                 placeholder="Scholarship information for the destination..."
                 rows={3}
               />
