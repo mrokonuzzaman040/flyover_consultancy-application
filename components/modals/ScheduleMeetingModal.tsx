@@ -7,6 +7,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { toast } from 'sonner'
+import { getErrorMessage } from '@/lib/utils/error-handling'
 
 interface ScheduleMeetingModalProps {
   isOpen: boolean
@@ -118,7 +119,7 @@ export default function ScheduleMeetingModal({ isOpen, onClose }: ScheduleMeetin
         onClose()
       } else {
         console.error('API Error:', responseData)
-        toast.error(responseData.message || responseData.error || 'Failed to schedule meeting')
+        toast.error(getErrorMessage(responseData, 'Failed to schedule meeting'))
       }
     } catch (error) {
       console.error('Error scheduling meeting:', error)

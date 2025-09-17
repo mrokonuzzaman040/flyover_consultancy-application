@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { toast } from "sonner";
 import { ArrowLeft, Calendar, MapPin, Clock, Users } from 'lucide-react';
+import { getApiErrorMessage } from '@/lib/utils/error-handling';
 
 interface Event {
   _id?: string;
@@ -143,8 +144,8 @@ export default function EventRegistrationPage({ params }: { params: Promise<{ sl
         toast.success('Registration successful! You will receive a confirmation email shortly.');
         router.push('/events');
       } else {
-        const errorData = await response.json();
-        toast.error(errorData.error || 'Registration failed. Please try again.');
+        const errorMessage = await getApiErrorMessage(response, 'Registration failed. Please try again.');
+        toast.error(errorMessage);
       }
     } catch (error) {
       console.error('Registration error:', error);
