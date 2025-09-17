@@ -105,6 +105,7 @@ export default function EditBlogPage() {
   const handleImageUpload = (image: { url: string; name: string; size: number }) => {
     setFormData(prev => ({
       ...prev,
+      image: image.url,
       featuredImage: image.url
     }));
     toast.success('Image uploaded successfully!');
@@ -113,6 +114,7 @@ export default function EditBlogPage() {
   const handleImageRemove = () => {
     setFormData(prev => ({
       ...prev,
+      image: '',
       featuredImage: ''
     }));
     toast.success('Image removed successfully!');
@@ -315,7 +317,8 @@ export default function EditBlogPage() {
                 <ImageBBUpload
                   onUpload={handleImageUpload}
                   onRemove={handleImageRemove}
-                  currentImage={formData.featuredImage}
+                  currentImage={formData.image || formData.featuredImage}
+                  label="Upload Featured Image"
                   className="mt-1"
                 />
               </div>
@@ -471,10 +474,17 @@ export default function EditBlogPage() {
                 <Input
                   id="image"
                   value={formData.image}
-                  onChange={(e) => handleInputChange('image', e.target.value)}
-                  placeholder="https://example.com/image.jpg"
+                  onChange={(e) => {
+                    const url = e.target.value;
+                    handleInputChange('image', url);
+                    handleInputChange('featuredImage', url);
+                  }}
+                  placeholder="https://example.com/image.jpg or upload above"
                   className="mt-1"
                 />
+                <p className="text-xs text-gray-500 mt-1">
+                  You can either upload an image above or enter a URL here manually
+                </p>
               </div>
               {formData.image && (
                 <div className="mt-3">
