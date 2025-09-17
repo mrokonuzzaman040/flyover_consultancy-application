@@ -7,6 +7,7 @@ const schema = z.object({
   country: z.string().min(1),
   slug: z.string().min(1).regex(/^[a-zA-Z0-9]+(?:-[a-zA-Z0-9]+)*$/).transform((s)=>s.toLowerCase()),
   flag: z.string().optional(),
+  image: z.string().optional(),
   description: z.string().optional(),
   hero: z.string().optional().nullable(),
   color: z.string().optional(),

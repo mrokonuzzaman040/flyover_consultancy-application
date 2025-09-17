@@ -60,21 +60,21 @@ const stats = [
   { icon: Star, label: "Success Rate", value: "98%" }
 ];
 
-let cachedDestinations: Destination[] | null = null;
+// let cachedDestinations: Destination[] | null = null;
 
-async function loadFallbackDestinations() {
-  if (cachedDestinations) return cachedDestinations;
+// async function loadFallbackDestinations() {
+//   if (cachedDestinations) return cachedDestinations;
 
-  try {
-    const testData = await import('@/data/destinations-test-data.json');
-    cachedDestinations = testData.destinations || [];
-    return cachedDestinations;
-  } catch (error) {
-    console.error('Error loading test data:', error);
-    cachedDestinations = [];
-    return cachedDestinations;
-  }
-}
+//   try {
+//     const testData = await import('@/data/destinations-test-data.json');
+//     cachedDestinations = testData.destinations || [];
+//     return cachedDestinations;
+//   } catch (error) {
+//     console.error('Error loading test data:', error);
+//     cachedDestinations = [];
+//     return cachedDestinations;
+//   }
+// }
 
 async function getDestinations() {
   if (process.env.MONGODB_URI) {
@@ -93,7 +93,7 @@ async function getDestinations() {
     }
   }
 
-  return loadFallbackDestinations();
+  // return loadFallbackDestinations();
 }
 
 export default async function DestinationsPage() {

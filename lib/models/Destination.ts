@@ -20,6 +20,7 @@ export interface IDestination extends Document {
   slug: string;
   country: string;
   flag?: string;
+  image?: string;
   description?: string;
   hero?: string;
   color?: string;
@@ -71,6 +72,7 @@ const DestinationSchema = new Schema<IDestination>({
     type: String,
     trim: true
   },
+  image: { type: String },
   description: { type: String },
   hero: { type: String },
   color: { type: String },

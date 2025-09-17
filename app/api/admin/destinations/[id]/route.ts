@@ -8,6 +8,7 @@ const patchSchema = z.object({
   country: z.string().min(1).optional(),
   slug: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/).optional(),
   flag: z.string().optional(),
+  image: z.string().optional(),
   description: z.string().optional(),
   hero: z.string().optional().nullable(),
   color: z.string().optional(),
