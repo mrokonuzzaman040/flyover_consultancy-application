@@ -4,11 +4,13 @@ import { useState, useEffect } from 'react';
 import ScheduleMeetingModal from "@/components/modals/ScheduleMeetingModal";
 import { usePartners } from '@/hooks/use-partners';
 import { Loader2, Globe, Award, Users, TrendingUp } from 'lucide-react';
+import Image from 'next/image';
 
 export default function PartnershipsSection() {
   const [isVisible, setIsVisible] = useState(false);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const { partners, loading, error } = usePartners();
 
   const handleScheduleClick = () => {
@@ -24,21 +26,48 @@ export default function PartnershipsSection() {
     return () => clearTimeout(timer);
   }, []);
 
-  // Create partners with SVG logos from MongoDB data
+  // Create partners with proper logos from MongoDB data
   const partnersWithLogos = partners.map(partner => ({
     ...partner,
-    logoSvg: (
-      <div className={`w-20 h-20 rounded-2xl bg-gradient-to-br ${partner.color} flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all duration-300`}>
-        <span className="text-white text-xs font-bold text-center leading-tight px-2">
-          {partner.logo}
-        </span>
+    logoComponent: (
+      <div className="w-20 h-20 rounded-2xl bg-white shadow-lg group-hover:shadow-xl transition-all duration-300 flex items-center justify-center p-2 border border-gray-100">
+        {partner.logo && (partner.logo.startsWith('http') || partner.logo.startsWith('/')) ? (
+          <Image
+            src={partner.logo}
+            alt={partner.name}
+            width={76}
+            height={76}
+            className="w-full h-full object-contain"
+            onError={(e) => {
+              // Fallback to colored circle with initials
+              e.currentTarget.style.display = 'none';
+              const fallback = e.currentTarget.parentElement?.nextElementSibling as HTMLElement;
+              if (fallback) fallback.style.display = 'flex';
+            }}
+          />
+        ) : null}
+        <div 
+          className="w-full h-full rounded-xl flex items-center justify-center"
+          style={{ 
+            backgroundColor: partner.color || '#1F4E79',
+            display: partner.logo && (partner.logo.startsWith('http') || partner.logo.startsWith('/')) ? 'none' : 'flex'
+          }}
+        >
+          <span className="text-white text-sm font-bold text-center leading-tight">
+            {partner.name.split(' ').map(word => word[0]).join('').substring(0, 3)}
+          </span>
+        </div>
       </div>
     )
   }));
 
+  // Calculate dynamic stats from partners data
+  const uniqueCountries = [...new Set(partners.map(p => p.country))];
+  const uniqueCategories = [...new Set(partners.map(p => p.category))];
+  
   const stats = [
-    { number: "200+", label: "Partner Universities", icon: Award, color: "from-blue-500 to-blue-600" },
-    { number: "50+", label: "Countries", icon: Globe, color: "from-green-500 to-green-600" },
+    { number: `${partners.length}`, label: "Total Partners", icon: Award, color: "from-blue-500 to-blue-600" },
+    { number: `${uniqueCountries.length}`, label: "Countries", icon: Globe, color: "from-green-500 to-green-600" },
     { number: "15+", label: "Years Experience", icon: TrendingUp, color: "from-purple-500 to-purple-600" },
     { number: "98%", label: "Success Rate", icon: Users, color: "from-orange-500 to-orange-600" }
   ];
@@ -119,9 +148,41 @@ export default function PartnershipsSection() {
           })}
         </div>
 
+        {/* Category Filter */}
+        <div className="flex flex-wrap justify-center gap-4 mb-12">
+          <button
+            onClick={() => setSelectedCategory('All')}
+            className={`px-6 py-3 rounded-full font-semibold transition-all duration-300 ${
+              selectedCategory === 'All'
+                ? 'bg-brand-600 text-white shadow-lg'
+                : 'bg-white/80 text-gray-600 hover:bg-white hover:text-brand-600 border border-gray-200'
+            }`}
+          >
+            All Partners ({partners.length})
+          </button>
+          {uniqueCategories.map((category) => {
+            const categoryCount = partners.filter(p => p.category === category).length;
+            return (
+              <button
+                key={category}
+                onClick={() => setSelectedCategory(category)}
+                className={`px-6 py-3 rounded-full font-semibold transition-all duration-300 ${
+                  selectedCategory === category
+                    ? 'bg-brand-600 text-white shadow-lg'
+                    : 'bg-white/80 text-gray-600 hover:bg-white hover:text-brand-600 border border-gray-200'
+                }`}
+              >
+                {category} ({categoryCount})
+              </button>
+            );
+          })}
+        </div>
+
         {/* Enhanced Partners Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-8 mb-20">
-          {partnersWithLogos.map((partner, index) => (
+          {partnersWithLogos.filter(partner => 
+            selectedCategory === 'All' || partner.category === selectedCategory
+          ).map((partner, index) => (
             <div
               key={partner._id || partner.id}
               className={`group relative bg-white/90 backdrop-blur-sm rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all duration-700 transform hover:-translate-y-3 hover:rotate-1 border border-white/30 ${
@@ -134,24 +195,37 @@ export default function PartnershipsSection() {
               onMouseLeave={() => setHoveredIndex(null)}
             >
               {/* Animated Background */}
-              <div className={`absolute inset-0 bg-gradient-to-br ${partner.color} opacity-0 group-hover:opacity-10 transition-all duration-500 rounded-3xl`} />
+              <div 
+                className="absolute inset-0 opacity-0 group-hover:opacity-10 transition-all duration-500 rounded-3xl"
+                style={{ 
+                  background: `linear-gradient(135deg, ${partner.color || '#1F4E79'}, ${partner.color || '#1F4E79'}80)` 
+                }}
+              />
               <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl" />
               
               {/* Content */}
               <div className="relative z-10 text-center">
                 {/* Logo */}
                 <div className="flex justify-center mb-6 group-hover:scale-110 transition-transform duration-500">
-                  {partner.logoSvg}
+                  {partner.logoComponent}
                 </div>
                 
                 {/* University Name */}
-                <h3 className="text-sm font-bold text-gray-900 mb-3 leading-tight group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-brand-600 group-hover:to-purple-600 transition-all duration-500">
+                <h3 className="text-sm font-bold text-gray-900 mb-3 leading-tight group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r transition-all duration-500"
+                    style={{
+                      '--tw-gradient-from': partner.color || '#1F4E79',
+                      '--tw-gradient-to': `${partner.color || '#1F4E79'}80`
+                    } as React.CSSProperties}
+                >
                   {partner.name}
                 </h3>
                 
                 {/* Category & Country */}
                 <div className="space-y-2">
-                  <div className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gradient-to-r ${partner.color} text-white opacity-80 group-hover:opacity-100 transition-opacity duration-300`}>
+                  <div 
+                    className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium text-white opacity-90 group-hover:opacity-100 transition-opacity duration-300"
+                    style={{ backgroundColor: partner.color || '#1F4E79' }}
+                  >
                     {partner.category}
                   </div>
                   <div className="text-xs text-gray-500 font-medium flex items-center justify-center">
@@ -162,7 +236,12 @@ export default function PartnershipsSection() {
 
                 {/* Hover Glow Effect */}
                 {hoveredIndex === index && (
-                  <div className={`absolute inset-0 bg-gradient-to-br ${partner.color} opacity-20 rounded-3xl animate-pulse blur-sm`} />
+                  <div 
+                    className="absolute inset-0 opacity-20 rounded-3xl animate-pulse blur-sm"
+                    style={{ 
+                      background: `linear-gradient(135deg, ${partner.color || '#1F4E79'}, ${partner.color || '#1F4E79'}40)` 
+                    }}
+                  />
                 )}
               </div>
             </div>
