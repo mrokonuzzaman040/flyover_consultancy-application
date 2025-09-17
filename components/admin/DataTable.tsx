@@ -45,7 +45,7 @@ export default function DataTable<T>({ columns, data, rowKey, empty }: DataTable
   }
 
   return (
-    <div className="overflow-x-auto bg-white border rounded-lg">
+    <div className="overflow-x-auto bg-white border rounded-lg -mx-3 sm:mx-0">
       <table className="min-w-full divide-y divide-slate-200">
         <thead className="bg-slate-50">
           <tr>

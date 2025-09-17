@@ -20,6 +20,12 @@ export const metadata: Metadata = {
   description:
     "Flyover Consultancy helps students study abroad with end-to-end assistance across admissions, visas, scholarships, and more.",
   metadataBase: new URL("https://www.flyover.example"),
+  viewport: {
+    width: 'device-width',
+    initialScale: 1,
+    maximumScale: 1,
+    userScalable: false,
+  },
   openGraph: {
     title: "Flyover Consultancy — Study Abroad Advisors",
     description:

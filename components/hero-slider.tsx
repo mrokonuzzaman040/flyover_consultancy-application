@@ -35,7 +35,7 @@ export default function HeroSlider({ slides = heroSlidesData.slides }: HeroSlide
 
   return (
     <div className="relative">
-      <Slider autoplayMs={6000} className="h-[520px] sm:h-[560px] md:h-[600px]" itemClassName="relative">
+      <Slider autoplayMs={6000} className="h-[400px] sm:h-[520px] md:h-[600px]" itemClassName="relative">
         {slides.map((s, i) => (
           <div key={i} className="relative h-full w-full">
             <Image
@@ -52,14 +52,14 @@ export default function HeroSlider({ slides = heroSlidesData.slides }: HeroSlide
               <div className="mx-auto flex h-full max-w-7xl items-center px-4 sm:px-6 lg:px-8">
                 <Reveal>
                   <div className="max-w-2xl text-white">
-                    <h1 className="text-3xl font-extrabold tracking-tight sm:text-4xl md:text-5xl drop-shadow-lg">{s.headline}</h1>
-                    <p className="mt-4 text-base sm:text-lg text-white/90 drop-shadow">{s.sub}</p>
-                    <div className="mt-6 flex flex-col sm:flex-row gap-3">
+                    <h1 className="text-2xl font-extrabold tracking-tight sm:text-4xl md:text-5xl drop-shadow-lg leading-tight">{s.headline}</h1>
+                    <p className="mt-3 text-sm sm:text-lg text-white/90 drop-shadow leading-relaxed">{s.sub}</p>
+                    <div className="mt-4 sm:mt-6 flex flex-col sm:flex-row gap-3">
                       {s.primary ? (
                         s.primary.isModal ? (
                           <button
                             onClick={handleScheduleClick}
-                            className="inline-flex items-center justify-center rounded-md bg-brand-600 px-6 py-3 text-sm sm:text-base font-semibold text-white shadow-lg hover:bg-brand-700 transition-all duration-200 drop-shadow"
+                            className="inline-flex items-center justify-center rounded-md bg-brand-600 px-6 py-3 text-sm sm:text-base font-semibold text-white shadow-lg hover:bg-brand-700 transition-all duration-200 drop-shadow touch-manipulation min-h-[48px]"
                           >
                             {s.primary.label}
                           </button>
@@ -70,7 +70,7 @@ export default function HeroSlider({ slides = heroSlidesData.slides }: HeroSlide
                       {s.secondary ? (
                         <Link
                           href={s.secondary.href}
-                          className="inline-flex items-center justify-center rounded-md border-2 border-white/40 bg-white/15 px-6 py-3 text-sm sm:text-base font-semibold text-white backdrop-blur hover:bg-white/25 transition-all duration-200 drop-shadow"
+                          className="inline-flex items-center justify-center rounded-md border-2 border-white/40 bg-white/15 px-6 py-3 text-sm sm:text-base font-semibold text-white backdrop-blur hover:bg-white/25 transition-all duration-200 drop-shadow touch-manipulation min-h-[48px]"
                         >
                           {s.secondary.label}
                         </Link>

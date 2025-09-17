@@ -2,6 +2,16 @@
 import { useState, useEffect, useRef } from "react";
 import { z } from "zod";
 import { ChevronDown, X, AlertCircle, CheckCircle2, Loader2 } from "lucide-react";
+import { useNavigation } from "@/hooks/use-navigation";
+
+interface NavigationItem {
+  label: string;
+  href: string;
+  dropdown?: Array<{
+    label: string;
+    href: string;
+  }>;
+}
 
 const LeadSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters").max(50, "Name must be less than 50 characters"),
@@ -15,36 +25,6 @@ const LeadSchema = z.object({
 });
 
 type LeadInput = z.infer<typeof LeadSchema>;
-
-const COUNTRIES = [
-  "Malaysia",
-  "Malta",
-  "Lithuania",
-  "Poland",
-  "Estonia",
-  "Latvia",
-  "UK",
-  "USA",
-  "Canada", 
-  "Australia",
-  "Germany",
-  "Spain",
-  "France",
-  "Denmark",
-  "Netherlands",
-];
-
-const SERVICES = [
-  "Student Visa Consultation",
-  "University Application",
-  "Scholarship Guidance",
-  "IELTS/TOEFL Preparation",
-  "Career Counseling",
-  "Immigration Services",
-  "Document Preparation",
-  "Other",
-];
-
 // Import country data from JSON file
 const COUNTRY_CODES = [
   { code: "+1", country: "US", flag: "🇺🇸", name: "United States" },
@@ -244,6 +224,8 @@ const COUNTRY_CODES = [
 ];
 
 export default function LeadForm({ purpose = "consultation" }: { purpose?: "consultation" | "enquiry" }) {
+  const { navigationData } = useNavigation();
+  
   const [state, setState] = useState<"idle" | "submitting" | "success" | "error">("idle");
   const [error, setError] = useState<string | null>(null);
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
@@ -252,16 +234,22 @@ export default function LeadForm({ purpose = "consultation" }: { purpose?: "cons
   const [serviceSearchTerm, setServiceSearchTerm] = useState<string>("");
   const [countryInterestSearchTerm, setCountryInterestSearchTerm] = useState<string>("");
 
+  // Get countries from navigation destinations
+  const COUNTRIES = navigationData?.find((item: NavigationItem) => item.label === 'Destinations')?.dropdown?.map((dest: { label: string; href: string }) => dest.label) || [];
+
+  // Get services from navigation services
+  const SERVICES = navigationData?.find((item: NavigationItem) => item.label === 'Our Services')?.dropdown?.map((service: { label: string; href: string }) => service.label) || [];
+
   // Filter services based on search term
   const filteredServices = serviceSearchTerm
-    ? SERVICES.filter(service => 
+    ? SERVICES.filter((service: string) => 
         service.toLowerCase().includes(serviceSearchTerm.toLowerCase())
       )
     : SERVICES;
 
   // Filter countries based on search term
   const filteredCountries = countryInterestSearchTerm
-    ? COUNTRIES.filter(country => 
+    ? COUNTRIES.filter((country: string) => 
         country.toLowerCase().includes(countryInterestSearchTerm.toLowerCase())
       )
     : COUNTRIES;
@@ -466,7 +454,7 @@ export default function LeadForm({ purpose = "consultation" }: { purpose?: "cons
              required
              maxLength={50}
              onChange={(e) => validateField('name', e.target.value)}
-             className={`rounded-xl border ${fieldErrors.name ? 'border-brand-300 bg-brand-50' : 'border-gray-300 bg-white'} px-4 py-3 text-gray-900 placeholder:text-gray-400 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20 transition-colors`}
+             className={`rounded-xl border ${fieldErrors.name ? 'border-brand-300 bg-brand-50' : 'border-gray-300 bg-white'} px-4 py-3 text-gray-900 placeholder:text-gray-400 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20 transition-colors text-base touch-manipulation`}
              placeholder="Enter your full name"
            />
            {fieldErrors.name && (
@@ -485,7 +473,7 @@ export default function LeadForm({ purpose = "consultation" }: { purpose?: "cons
              name="email"
              type="email"
              onChange={(e) => validateField('email', e.target.value)}
-             className={`rounded-xl border ${fieldErrors.email ? 'border-brand-300 bg-brand-50' : 'border-gray-300 bg-white'} px-4 py-3 text-gray-900 placeholder:text-gray-400 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20 transition-colors`}
+             className={`rounded-xl border ${fieldErrors.email ? 'border-brand-300 bg-brand-50' : 'border-gray-300 bg-white'} px-4 py-3 text-gray-900 placeholder:text-gray-400 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20 transition-colors text-base touch-manipulation`}
              placeholder="your.email@example.com (optional)"
              suppressHydrationWarning={true}
            />

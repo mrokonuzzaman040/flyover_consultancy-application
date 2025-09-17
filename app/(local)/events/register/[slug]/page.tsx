@@ -235,10 +235,10 @@ export default function EventRegistrationPage({ params }: { params: Promise<{ sl
           <h1 className="text-3xl font-bold text-gray-900">Event Registration</h1>
         </div>
 
-        <div className="grid lg:grid-cols-3 gap-8">
+        <div className="grid lg:grid-cols-3 gap-6 lg:gap-8">
           {/* Event Details */}
-          <div className="lg:col-span-1">
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 sticky top-8">
+          <div className="lg:col-span-1 order-2 lg:order-1">
+            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 lg:p-6 lg:sticky lg:top-8">
               <h2 className="text-xl font-bold text-gray-900 mb-4">{event.title}</h2>
               
               <div className="space-y-4">
@@ -294,7 +294,7 @@ export default function EventRegistrationPage({ params }: { params: Promise<{ sl
           </div>
 
           {/* Registration Form */}
-          <div className="lg:col-span-2">
+          <div className="lg:col-span-2 order-1 lg:order-2">
             <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
               <h2 className="text-xl font-bold text-gray-900 mb-6">Registration Form</h2>
               
@@ -314,7 +314,7 @@ export default function EventRegistrationPage({ params }: { params: Promise<{ sl
                         value={formData.fullName}
                         onChange={handleInputChange}
                         required
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        className="w-full px-3 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base touch-manipulation"
                       />
                     </div>
 
@@ -329,7 +329,7 @@ export default function EventRegistrationPage({ params }: { params: Promise<{ sl
                         value={formData.email}
                         onChange={handleInputChange}
                         required
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        className="w-full px-3 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base touch-manipulation"
                       />
                     </div>
 
@@ -344,7 +344,7 @@ export default function EventRegistrationPage({ params }: { params: Promise<{ sl
                         value={formData.phone}
                         onChange={handleInputChange}
                         required
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        className="w-full px-3 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base touch-manipulation"
                       />
                     </div>
 
@@ -358,7 +358,7 @@ export default function EventRegistrationPage({ params }: { params: Promise<{ sl
                         name="location"
                         value={formData.location}
                         onChange={handleInputChange}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        className="w-full px-3 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base touch-manipulation"
                       />
                     </div>
                   </div>
@@ -378,7 +378,7 @@ export default function EventRegistrationPage({ params }: { params: Promise<{ sl
                         name="company"
                         value={formData.company}
                         onChange={handleInputChange}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        className="w-full px-3 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base touch-manipulation"
                       />
                     </div>
 
@@ -392,7 +392,7 @@ export default function EventRegistrationPage({ params }: { params: Promise<{ sl
                         name="jobTitle"
                         value={formData.jobTitle}
                         onChange={handleInputChange}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        className="w-full px-3 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base touch-manipulation"
                       />
                     </div>
                   </div>
@@ -411,7 +411,7 @@ export default function EventRegistrationPage({ params }: { params: Promise<{ sl
                         name="howHear"
                         value={formData.howHear}
                         onChange={handleInputChange}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        className="w-full px-3 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base touch-manipulation"
                       >
                         <option value="">Select an option</option>
                         <option value="social-media">Social Media</option>
@@ -433,7 +433,7 @@ export default function EventRegistrationPage({ params }: { params: Promise<{ sl
                         value={formData.expectations}
                         onChange={handleInputChange}
                         rows={3}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        className="w-full px-3 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base touch-manipulation"
                       />
                     </div>
 
@@ -447,7 +447,7 @@ export default function EventRegistrationPage({ params }: { params: Promise<{ sl
                         value={formData.specialRequirements}
                         onChange={handleInputChange}
                         rows={2}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        className="w-full px-3 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base touch-manipulation"
                       />
                     </div>
 
@@ -461,7 +461,7 @@ export default function EventRegistrationPage({ params }: { params: Promise<{ sl
                         name="emergencyContact"
                         value={formData.emergencyContact}
                         onChange={handleInputChange}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        className="w-full px-3 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base touch-manipulation"
                       />
                     </div>
 
@@ -475,7 +475,7 @@ export default function EventRegistrationPage({ params }: { params: Promise<{ sl
                         value={formData.questions}
                         onChange={handleInputChange}
                         rows={3}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        className="w-full px-3 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base touch-manipulation"
                       />
                     </div>
                   </div>
@@ -486,7 +486,7 @@ export default function EventRegistrationPage({ params }: { params: Promise<{ sl
                   <button
                     type="submit"
                     disabled={submitting}
-                    className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                    className="w-full bg-blue-600 text-white py-4 px-4 rounded-lg font-medium hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors touch-manipulation min-h-[48px]"
                   >
                     {submitting ? 'Registering...' : 'Register for Event'}
                   </button>

@@ -81,7 +81,7 @@ export function MobileDropdownMenu({
                 <Link
                   key={item.href}
                   href={item.href}
-                  className="block px-4 py-2.5 text-sm text-gray-700 hover:bg-brand/10 hover:text-brand transition-colors duration-150"
+                  className="block px-4 py-3 text-sm text-gray-700 hover:bg-brand/10 hover:text-brand transition-colors duration-150 touch-manipulation min-h-[44px] flex items-center"
                   onClick={onItemClick}
                 >
                   {item.label}

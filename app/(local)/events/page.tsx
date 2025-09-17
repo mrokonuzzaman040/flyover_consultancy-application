@@ -382,7 +382,7 @@ export default function EventsPage() {
               </div>
             </Reveal>
             
-            <div className="grid gap-8 md:grid-cols-2">
+            <div className="grid gap-6 md:grid-cols-2">
               {featuredEvents.map((event, index) => (
                 <EventCard key={event._id || event.id} event={event} index={index} />
               ))}

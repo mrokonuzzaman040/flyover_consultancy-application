@@ -17,8 +17,8 @@ export default function CtaButton({ href = "/book-consultation", className, chil
     <Link
       href={href}
       className={clsx(
-        "inline-flex items-center justify-center rounded-md bg-brand text-white px-5 py-2.5 text-sm font-semibold shadow-sm transition-colors",
-        "hover:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-brand/40",
+        "inline-flex items-center justify-center rounded-md bg-brand text-white px-5 py-3 text-sm font-semibold shadow-sm transition-colors touch-manipulation min-h-[48px]",
+        "hover:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-brand/40 active:scale-95",
         isActive && "ring-2 ring-brand/40",
         className
       )}

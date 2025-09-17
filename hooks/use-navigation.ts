@@ -59,7 +59,13 @@ export function useNavigation() {
         const navigation: NavigationItem[] = [
           {
             label: 'About Us',
-            href: '/about'
+            href: '/about',
+            dropdown: [
+                { "href": "/about", "label": "Our Story" },
+                { "href": "/about/team", "label": "Our Team" },
+                { "href": "/about/mission-vision", "label": "Mission & Vision" },
+                { "href": "/about/testimonials", "label": "Testimonials" }
+            ]
           },
           {
             label: 'Destinations',

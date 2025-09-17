@@ -47,7 +47,7 @@ export default function SiteHeader() {
 
   return (
     <header className="sticky top-0 z-40 w-full border-b border-brand/15 bg-white">
-      <div className="mx-auto flex h-16 max-w-7xl items-center gap-4 px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto flex h-16 max-w-7xl items-center gap-4 px-4 sm:px-6 lg:px-8 relative">
         <div className="flex flex-1 items-center gap-3">
           <Link href="/" className="flex items-center gap-2">
             <Image src="/logo.png" alt="Flyover Consultancy" width={128} height={128} />
@@ -125,7 +125,7 @@ export default function SiteHeader() {
         </div>
 
         <button
-          className="md:hidden inline-flex items-center justify-center rounded-md p-2 text-gray-800 hover:bg-brand/10 transition-colors"
+          className="md:hidden inline-flex items-center justify-center rounded-md p-2 text-gray-800 hover:bg-brand/10 transition-colors touch-manipulation"
           onClick={() => setOpen((s) => !s)}
           aria-label="Toggle navigation"
           aria-expanded={open}
@@ -140,9 +140,9 @@ export default function SiteHeader() {
         </button>
       </div>
       {open && (
-        <div className="md:hidden border-t border-brand/15 bg-white shadow-lg">
+        <div className="md:hidden border-t border-brand/15 bg-white shadow-lg absolute top-full left-0 right-0 z-50">
           <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
-            <div className="grid gap-1">
+            <div className="grid gap-1 max-h-[calc(100vh-4rem)] overflow-y-auto">
               {loading ? (
                 // Loading skeleton for mobile
                 Array.from({ length: 6 }).map((_, index) => (
@@ -158,7 +158,7 @@ export default function SiteHeader() {
                       onItemClick={() => setOpen(false)}
                     >
                       <button
-                        className="flex w-full items-center justify-between rounded-md px-3 py-3 text-gray-800 hover:bg-brand/10 hover:text-brand transition-colors font-medium text-left"
+                        className="flex w-full items-center justify-between rounded-md px-4 py-4 text-gray-800 hover:bg-brand/10 hover:text-brand transition-colors font-medium text-left touch-manipulation min-h-[48px]"
                         onClick={() => setActiveDropdown(activeDropdown === item.label ? null : item.label)}
                       >
                         {item.label}
@@ -178,7 +178,7 @@ export default function SiteHeader() {
                     <Link
                       key={item.label}
                       href={item.href}
-                      className="block rounded-md px-3 py-3 text-gray-800 hover:bg-brand/10 hover:text-brand transition-colors font-medium"
+                      className="rounded-md px-4 py-4 text-gray-800 hover:bg-brand/10 hover:text-brand transition-colors font-medium touch-manipulation min-h-[48px] flex items-center"
                       onClick={() => setOpen(false)}
                     >
                       {item.label}
