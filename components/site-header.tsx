@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import CtaButton from "@/components/cta-button";
 import Image from "next/image";
 import { useNavigation } from "@/hooks/use-navigation";
-import { DropdownMenu, MobileDropdownMenu } from "@/components/ui/dropdown-menu";
+import { MobileDropdownMenu } from "@/components/ui/dropdown-menu";
 
 interface NavigationItem {
   label: string;
