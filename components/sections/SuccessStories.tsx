@@ -3,17 +3,15 @@
 import { useState, useEffect } from 'react';
 import Link from "next/link";
 import StarRating from "@/components/ui/star-rating";
-import sectionsData from '@/data/sections-data.json';
+import { useSuccessStories } from '@/hooks/use-success-stories';
+import { Loader2 } from 'lucide-react';
 
-interface SuccessStoriesProps {
-  successStories?: typeof sectionsData.successStories;
-}
-
-export default function SuccessStories({ successStories = sectionsData.successStories }: SuccessStoriesProps) {
+export default function SuccessStories() {
   const [isVisible, setIsVisible] = useState(false);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [itemsPerSlide, setItemsPerSlide] = useState(3); // Default to desktop view
+  const { successStories, loading, error } = useSuccessStories();
 
   useEffect(() => {
     const timer = setTimeout(() => setIsVisible(true), 200);
@@ -57,12 +55,53 @@ export default function SuccessStories({ successStories = sectionsData.successSt
     setCurrentSlide(index);
   };
 
+  // Calculate dynamic stats from success stories data
   const stats = [
-    { number: "22,000+", label: "Success Stories" },
+    { number: `${successStories.length}+`, label: "Success Stories" },
     { number: "95%", label: "Visa Success Rate" },
     { number: "$50M+", label: "Scholarships Secured" },
     { number: "200+", label: "Partner Universities" }
   ];
+
+  // Loading state
+  if (loading) {
+    return (
+      <section className="bg-gradient-to-br from-blue-50 via-white to-indigo-50 py-12 md:py-20">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-center">
+            <Loader2 className="h-8 w-8 animate-spin text-brand-600" />
+            <span className="ml-2 text-gray-600">Loading success stories...</span>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  // Error state
+  if (error) {
+    return (
+      <section className="bg-gradient-to-br from-blue-50 via-white to-indigo-50 py-12 md:py-20">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="text-center">
+            <p className="text-red-600">Error loading success stories: {error}</p>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  // No stories state
+  if (successStories.length === 0) {
+    return (
+      <section className="bg-gradient-to-br from-blue-50 via-white to-indigo-50 py-12 md:py-20">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="text-center">
+            <p className="text-gray-600">No success stories available at the moment.</p>
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="bg-gradient-to-br from-blue-50 via-white to-indigo-50 py-12 md:py-20">
@@ -70,7 +109,7 @@ export default function SuccessStories({ successStories = sectionsData.successSt
         {/* Header */}
         <div className="text-center mb-12 md:mb-16">
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-4 md:mb-6 px-4">
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-600 to-brand-700">22,000+</span> Success Stories
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-600 to-brand-700">{successStories.length}+</span> Success Stories
           </h2>
           <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto mb-6 md:mb-8 px-4">
             Real students, real achievements. Discover how Flyover Global has transformed dreams into reality for thousands of students worldwide.
@@ -113,7 +152,7 @@ export default function SuccessStories({ successStories = sectionsData.successSt
                   }`}>
                     {successStories.slice(slideIndex * itemsPerSlide, slideIndex * itemsPerSlide + itemsPerSlide).map((story, index) => (
                       <div
-                        key={story.id}
+                        key={story._id || story.storyId}
                         className={`group relative bg-white rounded-2xl p-6 md:p-8 shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 border border-gray-100 ${
                           isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
                         }`}
