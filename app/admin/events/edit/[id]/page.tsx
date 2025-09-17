@@ -159,19 +159,38 @@ export default function EditEventPage({ params }: { params: Promise<{ id: string
         let endAtValue = "";
         
         if (event.startAt) {
-          startAtValue = new Date(event.startAt).toISOString().slice(0, 16);
+          try {
+            const startDate = new Date(event.startAt);
+            if (!isNaN(startDate.getTime())) {
+              startAtValue = startDate.toISOString().slice(0, 16);
+            }
+          } catch (error) {
+            console.error('Error parsing startAt date:', error);
+          }
         } else if (event.date && event.time) {
           // Convert legacy date/time to datetime-local format
           try {
             const dateTimeString = `${event.date} ${event.time}`;
-            startAtValue = new Date(dateTimeString).toISOString().slice(0, 16);
+            const legacyDate = new Date(dateTimeString);
+            if (!isNaN(legacyDate.getTime())) {
+              startAtValue = legacyDate.toISOString().slice(0, 16);
+            } else {
+              console.warn('Invalid legacy date/time format:', { date: event.date, time: event.time });
+            }
           } catch (error) {
             console.error('Error parsing legacy date/time:', error);
           }
         }
         
         if (event.endAt) {
-          endAtValue = new Date(event.endAt).toISOString().slice(0, 16);
+          try {
+            const endDate = new Date(event.endAt);
+            if (!isNaN(endDate.getTime())) {
+              endAtValue = endDate.toISOString().slice(0, 16);
+            }
+          } catch (error) {
+            console.error('Error parsing endAt date:', error);
+          }
         }
 
         setFormData({
@@ -196,7 +215,15 @@ export default function EditEventPage({ params }: { params: Promise<{ id: string
           price: event.price || 0,
           currency: event.currency || "USD",
           isFree: event.isFree !== undefined ? event.isFree : true,
-          registrationDeadline: event.registrationDeadline ? new Date(event.registrationDeadline).toISOString().slice(0, 16) : "",
+          registrationDeadline: (() => {
+            if (!event.registrationDeadline) return "";
+            try {
+              const deadline = new Date(event.registrationDeadline);
+              return !isNaN(deadline.getTime()) ? deadline.toISOString().slice(0, 16) : "";
+            } catch {
+              return "";
+            }
+          })(),
           maxAttendees: event.maxAttendees || 0,
           minAttendees: event.minAttendees || 1,
           requirements: event.requirements || [],
@@ -234,7 +261,7 @@ export default function EditEventPage({ params }: { params: Promise<{ id: string
         toast.error('Failed to fetch event')
         router.push('/admin/events')
       }
-    } catch (error) {
+    } catch {
       toast.error('Error fetching event')
       router.push('/admin/events')
     } finally {
@@ -248,7 +275,7 @@ export default function EditEventPage({ params }: { params: Promise<{ id: string
 
     try {
       // Convert datetime-local back to legacy format if needed
-      const updateData: any = {
+      const updateData: Partial<Event> & { date?: string; time?: string } = {
         ...formData,
         capacity: Number(formData.capacity),
         seatsRemaining: Number(formData.seatsRemaining),
@@ -278,12 +305,12 @@ export default function EditEventPage({ params }: { params: Promise<{ id: string
       if (!updateData.organizerEmail) delete updateData.organizerEmail
       if (!updateData.organizerPhone) delete updateData.organizerPhone
       if (!updateData.registrationDeadline) delete updateData.registrationDeadline
-      if (updateData.targetAudience.length === 0) delete updateData.targetAudience
-      if (updateData.requirements.length === 0) delete updateData.requirements
-      if (updateData.agenda.length === 0) delete updateData.agenda
-      if (updateData.speakers.length === 0) delete updateData.speakers
-      if (updateData.tags.length === 0) delete updateData.tags
-      if (updateData.materials.length === 0) delete updateData.materials
+      if (updateData.targetAudience && updateData.targetAudience.length === 0) delete updateData.targetAudience
+      if (updateData.requirements && updateData.requirements.length === 0) delete updateData.requirements
+      if (updateData.agenda && updateData.agenda.length === 0) delete updateData.agenda
+      if (updateData.speakers && updateData.speakers.length === 0) delete updateData.speakers
+      if (updateData.tags && updateData.tags.length === 0) delete updateData.tags
+      if (updateData.materials && updateData.materials.length === 0) delete updateData.materials
 
       const response = await fetch(`/api/admin/events/${id}`, {
         method: 'PATCH',
@@ -297,7 +324,7 @@ export default function EditEventPage({ params }: { params: Promise<{ id: string
       } else {
         toast.error('Failed to update event')
       }
-    } catch (error) {
+    } catch {
       toast.error('Error updating event')
     } finally {
       setSaving(false)

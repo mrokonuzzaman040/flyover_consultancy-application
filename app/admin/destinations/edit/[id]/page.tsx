@@ -11,6 +11,7 @@ import { Badge } from "@/components/ui/badge"
 import { ArrowLeft, Eye } from "lucide-react"
 import { toast } from "sonner"
 import Link from "next/link"
+import ImageBBUpload from "@/components/admin/ImageBBUpload"
 
 interface University {
   name: string
@@ -414,15 +415,19 @@ export default function EditDestinationPage() {
               )}
             </div>
             <div>
-              <Label htmlFor="image">Image URL</Label>
               {viewMode ? (
-                <div className="p-2 bg-gray-50 rounded border">{formData.image || 'No image'}</div>
+                <div>
+                  <Label>Destination Image</Label>
+                  <div className="p-2 bg-gray-50 rounded border">{formData.image || 'No image'}</div>
+                </div>
               ) : (
-                <Input
-                  id="image"
-                  value={formData.image}
-                  onChange={(e) => setFormData({...formData, image: e.target.value})}
-                  placeholder="https://..."
+                <ImageBBUpload
+                  label="Destination Image"
+                  currentImage={formData.image}
+                  onUpload={(image) => setFormData({...formData, image: image.url})}
+                  onRemove={() => setFormData({...formData, image: ""})}
+                  maxSize={5 * 1024 * 1024} // 5MB
+                  required={false}
                 />
               )}
             </div>
@@ -676,12 +681,13 @@ export default function EditDestinationPage() {
                       />
                     </div>
                     <div>
-                      <Label htmlFor="universityImage">Image URL (Optional)</Label>
-                      <Input
-                        id="universityImage"
-                        value={universityInput.image}
-                        onChange={(e) => setUniversityInput({...universityInput, image: e.target.value})}
-                        placeholder="https://example.com/image.jpg"
+                      <ImageBBUpload
+                        label="University Image (Optional)"
+                        currentImage={universityInput.image}
+                        onUpload={(image) => setUniversityInput({...universityInput, image: image.url})}
+                        onRemove={() => setUniversityInput({...universityInput, image: ""})}
+                        maxSize={3 * 1024 * 1024} // 3MB
+                        required={false}
                       />
                     </div>
                   </div>

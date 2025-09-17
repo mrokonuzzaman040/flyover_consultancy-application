@@ -11,6 +11,7 @@ import { Badge } from "@/components/ui/badge"
 import { ArrowLeft, Plus, Trash2 } from "lucide-react"
 import { toast } from "sonner"
 import Link from "next/link"
+import ImageBBUpload from "@/components/admin/ImageBBUpload"
 
 export default function CreateDestinationPage() {
   const router = useRouter()
@@ -237,12 +238,13 @@ export default function CreateDestinationPage() {
               />
             </div>
             <div>
-              <Label htmlFor="image">Image URL</Label>
-              <Input
-                id="image"
-                value={formData.image}
-                onChange={(e) => setFormData({...formData, image: e.target.value})}
-                placeholder="https://example.com/image.jpg"
+              <ImageBBUpload
+                label="Destination Image"
+                currentImage={formData.image}
+                onUpload={(image) => setFormData({...formData, image: image.url})}
+                onRemove={() => setFormData({...formData, image: ""})}
+                maxSize={5 * 1024 * 1024} // 5MB
+                required={false}
               />
             </div>
           </div>
@@ -487,12 +489,13 @@ export default function CreateDestinationPage() {
                     />
                   </div>
                   <div>
-                    <Label htmlFor="university-image">Image URL</Label>
-                    <Input
-                      id="university-image"
-                      value={universityInput.image}
-                      onChange={(e) => setUniversityInput({...universityInput, image: e.target.value})}
-                      placeholder="e.g., https://images.unsplash.com/photo-..."
+                    <ImageBBUpload
+                      label="University Image"
+                      currentImage={universityInput.image}
+                      onUpload={(image) => setUniversityInput({...universityInput, image: image.url})}
+                      onRemove={() => setUniversityInput({...universityInput, image: ""})}
+                      maxSize={3 * 1024 * 1024} // 3MB
+                      required={false}
                     />
                   </div>
                 </div>
