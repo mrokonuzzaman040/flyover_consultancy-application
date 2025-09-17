@@ -10,7 +10,6 @@ import {
   Users,
   FileText,
   Calendar,
-  MessageSquare,
   LogOut,
   Menu,
   X,
@@ -73,7 +72,6 @@ const navigation: NavigationItem[] = [
   },
   { name: "Services", href: "/admin/services", icon: GraduationCap },
   { name: "Scholarships", href: "/admin/scholarships", icon: BookOpen },
-  { name: "Testimonials", href: "/admin/testimonials", icon: MessageSquare }
 ]
 
 export default function AdminSidebar() {
