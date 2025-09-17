@@ -28,7 +28,8 @@ import {
   Handshake,
   Target,
   Route,
-  BarChart3
+  BarChart3,
+  UserCheck
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Session } from "next-auth"
@@ -72,6 +73,7 @@ const navigation: NavigationItem[] = [
   },
   { name: "Services", href: "/admin/services", icon: GraduationCap },
   { name: "Scholarships", href: "/admin/scholarships", icon: BookOpen },
+  { name: "Team", href: "/admin/team", icon: UserCheck },
 ]
 
 export default function AdminSidebar() {
