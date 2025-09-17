@@ -3,11 +3,19 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import CtaButton from "@/components/cta-button";
 import Image from "next/image";
-import navigationData from "@/data/navigation-data.json";
+import { useNavigation } from "@/hooks/use-navigation";
 
-const nav = navigationData;
+interface NavigationItem {
+  label: string;
+  href: string;
+  dropdown?: Array<{
+    label: string;
+    href: string;
+  }>;
+}
 
 export default function SiteHeader() {
+  const { navigationData: nav, loading } = useNavigation();
   const [open, setOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [closeTimeout, setCloseTimeout] = useState<NodeJS.Timeout | null>(null);
@@ -47,7 +55,13 @@ export default function SiteHeader() {
         </div>
 
         <nav className="hidden md:flex items-center gap-6 text-sm font-medium">
-          {nav.map((item) => (
+          {loading ? (
+            // Loading skeleton
+            Array.from({ length: 6 }).map((_, index) => (
+              <div key={index} className="h-4 w-16 bg-gray-200 rounded animate-pulse" />
+            ))
+          ) : (
+            nav.map((item: NavigationItem) => (
             <div
               key={item.label}
               className="relative"
@@ -78,7 +92,7 @@ export default function SiteHeader() {
                   onMouseLeave={handleMouseLeave}
                 >
                   <div className="py-2">
-                    {item.dropdown.map((dropdownItem) => (
+                    {item.dropdown.map((dropdownItem: { label: string; href: string }) => (
                       <Link
                         key={dropdownItem.href}
                         href={dropdownItem.href}
@@ -91,7 +105,8 @@ export default function SiteHeader() {
                 </div>
               )}
             </div>
-          ))}
+          ))
+          )}
         </nav>
 
         <div className="ml-auto hidden md:block">
@@ -117,7 +132,13 @@ export default function SiteHeader() {
         <div className="md:hidden border-t border-brand/15 bg-white shadow-lg">
           <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
             <div className="grid gap-1">
-              {nav.map((item) => (
+              {loading ? (
+                // Loading skeleton for mobile
+                Array.from({ length: 6 }).map((_, index) => (
+                  <div key={index} className="h-12 bg-gray-200 rounded animate-pulse" />
+                ))
+              ) : (
+                nav.map((item: NavigationItem) => (
                 <div key={item.label}>
                   {item.dropdown ? (
                     <div>
@@ -139,7 +160,7 @@ export default function SiteHeader() {
                       </button>
                       {activeDropdown === item.label && (
                         <div className="ml-4 mt-1 space-y-1">
-                          {item.dropdown.map((dropdownItem) => (
+                          {item.dropdown.map((dropdownItem: { label: string; href: string }) => (
                             <Link
                               key={dropdownItem.href}
                               href={dropdownItem.href}
@@ -162,7 +183,8 @@ export default function SiteHeader() {
                     </Link>
                   )}
                 </div>
-              ))}
+              ))
+              )}
               <div className="mt-3 pt-3 border-t border-gray-200">
                 <CtaButton className="w-full justify-center" />
               </div>
