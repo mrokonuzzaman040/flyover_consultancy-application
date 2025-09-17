@@ -101,6 +101,7 @@ export default function UpcomingEvents({ events: propEvents }: UpcomingEventsPro
         const eventDate = new Date(event.date);
         return !isNaN(eventDate.getTime()) && eventDate < new Date();
       } catch (e) {
+        console.error('Error parsing date for UpcomingEvents:', e);
         return false; // Assume future if parsing fails
       }
     }
@@ -132,6 +133,7 @@ export default function UpcomingEvents({ events: propEvents }: UpcomingEventsPro
           return { day, month };
         }
       } catch (e) {
+        console.error('Error parsing date for UpcomingEvents:', e);
         // If parsing fails, return default values
       }
     }
