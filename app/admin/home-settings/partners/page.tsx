@@ -17,7 +17,10 @@ interface Partner {
   _id: string;
   id: number;
   name: string;
+  category: string;
+  country: string;
   logo: string;
+  color: string;
   createdAt: string;
   updatedAt: string;
 }
@@ -32,7 +35,10 @@ export default function PartnersPage() {
 
   const [formData, setFormData] = useState({
     name: "",
+    category: "",
+    country: "",
     logo: "",
+    color: "#1F4E79",
   });
 
   const fetchPartners = async () => {
@@ -57,7 +63,10 @@ export default function PartnersPage() {
   const resetForm = () => {
     setFormData({
       name: "",
+      category: "",
+      country: "",
       logo: "",
+      color: "#1F4E79",
     });
     setEditingPartner(null);
   };
@@ -92,7 +101,10 @@ export default function PartnersPage() {
     setEditingPartner(partner);
     setFormData({
       name: partner.name,
+      category: partner.category,
+      country: partner.country,
       logo: partner.logo,
+      color: partner.color,
     });
     setIsDialogOpen(true);
   };
@@ -155,13 +167,24 @@ export default function PartnersPage() {
       header: 'Partner',
       render: (partner: Partner) => (
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-gradient-to-r from-blue-400 to-blue-600 rounded-full flex items-center justify-center">
+          <div 
+            className="w-10 h-10 rounded-full flex items-center justify-center"
+            style={{ backgroundColor: partner.color || '#1F4E79' }}
+          >
             <Building2 className="h-5 w-5 text-white" />
           </div>
           <div>
             <div className="font-medium">{partner.name}</div>
+            <div className="text-sm text-gray-500">{partner.category}</div>
           </div>
         </div>
+      )
+    },
+    {
+      key: 'country',
+      header: 'Country',
+      render: (partner: Partner) => (
+        <span className="text-sm text-gray-600">{partner.country}</span>
       )
     },
     {
@@ -240,20 +263,18 @@ export default function PartnersPage() {
 
   return (
     <div className="container mx-auto py-6">
-      <PageHeader title="Partners Management" description="Manage partner organizations and institutions" />
-      
-      <div className="mb-6 flex justify-between items-center">
-        <div className="text-sm text-gray-500">
-          {partners.length} partner{partners.length !== 1 ? 's' : ''} total
-        </div>
-        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-          <DialogTrigger asChild>
-            <Button onClick={resetForm}>
-              <Plus className="h-4 w-4 mr-2" />
-              Add Partner
-            </Button>
-          </DialogTrigger>
-          <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+      <PageHeader 
+        title="Partners Management" 
+        description="Manage partner organizations and institutions"
+        actions={(
+          <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+            <DialogTrigger asChild>
+              <Button onClick={resetForm} className="bg-brand-600 hover:bg-brand-700">
+                <Plus className="h-4 w-4 mr-2" />
+                Add Partner
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
             <DialogHeader className="pb-4 border-b">
               <DialogTitle className="text-xl font-semibold">
                 {editingPartner ? 'Edit Partner' : 'Add New Partner'}
@@ -263,53 +284,127 @@ export default function PartnersPage() {
               </p>
             </DialogHeader>
             <div className="space-y-6 py-4">
-              <div className="space-y-2">
-                <Label htmlFor="name" className="text-sm font-medium">
-                  Partner Name <span className="text-red-500">*</span>
-                </Label>
-                <Input
-                  id="name"
-                  value={formData.name}
-                  onChange={(e) => setFormData({...formData, name: e.target.value})}
-                  placeholder="Enter partner organization name"
-                  className="h-10"
-                />
-                <p className="text-xs text-gray-500">
-                  The official name of the partner organization
-                </p>
-              </div>
-              
-              <div className="space-y-2">
-                <ImageBBUpload
-                  label="Partner Logo"
-                  currentImage={formData.logo}
-                  onUpload={(image) => setFormData({...formData, logo: image.url})}
-                  onRemove={() => setFormData({...formData, logo: ""})}
-                  maxSize={2 * 1024 * 1024} // 2MB
-                  required
-                />
-                <p className="text-xs text-gray-500">
-                  Upload a high-quality logo image (recommended: square format, max 2MB)
-                </p>
-              </div>
-              
-              {formData.logo && (
-                <div className="p-4 bg-gray-50 rounded-lg">
-                  <p className="text-sm font-medium text-gray-700 mb-2">Preview:</p>
-                  <div className="w-16 h-16 rounded-lg overflow-hidden bg-white border">
-                    <Image
-                      src={formData.logo}
-                      alt="Partner logo preview"
-                      width={64}
-                      height={64}
-                      className="w-full h-full object-cover"
-                      onError={(e) => {
-                        e.currentTarget.src = '/logo.png';
-                      }}
+              {/* Basic Information Section */}
+              <div className="space-y-4">
+                <h3 className="text-lg font-medium text-gray-900 border-b pb-2">Basic Information</h3>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="name" className="text-sm font-medium">
+                      Partner Name <span className="text-red-500">*</span>
+                    </Label>
+                    <Input
+                      id="name"
+                      value={formData.name}
+                      onChange={(e) => setFormData({...formData, name: e.target.value})}
+                      placeholder="Harvard University"
+                      className="h-10"
+                    />
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <Label htmlFor="category" className="text-sm font-medium">
+                      Category <span className="text-red-500">*</span>
+                    </Label>
+                    <Input
+                      id="category"
+                      value={formData.category}
+                      onChange={(e) => setFormData({...formData, category: e.target.value})}
+                      placeholder="University, Testing Organization, etc."
+                      className="h-10"
                     />
                   </div>
                 </div>
-              )}
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="country" className="text-sm font-medium">
+                      Country <span className="text-red-500">*</span>
+                    </Label>
+                    <Input
+                      id="country"
+                      value={formData.country}
+                      onChange={(e) => setFormData({...formData, country: e.target.value})}
+                      placeholder="United States"
+                      className="h-10"
+                    />
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <Label htmlFor="color" className="text-sm font-medium">
+                      Brand Color <span className="text-red-500">*</span>
+                    </Label>
+                    <div className="flex gap-2">
+                      <Input
+                        id="color"
+                        type="color"
+                        value={formData.color}
+                        onChange={(e) => setFormData({...formData, color: e.target.value})}
+                        className="w-16 h-10 p-1 border rounded"
+                      />
+                      <Input
+                        value={formData.color}
+                        onChange={(e) => setFormData({...formData, color: e.target.value})}
+                        placeholder="#1F4E79"
+                        className="h-10 flex-1"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Logo Section */}
+              <div className="space-y-4">
+                <h3 className="text-lg font-medium text-gray-900 border-b pb-2">Logo</h3>
+                
+                <div className="space-y-2">
+                  <ImageBBUpload
+                    label="Partner Logo"
+                    currentImage={formData.logo}
+                    onUpload={(image) => setFormData({...formData, logo: image.url})}
+                    onRemove={() => setFormData({...formData, logo: ""})}
+                    maxSize={2 * 1024 * 1024} // 2MB
+                    required
+                  />
+                  <p className="text-xs text-gray-500">
+                    Upload a high-quality logo image (recommended: square format, max 2MB)
+                  </p>
+                </div>
+                
+                {formData.logo && (
+                  <div className="p-4 bg-gray-50 rounded-lg">
+                    <p className="text-sm font-medium text-gray-700 mb-3">Preview:</p>
+                    <div className="flex items-center gap-4">
+                      <div className="w-16 h-16 rounded-lg overflow-hidden bg-white border">
+                        <Image
+                          src={formData.logo}
+                          alt="Partner logo preview"
+                          width={64}
+                          height={64}
+                          className="w-full h-full object-cover"
+                          onError={(e) => {
+                            e.currentTarget.src = '/logo.png';
+                          }}
+                        />
+                      </div>
+                      <div className="flex-1">
+                        <div className="flex items-center gap-3 p-3 bg-white rounded-lg border">
+                          <div 
+                            className="w-10 h-10 rounded-full flex items-center justify-center"
+                            style={{ backgroundColor: formData.color }}
+                          >
+                            <Building2 className="h-5 w-5 text-white" />
+                          </div>
+                          <div>
+                            <div className="font-medium">{formData.name || 'Partner Name'}</div>
+                            <div className="text-sm text-gray-500">{formData.category || 'Category'}</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
             
             <div className="flex justify-end gap-3 pt-4 border-t">
@@ -323,7 +418,7 @@ export default function PartnersPage() {
               </Button>
               <Button 
                 onClick={editingPartner ? handleUpdate : handleCreate}
-                disabled={saving || !formData.name || !formData.logo}
+                disabled={saving || !formData.name || !formData.category || !formData.country || !formData.logo || !formData.color}
                 className="px-6"
               >
                 {saving ? (
@@ -338,6 +433,13 @@ export default function PartnersPage() {
             </div>
           </DialogContent>
         </Dialog>
+        )}
+      />
+      
+      <div className="mb-6">
+        <div className="text-sm text-gray-500">
+          {partners.length} partner{partners.length !== 1 ? 's' : ''} total
+        </div>
       </div>
 
       {partners.length === 0 ? (

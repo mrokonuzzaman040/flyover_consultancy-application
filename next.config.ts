@@ -15,6 +15,34 @@ const nextConfig = {
         hostname: 'i.ibb.co',
       },
       {
+        protocol: 'https',
+        hostname: 'upload.wikimedia.org',
+      },
+      {
+        protocol: 'https',
+        hostname: 'www.ielts.org',
+      },
+      {
+        protocol: 'https',
+        hostname: 'www.ets.org',
+      },
+      {
+        protocol: 'https',
+        hostname: 'educationusa.state.gov',
+      },
+      {
+        protocol: 'https',
+        hostname: 'www.chevening.org',
+      },
+      {
+        protocol: 'https',
+        hostname: 'www.kaplaninternational.com',
+      },
+      {
+        protocol: 'https',
+        hostname: '*',
+      },
+      {
         protocol: 'http',
         hostname: '*',
       }
