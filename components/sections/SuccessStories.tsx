@@ -213,7 +213,12 @@ export default function SuccessStories({ successStories = sectionsData.successSt
                 Start Your Journey
               </Link>
               <button className="px-6 md:px-8 py-3 border-2 border-brand-600 text-brand-600 rounded-full font-semibold hover:bg-brand-600 hover:text-white transition-all duration-300 text-sm md:text-base">
-                Read More Stories
+                <Link 
+                  href="/about/testimonials"
+                  className="flex items-center justify-center"
+                >
+                  Read More Stories
+                </Link>
               </button>
             </div>
           </div>

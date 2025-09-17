@@ -105,16 +105,7 @@ export default function Home() {
       <UpcomingEvents />
 
       {/* 8. Our Industry{/* 8. Partnerships */}
-      <PartnershipsSection 
-        partners={data.partners?.map((partner, index) => ({
-          id: index + 1,
-          name: partner.name,
-          category: partner.category,
-          country: 'Global', // Default country
-          logo: partner.logo,
-          color: '#6366F1' // Default indigo color
-        }))}
-      />
+      <PartnershipsSection />
       {/* 9. Success Stories — review slider */}
       <SuccessStories 
         successStories={data.successStories?.map((story, index) => ({
@@ -134,23 +125,7 @@ export default function Home() {
       />
 
       {/* 10. Insights to Keep You Ahead */}
-      <InsightsSection 
-        insights={data.insights?.map((insight, index) => ({
-          id: index + 1,
-          category: insight.category,
-          categoryColor: insight.categoryColor,
-          author: insight.author,
-          authorRole: insight.authorRole,
-          readTime: insight.readTime,
-          publishDate: insight.publishDate,
-          title: insight.title,
-          excerpt: insight.excerpt,
-          image: insight.image,
-          featured: insight.featured,
-          views: insight.views,
-          likes: insight.likes
-        }))}
-      />
+      <InsightsSection/>
 
       {/* 11. Contact Us */}
       <ContactSection contactInfo={data.contactInfo} />

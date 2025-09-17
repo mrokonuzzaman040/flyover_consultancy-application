@@ -2,23 +2,26 @@
 
 import { useState, useEffect } from 'react';
 import Link from "next/link";
-import sectionsData from '@/data/sections-data.json';
+import { useBlogs } from '@/hooks/use-blogs';
+import Image from 'next/image';
 
 interface InsightsSectionProps {
-  insights?: typeof sectionsData.insights;
+  // Remove the insights prop since we're fetching from database
+  className?: string;
 }
 
-export default function InsightsSection({ insights = sectionsData.insights }: InsightsSectionProps) {
+export default function InsightsSection({}: InsightsSectionProps) {
+  const { blogs: insights, loading, error } = useBlogs(4);
   const [isVisible, setIsVisible] = useState(false);
   const [activeCategory, setActiveCategory] = useState("All");
 
   const categories = [
     { name: "All", count: insights.length },
-    { name: "University Rankings", count: insights.filter(i => i.category === "University Rankings").length },
-    { name: "Visa Guide", count: insights.filter(i => i.category === "Visa Guide").length },
+    { name: "Study Guides", count: insights.filter(i => i.category === "Study Guides").length },
+    { name: "Visa Guides", count: insights.filter(i => i.category === "Visa Guides").length },
     { name: "Scholarships", count: insights.filter(i => i.category === "Scholarships").length },
-    { name: "Cost of Living", count: insights.filter(i => i.category === "Cost of Living").length },
-    { name: "Career Guidance", count: insights.filter(i => i.category === "Career Guidance").length }
+    { name: "University Tips", count: insights.filter(i => i.category === "University Tips").length },
+    { name: "Study Abroad", count: insights.filter(i => i.category === "Study Abroad").length }
   ];
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [email, setEmail] = useState("");
@@ -34,6 +37,43 @@ export default function InsightsSection({ insights = sectionsData.insights }: In
 
   const featuredInsight = insights.find(insight => insight.featured);
   const regularInsights = insights.filter(insight => !insight.featured);
+
+  // Show loading state
+  if (loading) {
+    return (
+      <section className="bg-gradient-to-br from-gray-50 via-white to-blue-50 py-20">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-600 to-brand-700">Insights</span> to Keep You Ahead
+            </h2>
+            <div className="flex justify-center items-center py-12">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-brand-600"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  // Show error state
+  if (error) {
+    return (
+      <section className="bg-gradient-to-br from-gray-50 via-white to-blue-50 py-20">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-600 to-brand-700">Insights</span> to Keep You Ahead
+            </h2>
+            <div className="text-center py-12">
+              <p className="text-gray-600 mb-4">Unable to load latest insights at the moment.</p>
+              <p className="text-sm text-gray-500">Please try again later.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="bg-gradient-to-br from-gray-50 via-white to-blue-50 py-20">
@@ -102,7 +142,11 @@ export default function InsightsSection({ insights = sectionsData.insights }: In
                       </div>
                     </div>
                     <div className="text-sm text-gray-500">
-                      {featuredInsight.publishDate} • {featuredInsight.readTime}
+                      {new Date(featuredInsight.publishedAt).toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: 'short',
+                        day: 'numeric',
+                      })} • {featuredInsight.readTime}
                     </div>
                   </div>
                   
@@ -117,16 +161,28 @@ export default function InsightsSection({ insights = sectionsData.insights }: In
                         <span>{featuredInsight.likes}</span>
                       </span>
                     </div>
-                    <button className="px-6 py-3 bg-gradient-to-r from-brand-600 to-brand-700 text-white rounded-full font-semibold hover:from-brand-700 hover:to-brand-800 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl">
-                      Read Article
-                    </button>
+                    <Link href={`/blogs/${featuredInsight.slug}`}>
+                      <button className="px-6 py-3 bg-gradient-to-r from-brand-600 to-brand-700 text-white rounded-full font-semibold hover:from-brand-700 hover:to-brand-800 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl">
+                        Read Article
+                      </button>
+                    </Link>
                   </div>
                 </div>
                 
                 <div className="relative">
-                  <div className="w-full h-48 bg-gradient-to-br from-brand-400 to-brand-600 rounded-lg flex items-center justify-center text-white text-4xl font-bold">
-                    {featuredInsight.image}
-                  </div>
+                  {featuredInsight.featuredImage ? (
+                    <Image
+                      width={400}
+                      height={400}
+                      src={featuredInsight.featuredImage} 
+                      alt={featuredInsight.title}
+                      className="w-full h-48 object-cover rounded-lg"
+                    />
+                  ) : (
+                    <div className="w-full h-48 bg-gradient-to-br from-brand-400 to-brand-600 rounded-lg flex items-center justify-center text-white text-4xl font-bold">
+                      {featuredInsight.image || '📚'}
+                    </div>
+                  )}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
                 </div>
               </div>
@@ -136,23 +192,33 @@ export default function InsightsSection({ insights = sectionsData.insights }: In
 
         {/* Regular Articles Grid */}
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-          {(activeCategory === "All" ? regularInsights : filteredInsights).map((insight, index) => (
-            <article
-              key={insight.id}
-              className={`group bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 border border-gray-100 overflow-hidden ${
-                isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-              }`}
-              style={{
-                transitionDelay: `${index * 150}ms`
-              }}
-              onMouseEnter={() => setHoveredIndex(index)}
-              onMouseLeave={() => setHoveredIndex(null)}
-            >
+          {(activeCategory === "All" ? (featuredInsight ? regularInsights : insights) : filteredInsights).map((insight, index) => (
+            <Link key={insight._id || insight.id} href={`/blogs/${insight.slug}`}>
+              <article
+                className={`group bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 border border-gray-100 overflow-hidden cursor-pointer ${
+                  isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+                }`}
+                style={{
+                  transitionDelay: `${index * 150}ms`
+                }}
+                onMouseEnter={() => setHoveredIndex(index)}
+                onMouseLeave={() => setHoveredIndex(null)}
+              >
               {/* Image */}
               <div className="relative overflow-hidden">
-                <div className="w-full h-48 bg-gradient-to-br from-brand-400 to-brand-600 flex items-center justify-center text-white text-4xl font-bold">
-                  {insight.image}
-                </div>
+                {insight.featuredImage ? (
+                  <Image
+                    width={400}
+                    height={400}
+                    src={insight.featuredImage} 
+                    alt={insight.title}
+                    className="w-full h-48 object-cover"
+                  />
+                ) : (
+                  <div className="w-full h-48 bg-gradient-to-br from-brand-400 to-brand-600 flex items-center justify-center text-white text-4xl font-bold">
+                    {insight.image || '📚'}
+                  </div>
+                )}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 <div className="absolute top-4 left-4">
                   <span className={`px-3 py-1 rounded-full text-xs font-semibold ${insight.categoryColor}`}>
@@ -170,7 +236,11 @@ export default function InsightsSection({ insights = sectionsData.insights }: In
               <div className="p-6">
                 <div className="flex items-center justify-between mb-3">
                   <div className="text-sm text-gray-500">
-                    {insight.publishDate}
+                    {new Date(insight.publishedAt).toLocaleDateString('en-US', {
+                      year: 'numeric',
+                      month: 'short',
+                      day: 'numeric',
+                    })}
                   </div>
                   <div className="text-sm text-gray-500">
                     {insight.readTime}
@@ -210,12 +280,13 @@ export default function InsightsSection({ insights = sectionsData.insights }: In
 
                 {/* Hover Effect */}
                 {hoveredIndex === index && (
-                  <div className="absolute inset-0 bg-gradient-to-br from-brand-500/5 to-brand-600/5 rounded-2xl" />
-                )}
-              </div>
-            </article>
-          ))}
-        </div>
+                   <div className="absolute inset-0 bg-gradient-to-br from-brand-500/5 to-brand-600/5 rounded-2xl" />
+                 )}
+               </div>
+               </article>
+             </Link>
+           ))}
+         </div>
 
         {/* Bottom CTA */}
         <div className="text-center mt-16">

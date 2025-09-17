@@ -4,7 +4,10 @@ import mongoose, { Document, Schema } from 'mongoose';
 export interface IPartner extends Document {
   id: number;
   name: string;
+  category: string;
+  country: string;
   logo: string;
+  color: string;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -22,7 +25,24 @@ const PartnerSchema = new Schema<IPartner>({
     trim: true,
     maxlength: 200
   },
+  category: {
+    type: String,
+    required: true,
+    trim: true,
+    maxlength: 100
+  },
+  country: {
+    type: String,
+    required: true,
+    trim: true,
+    maxlength: 100
+  },
   logo: {
+    type: String,
+    required: true,
+    trim: true
+  },
+  color: {
     type: String,
     required: true,
     trim: true
