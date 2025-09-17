@@ -2,24 +2,26 @@ import mongoose, { Document, Schema } from 'mongoose';
 
 // Interface for StudyAbroadStep document
 export interface IStudyAbroadStep extends Document {
-  id: number;
-  icon: string;
+  stepId: number;
+  icon?: string;
   title: string;
   description: string;
+  color?: string;
+  bgColor?: string;
+  textColor?: string;
   createdAt: Date;
   updatedAt: Date;
 }
 
 // StudyAbroadStep Schema
 const StudyAbroadStepSchema = new Schema<IStudyAbroadStep>({
-  id: {
+  stepId: {
     type: Number,
     required: true,
     unique: true
   },
   icon: {
     type: String,
-    required: true,
     trim: true
   },
   title: {
@@ -33,6 +35,18 @@ const StudyAbroadStepSchema = new Schema<IStudyAbroadStep>({
     required: true,
     trim: true,
     maxlength: 1000
+  },
+  color: {
+    type: String,
+    trim: true
+  },
+  bgColor: {
+    type: String,
+    trim: true
+  },
+  textColor: {
+    type: String,
+    trim: true
   }
 }, {
   timestamps: true,

@@ -21,7 +21,7 @@ export async function GET(request: Request, { params }: { params: Promise<{ id: 
 
     await dbConnect();
     const { id } = await params;
-    const studyAbroadStep = await StudyAbroadStep.findOne({ id: parseInt(id) }).lean();
+    const studyAbroadStep = await StudyAbroadStep.findOne({ stepId: parseInt(id) }).lean();
     
     if (!studyAbroadStep) {
       return NextResponse.json({ error: "Study abroad step not found" }, { status: 404 });
@@ -52,7 +52,7 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
     if (!parsed.success) return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 });
     
     const studyAbroadStep = await StudyAbroadStep.findOneAndUpdate(
-      { id: parseInt(id) },
+      { stepId: parseInt(id) },
       { $set: parsed.data },
       { new: true, runValidators: true }
     ).lean();
@@ -79,7 +79,7 @@ export async function DELETE(request: Request, { params }: { params: Promise<{ i
     await dbConnect();
     const { id } = await params;
     
-    const studyAbroadStep = await StudyAbroadStep.findOneAndDelete({ id: parseInt(id) }).lean();
+    const studyAbroadStep = await StudyAbroadStep.findOneAndDelete({ stepId: parseInt(id) }).lean();
     
     if (!studyAbroadStep) {
       return NextResponse.json({ error: "Study abroad step not found" }, { status: 404 });

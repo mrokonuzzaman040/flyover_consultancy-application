@@ -81,10 +81,13 @@ export interface IWhyChooseUsFeature {
 
 export interface IStudyAbroadStep {
   _id: string;
-  step: number;
+  stepId: number;
   title: string;
   description: string;
-  icon: string;
+  icon?: string;
+  color?: string;
+  bgColor?: string;
+  textColor?: string;
   createdAt: string;
   updatedAt: string;
 }

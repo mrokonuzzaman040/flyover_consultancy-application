@@ -20,7 +20,7 @@ export async function GET() {
     }
 
     await dbConnect();
-    const docs = await StudyAbroadStep.find({}).sort({ order: 1, createdAt: -1 }).lean();
+    const docs = await StudyAbroadStep.find({}).sort({ stepId: 1, createdAt: -1 }).lean();
     return NextResponse.json({ studyAbroadSteps: docs.map((d) => ({ ...toObject(d as { _id: unknown }) })) });
   } catch (e: unknown) {
     // Handle MongoDB connection errors gracefully during build
@@ -43,13 +43,13 @@ export async function POST(req: NextRequest) {
     const parsed = schema.safeParse(json);
     if (!parsed.success) return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 });
     
-    // Generate next ID
-    const lastStep = await StudyAbroadStep.findOne({}).sort({ id: -1 }).lean() as { id: number } | null;
-    const nextId = lastStep ? lastStep.id + 1 : 1;
+    // Generate next stepId
+    const lastStep = await StudyAbroadStep.findOne({}).sort({ stepId: -1 }).lean() as { stepId: number } | null;
+    const nextStepId = lastStep ? lastStep.stepId + 1 : 1;
     
     const stepData = {
       ...parsed.data,
-      id: nextId
+      stepId: nextStepId
     };
     
     const doc = await StudyAbroadStep.create(stepData);

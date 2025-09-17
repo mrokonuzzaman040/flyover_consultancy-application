@@ -77,12 +77,13 @@ export default function Home() {
       {/* 4. Study abroad in just 5 steps - Professional Infographic */}
       <StudyAbroadSteps 
         steps={data.studyabroadsteps?.map((step) => ({
-          id: step.step,
+          stepId: step.stepId,
           title: step.title,
           description: step.description,
-          color: '#3B82F6', // Default blue color
-          bgColor: '#EFF6FF', // Light blue background
-          textColor: '#1E40AF' // Dark blue text
+          color: step.color,
+          bgColor: step.bgColor,
+          textColor: step.textColor,
+          icon: step.icon
         }))}
       />
 

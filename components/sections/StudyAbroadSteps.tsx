@@ -1,15 +1,62 @@
 "use client";
 
 import React from 'react';
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { CheckCircle, Circle, ArrowRight } from "lucide-react";
-import sectionsData from '@/data/sections-data.json';
-interface StudyAbroadStepsProps {
-  steps?: typeof sectionsData.studyabroadsteps;
+
+interface StudyAbroadStep {
+  stepId: number;
+  title: string;
+  description: string;
+  color?: string;
+  bgColor?: string;
+  textColor?: string;
+  icon?: string;
 }
 
-export default function StudyAbroadSteps({ steps = sectionsData.studyabroadsteps }: StudyAbroadStepsProps) {
+interface StudyAbroadStepsProps {
+  steps?: StudyAbroadStep[];
+}
+
+export default function StudyAbroadSteps({ steps: propSteps }: StudyAbroadStepsProps) {
   const [activeStep, setActiveStep] = useState(1);
+  const [steps, setSteps] = useState<StudyAbroadStep[]>(propSteps || []);
+  const [loading, setLoading] = useState(!propSteps);
+
+  useEffect(() => {
+    if (!propSteps) {
+      fetchSteps();
+    }
+  }, [propSteps]);
+
+  const fetchSteps = async () => {
+    try {
+      const response = await fetch('/api/admin/study-abroad-steps');
+      if (response.ok) {
+        const data = await response.json();
+        setSteps(data.studyAbroadSteps || []);
+      }
+    } catch (error) {
+      console.error('Failed to fetch study abroad steps:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <section className="relative py-20 bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 overflow-hidden">
+        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="text-center">
+            <div className="animate-pulse">
+              <div className="h-8 bg-gray-300 rounded w-1/2 mx-auto mb-4"></div>
+              <div className="h-4 bg-gray-300 rounded w-3/4 mx-auto"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="relative py-20 bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 overflow-hidden">
@@ -37,14 +84,14 @@ export default function StudyAbroadSteps({ steps = sectionsData.studyabroadsteps
             {steps.map((step, index) => (
               <button
                 key={index}
-                onClick={() => setActiveStep(step.id)}
+                onClick={() => setActiveStep(step.stepId)}
                 className={`relative z-10 w-12 h-12 rounded-full border-4 border-white shadow-lg transition-all duration-300 hover:scale-110 ${
-                  activeStep >= step.id 
-                    ? `bg-gradient-to-r ${step.color}` 
+                  activeStep >= step.stepId 
+                    ? `bg-gradient-to-r ${step.color || 'from-blue-500 to-purple-500'}` 
                     : 'bg-gray-200'
                 }`}
               >
-                {activeStep >= step.id ? (
+                {activeStep >= step.stepId ? (
                   <CheckCircle className="w-6 h-6 text-white mx-auto" />
                 ) : (
                   <Circle className="w-6 h-6 text-gray-400 mx-auto" />
@@ -60,33 +107,33 @@ export default function StudyAbroadSteps({ steps = sectionsData.studyabroadsteps
             <div
               key={index}
               className={`relative p-6 rounded-2xl border-2 transition-all duration-300 cursor-pointer hover:shadow-xl hover:-translate-y-2 ${
-                activeStep === step.id
-                  ? `${step.bgColor} border-current ${step.textColor} shadow-lg scale-105`
+                activeStep === step.stepId
+                  ? `${step.bgColor || 'bg-blue-50'} border-current ${step.textColor || 'text-blue-600'} shadow-lg scale-105`
                   : 'bg-white border-gray-200 hover:border-gray-300'
               }`}
-              onClick={() => setActiveStep(step.id)}
+              onClick={() => setActiveStep(step.stepId)}
             >
               <div className={`inline-flex items-center justify-center w-10 h-10 rounded-full mb-4 ${
-                activeStep === step.id 
-                  ? `bg-gradient-to-r ${step.color} text-white` 
+                activeStep === step.stepId 
+                  ? `bg-gradient-to-r ${step.color || 'from-blue-500 to-purple-500'} text-white` 
                   : 'bg-gray-100 text-gray-600'
               }`}>
-                <span className="font-bold">{step.id}</span>
+                <span className="font-bold">{step.stepId}</span>
               </div>
               <h3 className={`text-lg font-semibold mb-2 ${
-                activeStep === step.id ? step.textColor : 'text-gray-900'
+                activeStep === step.stepId ? step.textColor || 'text-blue-600' : 'text-gray-900'
               }`}>
                 {step.title}
               </h3>
               <p className={`text-sm ${
-                activeStep === step.id ? 'text-gray-700' : 'text-gray-600'
+                activeStep === step.stepId ? 'text-gray-700' : 'text-gray-600'
               }`}>
                 {step.description}
               </p>
               
-              {activeStep === step.id && (
+              {activeStep === step.stepId && (
                 <div className="absolute -top-2 -right-2">
-                  <div className={`w-6 h-6 rounded-full bg-gradient-to-r ${step.color} flex items-center justify-center`}>
+                  <div className={`w-6 h-6 rounded-full bg-gradient-to-r ${step.color || 'from-blue-500 to-purple-500'} flex items-center justify-center`}>
                     <ArrowRight className="w-3 h-3 text-white" />
                   </div>
                 </div>
