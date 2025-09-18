@@ -11,7 +11,7 @@ import AwardsSection from "@/components/sections/AwardsSection";
 import UpcomingEvents from "@/components/sections/UpcomingEvents";
 import PartnershipsSection from "@/components/sections/PartnershipsSection";
 import SuccessStories from "@/components/sections/SuccessStories";
-import InsightsSection from "@/components/sections/InsightsSection";
+// import InsightsSection from "@/components/sections/InsightsSection";
 import ContactSection from "@/components/sections/ContactSection";
 
 export default function Home() {
@@ -99,7 +99,7 @@ export default function Home() {
       />
 
       {/* 6. Awards & achievements */}
-      <AwardsSection awards={data.awards} />
+      <AwardsSection />
 
       {/* 7. Upcoming Events */}
       <UpcomingEvents />
@@ -107,25 +107,10 @@ export default function Home() {
       {/* 8. Our Industry{/* 8. Partnerships */}
       <PartnershipsSection />
       {/* 9. Success Stories — review slider */}
-      <SuccessStories 
-        successStories={data.successStories?.map((story, index) => ({
-          id: index + 1,
-          rating: story.rating,
-          text: story.text,
-          author: story.author,
-          university: 'University Name', // Default university
-          program: 'Study Program', // Default program
-          country: story.country,
-          scholarship: story.scholarship,
-          year: story.year,
-          avatar: story.avatar,
-          flag: story.flag,
-          color: story.color
-        }))}
-      />
+      <SuccessStories />
 
       {/* 10. Insights to Keep You Ahead */}
-      <InsightsSection/>
+      {/* <InsightsSection/> */}
 
       {/* 11. Contact Us */}
       <ContactSection contactInfo={data.contactInfo} />
