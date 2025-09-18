@@ -37,11 +37,11 @@ export default function CreateDestinationPage() {
     workRights: "",
     color: "",
     hero: "",
-    overviewText: "",
-    costsText: "",
-    intakesText: "",
-    visaText: "",
-    scholarshipsText: "",
+    overviewMD: "",
+    costsMD: "",
+    intakesMD: "",
+    visaMD: "",
+    scholarshipsMD: "",
     popularCourses: [] as string[],
     faqs: ""
   })
@@ -325,64 +325,64 @@ export default function CreateDestinationPage() {
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <Label htmlFor="overviewText">Overview Content</Label>
+              <Label htmlFor="overviewMD">Overview Content (Markdown)</Label>
               <Textarea
-                id="overviewText"
-                value={formData.overviewText}
-                onChange={(e) => setFormData({...formData, overviewText: e.target.value})}
-                placeholder="Overview content for the destination...&#10;&#10;This will be displayed in a structured format with cards and sections. Focus on key highlights and benefits of studying in this destination."
+                id="overviewMD"
+                value={formData.overviewMD}
+                onChange={(e) => setFormData({...formData, overviewMD: e.target.value})}
+                placeholder="# Study in [Country Name]&#10;&#10;Overview content for the destination in Markdown format...&#10;&#10;## Why Choose [Country]?&#10;&#10;- **World-renowned universities** with cutting-edge facilities&#10;- **Diverse academic programs** across all fields of study&#10;- **Research opportunities** at undergraduate and graduate levels"
                 rows={6}
               />
-              <p className="text-xs text-gray-500 mt-1">This content will be displayed in a modern card-based layout with structured information.</p>
+              <p className="text-xs text-gray-500 mt-1">Use Markdown format for rich content display. This will be rendered with proper formatting on the destination page.</p>
             </div>
             <div>
-              <Label htmlFor="costsText">Costs Information</Label>
+              <Label htmlFor="costsMD">Costs Information (Markdown)</Label>
               <Textarea
-                id="costsText"
-                value={formData.costsText}
-                onChange={(e) => setFormData({...formData, costsText: e.target.value})}
-                placeholder="Cost information for the destination...&#10;&#10;Include details about tuition fees, living expenses, accommodation costs, and any additional expenses students should be aware of."
+                id="costsMD"
+                value={formData.costsMD}
+                onChange={(e) => setFormData({...formData, costsMD: e.target.value})}
+                placeholder="# Study Costs in [Country]&#10;&#10;## Tuition Fees&#10;&#10;### Undergraduate Programs&#10;- **Public Universities**: $X,000 - $Y,000 per year&#10;- **Private Universities**: $X,000 - $Y,000 per year&#10;&#10;## Living Expenses&#10;- **Accommodation**: $X,000 - $Y,000 per year"
                 rows={6}
               />
-              <p className="text-xs text-gray-500 mt-1">This will be displayed in organized cost breakdown cards with clear pricing information.</p>
+              <p className="text-xs text-gray-500 mt-1">Use Markdown format for structured cost information with clear breakdown sections.</p>
             </div>
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <Label htmlFor="intakesText">Intakes Information</Label>
+              <Label htmlFor="intakesMD">Intakes Information (Markdown)</Label>
               <Textarea
-                id="intakesText"
-                value={formData.intakesText}
-                onChange={(e) => setFormData({...formData, intakesText: e.target.value})}
-                placeholder="Intake information for the destination...&#10;&#10;Include details about Fall, Spring, and Summer intakes with their respective application deadlines and important dates."
+                id="intakesMD"
+                value={formData.intakesMD}
+                onChange={(e) => setFormData({...formData, intakesMD: e.target.value})}
+                placeholder="# Academic Intakes in [Country]&#10;&#10;## Fall Semester (Primary Intake)&#10;- **Start Date**: August - September&#10;- **Application Deadline**: December - February&#10;- **Best for**: Maximum program options&#10;&#10;## Spring Semester&#10;- **Start Date**: January - February&#10;- **Application Deadline**: September - October"
                 rows={6}
               />
-              <p className="text-xs text-gray-500 mt-1">This will be displayed in timeline-style cards showing intake periods and deadlines.</p>
+              <p className="text-xs text-gray-500 mt-1">Use Markdown format for structured intake information with clear timelines and deadlines.</p>
             </div>
             <div>
-              <Label htmlFor="visaText">Visa Information</Label>
+              <Label htmlFor="visaMD">Visa Information (Markdown)</Label>
               <Textarea
-                id="visaText"
-                value={formData.visaText}
-                onChange={(e) => setFormData({...formData, visaText: e.target.value})}
-                placeholder="Visa information for the destination...&#10;&#10;Include details about visa types, processing times, requirements, work rights, and application procedures."
+                id="visaMD"
+                value={formData.visaMD}
+                onChange={(e) => setFormData({...formData, visaMD: e.target.value})}
+                placeholder="# Student Visa Information for [Country]&#10;&#10;## [Visa Type Name]&#10;&#10;### Requirements&#10;- **Form/Application** from approved institution&#10;- **Financial documentation** showing ability to pay&#10;- **Academic transcripts** and test scores&#10;&#10;### Processing Time&#10;- **Visa processing**: X-Y weeks"
                 rows={6}
               />
-              <p className="text-xs text-gray-500 mt-1">This will be displayed in structured information cards with visa details and requirements.</p>
+              <p className="text-xs text-gray-500 mt-1">Use Markdown format for comprehensive visa information with clear sections and requirements.</p>
             </div>
           </div>
 
           <div>
-            <Label htmlFor="scholarshipsText">Scholarships Information</Label>
+            <Label htmlFor="scholarshipsMD">Scholarships Information (Markdown)</Label>
             <Textarea
-              id="scholarshipsText"
-              value={formData.scholarshipsText}
-              onChange={(e) => setFormData({...formData, scholarshipsText: e.target.value})}
-              placeholder="Scholarship information for the destination...&#10;&#10;Include details about merit-based scholarships, need-based financial aid, research assistantships, and government scholarships available."
+              id="scholarshipsMD"
+              value={formData.scholarshipsMD}
+              onChange={(e) => setFormData({...formData, scholarshipsMD: e.target.value})}
+              placeholder="# Scholarships for International Students in [Country]&#10;&#10;## University-Specific Scholarships&#10;&#10;### Merit-Based Scholarships&#10;- **Coverage**: Partial to full tuition&#10;- **Criteria**: Academic excellence, test scores&#10;- **Application**: Usually automatic with admission&#10;&#10;## External Scholarships&#10;- **Government Scholarships**&#10;- **Private Foundation Scholarships**"
               rows={6}
             />
-            <p className="text-xs text-gray-500 mt-1">This will be displayed in organized scholarship cards with funding details and eligibility information.</p>
+            <p className="text-xs text-gray-500 mt-1">Use Markdown format for comprehensive scholarship information with clear categories and details.</p>
           </div>
 
           <div>

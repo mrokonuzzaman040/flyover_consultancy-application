@@ -245,7 +245,7 @@ export default async function DestinationPage({ params }: { params: Promise<{ sl
                 <div className="w-16 h-16 bg-gradient-to-br from-amber-500 to-amber-600 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
                   <DollarSign className="w-8 h-8 text-white" />
                 </div>
-                <div className="text-3xl font-bold bg-gradient-to-r from-amber-600 to-amber-700 bg-clip-text text-transparent mb-2">
+                <div className="text-xl font-bold bg-gradient-to-r from-amber-600 to-amber-700 bg-clip-text text-transparent mb-2">
                   {destination.averageCost}
                 </div>
                 <div className="text-sm text-gray-600 font-medium">Average Cost</div>
