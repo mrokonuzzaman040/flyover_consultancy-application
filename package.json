@@ -13,6 +13,7 @@
     "seed-services": "node scripts/seed-services.mjs",
     "seed-sections": "node scripts/seed-sections-data.mjs",
     "seed-success-stories": "node scripts/seed-success-stories.mjs",
+    "seed-scholarships": "node scripts/seed-scholarships.mjs",
     "seed-all": "npm run seed-sections && npm run seed-success-stories"
   },
   "dependencies": {

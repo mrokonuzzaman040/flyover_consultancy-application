@@ -19,7 +19,7 @@ const formatDate = (dateString: string) => {
 };
 
 interface Scholarship {
-  _id: string;
+  id: string;
   title: string;
   slug: string;
   description?: string;
@@ -30,7 +30,7 @@ interface Scholarship {
   requirements?: string;
   applicationProcess?: string;
   website?: string;
-  createdAt: string;
+  createdAt?: string;
 }
 
 interface ScholarshipDetailPageProps {
@@ -70,7 +70,7 @@ export default function ScholarshipDetailPage({ params }: ScholarshipDetailPageP
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
+      <div className="min-h-screen bg-gradient-to-br from-brand-50 via-white to-brand-100">
         <div className="container mx-auto px-4 py-16">
           <div className="max-w-4xl mx-auto">
             <div className="h-8 bg-gray-200 rounded w-32 mb-8 animate-pulse" />
@@ -91,7 +91,7 @@ export default function ScholarshipDetailPage({ params }: ScholarshipDetailPageP
 
   if (error || !scholarship) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
+      <div className="min-h-screen bg-gradient-to-br from-brand-50 via-white to-brand-100">
         <div className="container mx-auto px-4 py-16">
           <div className="max-w-4xl mx-auto text-center">
             <Award className="w-16 h-16 text-gray-300 mx-auto mb-4" />
@@ -100,7 +100,7 @@ export default function ScholarshipDetailPage({ params }: ScholarshipDetailPageP
               {error || 'The scholarship you are looking for does not exist or has been removed.'}
             </p>
             <Link href="/scholarships">
-              <Button className="bg-blue-600 hover:bg-blue-700">
+              <Button className="bg-brand-600 hover:bg-brand-700">
                 <ArrowLeft className="w-4 h-4 mr-2" />
                 Back to Scholarships
               </Button>
@@ -112,11 +112,11 @@ export default function ScholarshipDetailPage({ params }: ScholarshipDetailPageP
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
+    <div className="min-h-screen bg-gradient-to-br from-brand-50 via-white to-brand-100">
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-4xl mx-auto">
           {/* Back Button */}
-          <Link href="/scholarships" className="inline-flex items-center text-blue-600 hover:text-blue-700 mb-8 transition-colors">
+          <Link href="/scholarships" className="inline-flex items-center text-brand-600 hover:text-brand-700 mb-8 transition-colors">
             <ArrowLeft className="w-4 h-4 mr-2" />
             Back to Scholarships
           </Link>
@@ -124,7 +124,7 @@ export default function ScholarshipDetailPage({ params }: ScholarshipDetailPageP
           {/* Main Content */}
           <div className="bg-white rounded-xl shadow-lg overflow-hidden mb-8">
             {/* Header */}
-            <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-8">
+            <div className="bg-gradient-to-r from-brand-600 to-brand-700 text-white p-8">
               <div className="flex items-start justify-between mb-4">
                 <Badge className="bg-white/20 text-white hover:bg-white/30">
                   <Award className="w-3 h-3 mr-1" />
@@ -171,7 +171,7 @@ export default function ScholarshipDetailPage({ params }: ScholarshipDetailPageP
                   <Card>
                     <CardHeader className="pb-3">
                       <CardTitle className="flex items-center text-lg">
-                        <DollarSign className="w-5 h-5 mr-2 text-green-600" />
+                        <DollarSign className="w-5 h-5 mr-2 text-brand-600" />
                         Scholarship Amount
                       </CardTitle>
                     </CardHeader>
@@ -186,7 +186,7 @@ export default function ScholarshipDetailPage({ params }: ScholarshipDetailPageP
                   <Card>
                     <CardHeader className="pb-3">
                       <CardTitle className="flex items-center text-lg">
-                        <Users className="w-5 h-5 mr-2 text-blue-600" />
+                        <Users className="w-5 h-5 mr-2 text-brand-600" />
                         Eligibility Criteria
                       </CardTitle>
                     </CardHeader>
@@ -201,7 +201,7 @@ export default function ScholarshipDetailPage({ params }: ScholarshipDetailPageP
                   <Card className="md:col-span-2">
                     <CardHeader className="pb-3">
                       <CardTitle className="flex items-center text-lg">
-                        <Award className="w-5 h-5 mr-2 text-purple-600" />
+                        <Award className="w-5 h-5 mr-2 text-brand-600" />
                         Requirements
                       </CardTitle>
                     </CardHeader>
@@ -216,7 +216,7 @@ export default function ScholarshipDetailPage({ params }: ScholarshipDetailPageP
                   <Card className="md:col-span-2">
                     <CardHeader className="pb-3">
                       <CardTitle className="flex items-center text-lg">
-                        <Calendar className="w-5 h-5 mr-2 text-orange-600" />
+                        <Calendar className="w-5 h-5 mr-2 text-brand-600" />
                         Application Process
                       </CardTitle>
                     </CardHeader>
@@ -236,7 +236,7 @@ export default function ScholarshipDetailPage({ params }: ScholarshipDetailPageP
                     rel="noopener noreferrer"
                     className="flex-1"
                   >
-                    <Button className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white">
+                    <Button className="w-full bg-gradient-to-r from-brand-600 to-brand-700 hover:from-brand-700 hover:to-brand-800 text-white">
                       Visit Official Website
                       <ExternalLink className="w-4 h-4 ml-2" />
                     </Button>
@@ -244,7 +244,7 @@ export default function ScholarshipDetailPage({ params }: ScholarshipDetailPageP
                 )}
                 <Button 
                   variant="outline" 
-                  className="flex-1 border-2 border-blue-600 text-blue-600 hover:bg-blue-50"
+                  className="flex-1 border-2 border-brand-600 text-brand-600 hover:bg-brand-50"
                   onClick={() => {
                     const element = document.getElementById('contact-form');
                     element?.scrollIntoView({ behavior: 'smooth' });

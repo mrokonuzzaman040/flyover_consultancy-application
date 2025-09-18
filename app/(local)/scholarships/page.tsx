@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import type { Metadata } from "next";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
@@ -20,13 +19,13 @@ import PageHeader from "@/components/page-header";
 import LeadForm from "@/components/lead-form";
 
 interface Scholarship {
-  _id: string;
+  id: string;
   title: string;
   slug: string;
   description?: string;
   country: string[];
   deadline?: string;
-  createdAt: string;
+  createdAt?: string;
 }
 
 export default function ScholarshipsPage() {
@@ -108,7 +107,7 @@ export default function ScholarshipsPage() {
                 placeholder="Search scholarships by name, country, or description..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-12 pr-4 py-3 text-lg border-2 rounded-xl focus:border-blue-500 focus:ring-0"
+                className="pl-12 pr-4 py-3 text-lg border-2 rounded-xl focus:border-brand-500 focus:ring-0"
               />
             </div>
           </div>
@@ -129,7 +128,7 @@ export default function ScholarshipsPage() {
             {searchTerm && (
               <Button 
                 onClick={() => setSearchTerm('')}
-                className="bg-blue-600 hover:bg-blue-700"
+                className="bg-brand-600 hover:bg-brand-700"
               >
                 Clear Search
               </Button>
@@ -150,10 +149,10 @@ export default function ScholarshipsPage() {
             
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 mb-10">
               {filteredScholarships.map((scholarship) => (
-                <Card key={scholarship._id} className="group hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border-0 shadow-lg">
+                <Card key={scholarship.id} className="group hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border-0 shadow-lg">
                   <CardHeader className="pb-4">
                     <div className="flex items-start justify-between mb-3">
-                      <Badge variant="secondary" className="bg-blue-100 text-blue-700 hover:bg-blue-200">
+                      <Badge variant="secondary" className="bg-brand-100 text-brand-700 hover:bg-brand-200">
                         <Award className="w-3 h-3 mr-1" />
                         Scholarship
                       </Badge>
@@ -164,7 +163,7 @@ export default function ScholarshipsPage() {
                         </div>
                       )}
                     </div>
-                    <CardTitle className="text-xl font-bold text-gray-900 group-hover:text-blue-600 transition-colors line-clamp-2">
+                    <CardTitle className="text-xl font-bold text-gray-900 group-hover:text-brand-600 transition-colors line-clamp-2">
                       {scholarship.title}
                     </CardTitle>
                   </CardHeader>
@@ -177,7 +176,7 @@ export default function ScholarshipsPage() {
                     
                     {scholarship.country.length > 0 && (
                       <div className="flex items-center mb-4">
-                        <MapPin className="w-4 h-4 text-gray-400 mr-2 flex-shrink-0" />
+                        <MapPin className="w-4 h-4 text-brand-400 mr-2 flex-shrink-0" />
                         <div className="flex flex-wrap gap-1">
                           {scholarship.country.slice(0, 3).map((country, index) => (
                             <Badge key={index} variant="outline" className="text-xs">
@@ -194,7 +193,7 @@ export default function ScholarshipsPage() {
                     )}
                     
                     <Link href={`/scholarships/${scholarship.slug}`}>
-                      <Button className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white group-hover:shadow-lg transition-all duration-300">
+                      <Button className="w-full bg-gradient-to-r from-brand-600 to-brand-700 hover:from-brand-700 hover:to-brand-800 text-white group-hover:shadow-lg transition-all duration-300">
                         Learn More
                         <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
                       </Button>

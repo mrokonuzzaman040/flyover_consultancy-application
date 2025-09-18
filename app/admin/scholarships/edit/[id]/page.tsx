@@ -1,7 +1,7 @@
 "use client"
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
+import { useRouter, useParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -13,9 +13,28 @@ import { toast } from "sonner";
 
 type Status = "draft" | "published" | "archived";
 
-export default function CreateScholarshipPage() {
+interface Scholarship {
+  _id: string;
+  title: string;
+  slug: string;
+  description?: string;
+  country: string[];
+  deadline?: string;
+  amount?: string;
+  eligibility?: string;
+  requirements?: string;
+  applicationProcess?: string;
+  website?: string;
+  tags: string[];
+  status: Status;
+}
+
+export default function EditScholarshipPage() {
   const router = useRouter();
-  const [loading, setLoading] = useState(false);
+  const params = useParams();
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [scholarship, setScholarship] = useState<Scholarship | null>(null);
   const [formData, setFormData] = useState({
     title: "",
     slug: "",
@@ -31,6 +50,45 @@ export default function CreateScholarshipPage() {
     status: "draft" as Status,
   });
 
+  useEffect(() => {
+    if (params.id) {
+      fetchScholarship(params.id as string);
+    }
+  }, [params.id]);
+
+  const fetchScholarship = async (id: string) => {
+    try {
+      const response = await fetch(`/api/admin/scholarships/${id}`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch scholarship');
+      }
+      const data = await response.json();
+      const scholarship = data.scholarship;
+      
+      setScholarship(scholarship);
+      setFormData({
+        title: scholarship.title,
+        slug: scholarship.slug,
+        description: scholarship.description || "",
+        country: scholarship.country.join(', '),
+        deadline: scholarship.deadline ? new Date(scholarship.deadline).toISOString().split('T')[0] : "",
+        amount: scholarship.amount || "",
+        eligibility: scholarship.eligibility || "",
+        requirements: scholarship.requirements || "",
+        applicationProcess: scholarship.applicationProcess || "",
+        website: scholarship.website || "",
+        tags: scholarship.tags.join(', '),
+        status: scholarship.status,
+      });
+    } catch (error) {
+      console.error('Error fetching scholarship:', error);
+      toast.error('Failed to load scholarship');
+      router.push('/admin/scholarships');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const generateSlug = (title: string) => {
     return title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
   };
@@ -44,54 +102,103 @@ export default function CreateScholarshipPage() {
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault(); setLoading(true);
+    e.preventDefault();
+    setSaving(true);
     try {
-      const res = await fetch('/api/admin/scholarships', {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
+      const response = await fetch(`/api/admin/scholarships/${params.id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           ...formData,
           country: formData.country.split(',').map(t => t.trim()).filter(Boolean),
           tags: formData.tags.split(',').map(t => t.trim()).filter(Boolean),
-          deadline: formData.deadline ? new Date(formData.deadline).toISOString() : undefined,
+          deadline: formData.deadline ? new Date(formData.deadline).toISOString() : null,
         })
       });
-      if (!res.ok) throw new Error('Failed to create scholarship');
-      toast.success('Scholarship created'); router.push('/admin/scholarships');
-    } catch { toast.error('Failed to create scholarship'); } finally { setLoading(false); }
+      
+      if (!response.ok) {
+        throw new Error('Failed to update scholarship');
+      }
+      
+      toast.success('Scholarship updated successfully');
+      router.push('/admin/scholarships');
+    } catch (error) {
+      console.error('Error updating scholarship:', error);
+      toast.error('Failed to update scholarship');
+    } finally {
+      setSaving(false);
+    }
   };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-brand-600"></div>
+      </div>
+    );
+  }
+
+  if (!scholarship) {
+    return (
+      <div className="text-center py-12">
+        <p className="text-gray-500">Scholarship not found</p>
+        <Button className="mt-4" onClick={() => router.push('/admin/scholarships')}>
+          Back to Scholarships
+        </Button>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
       <div className="flex items-center gap-4">
         <Button variant="outline" size="sm" onClick={() => router.back()}>
-          <ArrowLeft className="w-4 h-4 mr-2" /> Back
+          <ArrowLeft className="w-4 h-4 mr-2" />
+          Back
         </Button>
-        <h1 className="text-3xl font-bold text-gray-900">Create Scholarship</h1>
+        <h1 className="text-3xl font-bold text-gray-900">Edit Scholarship</h1>
       </div>
+      
       <Card>
         <CardHeader>
-          <CardTitle>Details</CardTitle>
+          <CardTitle>Scholarship Details</CardTitle>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <Label>Title *</Label>
-                <Input value={formData.title} onChange={(e) => handleTitleChange(e.target.value)} required />
+                <Input 
+                  value={formData.title} 
+                  onChange={(e) => handleTitleChange(e.target.value)} 
+                  required 
+                />
               </div>
               <div>
                 <Label>Slug *</Label>
-                <Input value={formData.slug} onChange={(e) => setFormData({ ...formData, slug: e.target.value })} required />
+                <Input 
+                  value={formData.slug} 
+                  onChange={(e) => setFormData({ ...formData, slug: e.target.value })} 
+                  required 
+                />
               </div>
             </div>
+            
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <Label>Deadline</Label>
-                <Input type="date" value={formData.deadline} onChange={(e) => setFormData({ ...formData, deadline: e.target.value })} />
+                <Input 
+                  type="date" 
+                  value={formData.deadline} 
+                  onChange={(e) => setFormData({ ...formData, deadline: e.target.value })} 
+                />
               </div>
               <div>
                 <Label>Status</Label>
-                <Select value={formData.status} onValueChange={(v: Status) => setFormData({ ...formData, status: v })}>
+                <Select 
+                  value={formData.status} 
+                  onValueChange={(v: Status) => setFormData({ ...formData, status: v })}
+                >
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
@@ -103,6 +210,7 @@ export default function CreateScholarshipPage() {
                 </Select>
               </div>
             </div>
+            
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <Label>Countries (comma separated)</Label>
@@ -121,6 +229,7 @@ export default function CreateScholarshipPage() {
                 />
               </div>
             </div>
+            
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <Label>Website URL</Label>
@@ -139,6 +248,7 @@ export default function CreateScholarshipPage() {
                 />
               </div>
             </div>
+            
             <div>
               <Label>Description</Label>
               <Textarea 
@@ -148,6 +258,7 @@ export default function CreateScholarshipPage() {
                 placeholder="Brief overview of the scholarship program..."
               />
             </div>
+            
             <div>
               <Label>Eligibility Criteria</Label>
               <Textarea 
@@ -157,6 +268,7 @@ export default function CreateScholarshipPage() {
                 placeholder="Who can apply for this scholarship..."
               />
             </div>
+            
             <div>
               <Label>Requirements</Label>
               <Textarea 
@@ -166,6 +278,7 @@ export default function CreateScholarshipPage() {
                 placeholder="Documents and qualifications needed..."
               />
             </div>
+            
             <div>
               <Label>Application Process</Label>
               <Textarea 
@@ -175,9 +288,14 @@ export default function CreateScholarshipPage() {
                 placeholder="Step-by-step application instructions..."
               />
             </div>
+            
             <div className="flex justify-end gap-3">
-              <Button type="button" variant="outline" onClick={() => router.back()}>Cancel</Button>
-              <Button type="submit" disabled={loading}>{loading ? 'Creating...' : 'Create'}</Button>
+              <Button type="button" variant="outline" onClick={() => router.back()}>
+                Cancel
+              </Button>
+              <Button type="submit" disabled={saving}>
+                {saving ? 'Saving...' : 'Save Changes'}
+              </Button>
             </div>
           </form>
         </CardContent>
@@ -185,4 +303,3 @@ export default function CreateScholarshipPage() {
     </div>
   );
 }
-

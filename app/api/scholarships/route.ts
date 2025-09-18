@@ -20,7 +20,7 @@ export async function GET(req: NextRequest) {
     }
     
     const scholarships = await Scholarship.find(query)
-      .select('title slug description country deadline')
+      .select('title slug description country deadline amount eligibility requirements applicationProcess website tags')
       .sort({ createdAt: -1 })
       .limit(limit)
       .lean();
