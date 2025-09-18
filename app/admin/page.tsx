@@ -4,6 +4,7 @@ import { useSession } from "next-auth/react"
 import { useEffect, useState } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Users, FileText, Calendar, MessageSquare, Upload, TrendingUp } from "lucide-react"
+import PageHeader from "@/components/admin/PageHeader"
 
 type DashboardStats = {
   totalLeads: number
@@ -86,20 +87,16 @@ export default function AdminDashboard() {
       value: stats.recentActivity,
       icon: TrendingUp,
       description: "Actions this week",
-      color: "text-red-600"
+      color: "text-brand-600"
     }
   ]
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold text-gray-900">
-          Welcome back, {session?.user?.name || "Admin"}!
-        </h1>
-        <p className="text-gray-600 mt-1">
-          Here&apos;s what&apos;s happening with your admin panel today.
-        </p>
-      </div>
+      <PageHeader
+        title={`Welcome back, ${session?.user?.name || "Admin"}!`}
+        description="Here’s what’s happening with your admin panel today."
+      />
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {statCards.map((card, index) => {
@@ -181,7 +178,7 @@ export default function AdminDashboard() {
             </div>
             <div className="flex items-center justify-between">
               <span className="text-sm font-medium">Your Role</span>
-              <span className="text-sm text-blue-600">{session?.user?.role}</span>
+              <span className="text-sm text-brand-600">{(session?.user as { role?: string } | undefined)?.role || 'Admin'}</span>
             </div>
           </CardContent>
         </Card>

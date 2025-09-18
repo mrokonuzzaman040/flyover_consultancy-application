@@ -1,125 +1,50 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
-import { prisma } from "@/lib/prisma";
 import { z } from "zod";
+import { dbConnect, toObject } from "@/lib/mongoose";
+import { Lead } from "@/lib/models/Lead";
 
-const UpdateLeadSchema = z.object({
-  name: z.string().min(2).max(50).optional(),
-  email: z.string().email().optional(),
-  phone: z.string().optional(),
-  countryInterest: z.array(z.string()).optional(),
-  serviceInterest: z.array(z.string()).optional(),
-  message: z.string().max(500).optional(),
-  status: z.enum(["NEW", "CONTACTED", "QUALIFIED", "CONVERTED", "CLOSED"]).optional(),
-  source: z.string().optional(),
-  utmSource: z.string().optional(),
-  utmMedium: z.string().optional(),
-  utmCampaign: z.string().optional(),
+const schema = z.object({
+  name: z.string().min(1),
+  email: z.string().email().optional().or(z.literal("")),
+  phone: z.string().min(1, "Phone number is required").refine((val) => /^\+[1-9]\d{1,14}$/.test(val.replace(/[\s-()]/g, '')), {
+    message: "Please enter a valid phone number with country code (e.g., +1234567890)"
+  }),
+  countryInterest: z.array(z.string()).default([]),
+  serviceInterest: z.array(z.string()).default([]),
+  message: z.string().optional().nullable(),
+  purpose: z.enum(["consultation", "enquiry"]).default("consultation"),
+  utmSource: z.string().optional().nullable(),
+  utmMedium: z.string().optional().nullable(),
+  utmCampaign: z.string().optional().nullable(),
+  source: z.string().optional().nullable(),
+  status: z.enum(["NEW", "CONTACTED", "QUALIFIED", "CONVERTED", "CLOSED"]).default("NEW"),
 });
 
 export async function GET(req: NextRequest) {
   try {
-    const session = await getServerSession(authOptions);
-    if (!session || !session.user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-
+    await dbConnect();
     const { searchParams } = new URL(req.url);
-    const page = parseInt(searchParams.get('page') || '1');
-    const limit = parseInt(searchParams.get('limit') || '10');
-    const status = searchParams.get('status');
-    const search = searchParams.get('search');
-
-    const skip = (page - 1) * limit;
-
-    const where: {
-      status?: string;
-      OR?: Array<{
-        name?: { contains: string; mode: 'insensitive' };
-        email?: { contains: string; mode: 'insensitive' };
-        phone?: { contains: string; mode: 'insensitive' };
-      }>;
-    } = {};
-
-    if (status && status !== 'ALL') {
-      where.status = status;
-    }
-    if (search) {
-      where.OR = [
-        { name: { contains: search, mode: 'insensitive' } },
-        { email: { contains: search, mode: 'insensitive' } },
-        { phone: { contains: search, mode: 'insensitive' } }
-      ];
-    }
-
-    const [leads, total] = await Promise.all([
-      prisma.lead.findMany({
-        where,
-        skip,
-        take: limit,
-        orderBy: { createdAt: 'desc' }
-      }),
-      prisma.lead.count({ where })
-    ]);
-
-    return NextResponse.json({
-      leads,
-      pagination: {
-        page,
-        limit,
-        total,
-        pages: Math.ceil(total / limit)
-      }
-    });
-  } catch (error) {
-    console.error('Error fetching leads:', error);
-    return NextResponse.json(
-      { error: 'Failed to fetch leads' },
-      { status: 500 }
-    );
+    const status = searchParams.get("status");
+    const q: Record<string, unknown> = {};
+    if (status && ["NEW", "CONTACTED", "QUALIFIED", "CONVERTED", "CLOSED"].includes(status)) q.status = status;
+    const docs = await Lead.find(q).sort({ createdAt: -1 }).lean();
+    return NextResponse.json({ leads: docs.map((d) => ({ ...toObject(d as { _id: unknown }) })) });
+  } catch (e: unknown) {
+    console.error(e);
+    return NextResponse.json({ message: "Failed to fetch leads" }, { status: 500 });
   }
 }
 
 export async function POST(req: NextRequest) {
   try {
-    const session = await getServerSession(authOptions);
-    if (!session || !session.user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-
-    const body = await req.json();
-    const parsed = UpdateLeadSchema.safeParse(body);
-
-    if (!parsed.success) {
-      return NextResponse.json(
-        { error: "Validation failed", details: parsed.error.issues },
-        { status: 400 }
-      );
-    }
-
-    const lead = await prisma.lead.create({
-      data: {
-        name: parsed.data.name || '',
-        email: parsed.data.email || '',
-        phone: parsed.data.phone || '',
-        countryInterest: parsed.data.countryInterest || [],
-        serviceInterest: parsed.data.serviceInterest || [],
-        message: parsed.data.message,
-        status: parsed.data.status || 'NEW',
-        source: parsed.data.source,
-        utmSource: parsed.data.utmSource,
-        utmMedium: parsed.data.utmMedium,
-        utmCampaign: parsed.data.utmCampaign,
-      },
-    });
-
-    return NextResponse.json(lead);
-  } catch (error) {
-    console.error('Error creating lead:', error);
-    return NextResponse.json(
-      { error: 'Failed to create lead' },
-      { status: 500 }
-    );
+    await dbConnect();
+    const json = await req.json();
+    const parsed = schema.safeParse(json);
+    if (!parsed.success) return NextResponse.json({ message: parsed.error.flatten() }, { status: 400 });
+    const doc = await Lead.create(parsed.data);
+    return NextResponse.json({ lead: toObject(doc.toObject()) }, { status: 201 });
+  } catch (e: unknown) {
+    console.error(e);
+    return NextResponse.json({ message: "Failed to create lead" }, { status: 500 });
   }
 }

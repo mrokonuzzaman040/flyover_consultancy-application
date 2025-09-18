@@ -76,7 +76,7 @@ export default function ViewDestination() {
       <div className="container mx-auto px-4 py-8">
         <div className="flex items-center justify-center min-h-[400px]">
           <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-brand-600 mx-auto mb-4"></div>
             <p className="text-gray-600">Loading destination...</p>
           </div>
         </div>
@@ -89,7 +89,7 @@ export default function ViewDestination() {
       <div className="container mx-auto px-4 py-8">
         <div className="flex items-center justify-center min-h-[400px]">
           <div className="text-center">
-            <p className="text-red-600 mb-4">{error || 'Destination not found'}</p>
+            <p className="text-brand-600 mb-4">{error || 'Destination not found'}</p>
             <Link href="/admin/destinations">
               <Button variant="outline">
                 <ArrowLeft className="w-4 h-4 mr-2" />
@@ -123,7 +123,7 @@ export default function ViewDestination() {
             </Button>
           </Link>
           <Link href={`/admin/destinations/edit/${destination.id}`}>
-            <Button className="bg-blue-600 hover:bg-blue-700">
+            <Button className="bg-brand-600 hover:bg-brand-700">
               <Edit className="w-4 h-4 mr-2" />
               Edit Destination
             </Button>
@@ -135,7 +135,7 @@ export default function ViewDestination() {
       <div className="bg-white rounded-lg shadow-sm border p-8">
         {/* Header Section */}
         <div className="flex items-center space-x-6 mb-8 pb-6 border-b">
-          <div className="w-20 h-20 bg-blue-600 text-white rounded-full flex items-center justify-center">
+          <div className="w-20 h-20 bg-brand-600 text-white rounded-full flex items-center justify-center">
             <Globe className="w-10 h-10" />
           </div>
           <div>

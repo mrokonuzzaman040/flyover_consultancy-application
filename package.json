@@ -2,14 +2,22 @@
   "name": "flyover",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build --turbopack",
+    "build:no-turbo": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "create-admin": "node scripts/create-admin.js",
+    "seed-services": "node scripts/seed-services.mjs",
+    "seed-sections": "node scripts/seed-sections-data.mjs",
+    "seed-success-stories": "node scripts/seed-success-stories.mjs",
+    "seed-scholarships": "node scripts/seed-scholarships.mjs",
+    "seed-all": "npm run seed-sections && npm run seed-success-stories"
   },
   "dependencies": {
-    "@next-auth/prisma-adapter": "^1.0.7",
+    "@playwright/test": "^1.55.0",
     "@prisma/client": "^6.16.1",
     "@radix-ui/react-label": "^2.1.7",
     "@radix-ui/react-select": "^2.2.6",
@@ -34,6 +42,8 @@
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "react-dropzone": "^14.3.8",
+    "react-markdown": "^10.1.0",
+    "remark-gfm": "^4.0.1",
     "sonner": "^2.0.7",
     "tailwind-merge": "^3.3.1",
     "tailwindcss-animate": "^1.0.7",
@@ -48,7 +58,6 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "15.5.3",
-    "prisma": "^6.16.1",
     "tailwindcss": "^4",
     "typescript": "^5"
   }

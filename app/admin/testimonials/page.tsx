@@ -5,12 +5,16 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Trash2, Edit, Eye, Plus, Search, Filter, Quote } from "lucide-react"
 import { toast } from "sonner"
 import Image from "next/image"
+import ImageBBUpload from "@/components/admin/ImageBBUpload"
+import PageHeader from "@/components/admin/PageHeader"
+import DataTable from "@/components/admin/DataTable"
+import ListToolbar from "@/components/admin/ListToolbar"
+import EmptyState from "@/components/admin/EmptyState"
 
 interface Testimonial {
   id: string
@@ -201,131 +205,72 @@ export default function AdminTestimonialsPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-brand-600"></div>
       </div>
     )
   }
 
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <h1 className="text-3xl font-bold text-gray-900">Testimonials Management</h1>
-        <Button onClick={() => setShowCreateModal(true)} className="bg-blue-600 hover:bg-blue-700">
-          <Plus className="w-4 h-4 mr-2" />
-          Create Testimonial
-        </Button>
-      </div>
+      <PageHeader
+        title="Testimonials Management"
+        description="Collect and manage testimonials"
+        actions={(
+          <Button onClick={() => setShowCreateModal(true)} className="bg-brand-600 hover:bg-brand-700">
+            <Plus className="w-4 h-4 mr-2" />
+            Create Testimonial
+          </Button>
+        )}
+      />
 
-      {/* Filters */}
-      <Card>
-        <CardContent className="pt-6">
-          <div className="flex gap-4 items-center">
-            <div className="flex-1">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-                <Input
-                  placeholder="Search testimonials..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10"
-                />
-              </div>
-            </div>
-            <div className="w-48">
-              <Select value={statusFilter} onValueChange={setStatusFilter}>
-                <SelectTrigger>
-                  <Filter className="w-4 h-4 mr-2" />
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Status</SelectItem>
-                  <SelectItem value="published">Published</SelectItem>
-                  <SelectItem value="draft">Draft</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
+      <ListToolbar search={searchTerm} onSearchChange={setSearchTerm} searchPlaceholder="Search testimonials...">
+        <Select value={statusFilter} onValueChange={setStatusFilter}>
+          <SelectTrigger className="w-48">
+            <Filter className="w-4 h-4 mr-2" />
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All Status</SelectItem>
+            <SelectItem value="published">Published</SelectItem>
+            <SelectItem value="draft">Draft</SelectItem>
+          </SelectContent>
+        </Select>
+      </ListToolbar>
 
-      {/* Testimonials Grid */}
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {filteredTestimonials.map((testimonial) => (
-          <Card key={testimonial.id} className="hover:shadow-lg transition-shadow">
-            <CardHeader className="pb-3">
-              <div className="flex justify-between items-start">
-                <div className="flex items-center space-x-3">
-                  {testimonial.avatarUrl ? (
-                    <Image 
-                      src={testimonial.avatarUrl} 
-                      alt={testimonial.author}
-                      className="w-10 h-10 rounded-full object-cover"
-                      height={120}
-                      width={120}
-                    />
-                  ) : (
-                    <div className="w-10 h-10 bg-blue-600 text-white rounded-full flex items-center justify-center text-sm font-medium">
-                      {getInitials(testimonial.author)}
-                    </div>
-                  )}
-                  <div>
-                    <CardTitle className="text-lg">{testimonial.author}</CardTitle>
-                    {testimonial.source && (
-                      <p className="text-sm text-gray-600">{testimonial.source}</p>
-                    )}
-                  </div>
-                </div>
-                {getStatusBadge(testimonial)}
-              </div>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-3">
-                <div className="flex items-start">
-                  <Quote className="w-4 h-4 text-gray-400 mr-2 mt-1 flex-shrink-0" />
-                  <p className="text-sm text-gray-700 line-clamp-4">{testimonial.quote}</p>
-                </div>
-                <div className="flex items-center justify-between text-xs text-gray-500">
-                  <span>Created: {formatDate(testimonial.createdAt)}</span>
-                  {testimonial.publishedAt && (
-                    <span>Published: {formatDate(testimonial.publishedAt)}</span>
-                  )}
+      {filteredTestimonials.length === 0 ? (
+        <EmptyState title="No testimonials found" />
+      ) : (
+        <DataTable
+          columns={[
+            { key: 'author', header: 'Author', render: (t: Testimonial) => (
+              <div className="flex items-center gap-3">
+                {t.avatarUrl ? (
+                  <Image src={t.avatarUrl} alt={t.author} height={40} width={40} className="rounded-full object-cover w-10 h-10" />
+                ) : (
+                  <div className="w-10 h-10 bg-brand-600 text-white rounded-full flex items-center justify-center text-sm font-medium">{getInitials(t.author)}</div>
+                )}
+                <div>
+                  <div className="font-medium text-slate-900">{t.author}</div>
+                  {t.source && <div className="text-xs text-slate-500">{t.source}</div>}
                 </div>
               </div>
-              <div className="flex justify-end gap-2 mt-4">
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={() => openViewModal(testimonial)}
-                >
-                  <Eye className="w-4 h-4" />
-                </Button>
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={() => openEditModal(testimonial)}
-                >
-                  <Edit className="w-4 h-4" />
-                </Button>
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={() => openDeleteModal(testimonial)}
-                  className="text-red-600 hover:text-red-700"
-                >
-                  <Trash2 className="w-4 h-4" />
-                </Button>
+            ) },
+            { key: 'quote', header: 'Quote', hideOn: 'md', render: (t: Testimonial) => (
+              <div className="text-slate-600 line-clamp-1 flex items-center gap-2"><Quote className="w-4 h-4" />{t.quote}</div>
+            ) },
+            { key: 'status', header: 'Status', hideOn: 'sm', render: (t: Testimonial) => getStatusBadge(t) },
+            { key: 'createdAt', header: 'Created', hideOn: 'lg', render: (t: Testimonial) => formatDate(t.createdAt) },
+            { key: 'actions', header: 'Actions', headerClassName: 'text-right', cellClassName: 'text-right', render: (t: Testimonial) => (
+              <div className="flex justify-end gap-2">
+                <Button size="sm" variant="outline" onClick={() => openViewModal(t)}><Eye className="w-4 h-4" /></Button>
+                <Button size="sm" variant="outline" onClick={() => openEditModal(t)}><Edit className="w-4 h-4" /></Button>
+                <Button size="sm" variant="outline" onClick={() => openDeleteModal(t)} className="text-brand-600 hover:text-brand-700"><Trash2 className="w-4 h-4" /></Button>
               </div>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
-
-      {filteredTestimonials.length === 0 && (
-        <Card>
-          <CardContent className="text-center py-12">
-            <p className="text-gray-500">No testimonials found matching your criteria.</p>
-          </CardContent>
-        </Card>
+            ) },
+          ]}
+          data={filteredTestimonials}
+          rowKey={(t) => t.id}
+        />
       )}
 
       {/* Create Modal */}
@@ -367,13 +312,17 @@ export default function AdminTestimonialsPage() {
                 />
               </div>
               <div>
-                <Label htmlFor="avatarUrl">Avatar Image URL (Optional)</Label>
-                <Input
-                  id="avatarUrl"
-                  value={formData.avatarUrl}
-                  onChange={(e) => setFormData({...formData, avatarUrl: e.target.value})}
-                  placeholder="https://example.com/avatar.jpg"
+                <ImageBBUpload
+                  label="Avatar Image (Optional)"
+                  currentImage={formData.avatarUrl}
+                  onUpload={(image) => setFormData({...formData, avatarUrl: image.url})}
+                  onRemove={() => setFormData({...formData, avatarUrl: ""})}
+                  maxSize={1 * 1024 * 1024} // 1MB for avatars
+                  required={false}
                 />
+                <p className="text-xs text-gray-500 mt-1">
+                  Upload an avatar image (recommended: square format, max 1MB)
+                </p>
               </div>
               <div>
                 <Label htmlFor="publishedAt">Publish Date (Optional)</Label>
@@ -390,7 +339,7 @@ export default function AdminTestimonialsPage() {
               <Button variant="outline" onClick={() => { setShowCreateModal(false); resetForm(); }}>
                 Cancel
               </Button>
-              <Button onClick={handleCreate} className="bg-blue-600 hover:bg-blue-700">
+              <Button onClick={handleCreate} className="bg-brand-600 hover:bg-brand-700">
                 Create Testimonial
               </Button>
             </div>
@@ -437,13 +386,17 @@ export default function AdminTestimonialsPage() {
                 />
               </div>
               <div>
-                <Label htmlFor="edit-avatarUrl">Avatar Image URL (Optional)</Label>
-                <Input
-                  id="edit-avatarUrl"
-                  value={formData.avatarUrl}
-                  onChange={(e) => setFormData({...formData, avatarUrl: e.target.value})}
-                  placeholder="https://example.com/avatar.jpg"
+                <ImageBBUpload
+                  label="Avatar Image (Optional)"
+                  currentImage={formData.avatarUrl}
+                  onUpload={(image) => setFormData({...formData, avatarUrl: image.url})}
+                  onRemove={() => setFormData({...formData, avatarUrl: ""})}
+                  maxSize={1 * 1024 * 1024} // 1MB for avatars
+                  required={false}
                 />
+                <p className="text-xs text-gray-500 mt-1">
+                  Upload an avatar image (recommended: square format, max 1MB)
+                </p>
               </div>
               <div>
                 <Label htmlFor="edit-publishedAt">Publish Date (Optional)</Label>
@@ -460,7 +413,7 @@ export default function AdminTestimonialsPage() {
               <Button variant="outline" onClick={() => { setShowEditModal(false); resetForm(); }}>
                 Cancel
               </Button>
-              <Button onClick={handleUpdate} className="bg-blue-600 hover:bg-blue-700">
+              <Button onClick={handleUpdate} className="bg-brand-600 hover:bg-brand-700">
                 Update Testimonial
               </Button>
             </div>
@@ -486,7 +439,7 @@ export default function AdminTestimonialsPage() {
                     width={16}
                   />
                 ) : (
-                  <div className="w-16 h-16 bg-blue-600 text-white rounded-full flex items-center justify-center text-lg font-medium">
+                  <div className="w-16 h-16 bg-brand-600 text-white rounded-full flex items-center justify-center text-lg font-medium">
                     {getInitials(selectedTestimonial.author)}
                   </div>
                 )}
@@ -502,7 +455,7 @@ export default function AdminTestimonialsPage() {
               <div>
                 <Label className="font-medium text-gray-900">Testimonial</Label>
                 <div className="bg-gray-50 p-4 rounded-lg mt-2">
-                  <Quote className="w-6 h-6 text-blue-600 mb-2" />
+                  <Quote className="w-6 h-6 text-brand-600 mb-2" />
                   <p className="text-gray-700 leading-relaxed italic">&ldquo;{selectedTestimonial.quote}&rdquo;</p>
                 </div>
               </div>
@@ -542,7 +495,7 @@ export default function AdminTestimonialsPage() {
                 <Button variant="outline" onClick={() => setShowDeleteModal(false)}>
                   Cancel
                 </Button>
-                <Button onClick={handleDelete} className="bg-red-600 hover:bg-red-700">
+                <Button onClick={handleDelete} className="bg-brand-600 hover:bg-brand-700">
                   Delete
                 </Button>
               </div>

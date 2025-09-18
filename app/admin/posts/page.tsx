@@ -9,6 +9,10 @@ import { Badge } from "@/components/ui/badge"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Trash2, Edit, Eye, Plus, Search, Filter } from "lucide-react"
 import { toast } from "sonner"
+import PageHeader from "@/components/admin/PageHeader"
+import DataTable from "@/components/admin/DataTable"
+import ListToolbar from "@/components/admin/ListToolbar"
+import EmptyState from "@/components/admin/EmptyState"
 
 interface Post {
   id: string
@@ -46,7 +50,7 @@ export default function AdminPostsPage() {
       } else {
         toast.error('Failed to fetch posts')
       }
-    } catch (error) {
+    } catch {
       toast.error('Error fetching posts')
     } finally {
       setLoading(false)
@@ -70,7 +74,7 @@ export default function AdminPostsPage() {
       } else {
         toast.error('Failed to delete post')
       }
-    } catch (error) {
+    } catch {
       toast.error('Error deleting post')
     } finally {
       setDeleteLoading(null)
@@ -96,136 +100,89 @@ export default function AdminPostsPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-brand-600"></div>
       </div>
     )
   }
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold text-gray-900">Posts Management</h1>
-        <Button 
-          onClick={() => router.push('/admin/posts/create')}
-          className="bg-blue-600 hover:bg-blue-700"
-        >
-          <Plus className="w-4 h-4 mr-2" />
-          Create Post
-        </Button>
-      </div>
+      <PageHeader
+        title="Posts Management"
+        description="Write and publish blog posts"
+        actions={(
+          <Button 
+            onClick={() => router.push('/admin/posts/create')}
+            className="bg-brand-600 hover:bg-brand-700"
+          >
+            <Plus className="w-4 h-4 mr-2" />
+            Create Post
+          </Button>
+        )}
+      />
 
       {/* Filters */}
-      <Card>
-        <CardContent className="pt-6">
-          <div className="flex gap-4 items-end">
-            <div className="flex-1">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-                <Input
-                  placeholder="Search posts..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10"
-                />
-              </div>
-            </div>
-            <div className="w-48">
-              <Select value={statusFilter} onValueChange={setStatusFilter}>
-                <SelectTrigger>
-                  <Filter className="w-4 h-4 mr-2" />
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Status</SelectItem>
-                  <SelectItem value="draft">Draft</SelectItem>
-                  <SelectItem value="published">Published</SelectItem>
-                  <SelectItem value="archived">Archived</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
+      <ListToolbar
+        search={searchTerm}
+        onSearchChange={setSearchTerm}
+        searchPlaceholder="Search posts..."
+      >
+        <Select value={statusFilter} onValueChange={setStatusFilter}>
+          <SelectTrigger className="w-48">
+            <Filter className="w-4 h-4 mr-2" />
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All Status</SelectItem>
+            <SelectItem value="draft">Draft</SelectItem>
+            <SelectItem value="published">Published</SelectItem>
+            <SelectItem value="archived">Archived</SelectItem>
+          </SelectContent>
+        </Select>
+      </ListToolbar>
 
-      {/* Posts Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filteredPosts.map((post) => (
-          <Card key={post.id} className="hover:shadow-lg transition-shadow">
-            <CardHeader>
-              <div className="flex items-start justify-between">
-                <CardTitle className="text-lg line-clamp-2">{post.title}</CardTitle>
-                <Badge className={getStatusColor(post.status)}>
-                  {post.status}
-                </Badge>
+      {filteredPosts.length === 0 ? (
+        <EmptyState
+          title="No posts found"
+          description={searchTerm || statusFilter !== "all" ? "Try adjusting your search or filters." : "Get started by creating your first post."}
+          action={
+            !searchTerm && statusFilter === "all" ? (
+              <Button onClick={() => router.push('/admin/posts/create')} className="bg-brand-600 hover:bg-brand-700">
+                <Plus className="w-4 h-4 mr-2" />
+                Create Post
+              </Button>
+            ) : null
+          }
+        />
+      ) : (
+        <DataTable
+          columns={[
+            { key: 'title', header: 'Title', render: (p: Post) => (
+              <div>
+                <div className="font-medium text-slate-900 line-clamp-1">{p.title}</div>
+                {p.excerpt && <div className="text-xs text-slate-500 line-clamp-1">{p.excerpt}</div>}
               </div>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-3">
-                {post.excerpt && (
-                  <p className="text-gray-600 text-sm line-clamp-3">{post.excerpt}</p>
-                )}
-                <div className="flex items-center justify-between text-sm text-gray-500">
-                  <span>By {post.author}</span>
-                  <span>{new Date(post.createdAt).toLocaleDateString()}</span>
-                </div>
-                <div className="flex gap-2 pt-2">
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    onClick={() => router.push(`/admin/posts/${post.id}`)}
-                    className="flex-1"
-                  >
-                    <Eye className="w-4 h-4 mr-1" />
-                    View
-                  </Button>
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    onClick={() => router.push(`/admin/posts/${post.id}/edit`)}
-                    className="flex-1"
-                  >
-                    <Edit className="w-4 h-4 mr-1" />
-                    Edit
-                  </Button>
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    onClick={() => handleDelete(post)}
-                    disabled={deleteLoading === post.id}
-                    className="text-red-600 hover:text-red-700 hover:bg-red-50"
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </Button>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
-
-      {filteredPosts.length === 0 && (
-        <Card>
-          <CardContent className="pt-6">
-            <div className="text-center py-8">
-              <h3 className="text-lg font-medium text-gray-900 mb-2">No posts found</h3>
-              <p className="text-gray-600 mb-4">
-                {searchTerm || statusFilter !== "all" 
-                  ? "Try adjusting your search or filter criteria."
-                  : "Get started by creating your first post."
-                }
-              </p>
-              {!searchTerm && statusFilter === "all" && (
-                <Button 
-                  onClick={() => router.push('/admin/posts/create')}
-                  className="bg-blue-600 hover:bg-blue-700"
-                >
-                  <Plus className="w-4 h-4 mr-2" />
-                  Create Post
+            ) },
+            { key: 'author', header: 'Author', hideOn: 'sm', render: (p: Post) => <span className="text-slate-600">{p.author}</span> },
+            { key: 'status', header: 'Status', hideOn: 'md', render: (p: Post) => <Badge className={getStatusColor(p.status)}>{p.status}</Badge> },
+            { key: 'createdAt', header: 'Created', hideOn: 'lg', render: (p: Post) => new Date(p.createdAt).toLocaleDateString() },
+            { key: 'actions', header: 'Actions', headerClassName: 'text-right', cellClassName: 'text-right', render: (p: Post) => (
+              <div className="flex justify-end gap-2">
+                <Button size="sm" variant="outline" onClick={() => router.push(`/admin/posts/${p.id}`)}>
+                  <Eye className="w-4 h-4" />
                 </Button>
-              )}
-            </div>
-          </CardContent>
-        </Card>
+                <Button size="sm" variant="outline" onClick={() => router.push(`/admin/posts/${p.id}/edit`)}>
+                  <Edit className="w-4 h-4" />
+                </Button>
+                <Button size="sm" variant="outline" onClick={() => handleDelete(p)} disabled={deleteLoading === p.id} className="text-brand-600 hover:text-brand-700">
+                  <Trash2 className="w-4 h-4" />
+                </Button>
+              </div>
+            ) },
+          ]}
+          data={filteredPosts}
+          rowKey={(p) => p.id}
+        />
       )}
     </div>
   )

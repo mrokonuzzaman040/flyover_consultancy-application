@@ -11,6 +11,16 @@ import { Badge } from "@/components/ui/badge"
 import { ArrowLeft, Eye } from "lucide-react"
 import { toast } from "sonner"
 import Link from "next/link"
+import ImageBBUpload from "@/components/admin/ImageBBUpload"
+
+interface University {
+  name: string
+  location: string
+  ranking?: string
+  image?: string
+  description?: string
+  popularCourses: string[]
+}
 
 interface Destination {
   id: string
@@ -20,7 +30,7 @@ interface Destination {
   image?: string
   description?: string
   highlights: string[]
-  universities?: string
+  universities?: University[]
   students?: string
   popularCities: string[]
   averageCost?: string
@@ -53,7 +63,7 @@ export default function EditDestinationPage() {
     image: "",
     description: "",
     highlights: [] as string[],
-    universities: "",
+    universities: [] as University[],
     students: "",
     popularCities: [] as string[],
     averageCost: "",
@@ -72,6 +82,16 @@ export default function EditDestinationPage() {
   const [highlightInput, setHighlightInput] = useState("")
   const [cityInput, setCityInput] = useState("")
   const [viewMode, setViewMode] = useState(false)
+  const [universityInput, setUniversityInput] = useState({
+    name: "",
+    location: "",
+    ranking: "",
+    image: "",
+    description: "",
+    popularCourses: [] as string[]
+  })
+  const [universityCourseInput, setUniversityCourseInput] = useState("")
+  const [editingUniversityIndex, setEditingUniversityIndex] = useState<number | null>(null)
 
   useEffect(() => {
     if (params.id) {
@@ -83,7 +103,7 @@ export default function EditDestinationPage() {
     try {
       const response = await fetch(`/api/admin/destinations/${id}`)
       if (response.ok) {
-        const destination = await response.json()
+        const { destination } = await response.json()
         setDestination(destination)
         setFormData({
           country: destination.country,
@@ -92,18 +112,18 @@ export default function EditDestinationPage() {
           image: destination.image || "",
           description: destination.description || "",
           highlights: destination.highlights || [],
-          universities: destination.universities || "",
+          universities: Array.isArray(destination.universities) ? destination.universities : [],
           students: destination.students || "",
           popularCities: destination.popularCities || [],
           averageCost: destination.averageCost || "",
           workRights: destination.workRights || "",
           color: destination.color || "",
           hero: destination.hero || "",
-          overviewMD: destination.overviewMD || "",
-          costsMD: destination.costsMD || "",
-          intakesMD: destination.intakesMD || "",
-          visaMD: destination.visaMD || "",
-          scholarshipsMD: destination.scholarshipsMD || "",
+          overviewMD: destination.overviewMD || "# Overview\n\nCanada offers world-class education with excellent opportunities for international students. The country is known for its high-quality universities, diverse programs, and welcoming environment for students from around the world.",
+          costsMD: destination.costsMD || "# Costs\n\n## Tuition Fees\n- Undergraduate: USD $15,000 - $30,000 per year\n- Graduate: USD $20,000 - $35,000 per year\n\n## Living Expenses\n- Accommodation: USD $8,000 - $15,000 per year\n- Food: USD $2,500 - $4,000 per year\n- Transportation: USD $1,200 - $2,000 per year",
+          intakesMD: destination.intakesMD || "# Intakes\n\n## Main Intakes\n- **Fall Intake (September)**: Primary intake with most programs available\n- **Winter Intake (January)**: Secondary intake with limited programs\n- **Summer Intake (May)**: Available for select programs\n\n## Application Deadlines\n- Fall: March - June\n- Winter: September - November\n- Summer: January - March",
+          visaMD: destination.visaMD || "# Visa Information\n\n## Study Permit Requirements\n- Letter of acceptance from designated learning institution\n- Proof of financial support\n- Clean criminal record\n- Medical exam (if required)\n\n## Processing Time\n- 4-12 weeks depending on country of residence\n\n## Work Rights\n- 20 hours per week during studies\n- Full-time during scheduled breaks",
+          scholarshipsMD: destination.scholarshipsMD || "# Scholarships\n\n## Government Scholarships\n- **Vanier Canada Graduate Scholarships**: Up to USD $50,000\n- **Canada Graduate Scholarships**: USD $17,500 - $35,000\n\n## University Scholarships\n- Merit-based scholarships: USD $1,000 - $10,000\n- International student scholarships\n- Program-specific awards\n\n## External Scholarships\n- Various private and organizational scholarships available",
           popularCourses: destination.popularCourses || [],
           faqs: destination.faqs ? JSON.stringify(destination.faqs, null, 2) : ""
         })
@@ -111,7 +131,7 @@ export default function EditDestinationPage() {
         toast.error('Failed to fetch destination')
         router.push('/admin/destinations')
       }
-    } catch (error) {
+    } catch {
       toast.error('Error fetching destination')
       router.push('/admin/destinations')
     } finally {
@@ -138,7 +158,7 @@ export default function EditDestinationPage() {
         const errorData = await response.json()
         toast.error(errorData.error || 'Failed to update destination')
       }
-    } catch (error) {
+    } catch {
       toast.error('Error updating destination')
     } finally {
       setSaving(false)
@@ -196,6 +216,92 @@ export default function EditDestinationPage() {
     })
   }
 
+  const addUniversityCourse = () => {
+    if (universityCourseInput.trim() && !universityInput.popularCourses.includes(universityCourseInput.trim())) {
+      setUniversityInput({
+        ...universityInput,
+        popularCourses: [...universityInput.popularCourses, universityCourseInput.trim()]
+      })
+      setUniversityCourseInput("")
+    }
+  }
+
+  const removeUniversityCourse = (index: number) => {
+    setUniversityInput({
+      ...universityInput,
+      popularCourses: universityInput.popularCourses.filter((_, i) => i !== index)
+    })
+  }
+
+  const addUniversity = () => {
+    if (universityInput.name.trim() && universityInput.location.trim()) {
+      setFormData({
+        ...formData,
+        universities: [...formData.universities, { ...universityInput }]
+      })
+      setUniversityInput({
+        name: "",
+        location: "",
+        ranking: "",
+        image: "",
+        description: "",
+        popularCourses: []
+      })
+    }
+  }
+
+  const removeUniversity = (index: number) => {
+    setFormData({
+      ...formData,
+      universities: (formData.universities || []).filter((_, i) => i !== index)
+    })
+  }
+
+  const startEditUniversity = (index: number) => {
+    const university = formData.universities[index]
+    setUniversityInput({
+      name: university.name || "",
+      location: university.location || "",
+      ranking: university.ranking || "",
+      image: university.image || "",
+      description: university.description || "",
+      popularCourses: university.popularCourses || []
+    })
+    setEditingUniversityIndex(index)
+  }
+
+  const updateUniversity = () => {
+    if (editingUniversityIndex !== null && universityInput.name.trim() && universityInput.location.trim()) {
+      const updatedUniversities = [...formData.universities]
+      updatedUniversities[editingUniversityIndex] = { ...universityInput }
+      setFormData({
+        ...formData,
+        universities: updatedUniversities
+      })
+      setUniversityInput({
+        name: "",
+        location: "",
+        ranking: "",
+        image: "",
+        description: "",
+        popularCourses: []
+      })
+      setEditingUniversityIndex(null)
+    }
+  }
+
+  const cancelEditUniversity = () => {
+    setUniversityInput({
+      name: "",
+      location: "",
+      ranking: "",
+      image: "",
+      description: "",
+      popularCourses: []
+    })
+    setEditingUniversityIndex(null)
+  }
+
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-US', {
       year: 'numeric',
@@ -209,7 +315,7 @@ export default function EditDestinationPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-brand-600"></div>
       </div>
     )
   }
@@ -309,15 +415,19 @@ export default function EditDestinationPage() {
               )}
             </div>
             <div>
-              <Label htmlFor="image">Image URL</Label>
               {viewMode ? (
-                <div className="p-2 bg-gray-50 rounded border">{formData.image || 'No image'}</div>
+                <div>
+                  <Label>Destination Image</Label>
+                  <div className="p-2 bg-gray-50 rounded border">{formData.image || 'No image'}</div>
+                </div>
               ) : (
-                <Input
-                  id="image"
-                  value={formData.image}
-                  onChange={(e) => setFormData({...formData, image: e.target.value})}
-                  placeholder="https://..."
+                <ImageBBUpload
+                  label="Destination Image"
+                  currentImage={formData.image}
+                  onUpload={(image) => setFormData({...formData, image: image.url})}
+                  onRemove={() => setFormData({...formData, image: ""})}
+                  maxSize={5 * 1024 * 1024} // 5MB
+                  required={false}
                 />
               )}
             </div>
@@ -341,16 +451,12 @@ export default function EditDestinationPage() {
           <div className="grid grid-cols-2 gap-4">
             <div>
               <Label htmlFor="universities">Universities</Label>
-              {viewMode ? (
-                <div className="p-2 bg-gray-50 rounded border">{formData.universities || 'No universities info'}</div>
-              ) : (
-                <Input
-                  id="universities"
-                  value={formData.universities}
-                  onChange={(e) => setFormData({...formData, universities: e.target.value})}
-                  placeholder="e.g., 8 Universities"
-                />
-              )}
+              <Input
+                id="universities"
+                value={`${formData.universities?.length || 0} universities added`}
+                readOnly
+                className="bg-gray-50"
+              />
             </div>
             <div>
               <Label htmlFor="students">Students</Label>
@@ -426,29 +532,29 @@ export default function EditDestinationPage() {
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <Label htmlFor="overviewMD">Overview (Markdown)</Label>
-              {viewMode ? (
-                <div className="p-2 bg-gray-50 rounded border min-h-[100px] whitespace-pre-wrap">{formData.overviewMD || 'No overview content'}</div>
-              ) : (
-                <Textarea
-                  id="overviewMD"
-                  value={formData.overviewMD}
-                  onChange={(e) => setFormData({...formData, overviewMD: e.target.value})}
-                  placeholder="Overview content in markdown..."
+              <Label htmlFor="overviewMD">Overview Content</Label>
+                {viewMode ? (
+                  <div className="p-2 bg-gray-50 rounded border min-h-[100px] whitespace-pre-wrap">{formData.overviewMD || 'No overview content'}</div>
+                ) : (
+                  <Textarea
+                    id="overviewMD"
+                    value={formData.overviewMD}
+                    onChange={(e) => setFormData({...formData, overviewMD: e.target.value})}
+                  placeholder="Overview content for the destination..."
                   rows={4}
                 />
               )}
             </div>
             <div>
-              <Label htmlFor="costsMD">Costs Information (Markdown)</Label>
-              {viewMode ? (
-                <div className="p-2 bg-gray-50 rounded border min-h-[100px] whitespace-pre-wrap">{formData.costsMD || 'No costs information'}</div>
-              ) : (
-                <Textarea
-                  id="costsMD"
-                  value={formData.costsMD}
-                  onChange={(e) => setFormData({...formData, costsMD: e.target.value})}
-                  placeholder="Cost information in markdown..."
+              <Label htmlFor="costsMD">Costs Information</Label>
+                {viewMode ? (
+                  <div className="p-2 bg-gray-50 rounded border min-h-[100px] whitespace-pre-wrap">{formData.costsMD || 'No costs information'}</div>
+                ) : (
+                  <Textarea
+                    id="costsMD"
+                    value={formData.costsMD}
+                    onChange={(e) => setFormData({...formData, costsMD: e.target.value})}
+                  placeholder="Cost information for the destination..."
                   rows={4}
                 />
               )}
@@ -457,29 +563,29 @@ export default function EditDestinationPage() {
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <Label htmlFor="intakesMD">Intakes Information (Markdown)</Label>
-              {viewMode ? (
-                <div className="p-2 bg-gray-50 rounded border min-h-[100px] whitespace-pre-wrap">{formData.intakesMD || 'No intakes information'}</div>
-              ) : (
-                <Textarea
-                  id="intakesMD"
-                  value={formData.intakesMD}
-                  onChange={(e) => setFormData({...formData, intakesMD: e.target.value})}
-                  placeholder="Intake information in markdown..."
+              <Label htmlFor="intakesMD">Intakes Information</Label>
+                {viewMode ? (
+                  <div className="p-2 bg-gray-50 rounded border min-h-[100px] whitespace-pre-wrap">{formData.intakesMD || 'No intakes information'}</div>
+                ) : (
+                  <Textarea
+                    id="intakesMD"
+                    value={formData.intakesMD}
+                    onChange={(e) => setFormData({...formData, intakesMD: e.target.value})}
+                  placeholder="Intake information for the destination..."
                   rows={4}
                 />
               )}
             </div>
             <div>
-              <Label htmlFor="visaMD">Visa Information (Markdown)</Label>
-              {viewMode ? (
-                <div className="p-2 bg-gray-50 rounded border min-h-[100px] whitespace-pre-wrap">{formData.visaMD || 'No visa information'}</div>
-              ) : (
-                <Textarea
-                  id="visaMD"
-                  value={formData.visaMD}
-                  onChange={(e) => setFormData({...formData, visaMD: e.target.value})}
-                  placeholder="Visa information in markdown..."
+              <Label htmlFor="visaMD">Visa Information</Label>
+                {viewMode ? (
+                  <div className="p-2 bg-gray-50 rounded border min-h-[100px] whitespace-pre-wrap">{formData.visaMD || 'No visa information'}</div>
+                ) : (
+                  <Textarea
+                    id="visaMD"
+                    value={formData.visaMD}
+                    onChange={(e) => setFormData({...formData, visaMD: e.target.value})}
+                  placeholder="Visa information for the destination..."
                   rows={4}
                 />
               )}
@@ -487,15 +593,15 @@ export default function EditDestinationPage() {
           </div>
 
           <div>
-            <Label htmlFor="scholarshipsMD">Scholarships Information (Markdown)</Label>
-            {viewMode ? (
-              <div className="p-2 bg-gray-50 rounded border min-h-[80px] whitespace-pre-wrap">{formData.scholarshipsMD || 'No scholarships information'}</div>
-            ) : (
-              <Textarea
-                id="scholarshipsMD"
-                value={formData.scholarshipsMD}
-                onChange={(e) => setFormData({...formData, scholarshipsMD: e.target.value})}
-                placeholder="Scholarship information in markdown..."
+            <Label htmlFor="scholarshipsMD">Scholarships Information</Label>
+                {viewMode ? (
+                  <div className="p-2 bg-gray-50 rounded border min-h-[80px] whitespace-pre-wrap">{formData.scholarshipsMD || 'No scholarships information'}</div>
+                ) : (
+                  <Textarea
+                    id="scholarshipsMD"
+                    value={formData.scholarshipsMD}
+                    onChange={(e) => setFormData({...formData, scholarshipsMD: e.target.value})}
+                placeholder="Scholarship information for the destination..."
                 rows={3}
               />
             )}
@@ -530,6 +636,171 @@ export default function EditDestinationPage() {
                 ))
               ) : (
                 <p className="text-gray-500 text-sm">No highlights added</p>
+              )}
+            </div>
+          </div>
+
+          <div>
+            <Label>Universities</Label>
+            {!viewMode && (
+              <Card className="mb-4">
+                <CardHeader>
+                  <CardTitle className="text-lg">
+                    {editingUniversityIndex !== null ? 'Edit University' : 'Add University'}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <Label htmlFor="universityName">University Name</Label>
+                      <Input
+                        id="universityName"
+                        value={universityInput.name}
+                        onChange={(e) => setUniversityInput({...universityInput, name: e.target.value})}
+                        placeholder="e.g., University of Toronto"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="universityLocation">Location</Label>
+                      <Input
+                        id="universityLocation"
+                        value={universityInput.location}
+                        onChange={(e) => setUniversityInput({...universityInput, location: e.target.value})}
+                        placeholder="e.g., Toronto, Ontario"
+                      />
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <Label htmlFor="universityRanking">Ranking (Optional)</Label>
+                      <Input
+                        id="universityRanking"
+                        value={universityInput.ranking}
+                        onChange={(e) => setUniversityInput({...universityInput, ranking: e.target.value})}
+                        placeholder="e.g., #1 in Canada"
+                      />
+                    </div>
+                    <div>
+                      <ImageBBUpload
+                        label="University Image (Optional)"
+                        currentImage={universityInput.image}
+                        onUpload={(image) => setUniversityInput({...universityInput, image: image.url})}
+                        onRemove={() => setUniversityInput({...universityInput, image: ""})}
+                        maxSize={3 * 1024 * 1024} // 3MB
+                        required={false}
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <Label htmlFor="universityDescription">Description (Optional)</Label>
+                    <Textarea
+                      id="universityDescription"
+                      value={universityInput.description}
+                      onChange={(e) => setUniversityInput({...universityInput, description: e.target.value})}
+                      placeholder="Brief description of the university..."
+                      rows={3}
+                    />
+                  </div>
+                  <div>
+                    <Label>Popular Courses</Label>
+                    <div className="flex gap-2 mb-2">
+                      <Input
+                        value={universityCourseInput}
+                        onChange={(e) => setUniversityCourseInput(e.target.value)}
+                        placeholder="Add a popular course"
+                        onKeyPress={(e) => e.key === 'Enter' && addUniversityCourse()}
+                      />
+                      <Button type="button" onClick={addUniversityCourse} variant="outline">
+                        Add
+                      </Button>
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                      {universityInput.popularCourses.length > 0 ? (
+                        universityInput.popularCourses.map((course, index) => (
+                          <Badge 
+                            key={index} 
+                            variant="secondary" 
+                            className="cursor-pointer" 
+                            onClick={() => removeUniversityCourse(index)}
+                          >
+                            {course} ×
+                          </Badge>
+                        ))
+                      ) : (
+                        <p className="text-gray-500 text-sm">No courses added</p>
+                      )}
+                    </div>
+                  </div>
+                  <div className="flex gap-2">
+                    {editingUniversityIndex !== null ? (
+                      <>
+                        <Button type="button" onClick={updateUniversity} className="flex-1">
+                          Update University
+                        </Button>
+                        <Button type="button" onClick={cancelEditUniversity} variant="outline" className="flex-1">
+                          Cancel
+                        </Button>
+                      </>
+                    ) : (
+                      <Button type="button" onClick={addUniversity} className="w-full">
+                        Add University
+                      </Button>
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+            <div className="space-y-2">
+              {formData.universities && formData.universities.length > 0 ? (
+                formData.universities.map((university, index) => (
+                  <Card key={index}>
+                    <CardContent className="p-4">
+                      <div className="flex justify-between items-start">
+                        <div className="flex-1">
+                          <h4 className="font-semibold">{university.name}</h4>
+                          <p className="text-sm text-gray-600">{university.location}</p>
+                          {university.ranking && (
+                            <p className="text-sm text-brand-600">{university.ranking}</p>
+                          )}
+                          {university.description && (
+                            <p className="text-sm text-gray-700 mt-1">{university.description}</p>
+                          )}
+                          {university.popularCourses && university.popularCourses.length > 0 && (
+                            <div className="flex flex-wrap gap-1 mt-2">
+                              {university.popularCourses.map((course, courseIndex) => (
+                                <Badge key={courseIndex} variant="outline" className="text-xs">
+                                  {course}
+                                </Badge>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                        {!viewMode && (
+                          <div className="flex gap-2">
+                            <Button
+                              type="button"
+                              variant="outline"
+                              size="sm"
+                              onClick={() => startEditUniversity(index)}
+                            >
+                              Edit
+                            </Button>
+                            <Button
+                              type="button"
+                              variant="destructive"
+                              size="sm"
+                              onClick={() => removeUniversity(index)}
+                            >
+                              Remove
+                            </Button>
+                          </div>
+                        )}
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))
+              ) : (
+                <p className="text-gray-500 text-sm">No universities added</p>
               )}
             </div>
           </div>
@@ -627,7 +898,7 @@ export default function EditDestinationPage() {
                   Cancel
                 </Button>
               </Link>
-              <Button onClick={handleUpdate} disabled={saving} className="bg-blue-600 hover:bg-blue-700">
+              <Button onClick={handleUpdate} disabled={saving} className="bg-brand-600 hover:bg-brand-700">
                 {saving ? 'Saving...' : 'Save Changes'}
               </Button>
             </div>

@@ -1,8 +1,15 @@
 "use client";
 
+import React from 'react';
 import { useState, useEffect } from 'react';
+import { Shield, Users, Globe, Award, Clock, HeartHandshake, BookOpen, CheckCircle } from 'lucide-react';
+import sectionsData from '@/data/sections-data.json';
 
-export default function WhyChooseUs() {
+interface WhyChooseUsProps {
+  features?: typeof sectionsData.whychooseusfeatures;
+}
+
+export default function WhyChooseUs({ features = sectionsData.whychooseusfeatures }: WhyChooseUsProps) {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
@@ -10,52 +17,19 @@ export default function WhyChooseUs() {
     return () => clearTimeout(timer);
   }, []);
 
-  const features = [
-    {
-      icon: (
-        <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-        </svg>
-      ),
-      title: "End-to-End FREE Assistance",
-      description: "Complete support from application to visa approval with no hidden costs",
-      stat: "100%",
-      statLabel: "Free Service"
-    },
-    {
-      icon: (
-        <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-        </svg>
-      ),
-      title: "22,000+ Success Stories",
-      description: "Proven track record of helping students achieve their dreams",
-      stat: "22K+",
-      statLabel: "Success Stories"
-    },
-    {
-      icon: (
-        <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9v-9m0-9v9m0 9c-5 0-9-4-9-9s4-9 9-9" />
-        </svg>
-      ),
-      title: "550+ Global Partners",
-      description: "Extensive network of top universities and institutions worldwide",
-      stat: "550+",
-      statLabel: "Partners"
-    },
-    {
-      icon: (
-        <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-        </svg>
-      ),
-      title: "Transparent, Ethical Guidance",
-      description: "Honest advice and transparent processes you can trust",
-      stat: "100%",
-      statLabel: "Transparency"
-    }
-  ];
+  // Icon mapping for features
+  const iconMap = {
+    Shield,
+    Users,
+    Globe,
+    Award,
+    Clock,
+    HeartHandshake,
+    BookOpen,
+    CheckCircle
+  };
+
+  // Remove hardcoded features array - now using props
 
   return (
     <section className="bg-gradient-to-br from-blue-50 via-white to-indigo-50 py-16">
@@ -88,7 +62,7 @@ export default function WhyChooseUs() {
               {/* Icon */}
               <div className="relative mb-5">
                 <div className="w-14 h-14 bg-gradient-to-br from-brand-500 to-brand-600 rounded-xl flex items-center justify-center text-white group-hover:scale-105 transition-transform duration-300">
-                  {feature.icon}
+                  {React.createElement(iconMap[feature.icon as keyof typeof iconMap], { className: "w-8 h-8" })}
                 </div>
               </div>
 

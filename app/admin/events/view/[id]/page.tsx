@@ -61,7 +61,7 @@ export default function ViewEventPage({ params }: { params: Promise<{ id: string
       case 'draft':
         return 'bg-gray-100 text-gray-800'
       case 'cancelled':
-        return 'bg-red-100 text-red-800'
+        return 'bg-brand-100 text-brand-800'
       case 'completed':
         return 'bg-blue-100 text-blue-800'
       default:
@@ -72,7 +72,7 @@ export default function ViewEventPage({ params }: { params: Promise<{ id: string
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-brand-600"></div>
       </div>
     )
   }
@@ -114,7 +114,7 @@ export default function ViewEventPage({ params }: { params: Promise<{ id: string
             </Button>
           </Link>
           <Link href={`/admin/events/delete/${event.id}`}>
-            <Button variant="outline" size="sm" className="text-red-600 hover:text-red-700">
+            <Button variant="outline" size="sm" className="text-brand-600 hover:text-brand-700">
               <Trash2 className="w-4 h-4 mr-2" />
               Delete
             </Button>
@@ -232,7 +232,7 @@ export default function ViewEventPage({ params }: { params: Promise<{ id: string
               <div className="pt-2">
                 <div className="w-full bg-gray-200 rounded-full h-2">
                   <div 
-                    className="bg-blue-600 h-2 rounded-full" 
+                    className="bg-brand-600 h-2 rounded-full" 
                     style={{ 
                       width: `${((event.capacity - event.seatsRemaining) / event.capacity) * 100}%` 
                     }}

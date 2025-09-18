@@ -80,7 +80,7 @@ export default function DeleteEventPage({ params }: { params: Promise<{ id: stri
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-brand-600"></div>
       </div>
     )
   }
@@ -114,9 +114,9 @@ export default function DeleteEventPage({ params }: { params: Promise<{ id: stri
         <h1 className="text-3xl font-bold text-gray-900">Delete Event</h1>
       </div>
 
-      <Card className="border-red-200">
-        <CardHeader className="bg-red-50">
-          <CardTitle className="text-red-800 flex items-center gap-2">
+      <Card className="border-brand-200">
+        <CardHeader className="bg-brand-50">
+          <CardTitle className="text-brand-800 flex items-center gap-2">
             <Trash2 className="w-5 h-5" />
             Confirm Deletion
           </CardTitle>
@@ -189,7 +189,7 @@ export default function DeleteEventPage({ params }: { params: Promise<{ id: stri
               <Button 
                 onClick={handleDelete}
                 disabled={deleting}
-                className="bg-red-600 hover:bg-red-700 text-white"
+                className="bg-brand-600 hover:bg-brand-700 text-white"
               >
                 {deleting ? 'Deleting...' : 'Delete Event'}
               </Button>

@@ -1,133 +1,76 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { z } from 'zod'
-import { prisma } from '@/lib/prisma'
+import { NextRequest, NextResponse } from "next/server";
+import { z } from "zod";
+import { dbConnect, toObject } from "@/lib/mongoose";
+import { Destination } from "@/lib/models/Destination";
 
-// TODO: Add authentication middleware
-// import { getServerSession } from 'next-auth/next'
-// import { authOptions } from '@/lib/auth'
-
-const destinationSchema = z.object({
-  country: z.string().min(1, 'Country is required'),
-  slug: z.string().min(1, 'Slug is required'),
+const schema = z.object({
+  country: z.string().min(1),
+  slug: z.string().min(1).regex(/^[a-zA-Z0-9]+(?:-[a-zA-Z0-9]+)*$/).transform((s)=>s.toLowerCase()),
   flag: z.string().optional(),
   image: z.string().optional(),
   description: z.string().optional(),
-  highlights: z.array(z.string()).default([]),
-  universities: z.string().optional(),
+  hero: z.string().optional().nullable(),
+  color: z.string().optional(),
   students: z.string().optional(),
-  popularCities: z.array(z.string()).default([]),
   averageCost: z.string().optional(),
   workRights: z.string().optional(),
-  color: z.string().optional(),
-  hero: z.string().optional(),
-  overviewMD: z.string().optional(),
-  costsMD: z.string().optional(),
-  intakesMD: z.string().optional(),
-  visaMD: z.string().optional(),
-  scholarshipsMD: z.string().optional(),
+  popularCities: z.array(z.string()).default([]),
+  highlights: z.array(z.string()).default([]),
   popularCourses: z.array(z.string()).default([]),
-  faqs: z.array(z.object({
-    question: z.string(),
-    answer: z.string()
-  })).optional()
-})
+  universities: z.array(z.object({
+    name: z.string(),
+    image: z.string().optional(),
+    ranking: z.string().optional(),
+    location: z.string().optional(),
+    courses: z.array(z.string()).default([])
+  })).default([]),
+  overviewMD: z.string().optional().nullable(),
+  costsMD: z.string().optional().nullable(),
+  intakesMD: z.string().optional().nullable(),
+  visaMD: z.string().optional().nullable(),
+  scholarshipsMD: z.string().optional().nullable(),
+  faqs: z.array(z.object({ question: z.string(), answer: z.string() })).default([]),
+});
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
-    // TODO: Add authentication check
-    // const session = await getServerSession(authOptions)
-    // if (!session || session.user.role !== 'ADMIN') {
-    //   return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    // }
-
-    const { searchParams } = new URL(request.url)
-    const search = searchParams.get('search')
-    const page = parseInt(searchParams.get('page') || '1')
-    const limit = parseInt(searchParams.get('limit') || '10')
-    const skip = (page - 1) * limit
-
-    const where: {
-      OR?: Array<{
-        country?: { contains: string; mode: 'insensitive' }
-        slug?: { contains: string; mode: 'insensitive' }
-      }>
-    } = {}
-
-    if (search) {
-      where.OR = [
-        { country: { contains: search, mode: 'insensitive' } },
-        { slug: { contains: search, mode: 'insensitive' } }
-      ]
+    // Check if we're in build mode or if MongoDB is not available
+    if (process.env.NODE_ENV === 'production' && !process.env.MONGODB_URI) {
+      return NextResponse.json(
+        { destinations: [], error: 'Database not available during build' },
+        { status: 503 }
+      );
     }
 
-    const [destinations, total] = await Promise.all([
-      prisma.destination.findMany({
-        where,
-        skip,
-        take: limit,
-        orderBy: { createdAt: 'desc' }
-      }),
-      prisma.destination.count({ where })
-    ])
-
-    return NextResponse.json({
-      destinations,
-      pagination: {
-        page,
-        limit,
-        total,
-        pages: Math.ceil(total / limit)
-      }
-    })
-  } catch (error) {
-    console.error('Error fetching destinations:', error)
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    )
+    await dbConnect();
+    const docs = await Destination.find({}).sort({ createdAt: -1 }).lean();
+    return NextResponse.json({ destinations: docs.map((d) => ({ ...toObject(d as { _id: unknown }) })) });
+  } catch (e: unknown) {
+    // Handle MongoDB connection errors gracefully during build
+    if (e instanceof Error && e.message.includes('ECONNREFUSED')) {
+      return NextResponse.json(
+        { destinations: [], error: 'Database connection not available' },
+        { status: 503 }
+      );
+    }
+    
+    console.error(e);
+    return NextResponse.json({ error: "Failed to fetch destinations" }, { status: 500 });
   }
 }
 
-export async function POST(request: NextRequest) {
+export async function POST(req: NextRequest) {
   try {
-    // TODO: Add authentication check
-    // const session = await getServerSession(authOptions)
-    // if (!session || session.user.role !== 'ADMIN') {
-    //   return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    // }
-
-    const body = await request.json()
-    const validatedData = destinationSchema.parse(body)
-
-    // Check if slug already exists
-    const existingDestination = await prisma.destination.findUnique({
-      where: { slug: validatedData.slug }
-    })
-
-    if (existingDestination) {
-      return NextResponse.json(
-        { error: 'A destination with this slug already exists' },
-        { status: 400 }
-      )
-    }
-
-    const destination = await prisma.destination.create({
-      data: validatedData
-    })
-
-    return NextResponse.json(destination, { status: 201 })
-  } catch (error) {
-    if (error instanceof z.ZodError) {
-      return NextResponse.json(
-        { error: 'Validation failed', details: error.issues },
-        { status: 400 }
-      )
-    }
-
-    console.error('Error creating destination:', error)
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    )
+    await dbConnect();
+    const json = await req.json();
+    const parsed = schema.safeParse(json);
+    if (!parsed.success) return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 });
+    const exists = await Destination.findOne({ slug: parsed.data.slug });
+    if (exists) return NextResponse.json({ error: "Slug already exists" }, { status: 409 });
+    const doc = await Destination.create(parsed.data);
+    return NextResponse.json({ destination: toObject(doc.toObject()) }, { status: 201 });
+  } catch (e: unknown) {
+    console.error(e);
+    return NextResponse.json({ error: "Failed to create destination" }, { status: 500 });
   }
 }

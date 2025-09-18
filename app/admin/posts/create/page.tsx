@@ -33,14 +33,18 @@ export default function CreatePostPage() {
     setLoading(true)
 
     try {
+      const sanitizedSlug = (formData.slug || "").toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
+      const payload: any = {
+        ...formData,
+        slug: sanitizedSlug,
+        tags: formData.tags.split(',').map(tag => tag.trim()).filter(Boolean),
+        country: formData.country.split(',').map(c => c.trim()).filter(Boolean)
+      }
+      if (!payload.coverUrl) delete payload.coverUrl
       const response = await fetch('/api/admin/posts', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          ...formData,
-          tags: formData.tags.split(',').map(tag => tag.trim()).filter(Boolean),
-          country: formData.country.split(',').map(c => c.trim()).filter(Boolean)
-        })
+        body: JSON.stringify(payload)
       })
 
       if (response.ok) {
@@ -191,7 +195,7 @@ export default function CreatePostPage() {
               <Button
                 type="submit"
                 disabled={loading}
-                className="bg-blue-600 hover:bg-blue-700"
+                className="bg-brand-600 hover:bg-brand-700"
               >
                 <Save className="w-4 h-4 mr-2" />
                 {loading ? 'Creating...' : 'Create Post'}

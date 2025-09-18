@@ -1,179 +1,150 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { getServerSession } from 'next-auth/next'
-import { authOptions } from '@/lib/auth'
-import { prisma } from '@/lib/prisma'
-import { z } from 'zod'
+import { NextRequest, NextResponse } from "next/server";
+import mongoose from "mongoose";
+import { z } from "zod";
+import { dbConnect, toObject } from "@/lib/mongoose";
+import Event from "@/lib/models/Event";
 
-const eventUpdateSchema = z.object({
-  title: z.string().min(1, 'Title is required').optional(),
-  slug: z.string().min(1, 'Slug is required').optional(),
-  startAt: z.string().min(1, 'Start date is required').optional(),
-  endAt: z.string().optional(),
-  venue: z.string().optional(),
-  city: z.string().optional(),
-  description: z.string().min(1, 'Description is required').optional(),
-  bannerUrl: z.string().optional(),
-  status: z.enum(['draft', 'published', 'cancelled', 'completed']).optional(),
-  capacity: z.number().min(0, 'Capacity must be non-negative').optional(),
-  seatsRemaining: z.number().min(0, 'Seats remaining must be non-negative').optional()
-})
+const patchSchema = z.object({
+  title: z.string().min(1).optional(),
+  slug: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/).optional(),
+  description: z.string().min(1).optional(),
+  // Legacy fields
+  date: z.string().optional(),
+  time: z.string().optional(),
+  location: z.string().optional(),
+  image: z.string().optional(),
+  registrationLink: z.string().optional(),
+  type: z.string().optional(),
+  attendees: z.string().optional(),
+  featured: z.boolean().optional(),
+  icon: z.string().optional(),
+  color: z.string().optional(),
+  // New fields
+  startAt: z.string().or(z.date()).optional().transform((v) => (v ? new Date(v) : undefined)),
+  endAt: z.string().or(z.date()).optional().transform((v) => (v ? new Date(v) : undefined)),
+  venue: z.string().optional().nullable(),
+  city: z.string().optional().nullable(),
+  bannerUrl: z.string().url().optional().nullable(),
+  status: z.enum(["draft", "published", "cancelled", "completed"]).optional(),
+  capacity: z.number().int().nonnegative().optional(),
+  seatsRemaining: z.number().int().nonnegative().optional(),
+  // Enhanced fields
+  eventType: z.enum(['workshop', 'seminar', 'conference', 'webinar', 'fair', 'exhibition', 'networking', 'other']).optional(),
+  category: z.enum(['education', 'career', 'networking', 'training', 'information', 'other']).optional(),
+  targetAudience: z.array(z.string()).optional(),
+  organizer: z.string().optional(),
+  organizerEmail: z.string().email().optional(),
+  organizerPhone: z.string().optional(),
+  price: z.number().min(0).optional(),
+  currency: z.string().optional(),
+  isFree: z.boolean().optional(),
+  registrationDeadline: z.string().or(z.date()).optional().transform((v) => (v ? new Date(v) : undefined)),
+  maxAttendees: z.number().int().min(1).optional(),
+  minAttendees: z.number().int().min(1).optional(),
+  requirements: z.array(z.string()).optional(),
+  agenda: z.array(z.object({
+    time: z.string(),
+    title: z.string(),
+    description: z.string().optional(),
+    speaker: z.string().optional()
+  })).optional(),
+  speakers: z.array(z.object({
+    name: z.string(),
+    title: z.string(),
+    company: z.string().optional(),
+    bio: z.string().optional(),
+    image: z.string().optional(),
+    socialLinks: z.object({
+      linkedin: z.string().optional(),
+      twitter: z.string().optional(),
+      website: z.string().optional()
+    }).optional()
+  })).optional(),
+  tags: z.array(z.string()).optional(),
+  priority: z.enum(['low', 'medium', 'high']).optional(),
+  locationDetails: z.object({
+    address: z.string().optional(),
+    coordinates: z.object({
+      lat: z.number(),
+      lng: z.number()
+    }).optional(),
+    parking: z.boolean().optional(),
+    accessibility: z.boolean().optional(),
+    directions: z.string().optional()
+  }).optional(),
+  onlineDetails: z.object({
+    platform: z.string().optional(),
+    meetingLink: z.string().optional(),
+    meetingId: z.string().optional(),
+    password: z.string().optional(),
+    instructions: z.string().optional()
+  }).optional(),
+  materials: z.array(z.object({
+    title: z.string(),
+    type: z.enum(['document', 'video', 'link', 'other']),
+    url: z.string(),
+    description: z.string().optional()
+  })).optional(),
+  socialMedia: z.object({
+    facebook: z.string().optional(),
+    twitter: z.string().optional(),
+    linkedin: z.string().optional(),
+    instagram: z.string().optional()
+  }).optional(),
+});
 
-export async function GET(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+function validateId(id: string) {
+  return mongoose.Types.ObjectId.isValid(id);
+}
+
+export async function GET(_: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
-    const session = await getServerSession(authOptions)
-    
-    if (!session?.user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    }
-
-    const { id } = await params
-    const event = await prisma.event.findUnique({
-      where: { id }
-    })
-
-    if (!event) {
-      return NextResponse.json({ error: 'Event not found' }, { status: 404 })
-    }
-
-    return NextResponse.json({ event })
-  } catch (error) {
-    console.error('Error fetching event:', error)
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    )
+    await dbConnect();
+    const { id } = await params;
+    if (!validateId(id)) return NextResponse.json({ error: "Invalid id" }, { status: 400 });
+    const doc = await Event.findById(id).lean();
+    if (!doc) return NextResponse.json({ error: "Not found" }, { status: 404 });
+    return NextResponse.json({ event: toObject(doc as { _id: unknown }) });
+  } catch (err) {
+    console.error("[GET /admin/events/:id]", err);
+    return NextResponse.json({ error: "Failed to fetch event" }, { status: 500 });
   }
 }
 
-export async function PATCH(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
-    const session = await getServerSession(authOptions)
-    
-    if (!session?.user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    await dbConnect();
+    const { id } = await params;
+    if (!validateId(id)) return NextResponse.json({ error: "Invalid id" }, { status: 400 });
+    const json = await req.json();
+    const parsed = patchSchema.safeParse(json);
+    if (!parsed.success) {
+      return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 });
     }
-
-    const { id } = await params
-    const body = await request.json()
-    
-    // Validate the request body
-    const validationResult = eventUpdateSchema.safeParse(body)
-    if (!validationResult.success) {
-      return NextResponse.json(
-        { 
-          error: 'Validation failed', 
-          details: validationResult.error.issues 
-        },
-        { status: 400 }
-      )
+    // If slug provided, ensure uniqueness
+    if (parsed.data.slug) {
+      const exists = await Event.findOne({ slug: parsed.data.slug, _id: { $ne: id } });
+      if (exists) return NextResponse.json({ error: "Slug already exists" }, { status: 409 });
     }
-
-    const data = validationResult.data
-
-    // Check if event exists
-    const existingEvent = await prisma.event.findUnique({
-      where: { id }
-    })
-
-    if (!existingEvent) {
-      return NextResponse.json({ error: 'Event not found' }, { status: 404 })
-    }
-
-    // If slug is being updated, check if it's already taken by another event
-    if (data.slug && data.slug !== existingEvent.slug) {
-      const slugExists = await prisma.event.findUnique({
-        where: { slug: data.slug }
-      })
-
-      if (slugExists) {
-        return NextResponse.json(
-          { error: 'An event with this slug already exists' },
-          { status: 400 }
-        )
-      }
-    }
-
-    // Prepare update data
-    const updateData: {
-      title?: string
-      slug?: string
-      startAt?: Date
-      endAt?: Date | null
-      venue?: string | null
-      city?: string | null
-      description?: string
-      bannerUrl?: string | null
-      status?: string
-      capacity?: number
-      seatsRemaining?: number
-    } = {}
-
-    if (data.title !== undefined) updateData.title = data.title
-    if (data.slug !== undefined) updateData.slug = data.slug
-    if (data.startAt !== undefined) updateData.startAt = new Date(data.startAt)
-    if (data.endAt !== undefined) updateData.endAt = data.endAt ? new Date(data.endAt) : null
-    if (data.venue !== undefined) updateData.venue = data.venue || null
-    if (data.city !== undefined) updateData.city = data.city || null
-    if (data.description !== undefined) updateData.description = data.description
-    if (data.bannerUrl !== undefined) updateData.bannerUrl = data.bannerUrl || null
-    if (data.status !== undefined) updateData.status = data.status
-    if (data.capacity !== undefined) updateData.capacity = data.capacity
-    if (data.seatsRemaining !== undefined) updateData.seatsRemaining = data.seatsRemaining
-
-    // Update the event
-    const event = await prisma.event.update({
-      where: { id },
-      data: updateData
-    })
-
-    return NextResponse.json({ event })
-  } catch (error) {
-    console.error('Error updating event:', error)
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    )
+    const updated = await Event.findByIdAndUpdate(id, parsed.data, { new: true }).lean();
+    if (!updated) return NextResponse.json({ error: "Not found" }, { status: 404 });
+    return NextResponse.json({ event: toObject(updated as { _id: unknown }) });
+  } catch (err) {
+    console.error("[PATCH /admin/events/:id]", err);
+    return NextResponse.json({ error: "Failed to update event" }, { status: 500 });
   }
 }
 
-export async function DELETE(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function DELETE(_: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
-    const session = await getServerSession(authOptions)
-    
-    if (!session?.user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    }
-
-    const { id } = await params
-    // Check if event exists
-    const existingEvent = await prisma.event.findUnique({
-      where: { id }
-    })
-
-    if (!existingEvent) {
-      return NextResponse.json({ error: 'Event not found' }, { status: 404 })
-    }
-
-    // Delete the event
-    await prisma.event.delete({
-      where: { id }
-    })
-
-    return NextResponse.json({ message: 'Event deleted successfully' })
-  } catch (error) {
-    console.error('Error deleting event:', error)
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    )
+    await dbConnect();
+    const { id } = await params;
+    if (!validateId(id)) return NextResponse.json({ error: "Invalid id" }, { status: 400 });
+    const deleted = await Event.findByIdAndDelete(id).lean();
+    if (!deleted) return NextResponse.json({ error: "Not found" }, { status: 404 });
+    return NextResponse.json({ ok: true });
+  } catch (err) {
+    console.error("[DELETE /admin/events/:id]", err);
+    return NextResponse.json({ error: "Failed to delete event" }, { status: 500 });
   }
 }

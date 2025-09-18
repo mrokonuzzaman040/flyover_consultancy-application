@@ -8,6 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { ArrowLeft, Edit, Trash2 } from "lucide-react"
 import { toast } from "sonner"
+import Image from "next/image"
 
 interface Post {
   id: string
@@ -47,7 +48,7 @@ export default function ViewPostPage() {
         toast.error('Failed to fetch post')
         router.push('/admin/posts')
       }
-    } catch (error) {
+    } catch  {
       toast.error('Error fetching post')
       router.push('/admin/posts')
     } finally {
@@ -81,7 +82,7 @@ export default function ViewPostPage() {
       } else {
         toast.error('Failed to delete post')
       }
-    } catch (error) {
+    } catch {
       toast.error('Error deleting post')
     } finally {
       setDeleteLoading(false)
@@ -91,7 +92,7 @@ export default function ViewPostPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-brand-600"></div>
       </div>
     )
   }
@@ -125,7 +126,7 @@ export default function ViewPostPage() {
         <div className="flex gap-2">
           <Button
             onClick={() => router.push(`/admin/posts/${post.id}/edit`)}
-            className="bg-blue-600 hover:bg-blue-700"
+            className="bg-brand-600 hover:bg-brand-700"
           >
             <Edit className="w-4 h-4 mr-2" />
             Edit
@@ -228,10 +229,12 @@ export default function ViewPostPage() {
             <div>
               <Label className="font-medium">Cover Image</Label>
               <div className="mt-1">
-                <img 
+                <Image 
                   src={post.coverUrl} 
                   alt="Cover" 
                   className="max-w-full h-48 object-cover rounded-lg border" 
+                  width={192}
+                  height={192}
                 />
               </div>
             </div>

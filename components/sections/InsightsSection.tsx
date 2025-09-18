@@ -2,137 +2,29 @@
 
 import { useState, useEffect } from 'react';
 import Link from "next/link";
+import { useBlogs } from '@/hooks/use-blogs';
+import Image from 'next/image';
 
-const insights = [
-  {
-    id: 1,
-    category: "University Rankings",
-    categoryColor: "bg-blue-100 text-blue-800",
-    author: "Dr. Sarah Mitchell",
-    authorRole: "Education Consultant",
-    readTime: "8 min read",
-    publishDate: "Dec 15, 2024",
-    title: "Top 10 Universities in Canada for International Students 2025",
-    excerpt: "Comprehensive analysis of Canada's leading universities, including admission requirements, tuition fees, and scholarship opportunities for international students.",
-    image: (
-      <div className="w-full h-48 bg-gradient-to-br from-brand-400 to-brand-600 rounded-lg flex items-center justify-center text-white text-4xl font-bold">
-        🇨🇦
-      </div>
-    ),
-    featured: true,
-    views: "12.5K",
-    likes: "892"
-  },
-  {
-    id: 2,
-    category: "Visa Guide",
-    categoryColor: "bg-green-100 text-green-800",
-    author: "Ahmed Hassan",
-    authorRole: "Immigration Lawyer",
-    readTime: "12 min read",
-    publishDate: "Dec 12, 2024",
-    title: "Complete Student Visa Application Guide 2025: Step-by-Step Process",
-    excerpt: "Everything you need to know about student visa applications, including required documents, processing times, and common mistakes to avoid.",
-    image: (
-      <div className="w-full h-48 bg-gradient-to-br from-green-400 to-emerald-600 rounded-lg flex items-center justify-center text-white text-4xl font-bold">
-        📋
-      </div>
-    ),
-    featured: false,
-    views: "8.7K",
-    likes: "654"
-  },
-  {
-    id: 3,
-    category: "Scholarships",
-    categoryColor: "bg-purple-100 text-purple-800",
-    author: "Maria Rodriguez",
-    authorRole: "Financial Aid Advisor",
-    readTime: "6 min read",
-    publishDate: "Dec 10, 2024",
-    title: "$2M+ in Scholarships: Opportunities You Can't Afford to Miss",
-    excerpt: "Discover merit-based, need-based, and country-specific scholarships available for international students in 2025.",
-    image: (
-      <div className="w-full h-48 bg-gradient-to-br from-purple-400 to-indigo-600 rounded-lg flex items-center justify-center text-white text-4xl font-bold">
-        💰
-      </div>
-    ),
-    featured: false,
-    views: "15.2K",
-    likes: "1.1K"
-  },
-  {
-    id: 4,
-    category: "Cost of Living",
-    categoryColor: "bg-orange-100 text-orange-800",
-    author: "James Thompson",
-    authorRole: "Student Life Coordinator",
-    readTime: "10 min read",
-    publishDate: "Dec 8, 2024",
-    title: "Living Costs Breakdown: UK vs USA vs Canada vs Australia",
-    excerpt: "Detailed comparison of living expenses, accommodation costs, and budgeting tips for popular study destinations.",
-    image: (
-      <div className="w-full h-48 bg-gradient-to-br from-orange-400 to-brand-500 rounded-lg flex items-center justify-center text-white text-4xl font-bold">
-        🏠
-      </div>
-    ),
-    featured: false,
-    views: "9.8K",
-    likes: "743"
-  },
-  {
-    id: 5,
-    category: "Career Guidance",
-    categoryColor: "bg-cyan-100 text-cyan-800",
-    author: "Lisa Chen",
-    authorRole: "Career Development Specialist",
-    readTime: "7 min read",
-    publishDate: "Dec 5, 2024",
-    title: "Post-Graduation Work Permits: Your Path to International Career",
-    excerpt: "Navigate post-study work opportunities, visa extensions, and career prospects in different countries after graduation.",
-    image: (
-      <div className="w-full h-48 bg-gradient-to-br from-cyan-400 to-blue-500 rounded-lg flex items-center justify-center text-white text-4xl font-bold">
-        🎓
-      </div>
-    ),
-    featured: false,
-    views: "6.4K",
-    likes: "521"
-  },
-  {
-    id: 6,
-    category: "Test Preparation",
-    categoryColor: "bg-pink-100 text-pink-800",
-    author: "Robert Kim",
-    authorRole: "IELTS/TOEFL Expert",
-    readTime: "9 min read",
-    publishDate: "Dec 3, 2024",
-    title: "IELTS vs TOEFL: Which Test Should You Take in 2025?",
-    excerpt: "Comprehensive comparison of English proficiency tests, preparation strategies, and university acceptance criteria.",
-    image: (
-      <div className="w-full h-48 bg-gradient-to-br from-pink-400 to-rose-500 rounded-lg flex items-center justify-center text-white text-4xl font-bold">
-        📚
-      </div>
-    ),
-    featured: false,
-    views: "11.3K",
-    likes: "867"
-  }
-];
+interface InsightsSectionProps {
+  // Remove the insights prop since we're fetching from database
+  className?: string;
+}
 
-const categories = [
-  { name: "All", count: insights.length },
-  { name: "University Rankings", count: insights.filter(i => i.category === "University Rankings").length },
-  { name: "Visa Guide", count: insights.filter(i => i.category === "Visa Guide").length },
-  { name: "Scholarships", count: insights.filter(i => i.category === "Scholarships").length },
-  { name: "Cost of Living", count: insights.filter(i => i.category === "Cost of Living").length },
-  { name: "Career Guidance", count: insights.filter(i => i.category === "Career Guidance").length }
-];
-
-export default function InsightsSection() {
+export default function InsightsSection({}: InsightsSectionProps) {
+  const { blogs: insights, loading, error } = useBlogs(4);
   const [isVisible, setIsVisible] = useState(false);
   const [activeCategory, setActiveCategory] = useState("All");
+
+  const categories = [
+    { name: "All", count: insights.length },
+    { name: "Study Guides", count: insights.filter(i => i.category === "Study Guides").length },
+    { name: "Visa Guides", count: insights.filter(i => i.category === "Visa Guides").length },
+    { name: "Scholarships", count: insights.filter(i => i.category === "Scholarships").length },
+    { name: "University Tips", count: insights.filter(i => i.category === "University Tips").length },
+    { name: "Study Abroad", count: insights.filter(i => i.category === "Study Abroad").length }
+  ];
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const [email, setEmail] = useState("");
 
   useEffect(() => {
     const timer = setTimeout(() => setIsVisible(true), 200);
@@ -145,6 +37,43 @@ export default function InsightsSection() {
 
   const featuredInsight = insights.find(insight => insight.featured);
   const regularInsights = insights.filter(insight => !insight.featured);
+
+  // Show loading state
+  if (loading) {
+    return (
+      <section className="bg-gradient-to-br from-gray-50 via-white to-blue-50 py-20">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-600 to-brand-700">Insights</span> to Keep You Ahead
+            </h2>
+            <div className="flex justify-center items-center py-12">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-brand-600"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  // Show error state
+  if (error) {
+    return (
+      <section className="bg-gradient-to-br from-gray-50 via-white to-blue-50 py-20">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-600 to-brand-700">Insights</span> to Keep You Ahead
+            </h2>
+            <div className="text-center py-12">
+              <p className="text-gray-600 mb-4">Unable to load latest insights at the moment.</p>
+              <p className="text-sm text-gray-500">Please try again later.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="bg-gradient-to-br from-gray-50 via-white to-blue-50 py-20">
@@ -213,7 +142,11 @@ export default function InsightsSection() {
                       </div>
                     </div>
                     <div className="text-sm text-gray-500">
-                      {featuredInsight.publishDate} • {featuredInsight.readTime}
+                      {new Date(featuredInsight.publishedAt).toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: 'short',
+                        day: 'numeric',
+                      })} • {featuredInsight.readTime}
                     </div>
                   </div>
                   
@@ -228,14 +161,28 @@ export default function InsightsSection() {
                         <span>{featuredInsight.likes}</span>
                       </span>
                     </div>
-                    <button className="px-6 py-3 bg-gradient-to-r from-brand-600 to-brand-700 text-white rounded-full font-semibold hover:from-brand-700 hover:to-brand-800 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl">
-                      Read Article
-                    </button>
+                    <Link href={`/blogs/${featuredInsight.slug}`}>
+                      <button className="px-6 py-3 bg-gradient-to-r from-brand-600 to-brand-700 text-white rounded-full font-semibold hover:from-brand-700 hover:to-brand-800 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl">
+                        Read Article
+                      </button>
+                    </Link>
                   </div>
                 </div>
                 
                 <div className="relative">
-                  {featuredInsight.image}
+                  {featuredInsight.featuredImage ? (
+                    <Image
+                      width={400}
+                      height={400}
+                      src={featuredInsight.featuredImage} 
+                      alt={featuredInsight.title}
+                      className="w-full h-48 object-cover rounded-lg"
+                    />
+                  ) : (
+                    <div className="w-full h-48 bg-gradient-to-br from-brand-400 to-brand-600 rounded-lg flex items-center justify-center text-white text-4xl font-bold">
+                      {featuredInsight.image || '📚'}
+                    </div>
+                  )}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
                 </div>
               </div>
@@ -245,21 +192,33 @@ export default function InsightsSection() {
 
         {/* Regular Articles Grid */}
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-          {(activeCategory === "All" ? regularInsights : filteredInsights).map((insight, index) => (
-            <article
-              key={insight.id}
-              className={`group bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 border border-gray-100 overflow-hidden ${
-                isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-              }`}
-              style={{
-                transitionDelay: `${index * 150}ms`
-              }}
-              onMouseEnter={() => setHoveredIndex(index)}
-              onMouseLeave={() => setHoveredIndex(null)}
-            >
+          {(activeCategory === "All" ? (featuredInsight ? regularInsights : insights) : filteredInsights).map((insight, index) => (
+            <Link key={insight._id || insight.id} href={`/blogs/${insight.slug}`}>
+              <article
+                className={`group bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 border border-gray-100 overflow-hidden cursor-pointer ${
+                  isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+                }`}
+                style={{
+                  transitionDelay: `${index * 150}ms`
+                }}
+                onMouseEnter={() => setHoveredIndex(index)}
+                onMouseLeave={() => setHoveredIndex(null)}
+              >
               {/* Image */}
               <div className="relative overflow-hidden">
-                {insight.image}
+                {insight.featuredImage ? (
+                  <Image
+                    width={400}
+                    height={400}
+                    src={insight.featuredImage} 
+                    alt={insight.title}
+                    className="w-full h-48 object-cover"
+                  />
+                ) : (
+                  <div className="w-full h-48 bg-gradient-to-br from-brand-400 to-brand-600 flex items-center justify-center text-white text-4xl font-bold">
+                    {insight.image || '📚'}
+                  </div>
+                )}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 <div className="absolute top-4 left-4">
                   <span className={`px-3 py-1 rounded-full text-xs font-semibold ${insight.categoryColor}`}>
@@ -277,7 +236,11 @@ export default function InsightsSection() {
               <div className="p-6">
                 <div className="flex items-center justify-between mb-3">
                   <div className="text-sm text-gray-500">
-                    {insight.publishDate}
+                    {new Date(insight.publishedAt).toLocaleDateString('en-US', {
+                      year: 'numeric',
+                      month: 'short',
+                      day: 'numeric',
+                    })}
                   </div>
                   <div className="text-sm text-gray-500">
                     {insight.readTime}
@@ -317,12 +280,13 @@ export default function InsightsSection() {
 
                 {/* Hover Effect */}
                 {hoveredIndex === index && (
-                  <div className="absolute inset-0 bg-gradient-to-br from-brand-500/5 to-brand-600/5 rounded-2xl" />
-                )}
-              </div>
-            </article>
-          ))}
-        </div>
+                   <div className="absolute inset-0 bg-gradient-to-br from-brand-500/5 to-brand-600/5 rounded-2xl" />
+                 )}
+               </div>
+               </article>
+             </Link>
+           ))}
+         </div>
 
         {/* Bottom CTA */}
         <div className="text-center mt-16">
@@ -336,8 +300,11 @@ export default function InsightsSection() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center max-w-md mx-auto">
               <input 
                 type="email" 
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 placeholder="Enter your email address"
                 className="flex-1 px-4 py-3 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                suppressHydrationWarning
               />
               <button className="px-8 py-3 bg-gradient-to-r from-brand-600 to-brand-700 text-white rounded-full font-semibold hover:from-brand-700 hover:to-brand-800 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl">
                 Subscribe

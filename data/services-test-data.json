@@ -1,0 +1,329 @@
+{
+  "services": [
+    {
+      "id": "1",
+      "name": "Study Abroad Consultation",
+      "slug": "study-abroad-consultation",
+      "title": "Expert Study Abroad Consultation",
+      "subtitle": "Get personalized guidance from our experienced counselors",
+      "description": "Our comprehensive study abroad consultation service provides you with expert guidance to choose the right country, university, and course that aligns with your career goals and budget.",
+      "image": "/hero/slide1.svg",
+      "sectionsMD": [
+        "## Why Choose Our Consultation Service?\n\nOur experienced counselors have helped over 5,000 students achieve their study abroad dreams. We provide personalized guidance based on your academic background, career aspirations, and financial situation.\n\n### What Makes Us Different\n\n- **Personalized Approach**: Every student is unique, and so is our guidance\n- **Expert Knowledge**: Our counselors are trained professionals with years of experience\n- **Comprehensive Support**: From initial consultation to visa approval\n- **Success Track Record**: 98% success rate in university admissions",
+        "## Our Consultation Process\n\nWe follow a systematic approach to ensure you make the best decisions for your future:\n\n1. **Initial Assessment**: Understanding your background and goals\n2. **Country & University Selection**: Matching you with the best options\n3. **Application Strategy**: Creating a winning application plan\n4. **Ongoing Support**: Continuous guidance throughout the process"
+      ],
+      "features": [
+        {
+          "icon": "user-check",
+          "title": "Personalized Guidance",
+          "description": "One-on-one consultation tailored to your specific needs and goals"
+        },
+        {
+          "icon": "globe",
+          "title": "Global Expertise",
+          "description": "In-depth knowledge of education systems worldwide"
+        },
+        {
+          "icon": "award",
+          "title": "Proven Success",
+          "description": "98% success rate in university admissions and visa approvals"
+        }
+      ],
+      "benefits": [
+        "Free initial consultation session",
+        "Personalized country and university recommendations",
+        "Course selection based on career goals",
+        "Budget planning and scholarship guidance",
+        "Application timeline and strategy",
+        "Interview preparation support",
+        "Ongoing support throughout the process"
+      ],
+      "process": [
+        {
+          "step": "1",
+          "title": "Initial Consultation",
+          "description": "We start with a comprehensive assessment of your academic background, career goals, and preferences."
+        },
+        {
+          "step": "2",
+          "title": "Research & Recommendations",
+          "description": "Our experts research and provide personalized recommendations for countries, universities, and courses."
+        },
+        {
+          "step": "3",
+          "title": "Application Strategy",
+          "description": "We develop a comprehensive application strategy including timelines, requirements, and preparation plans."
+        },
+        {
+          "step": "4",
+          "title": "Ongoing Support",
+          "description": "Continuous guidance and support throughout your application journey until you reach your destination."
+        }
+      ],
+      "ctaLabel": "Book Free Consultation",
+      "ctaText": "Ready to Start Your Study Abroad Journey?",
+      "createdAt": "2024-01-15T10:00:00Z",
+      "updatedAt": "2024-01-15T10:00:00Z"
+    },
+    {
+      "id": "2",
+      "name": "Visa Assistance",
+      "slug": "visa-assistance",
+      "title": "Complete Visa Assistance Service",
+      "subtitle": "Expert help with visa applications and documentation",
+      "description": "Navigate the complex visa application process with confidence. Our visa experts provide comprehensive assistance to ensure your application is complete, accurate, and submitted on time.",
+      "image": "/hero/slide2.svg",
+      "sectionsMD": [
+        "## Comprehensive Visa Support\n\nVisa applications can be complex and stressful. Our experienced visa consultants have successfully processed thousands of visa applications across multiple countries.\n\n### Our Expertise Covers\n\n- **Student Visas**: All major study destinations\n- **Documentation**: Complete checklist and review\n- **Interview Preparation**: Mock interviews and tips\n- **Application Tracking**: Regular updates on your application status",
+        "## Why Visa Applications Fail\n\nCommon reasons for visa rejections include:\n\n- Incomplete or incorrect documentation\n- Insufficient financial proof\n- Poor interview performance\n- Lack of genuine student intent\n\nOur service addresses all these potential issues to maximize your chances of approval."
+      ],
+      "features": [
+        {
+          "icon": "file-text",
+          "title": "Document Review",
+          "description": "Thorough review of all documents to ensure completeness and accuracy"
+        },
+        {
+          "icon": "users",
+          "title": "Interview Prep",
+          "description": "Mock interviews and personalized coaching for visa interviews"
+        },
+        {
+          "icon": "shield-check",
+          "title": "Success Guarantee",
+          "description": "High success rate with comprehensive application support"
+        }
+      ],
+      "benefits": [
+        "Complete visa application assistance",
+        "Document checklist and verification",
+        "Financial documentation guidance",
+        "Visa interview preparation",
+        "Application form completion support",
+        "Regular status updates",
+        "Post-approval travel guidance"
+      ],
+      "process": [
+        {
+          "step": "1",
+          "title": "Document Assessment",
+          "description": "We review your documents and create a personalized checklist of requirements."
+        },
+        {
+          "step": "2",
+          "title": "Application Preparation",
+          "description": "Complete assistance with filling out visa application forms and organizing documents."
+        },
+        {
+          "step": "3",
+          "title": "Interview Coaching",
+          "description": "Comprehensive interview preparation including mock sessions and personalized tips."
+        },
+        {
+          "step": "4",
+          "title": "Submission & Tracking",
+          "description": "Application submission assistance and regular tracking updates until decision."
+        }
+      ],
+      "ctaLabel": "Get Visa Help",
+      "ctaText": "Need Help with Your Visa Application?",
+      "createdAt": "2024-01-15T10:00:00Z",
+      "updatedAt": "2024-01-15T10:00:00Z"
+    },
+    {
+      "id": "3",
+      "name": "Application Support",
+      "slug": "application-support",
+      "title": "University Application Support",
+      "subtitle": "Complete assistance with university applications",
+      "description": "From selecting the right universities to submitting compelling applications, we provide end-to-end support to maximize your chances of admission to top universities worldwide.",
+      "image": "/hero/slide3.svg",
+      "sectionsMD": [
+        "## University Application Excellence\n\nApplying to universities abroad involves multiple steps and requirements. Our application support service ensures every aspect of your application is optimized for success.\n\n### What We Cover\n\n- **University Selection**: Strategic selection based on your profile\n- **Application Essays**: Professional review and editing\n- **Recommendation Letters**: Guidance for referees\n- **Portfolio Preparation**: For creative and technical programs",
+        "## Application Timeline Management\n\nWe help you manage complex application timelines across multiple universities:\n\n- **Early Planning**: Starting 12-18 months in advance\n- **Deadline Tracking**: Never miss important dates\n- **Document Preparation**: Organized and systematic approach\n- **Quality Assurance**: Multiple reviews before submission"
+      ],
+      "features": [
+        {
+          "icon": "target",
+          "title": "Strategic Selection",
+          "description": "Data-driven university selection to maximize admission chances"
+        },
+        {
+          "icon": "edit",
+          "title": "Essay Excellence",
+          "description": "Professional editing and review of personal statements and essays"
+        },
+        {
+          "icon": "calendar",
+          "title": "Timeline Management",
+          "description": "Comprehensive timeline management to meet all deadlines"
+        }
+      ],
+      "benefits": [
+        "Strategic university shortlisting",
+        "Application form completion",
+        "Personal statement and essay review",
+        "Recommendation letter guidance",
+        "Portfolio development support",
+        "Deadline management and reminders",
+        "Application status tracking"
+      ],
+      "process": [
+        {
+          "step": "1",
+          "title": "Profile Evaluation",
+          "description": "Comprehensive assessment of your academic and professional profile."
+        },
+        {
+          "step": "2",
+          "title": "University Selection",
+          "description": "Strategic selection of universities based on your profile and preferences."
+        },
+        {
+          "step": "3",
+          "title": "Application Preparation",
+          "description": "Complete assistance with essays, forms, and supporting documents."
+        },
+        {
+          "step": "4",
+          "title": "Submission & Follow-up",
+          "description": "Application submission and ongoing communication with universities."
+        }
+      ],
+      "ctaLabel": "Start Application",
+      "ctaText": "Ready to Apply to Top Universities?",
+      "createdAt": "2024-01-15T10:00:00Z",
+      "updatedAt": "2024-01-15T10:00:00Z"
+    },
+    {
+      "id": "4",
+      "name": "Course Selection",
+      "slug": "course-selection",
+      "title": "Expert Course Selection Guidance",
+      "subtitle": "Find the perfect course for your career goals",
+      "description": "Choose the right course that aligns with your interests, career goals, and market demands. Our experts help you navigate thousands of course options to find your perfect match.",
+      "image": "/hero/slide1.svg",
+      "sectionsMD": [
+        "## Finding Your Perfect Course\n\nWith thousands of courses available across different countries and universities, choosing the right one can be overwhelming. Our course selection service simplifies this process.\n\n### Our Approach\n\n- **Career Alignment**: Matching courses with career prospects\n- **Market Analysis**: Understanding industry demands\n- **Skill Assessment**: Evaluating your strengths and interests\n- **Future Trends**: Considering emerging fields and opportunities",
+        "## Course Categories We Cover\n\nOur expertise spans across all major fields of study:\n\n- **STEM Fields**: Engineering, Computer Science, Medicine, Research\n- **Business & Management**: MBA, Finance, Marketing, Entrepreneurship\n- **Creative Arts**: Design, Media, Fine Arts, Architecture\n- **Social Sciences**: Psychology, International Relations, Law\n- **Emerging Fields**: Data Science, AI, Sustainability, Digital Marketing"
+      ],
+      "features": [
+        {
+          "icon": "compass",
+          "title": "Career Mapping",
+          "description": "Detailed analysis of career paths and opportunities for each course"
+        },
+        {
+          "icon": "trending-up",
+          "title": "Market Insights",
+          "description": "Current and future job market trends for informed decision making"
+        },
+        {
+          "icon": "brain",
+          "title": "Aptitude Assessment",
+          "description": "Comprehensive assessment to match your skills with suitable courses"
+        }
+      ],
+      "benefits": [
+        "Comprehensive course database access",
+        "Career prospects analysis",
+        "Salary and employment statistics",
+        "Course curriculum comparison",
+        "University ranking insights",
+        "Industry expert consultations",
+        "Personalized course recommendations"
+      ],
+      "process": [
+        {
+          "step": "1",
+          "title": "Interest & Skills Assessment",
+          "description": "Detailed evaluation of your interests, skills, and career aspirations."
+        },
+        {
+          "step": "2",
+          "title": "Market Research",
+          "description": "Analysis of job market trends and career opportunities in your areas of interest."
+        },
+        {
+          "step": "3",
+          "title": "Course Matching",
+          "description": "Identification of courses that best match your profile and career goals."
+        },
+        {
+          "step": "4",
+          "title": "Final Recommendations",
+          "description": "Detailed recommendations with course comparisons and career pathway analysis."
+        }
+      ],
+      "ctaLabel": "Find My Course",
+      "ctaText": "Discover Your Ideal Course Today!",
+      "createdAt": "2024-01-15T10:00:00Z",
+      "updatedAt": "2024-01-15T10:00:00Z"
+    },
+    {
+      "id": "5",
+      "name": "Scholarship Assistance",
+      "slug": "scholarship-assistance",
+      "title": "Scholarship & Financial Aid Assistance",
+      "subtitle": "Maximize your funding opportunities",
+      "description": "Discover and apply for scholarships, grants, and financial aid opportunities. Our experts help you identify funding sources and create compelling scholarship applications.",
+      "image": "/hero/slide2.svg",
+      "sectionsMD": [
+        "## Unlock Funding Opportunities\n\nStudying abroad can be expensive, but numerous funding opportunities are available. Our scholarship assistance service helps you identify and apply for financial aid that matches your profile.\n\n### Types of Funding We Help With\n\n- **Merit-based Scholarships**: Academic excellence awards\n- **Need-based Aid**: Financial assistance programs\n- **Country-specific Grants**: Government funding programs\n- **University Scholarships**: Institution-specific awards\n- **External Scholarships**: Private and corporate funding",
+        "## Scholarship Application Success\n\nOur proven strategies have helped students secure millions in funding:\n\n- **Profile Optimization**: Highlighting your strengths effectively\n- **Essay Excellence**: Compelling scholarship essays\n- **Application Strategy**: Applying to the right opportunities\n- **Interview Preparation**: Scholarship interview coaching"
+      ],
+      "features": [
+        {
+          "icon": "search",
+          "title": "Opportunity Discovery",
+          "description": "Comprehensive database search to find scholarships matching your profile"
+        },
+        {
+          "icon": "file-edit",
+          "title": "Application Excellence",
+          "description": "Professional assistance with scholarship essays and applications"
+        },
+        {
+          "icon": "dollar-sign",
+          "title": "Funding Maximization",
+          "description": "Strategic approach to maximize your total funding package"
+        }
+      ],
+      "benefits": [
+        "Comprehensive scholarship database access",
+        "Personalized funding opportunity matching",
+        "Scholarship essay writing assistance",
+        "Application form completion support",
+        "Interview preparation for scholarship panels",
+        "Deadline management and reminders",
+        "Financial planning and budgeting guidance"
+      ],
+      "process": [
+        {
+          "step": "1",
+          "title": "Profile Analysis",
+          "description": "Detailed analysis of your academic, extracurricular, and personal achievements."
+        },
+        {
+          "step": "2",
+          "title": "Opportunity Matching",
+          "description": "Identification of scholarships and grants that match your profile and goals."
+        },
+        {
+          "step": "3",
+          "title": "Application Preparation",
+          "description": "Complete assistance with scholarship applications, essays, and supporting documents."
+        },
+        {
+          "step": "4",
+          "title": "Submission & Follow-up",
+          "description": "Application submission and ongoing communication with scholarship providers."
+        }
+      ],
+      "ctaLabel": "Find Scholarships",
+      "ctaText": "Start Your Scholarship Search Today!",
+      "createdAt": "2024-01-15T10:00:00Z",
+      "updatedAt": "2024-01-15T10:00:00Z"
+    }
+  ]
+}

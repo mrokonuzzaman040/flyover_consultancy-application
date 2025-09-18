@@ -1,0 +1,509 @@
+{
+  "services": [
+    {
+      "icon": "UserCheck",
+      "title": "Personalized Counseling",
+      "description": "Get expert guidance tailored to your academic goals and career aspirations.",
+      "features": ["1-on-1 Expert Sessions", "Career Path Analysis", "Goal Setting & Planning"],
+      "popular": true
+    },
+    {
+      "icon": "FileText",
+      "title": "Application Support",
+      "description": "Complete assistance with university applications, essays, and documentation.",
+      "features": ["Essay Writing Help", "Document Review", "Application Tracking"],
+      "popular": false
+    },
+    {
+      "icon": "Award",
+      "title": "Scholarship Guidance",
+      "description": "Discover and apply for scholarships to fund your international education.",
+      "features": ["Scholarship Search", "Application Assistance", "Interview Prep"],
+      "popular": false
+    },
+    {
+      "icon": "Plane",
+      "title": "Visa & Travel Support",
+      "description": "Navigate visa processes and pre-departure preparations with confidence.",
+      "features": ["Visa Documentation", "Interview Preparation", "Travel Planning"],
+      "popular": true
+    }
+  ],
+  "stats": [
+    { "icon": "Users", "value": "5,000+", "label": "Students Helped" },
+    { "icon": "CheckCircle", "value": "98%", "label": "Success Rate" },
+    { "icon": "Star", "value": "4.9/5", "label": "Client Rating" },
+    { "icon": "Clock", "value": "15+", "label": "Years Experience" }
+  ],
+  "destinations": [
+    {
+      "name": "Study in New Zealand",
+      "city": "Auckland",
+      "image": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='600' viewBox='0 0 800 600'%3E%3Cdefs%3E%3ClinearGradient id='nz' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%2364B5F6'/%3E%3Cstop offset='100%25' style='stop-color:%231976D2'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100%25' height='100%25' fill='url(%23nz)'/%3E%3Ctext x='50%25' y='50%25' font-family='Arial' font-size='48' fill='white' text-anchor='middle' dy='0.3em'%3E🏔️ New Zealand%3C/text%3E%3C/svg%3E",
+      "universityLogo": "/logo.png",
+      "description": "Experience world-class education in stunning natural landscapes"
+    },
+    {
+      "name": "Study in Malaysia",
+      "city": "Kuala Lumpur",
+      "image": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='600' viewBox='0 0 800 600'%3E%3Cdefs%3E%3ClinearGradient id='my' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%23FF7043'/%3E%3Cstop offset='100%25' style='stop-color:%23D84315'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100%25' height='100%25' fill='url(%23my)'/%3E%3Ctext x='50%25' y='50%25' font-family='Arial' font-size='48' fill='white' text-anchor='middle' dy='0.3em'%3E🏙️ Malaysia%3C/text%3E%3C/svg%3E",
+      "universityLogo": "/logo.png",
+      "description": "Affordable quality education in a multicultural environment"
+    },
+    {
+      "name": "Study in Japan",
+      "city": "Tokyo",
+      "image": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='600' viewBox='0 0 800 600'%3E%3Cdefs%3E%3ClinearGradient id='jp' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%23E91E63'/%3E%3Cstop offset='100%25' style='stop-color:%23AD1457'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100%25' height='100%25' fill='url(%23jp)'/%3E%3Ctext x='50%25' y='50%25' font-family='Arial' font-size='48' fill='white' text-anchor='middle' dy='0.3em'%3E🏯 Japan%3C/text%3E%3C/svg%3E",
+      "universityLogo": "/logo.png",
+      "description": "Immerse yourself in cutting-edge technology and rich culture"
+    },
+    {
+      "name": "Study in Europe",
+      "city": "Berlin",
+      "image": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='600' viewBox='0 0 800 600'%3E%3Cdefs%3E%3ClinearGradient id='eu' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%234CAF50'/%3E%3Cstop offset='100%25' style='stop-color:%23388E3C'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100%25' height='100%25' fill='url(%23eu)'/%3E%3Ctext x='50%25' y='50%25' font-family='Arial' font-size='48' fill='white' text-anchor='middle' dy='0.3em'%3E🏛️ Europe%3C/text%3E%3C/svg%3E",
+      "universityLogo": "/logo.png",
+      "description": "Explore diverse cultures and world-renowned universities"
+    },
+    {
+      "name": "Study in Dubai",
+      "city": "Dubai",
+      "image": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='600' viewBox='0 0 800 600'%3E%3Cdefs%3E%3ClinearGradient id='ae' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%23FF9800'/%3E%3Cstop offset='100%25' style='stop-color:%23F57C00'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100%25' height='100%25' fill='url(%23ae)'/%3E%3Ctext x='50%25' y='50%25' font-family='Arial' font-size='48' fill='white' text-anchor='middle' dy='0.3em'%3E🏗️ Dubai%3C/text%3E%3C/svg%3E",
+      "universityLogo": "/logo.png",
+      "description": "Gateway to the Middle East with modern infrastructure"
+    },
+    {
+      "name": "Study in Indonesia",
+      "city": "Jakarta",
+      "image": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='600' viewBox='0 0 800 600'%3E%3Cdefs%3E%3ClinearGradient id='id' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%239C27B0'/%3E%3Cstop offset='100%25' style='stop-color:%237B1FA2'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100%25' height='100%25' fill='url(%23id)'/%3E%3Ctext x='50%25' y='50%25' font-family='Arial' font-size='48' fill='white' text-anchor='middle' dy='0.3em'%3E🏝️ Indonesia%3C/text%3E%3C/svg%3E",
+      "universityLogo": "/logo.png",
+      "description": "Discover Southeast Asian culture and growing opportunities"
+    }
+  ],
+  "studyabroadsteps": [
+    {
+      "id": 1,
+      "title": "Initial Consultation",
+      "description": "Meet with our expert counselors to discuss your academic goals and preferences",
+      "color": "from-brand-500 to-orange-500",
+      "bgColor": "bg-brand-50",
+      "textColor": "text-brand-600"
+    },
+    {
+      "id": 2,
+      "title": "University Selection",
+      "description": "Get personalized recommendations based on your profile and career aspirations",
+      "color": "from-orange-500 to-amber-500",
+      "bgColor": "bg-orange-50",
+      "textColor": "text-orange-600"
+    },
+    {
+      "id": 3,
+      "title": "Application Process",
+      "description": "Complete applications with our guidance and submit to your chosen universities",
+      "color": "from-amber-500 to-yellow-500",
+      "bgColor": "bg-amber-50",
+      "textColor": "text-amber-600"
+    },
+    {
+      "id": 4,
+      "title": "Visa Assistance",
+      "description": "Navigate the visa process with our comprehensive support and documentation help",
+      "color": "from-yellow-500 to-green-500",
+      "bgColor": "bg-yellow-50",
+      "textColor": "text-yellow-600"
+    },
+    {
+      "id": 5,
+      "title": "Pre-Departure",
+      "description": "Prepare for your journey with orientation sessions and travel arrangements",
+      "color": "from-green-500 to-emerald-500",
+      "bgColor": "bg-green-50",
+      "textColor": "text-green-600"
+    }
+  ],
+  "whychooseusfeatures": [
+    {
+      "icon": "BookOpen",
+      "title": "End-to-End FREE Assistance",
+      "description": "Complete support from application to visa approval with no hidden costs",
+      "stat": "100%",
+      "statLabel": "Free Service"
+    },
+    {
+      "icon": "CheckCircle",
+      "title": "22,000+ Success Stories",
+      "description": "Proven track record of helping students achieve their dreams",
+      "stat": "22K+",
+      "statLabel": "Success Stories"
+    },
+    {
+      "icon": "Globe",
+      "title": "550+ Global Partners",
+      "description": "Extensive network of top universities and institutions worldwide",
+      "stat": "550+",
+      "statLabel": "Partners"
+    },
+    {
+      "icon": "Shield",
+      "title": "Transparent, Ethical Guidance",
+      "description": "Honest advice and transparent processes you can trust",
+      "stat": "100%",
+      "statLabel": "Transparency"
+    }
+  ],
+  "awards": [
+    {
+      "title": "Best Education Consultancy 2023",
+      "description": "Recognized as the leading education consultancy for outstanding student placement services",
+      "year": "2023",
+      "organization": "Global Education Awards",
+      "icon": "Award",
+      "color": "from-yellow-400 to-orange-500"
+    },
+    {
+      "title": "Excellence in Student Support",
+      "description": "Awarded for exceptional dedication to student welfare and comprehensive support services",
+      "year": "2023",
+      "organization": "International Education Council",
+      "icon": "Shield",
+      "color": "from-blue-400 to-indigo-500"
+    },
+    {
+      "title": "Top Visa Success Rate",
+      "description": "Achieved highest visa approval rate among education consultancies in the region",
+      "year": "2022",
+      "organization": "Visa Success Institute",
+      "icon": "Zap",
+      "color": "from-green-400 to-emerald-500"
+    },
+    {
+      "title": "Innovation in Education",
+      "description": "Recognized for innovative approaches to international education consulting",
+      "year": "2022",
+      "organization": "Education Innovation Awards",
+      "icon": "Lightbulb",
+      "color": "from-purple-400 to-pink-500"
+    }
+  ],
+  "upcomingEvents": [
+    {
+      "date": "Jan 15, 2025",
+      "time": "10:00 AM - 4:00 PM",
+      "location": "Dhaka Convention Center",
+      "title": "Global Education Fair 2025",
+      "description": "Meet representatives from 50+ top universities worldwide. Explore scholarships, programs, and get instant admission offers.",
+      "type": "Fair",
+      "attendees": "500+",
+      "featured": true,
+      "icon": "Building",
+      "color": "from-blue-500 to-indigo-600"
+    },
+    {
+      "date": "Jan 20, 2025",
+      "time": "2:00 PM - 5:00 PM",
+      "location": "Flyover Global Office",
+      "title": "IELTS Preparation Workshop",
+      "description": "Free intensive workshop covering all IELTS modules with expert trainers. Limited seats available.",
+      "type": "Workshop",
+      "attendees": "30",
+      "featured": false,
+      "icon": "BookOpen",
+      "color": "from-green-500 to-emerald-600"
+    },
+    {
+      "date": "Jan 25, 2025",
+      "time": "6:00 PM - 8:00 PM",
+      "location": "Virtual Event",
+      "title": "Scholarship Guidance Webinar",
+      "description": "Learn about available scholarships, application strategies, and success tips from our expert counselors.",
+      "type": "Webinar",
+      "attendees": "Unlimited",
+      "featured": false,
+      "icon": "Monitor",
+      "color": "from-purple-500 to-pink-600"
+    }
+  ],
+  "partners": [
+    {
+      "id": 1,
+      "name": "Harvard University",
+      "category": "Ivy League",
+      "country": "USA",
+      "logo": "HARVARD",
+      "color": "from-brand-600 to-brand-800"
+    },
+    {
+      "id": 2,
+      "name": "University of Oxford",
+      "category": "Russell Group",
+      "country": "UK",
+      "logo": "OXFORD",
+      "color": "from-blue-900 to-indigo-900"
+    },
+    {
+      "id": 3,
+      "name": "University of Toronto",
+      "category": "U15 Group",
+      "country": "Canada",
+      "logo": "TORONTO",
+      "color": "from-blue-700 to-blue-900"
+    },
+    {
+      "id": 4,
+      "name": "University of Melbourne",
+      "category": "Group of Eight",
+      "country": "Australia",
+      "logo": "MELBOURNE",
+      "color": "from-indigo-700 to-indigo-900"
+    },
+    {
+      "id": 5,
+      "name": "National University of Singapore",
+      "category": "ASEAN Universities",
+      "country": "Singapore",
+      "logo": "NUS",
+      "color": "from-blue-800 to-blue-900"
+    },
+    {
+      "id": 6,
+      "name": "University of British Columbia",
+      "category": "U15 Group",
+      "country": "Canada",
+      "logo": "UBC",
+      "color": "from-slate-600 to-slate-800"
+    },
+    {
+      "id": 7,
+      "name": "King's College London",
+      "category": "Russell Group",
+      "country": "UK",
+      "logo": "KING'S",
+      "color": "from-rose-700 to-rose-900"
+    },
+    {
+      "id": 8,
+      "name": "University of Sydney",
+      "category": "Group of Eight",
+      "country": "Australia",
+      "logo": "SYDNEY",
+      "color": "from-orange-600 to-orange-800"
+    },
+    {
+      "id": 9,
+      "name": "McGill University",
+      "category": "U15 Group",
+      "country": "Canada",
+      "logo": "McGILL",
+      "color": "from-brand-600 to-brand-800"
+    }
+  ],
+  "successStories": [
+    {
+      "id": 1,
+      "rating": 5,
+      "text": "Flyover Global made my dream of studying at Harvard a reality. Their personalized guidance and scholarship assistance helped me secure a full scholarship. The counselors were incredibly supportive throughout the entire process.",
+      "author": "Rashida Ahmed",
+      "university": "Harvard University",
+      "program": "Master's in Computer Science",
+      "country": "USA",
+      "scholarship": "Full Scholarship",
+      "year": "2024",
+      "avatar": "RA",
+      "flag": "🇺🇸",
+      "color": "from-brand-500 to-brand-700"
+    },
+    {
+      "id": 2,
+      "rating": 5,
+      "text": "The team at Flyover Global helped me navigate the complex application process for Oxford. Their IELTS preparation sessions were excellent, and I achieved the score I needed. Now I'm pursuing my PhD in Engineering!",
+      "author": "Mohammad Hassan",
+      "university": "University of Oxford",
+      "program": "PhD in Engineering",
+      "country": "UK",
+      "scholarship": "Partial Scholarship",
+      "year": "2023",
+      "avatar": "MH",
+      "flag": "🇬🇧",
+      "color": "from-blue-600 to-blue-800"
+    },
+    {
+      "id": 3,
+      "rating": 5,
+      "text": "Thanks to Flyover Global, I'm now studying at the University of Toronto. The visa process was seamless, and their career counseling helped me choose the perfect program. Couldn't be happier with my decision!",
+      "author": "Fatima Khan",
+      "university": "University of Toronto",
+      "program": "Master's in Business Administration",
+      "country": "Canada",
+      "scholarship": "Merit Scholarship",
+      "year": "2024",
+      "avatar": "FK",
+      "flag": "🇨🇦",
+      "color": "from-green-500 to-green-700"
+    },
+    {
+      "id": 4,
+      "rating": 5,
+      "text": "Flyover Global's support was incredible from start to finish. They helped me get into the University of Melbourne with a scholarship. The pre-departure orientation was very helpful for my transition to Australia.",
+      "author": "Arif Rahman",
+      "university": "University of Melbourne",
+      "program": "Master's in Data Science",
+      "country": "Australia",
+      "scholarship": "International Excellence Scholarship",
+      "year": "2023",
+      "avatar": "AR",
+      "flag": "🇦🇺",
+      "color": "from-orange-500 to-orange-700"
+    },
+    {
+      "id": 5,
+      "rating": 5,
+      "text": "I was overwhelmed by the application process until I found Flyover Global. They simplified everything and helped me secure admission to NUS with financial aid. Their expertise in Asian universities is unmatched.",
+      "author": "Nusrat Jahan",
+      "university": "National University of Singapore",
+      "program": "Master's in Public Policy",
+      "country": "Singapore",
+      "scholarship": "Need-based Aid",
+      "year": "2024",
+      "avatar": "NJ",
+      "flag": "🇸🇬",
+      "color": "from-purple-500 to-purple-700"
+    },
+    {
+      "id": 6,
+      "rating": 5,
+      "text": "The personalized attention I received from Flyover Global was amazing. They helped me craft compelling essays and prepare for interviews. Now I'm at Imperial College London pursuing my dream in Artificial Intelligence!",
+      "author": "Tanvir Ahmed",
+      "university": "Imperial College London",
+      "program": "Master's in Artificial Intelligence",
+      "country": "UK",
+      "scholarship": "Dean's Excellence Scholarship",
+      "year": "2023",
+      "avatar": "TA",
+      "flag": "🇬🇧",
+      "color": "from-cyan-500 to-cyan-700"
+    }
+  ],
+  "insights": [
+    {
+      "id": 1,
+      "category": "University Rankings",
+      "categoryColor": "bg-blue-100 text-blue-800",
+      "author": "Dr. Sarah Mitchell",
+      "authorRole": "Education Consultant",
+      "readTime": "8 min read",
+      "publishDate": "Dec 15, 2024",
+      "title": "Top 10 Universities in Canada for International Students 2025",
+      "excerpt": "Comprehensive analysis of Canada's leading universities, including admission requirements, tuition fees, and scholarship opportunities for international students.",
+      "image": "🇨🇦",
+      "featured": true,
+      "views": "12.5K",
+      "likes": "892"
+    },
+    {
+      "id": 2,
+      "category": "Visa Guide",
+      "categoryColor": "bg-green-100 text-green-800",
+      "author": "Ahmed Hassan",
+      "authorRole": "Immigration Lawyer",
+      "readTime": "12 min read",
+      "publishDate": "Dec 12, 2024",
+      "title": "Complete Student Visa Application Guide 2025: Step-by-Step Process",
+      "excerpt": "Everything you need to know about student visa applications, including required documents, processing times, and common mistakes to avoid.",
+      "image": "📋",
+      "featured": false,
+      "views": "8.7K",
+      "likes": "654"
+    },
+    {
+      "id": 3,
+      "category": "Scholarships",
+      "categoryColor": "bg-purple-100 text-purple-800",
+      "author": "Maria Rodriguez",
+      "authorRole": "Financial Aid Advisor",
+      "readTime": "6 min read",
+      "publishDate": "Dec 10, 2024",
+      "title": "$2M+ in Scholarships: Opportunities You Can't Afford to Miss",
+      "excerpt": "Discover merit-based, need-based, and country-specific scholarships available for international students in 2025.",
+      "image": "💰",
+      "featured": false,
+      "views": "15.2K",
+      "likes": "1.1K"
+    },
+    {
+      "id": 4,
+      "category": "Cost of Living",
+      "categoryColor": "bg-orange-100 text-orange-800",
+      "author": "James Thompson",
+      "authorRole": "Student Life Coordinator",
+      "readTime": "10 min read",
+      "publishDate": "Dec 8, 2024",
+      "title": "Living Costs Breakdown: UK vs USA vs Canada vs Australia",
+      "excerpt": "Detailed comparison of living expenses, accommodation costs, and budgeting tips for popular study destinations.",
+      "image": "🏠",
+      "featured": false,
+      "views": "9.8K",
+      "likes": "743"
+    },
+    {
+      "id": 5,
+      "category": "Career Guidance",
+      "categoryColor": "bg-cyan-100 text-cyan-800",
+      "author": "Lisa Chen",
+      "authorRole": "Career Development Specialist",
+      "readTime": "7 min read",
+      "publishDate": "Dec 5, 2024",
+      "title": "Post-Graduation Work Permits: Your Path to International Career",
+      "excerpt": "Navigate post-study work opportunities, visa extensions, and career prospects in different countries after graduation.",
+      "image": "🎓",
+      "featured": false,
+      "views": "6.4K",
+      "likes": "521"
+    },
+    {
+      "id": 6,
+      "category": "Test Preparation",
+      "categoryColor": "bg-pink-100 text-pink-800",
+      "author": "Robert Kim",
+      "authorRole": "IELTS/TOEFL Expert",
+      "readTime": "9 min read",
+      "publishDate": "Dec 3, 2024",
+      "title": "IELTS vs TOEFL: Which Test Should You Take in 2025?",
+      "excerpt": "Comprehensive comparison of English proficiency tests, preparation strategies, and university acceptance criteria.",
+      "image": "📚",
+      "featured": false,
+      "views": "11.3K",
+      "likes": "867"
+    }
+  ],
+  "insightCategories": [
+    { "name": "All", "count": 6 },
+    { "name": "University Rankings", "count": 1 },
+    { "name": "Visa Guide", "count": 1 },
+    { "name": "Scholarships", "count": 1 },
+    { "name": "Cost of Living", "count": 1 },
+    { "name": "Career Guidance", "count": 1 }
+  ],
+  "slides": [
+    {
+      "image": "/hero/slide1.svg",
+      "headline": "Your Global Study Partner",
+      "sub": "Admissions, visas, scholarships and more — end-to-end guidance.",
+      "primary": { "label": "Schedule Free Consultation", "isModal": true },
+      "secondary": { "label": "Explore Destinations", "href": "/destinations" }
+    },
+    {
+      "image": "/hero/slide2.svg",
+      "headline": "550+ Institutions, 22,000+ Success Stories",
+      "sub": "Unlock top universities across AU, CA, USA, UK, EU, NZ, JP.",
+      "primary": { "label": "See Services", "href": "/services" },
+      "secondary": { "label": "Upcoming Events", "href": "/events" }
+    },
+    {
+      "image": "/hero/slide3.svg",
+      "headline": "Start in 5 Simple Steps",
+      "sub": "From counseling to takeoff — we streamline your journey.",
+      "primary": { "label": "Schedule Consultation", "isModal": true },
+      "secondary": { "label": "Read Resources", "href": "/resources" }
+    }
+  ]
+}

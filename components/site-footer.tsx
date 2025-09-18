@@ -4,18 +4,25 @@ import Link from "next/link";
 import { Facebook, Instagram, Linkedin, Youtube } from "lucide-react";
 import { useState, useEffect } from "react";
 import Image from "next/image";
+import { useNavigation } from "@/hooks/use-navigation";
 
 export default function SiteFooter() {
   const [isClient, setIsClient] = useState(false);
+  const { navigationData, loading: navLoading } = useNavigation();
 
   useEffect(() => {
     setIsClient(true);
   }, []);
+
+  // Extract destinations and services from navigation data
+  const destinationsNav = navigationData.find(item => item.label === 'Destinations');
+  const servicesNav = navigationData.find(item => item.label === 'Our Services');
+  const scholarshipsNav = navigationData.find(item => item.label === 'Scholarships');
   return (
     <footer className="mt-16 bg-neutral-950 text-white">
       <div className="h-1 w-full bg-gradient-to-r from-brand via-brand-700 to-brand" />
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-        <div className="grid gap-10 md:grid-cols-4">
+        <div className="grid gap-8 md:grid-cols-5">
           <div>
             <Image src="/logo.png" alt="Flyover Consultancy" className="h-9 w-auto brightness-0 invert" width={120} height={30} />
             <p className="mt-4 text-sm text-white/80">
@@ -31,35 +38,67 @@ export default function SiteFooter() {
           <div>
             <h3 className="text-sm font-semibold text-white">Destinations</h3>
             <ul className="mt-3 space-y-2 text-sm text-white/90">
-              {[
-                ["Australia", "/destinations/australia"],
-                ["Canada", "/destinations/canada"],
-                ["USA", "/destinations/usa"],
-                ["UK", "/destinations/uk"],
-                ["Europe", "/destinations/europe"],
-                ["New Zealand", "/destinations/new-zealand"],
-                ["Japan", "/destinations/japan"],
-              ].map(([label, href]) => (
-                <li key={String(href)}>
-                  <Link href={String(href)} className="hover:underline">{label}</Link>
+              {navLoading ? (
+                <li className="text-white/60">Loading destinations...</li>
+              ) : destinationsNav?.dropdown ? (
+                destinationsNav.dropdown.slice(0, 7).map((dest) => (
+                  <li key={dest.href}>
+                    <Link href={dest.href} className="hover:underline hover:text-white transition-colors">
+                      {dest.label}
+                    </Link>
+                  </li>
+                ))
+              ) : (
+                <li>
+                  <Link href="/destinations" className="hover:underline hover:text-white transition-colors">
+                    View All Destinations
+                  </Link>
                 </li>
-              ))}
+              )}
             </ul>
           </div>
           <div>
             <h3 className="text-sm font-semibold text-white">Services</h3>
             <ul className="mt-3 space-y-2 text-sm text-white/90">
-              {[
-                ["Admission Support", "/services/admission-support"],
-                ["Visa Services", "/services/visa-services"],
-                ["Accommodation", "/services/accommodation"],
-                ["Health Insurance", "/services/health-insurance"],
-                ["Migration Services", "/services/migration"],
-              ].map(([label, href]) => (
-                <li key={String(href)}>
-                  <Link href={String(href)} className="hover:underline">{label}</Link>
+              {navLoading ? (
+                <li className="text-white/60">Loading services...</li>
+              ) : servicesNav?.dropdown ? (
+                servicesNav.dropdown.slice(0, 6).map((service) => (
+                  <li key={service.href}>
+                    <Link href={service.href} className="hover:underline hover:text-white transition-colors">
+                      {service.label}
+                    </Link>
+                  </li>
+                ))
+              ) : (
+                <li>
+                  <Link href="/services" className="hover:underline hover:text-white transition-colors">
+                    View All Services
+                  </Link>
                 </li>
-              ))}
+              )}
+            </ul>
+          </div>
+          <div>
+            <h3 className="text-sm font-semibold text-white">Scholarships</h3>
+            <ul className="mt-3 space-y-2 text-sm text-white/90">
+              {navLoading ? (
+                <li className="text-white/60">Loading scholarships...</li>
+              ) : scholarshipsNav?.dropdown ? (
+                scholarshipsNav.dropdown.slice(0, 5).map((scholarship) => (
+                  <li key={scholarship.href}>
+                    <Link href={scholarship.href} className="hover:underline hover:text-white transition-colors">
+                      {scholarship.label}
+                    </Link>
+                  </li>
+                ))
+              ) : (
+                <li>
+                  <Link href="/scholarships" className="hover:underline hover:text-white transition-colors">
+                    View All Scholarships
+                  </Link>
+                </li>
+              )}
             </ul>
           </div>
           <div>

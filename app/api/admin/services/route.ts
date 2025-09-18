@@ -1,125 +1,50 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { z } from 'zod'
-import { prisma } from '@/lib/prisma'
+import { NextRequest, NextResponse } from "next/server";
+import { z } from "zod";
+import { dbConnect, toObject } from "@/lib/mongoose";
+import Service from "@/lib/models/Service";
 
-// TODO: Add authentication middleware
-// import { getServerSession } from 'next-auth/next'
-// import { authOptions } from '@/lib/auth'
+const feature = z.object({ icon: z.string().optional(), title: z.string(), description: z.string() });
+const processStep = z.object({ step: z.string(), title: z.string(), description: z.string() });
 
-const createServiceSchema = z.object({
-  name: z.string().min(1, 'Name is required'),
-  slug: z.string().min(1, 'Slug is required'),
+const schema = z.object({
+  name: z.string().min(1),
+  slug: z.string().min(1).regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/).transform((s)=>s.toLowerCase()),
+  title: z.string().min(1),
+  subtitle: z.string().min(1),
+  description: z.string().min(1),
+  image: z.string().min(1),
+  ctaLabel: z.string().min(1),
+  ctaText: z.string().min(1),
   sectionsMD: z.array(z.string()).optional().default([]),
-  ctaLabel: z.string().optional()
-})
+  features: z.array(feature).min(1),
+  benefits: z.array(z.string()).min(1),
+  process: z.array(processStep).min(1),
+  popular: z.boolean().optional().default(false),
+});
 
-const querySchema = z.object({
-  page: z.string().optional().default('1'),
-  limit: z.string().optional().default('10'),
-  search: z.string().optional()
-})
-
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
-    // TODO: Add authentication check
-    // const session = await getServerSession(authOptions)
-    // if (!session || session.user.role !== 'ADMIN') {
-    //   return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    // }
-
-    const { searchParams } = new URL(request.url)
-    const { page, limit, search } = querySchema.parse({
-      page: searchParams.get('page'),
-      limit: searchParams.get('limit'),
-      search: searchParams.get('search')
-    })
-
-    const pageNum = parseInt(page)
-    const limitNum = parseInt(limit)
-    const skip = (pageNum - 1) * limitNum
-
-    const where: {
-      OR?: Array<{
-        name?: { contains: string; mode: 'insensitive' }
-        slug?: { contains: string; mode: 'insensitive' }
-      }>
-    } = {}
-
-    if (search) {
-      where.OR = [
-        { name: { contains: search, mode: 'insensitive' } },
-        { slug: { contains: search, mode: 'insensitive' } }
-      ]
-    }
-
-    const [services, total] = await Promise.all([
-      prisma.service.findMany({
-        where,
-        skip,
-        take: limitNum,
-        orderBy: { createdAt: 'desc' }
-      }),
-      prisma.service.count({ where })
-    ])
-
-    return NextResponse.json({
-      services,
-      pagination: {
-        page: pageNum,
-        limit: limitNum,
-        total,
-        pages: Math.ceil(total / limitNum)
-      }
-    })
-  } catch (error) {
-    console.error('Error fetching services:', error)
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    )
+    await dbConnect();
+    const docs = await Service.find({}).sort({ createdAt: -1 }).lean();
+    return NextResponse.json({ services: docs.map((d) => ({ ...toObject(d as { _id: unknown }) })) });
+  } catch (e: unknown) {
+    console.error(e);
+    return NextResponse.json({ error: "Failed to fetch services" }, { status: 500 });
   }
 }
 
-export async function POST(request: NextRequest) {
+export async function POST(req: NextRequest) {
   try {
-    // TODO: Add authentication check
-    // const session = await getServerSession(authOptions)
-    // if (!session || session.user.role !== 'ADMIN') {
-    //   return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    // }
-
-    const body = await request.json()
-    const validatedData = createServiceSchema.parse(body)
-
-    // Check if slug already exists
-    const existingService = await prisma.service.findUnique({
-      where: { slug: validatedData.slug }
-    })
-
-    if (existingService) {
-      return NextResponse.json(
-        { error: 'A service with this slug already exists' },
-        { status: 400 }
-      )
-    }
-
-    const service = await prisma.service.create({
-      data: validatedData
-    })
-
-    return NextResponse.json(service, { status: 201 })
-  } catch (error) {
-    if (error instanceof z.ZodError) {
-      return NextResponse.json(
-        { error: 'Validation error', details: error.issues },
-        { status: 400 }
-      )
-    }
-
-    console.error('Error creating service:', error)
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    )
+    await dbConnect();
+    const json = await req.json();
+    const parsed = schema.safeParse(json);
+    if (!parsed.success) return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 });
+    const exists = await Service.findOne({ slug: parsed.data.slug });
+    if (exists) return NextResponse.json({ error: "Slug already exists" }, { status: 409 });
+    const doc = await Service.create(parsed.data);
+    return NextResponse.json({ service: toObject(doc.toObject()) }, { status: 201 });
+  } catch (e: unknown) {
+    console.error(e);
+    return NextResponse.json({ error: "Failed to create service" }, { status: 500 });
   }
 }

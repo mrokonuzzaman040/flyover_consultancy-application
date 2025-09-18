@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { use, useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -27,7 +27,8 @@ interface Destination {
   createdAt: string
 }
 
-export default function DeleteDestinationPage({ params }: { params: { id: string } }) {
+export default function DeleteDestinationPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = use(params)
   const [destination, setDestination] = useState<Destination | null>(null)
   const [loading, setLoading] = useState(true)
   const [deleting, setDeleting] = useState(false)
@@ -35,11 +36,11 @@ export default function DeleteDestinationPage({ params }: { params: { id: string
 
   useEffect(() => {
     fetchDestination()
-  }, [])
+  }, [id])
 
   const fetchDestination = async () => {
     try {
-      const response = await fetch(`/api/admin/destinations/${params.id}`)
+      const response = await fetch(`/api/admin/destinations/${id}`)
       if (response.ok) {
         const data = await response.json()
         setDestination(data.destination)
@@ -90,7 +91,7 @@ export default function DeleteDestinationPage({ params }: { params: { id: string
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-brand-600"></div>
       </div>
     )
   }
@@ -129,13 +130,13 @@ export default function DeleteDestinationPage({ params }: { params: { id: string
       </div>
 
       {/* Warning Alert */}
-      <Card className="border-red-200 bg-red-50">
+      <Card className="border-brand-200 bg-brand-50">
         <CardContent className="pt-6">
           <div className="flex items-start gap-3">
-            <AlertTriangle className="w-5 h-5 text-red-600 mt-0.5" />
+            <AlertTriangle className="w-5 h-5 text-brand-600 mt-0.5" />
             <div>
-              <h3 className="font-semibold text-red-900 mb-1">Warning: This action cannot be undone</h3>
-              <p className="text-red-700 text-sm">
+              <h3 className="font-semibold text-brand-900 mb-1">Warning: This action cannot be undone</h3>
+              <p className="text-brand-700 text-sm">
                 Deleting this destination will permanently remove all associated data including content, 
                 courses, FAQs, and any related information. This action is irreversible.
               </p>
@@ -148,7 +149,7 @@ export default function DeleteDestinationPage({ params }: { params: { id: string
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-blue-600 text-white rounded-full flex items-center justify-center">
+            <div className="w-10 h-10 bg-brand-600 text-white rounded-full flex items-center justify-center">
               <Globe className="w-5 h-5" />
             </div>
             <div>
@@ -232,7 +233,7 @@ export default function DeleteDestinationPage({ params }: { params: { id: string
               <Button 
                 onClick={handleDelete}
                 disabled={deleting}
-                className="bg-red-600 hover:bg-red-700"
+                className="bg-brand-600 hover:bg-brand-700"
               >
                 {deleting ? (
                   <>

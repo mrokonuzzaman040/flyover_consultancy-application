@@ -1,115 +1,69 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
-import { prisma } from "@/lib/prisma";
+import mongoose from "mongoose";
 import { z } from "zod";
+import { dbConnect, toObject } from "@/lib/mongoose";
+import { Lead } from "@/lib/models/Lead";
 
-const UpdateLeadSchema = z.object({
-  name: z.string().min(2).max(50).optional(),
+const patchSchema = z.object({
+  name: z.string().min(1).optional(),
   email: z.string().email().optional(),
-  phone: z.string().optional(),
+  phone: z.string().optional().nullable(),
   countryInterest: z.array(z.string()).optional(),
   serviceInterest: z.array(z.string()).optional(),
-  message: z.string().max(500).optional(),
+  message: z.string().optional().nullable(),
+  utmSource: z.string().optional().nullable(),
+  utmMedium: z.string().optional().nullable(),
+  utmCampaign: z.string().optional().nullable(),
+  source: z.string().optional().nullable(),
   status: z.enum(["NEW", "CONTACTED", "QUALIFIED", "CONVERTED", "CLOSED"]).optional(),
-  source: z.string().optional(),
-  utmSource: z.string().optional(),
-  utmMedium: z.string().optional(),
-  utmCampaign: z.string().optional(),
 });
 
-export async function GET(
-  req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+function isValid(id: string) {
+  return mongoose.Types.ObjectId.isValid(id);
+}
+
+export async function GET(_: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
-    const session = await getServerSession(authOptions);
-    if (!session || !session.user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-
+    await dbConnect();
     const { id } = await params;
-    const lead = await prisma.lead.findUnique({
-      where: { id },
-    });
-
-    if (!lead) {
-      return NextResponse.json({ error: "Lead not found" }, { status: 404 });
-    }
-
-    return NextResponse.json(lead);
-  } catch (error) {
-    console.error('Error fetching lead:', error);
-    return NextResponse.json(
-      { error: 'Failed to fetch lead' },
-      { status: 500 }
-    );
+    if (!isValid(id)) return NextResponse.json({ message: "Invalid id" }, { status: 400 });
+    const doc = await Lead.findById(id).lean();
+    if (!doc) return NextResponse.json({ message: "Not found" }, { status: 404 });
+    return NextResponse.json({ lead: toObject(doc as { _id: unknown }) });
+  } catch (e) {
+    console.error(e);
+    return NextResponse.json({ message: "Failed to fetch lead" }, { status: 500 });
   }
 }
 
-export async function PUT(
-  req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  // allow full or partial updates via PUT
   try {
-    const session = await getServerSession(authOptions);
-    if (!session || !session.user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-
+    await dbConnect();
     const { id } = await params;
-    const body = await req.json();
-    const parsed = UpdateLeadSchema.safeParse(body);
-
-    if (!parsed.success) {
-      return NextResponse.json(
-        { error: "Validation failed", details: parsed.error.issues },
-        { status: 400 }
-      );
-    }
-
-    const lead = await prisma.lead.update({
-      where: { id },
-      data: parsed.data,
-    });
-
-    return NextResponse.json(lead);
-  } catch (error) {
-    console.error('Error updating lead:', error);
-    if (error instanceof Error && error.message.includes('Record to update not found')) {
-      return NextResponse.json({ error: "Lead not found" }, { status: 404 });
-    }
-    return NextResponse.json(
-      { error: 'Failed to update lead' },
-      { status: 500 }
-    );
+    if (!isValid(id)) return NextResponse.json({ message: "Invalid id" }, { status: 400 });
+    const json = await req.json();
+    const parsed = patchSchema.safeParse(json);
+    if (!parsed.success) return NextResponse.json({ message: parsed.error.flatten() }, { status: 400 });
+    const updated = await Lead.findByIdAndUpdate(id, parsed.data, { new: true }).lean();
+    if (!updated) return NextResponse.json({ message: "Not found" }, { status: 404 });
+    return NextResponse.json({ lead: toObject(updated as { _id: unknown }) });
+  } catch (e) {
+    console.error(e);
+    return NextResponse.json({ message: "Failed to update lead" }, { status: 500 });
   }
 }
 
-export async function DELETE(
-  req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function DELETE(_: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
-    const session = await getServerSession(authOptions);
-    if (!session || !session.user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-
+    await dbConnect();
     const { id } = await params;
-    await prisma.lead.delete({
-      where: { id },
-    });
-
-    return NextResponse.json({ message: "Lead deleted successfully" });
-  } catch (error) {
-    console.error('Error deleting lead:', error);
-    if (error instanceof Error && error.message.includes('Record to delete does not exist')) {
-      return NextResponse.json({ error: "Lead not found" }, { status: 404 });
-    }
-    return NextResponse.json(
-      { error: 'Failed to delete lead' },
-      { status: 500 }
-    );
+    if (!isValid(id)) return NextResponse.json({ message: "Invalid id" }, { status: 400 });
+    const deleted = await Lead.findByIdAndDelete(id).lean();
+    if (!deleted) return NextResponse.json({ message: "Not found" }, { status: 404 });
+    return NextResponse.json({ ok: true });
+  } catch (e) {
+    console.error(e);
+    return NextResponse.json({ message: "Failed to delete lead" }, { status: 500 });
   }
 }

@@ -1,78 +1,181 @@
 "use client";
 
-import { UserCheck, FileText, Award, Plane } from "lucide-react";
+import { UserCheck, FileText, Award, Plane, ArrowRight, CheckCircle, Clock, Users, Star } from "lucide-react";
+import { useState } from "react";
+import Link from "next/link";
+import ScheduleMeetingModal from "@/components/modals/ScheduleMeetingModal";
+import sectionsData from '@/data/sections-data.json';
 
-const services = [
-  {
-    icon: UserCheck,
-    title: "Personalized Counseling",
-    description: "Get expert guidance tailored to your academic goals and career aspirations."
-  },
-  {
-    icon: FileText,
-    title: "Application Support",
-    description: "Complete assistance with university applications, essays, and documentation."
-  },
-  {
-    icon: Award,
-    title: "Scholarship Guidance",
-    description: "Discover and apply for scholarships to fund your international education."
-  },
-  {
-    icon: Plane,
-    title: "Visa & Travel Support",
-    description: "Navigate visa processes and pre-departure preparations with confidence."
-  }
-];
+// Icon mapping
+const iconMap = {
+  UserCheck,
+  FileText,
+  Award,
+  Plane,
+  Users,
+  CheckCircle,
+  Star,
+  Clock
+};
 
-export default function ServicesSection() {
+interface ServicesSectionProps {
+  services?: typeof sectionsData.services;
+  stats?: typeof sectionsData.stats;
+}
+
+
+
+export default function ServicesSection({ 
+  services = sectionsData.services, 
+  stats = sectionsData.stats 
+}: ServicesSectionProps = {}) {
+  const [activeService, setActiveService] = useState(0);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleScheduleClick = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+
   return (
-    <section className="relative bg-brand py-24">
-      {/* Background decorative elements */}
-      <div className="absolute inset-0 bg-grid-white/[0.05] [mask-image:linear-gradient(0deg,white,rgba(255,255,255,0.6))] -z-10"></div>
-      <div className="absolute top-10 left-10 w-32 h-32 bg-white/10 rounded-full blur-xl"></div>
-      <div className="absolute bottom-10 right-10 w-40 h-40 bg-white/5 rounded-full blur-2xl"></div>
+    <section className="relative bg-gradient-to-br from-brand-600 via-brand-700 to-brand-800 py-24 overflow-hidden">
+      {/* Enhanced Background Elements */}
+      <div className="absolute inset-0">
+        <div className="absolute inset-0 bg-grid-white/[0.05] [mask-image:linear-gradient(0deg,white,rgba(255,255,255,0.6))]"></div>
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-gradient-to-r from-yellow-400/20 to-orange-400/20 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-gradient-to-r from-blue-400/20 to-purple-400/20 rounded-full blur-3xl animate-pulse delay-1000"></div>
+        <div className="absolute top-1/2 left-0 w-64 h-64 bg-gradient-to-r from-pink-400/10 to-brand-400/10 rounded-full blur-2xl"></div>
+      </div>
       
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        {/* Header Section */}
         <div className="text-center mb-16">
-          <div className="inline-flex items-center px-4 py-2 rounded-full bg-white/10 text-white text-sm font-medium mb-6">
-            <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+          <div className="inline-flex items-center px-6 py-3 rounded-full bg-white/10 backdrop-blur-sm text-white text-sm font-medium mb-6 border border-white/20">
+            <svg className="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20">
               <path fillRule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clipRule="evenodd" />
             </svg>
-            Our Services
+            Comprehensive Services
           </div>
           <h2 className="text-4xl md:text-5xl font-extrabold text-white mb-6 leading-tight">
-            How Flyover Simplifies Your{' '}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 to-orange-300">
-              Study Abroad Journey
+            Transform Your{' '}
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 via-orange-300 to-brand-300">
+              Study Abroad
             </span>
+            {' '}Dreams
           </h2>
-          <p className="text-xl text-white/80 max-w-3xl mx-auto leading-relaxed">
-            From initial consultation to successful settlement, we provide comprehensive support at every step of your international education journey.
+          <p className="text-lg text-white/80 max-w-3xl mx-auto leading-relaxed mb-10">
+            From personalized counseling to visa success, we provide end-to-end support with proven results. 
+            Join thousands of students who achieved their international education goals with Flyover.
           </p>
+          
+          {/* Stats Row */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-3xl mx-auto">
+            {stats.map((stat, index) => {
+              const IconComponent = iconMap[stat.icon as keyof typeof iconMap];
+              return (
+                <div key={index} className="text-center">
+                  <div className="inline-flex items-center justify-center w-10 h-10 bg-white/10 rounded-lg mb-2">
+                    <IconComponent className="w-5 h-5 text-white" />
+                  </div>
+                  <div className="text-xl font-bold text-white mb-1">{stat.value}</div>
+                  <div className="text-xs text-white/70">{stat.label}</div>
+                </div>
+              );
+            })}
+          </div>
         </div>
         
-        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+        {/* Services Grid - Enhanced Design */}
+        <div className="grid gap-8 lg:grid-cols-2 xl:grid-cols-4">
           {services.map((service, index) => {
-            const IconComponent = service.icon;
+            const IconComponent = iconMap[service.icon as keyof typeof iconMap];
+            const isActive = activeService === index;
+            
             return (
               <div 
-                key={index} 
-                className="group relative bg-white/10 backdrop-blur-lg rounded-2xl p-8 border border-white/20 hover:bg-white/15 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl"
+                key={index}
+                onMouseEnter={() => setActiveService(index)}
+                className={`group relative bg-white/10 backdrop-blur-xl rounded-3xl p-8 border transition-all duration-500 cursor-pointer ${
+                  isActive 
+                    ? 'border-white/40 bg-white/15 scale-105 shadow-2xl shadow-white/10' 
+                    : 'border-white/20 hover:border-white/30 hover:bg-white/12 hover:scale-102'
+                }`}
               >
-                <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-white/10 to-white/5 rounded-full -translate-y-10 translate-x-10 opacity-50"></div>
-                <div className="relative z-10">
-                  <div className="w-16 h-16 bg-gradient-to-br from-white/20 to-white/10 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
-                    <IconComponent className="w-8 h-8 text-white" />
+                {/* Popular Badge */}
+                {service.popular && (
+                  <div className="absolute -top-3 -right-3 bg-gradient-to-r from-yellow-400 to-orange-400 text-black text-xs font-bold px-3 py-1 rounded-full">
+                    Popular
                   </div>
-                  <h3 className="text-xl font-bold text-white mb-4">{service.title}</h3>
-                  <p className="text-white/70 leading-relaxed">{service.description}</p>
+                )}
+                
+                {/* Decorative Elements */}
+                <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-white/10 to-transparent rounded-full -translate-y-12 translate-x-12 opacity-60"></div>
+                <div className="absolute bottom-0 left-0 w-16 h-16 bg-gradient-to-tr from-white/5 to-transparent rounded-full translate-y-8 -translate-x-8"></div>
+                
+                <div className="relative z-10">
+                  {/* Icon */}
+                  <div className={`w-20 h-20 rounded-3xl flex items-center justify-center mb-6 transition-all duration-300 ${
+                    isActive 
+                      ? 'bg-gradient-to-br from-white/30 to-white/20 scale-110' 
+                      : 'bg-gradient-to-br from-white/20 to-white/10 group-hover:scale-110'
+                  }`}>
+                    <IconComponent className="w-10 h-10 text-white" />
+                  </div>
+                  
+                  {/* Content */}
+                  <h3 className="text-2xl font-bold text-white mb-4 group-hover:text-yellow-200 transition-colors">
+                    {service.title}
+                  </h3>
+                  <p className="text-white/80 leading-relaxed mb-6">
+                    {service.description}
+                  </p>
+                  
+                  {/* Features */}
+                  <div className="space-y-3 mb-6">
+                    {service.features.map((feature, featureIndex) => (
+                      <div key={featureIndex} className="flex items-center text-sm text-white/90">
+                        <CheckCircle className="w-4 h-4 text-green-400 mr-3 flex-shrink-0" />
+                        {feature}
+                      </div>
+                    ))}
+                  </div>
+                  
+
+                  
+                  {/* CTA Button */}
+                  <Link href="/book-consultation" className="w-full bg-gradient-to-r from-white/20 to-white/10 hover:from-white/30 hover:to-white/20 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300 flex items-center justify-center group-hover:shadow-lg border border-white/20 hover:border-white/40">
+                    Learn More
+                    <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+                  </Link>
                 </div>
               </div>
             );
           })}
         </div>
+        
+        {/* Bottom CTA */}
+        <div className="text-center mt-16">
+          <div className="inline-flex flex-col sm:flex-row gap-4">
+            <Link href="/book-consultation" className="px-8 py-4 bg-white text-brand-700 font-bold rounded-2xl hover:bg-gray-100 transition-all duration-300 transform hover:scale-105 shadow-xl">
+              Get Started Today
+            </Link>
+            <button 
+              onClick={handleScheduleClick}
+              className="px-8 py-4 border-2 border-white/30 text-white font-semibold rounded-2xl hover:bg-white/10 transition-all duration-300"
+            >
+              Schedule Free Consultation
+            </button>
+          </div>
+        </div>
       </div>
+      
+      <ScheduleMeetingModal
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+      />
     </section>
   );
 }

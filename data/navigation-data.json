@@ -1,0 +1,31 @@
+[
+  {
+    "label": "About Us",
+    "href": "/about",
+    "dropdown": [
+      { "href": "/about", "label": "Our Story" },
+      { "href": "/about/team", "label": "Our Team" },
+      { "href": "/about/mission-vision", "label": "Mission & Vision" },
+      { "href": "/about/testimonials", "label": "Testimonials" }
+    ]
+  },
+  {
+    "label": "Scholarships",
+    "href": "/scholarships",
+    "dropdown": [
+      { "href": "/scholarships", "label": "All Scholarships" },
+      { "href": "/scholarships/undergraduate", "label": "Undergraduate" },
+      { "href": "/scholarships/graduate", "label": "Graduate" },
+      { "href": "/scholarships/phd", "label": "PhD Programs" },
+      { "href": "/scholarships/merit", "label": "Merit-based" }
+    ]
+  },
+  {
+    "label": "Blogs",
+    "href": "/blogs"
+  },
+  {
+    "label": "Contact",
+    "href": "/contact"
+  }
+]

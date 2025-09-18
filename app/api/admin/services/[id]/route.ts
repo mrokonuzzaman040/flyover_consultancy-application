@@ -1,151 +1,77 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { z } from 'zod'
-import { prisma } from '@/lib/prisma'
+import { NextRequest, NextResponse } from "next/server";
+import mongoose from "mongoose";
+import { z } from "zod";
+import { dbConnect, toObject } from "@/lib/mongoose";
+import Service from "@/lib/models/Service";
 
-// TODO: Add authentication middleware
-// import { getServerSession } from 'next-auth/next'
-// import { authOptions } from '@/lib/auth'
+const feature = z.object({ icon: z.string().optional(), title: z.string(), description: z.string() });
+const processStep = z.object({ step: z.string(), title: z.string(), description: z.string() });
 
-const updateServiceSchema = z.object({
-  name: z.string().min(1, 'Name is required').optional(),
-  slug: z.string().min(1, 'Slug is required').optional(),
+const patchSchema = z.object({
+  name: z.string().min(1).optional(),
+  slug: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/).optional(),
+  title: z.string().min(1).optional(),
+  subtitle: z.string().min(1).optional(),
+  description: z.string().min(1).optional(),
+  image: z.string().min(1).optional(),
+  ctaLabel: z.string().min(1).optional(),
+  ctaText: z.string().min(1).optional(),
   sectionsMD: z.array(z.string()).optional(),
-  ctaLabel: z.string().optional()
-})
+  features: z.array(feature).min(1).optional(),
+  benefits: z.array(z.string()).min(1).optional(),
+  process: z.array(processStep).min(1).optional(),
+  popular: z.boolean().optional(),
+});
 
-export async function GET(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+function isValid(id: string) {
+  return mongoose.Types.ObjectId.isValid(id);
+}
+
+export async function GET(_: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
-    // TODO: Add authentication check
-    // const session = await getServerSession(authOptions)
-    // if (!session || session.user.role !== 'ADMIN') {
-    //   return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    // }
-
-    const { id } = await params
-    const service = await prisma.service.findUnique({
-      where: { id }
-    })
-
-    if (!service) {
-      return NextResponse.json(
-        { error: 'Service not found' },
-        { status: 404 }
-      )
-    }
-
-    return NextResponse.json(service)
-  } catch (error) {
-    console.error('Error fetching service:', error)
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    )
+    await dbConnect();
+    const { id } = await params;
+    if (!isValid(id)) return NextResponse.json({ error: "Invalid id" }, { status: 400 });
+    const doc = await Service.findById(id).lean();
+    if (!doc) return NextResponse.json({ error: "Not found" }, { status: 404 });
+    return NextResponse.json({ service: toObject(doc as { _id: unknown }) });
+  } catch (e) {
+    console.error(e);
+    return NextResponse.json({ error: "Failed to fetch service" }, { status: 500 });
   }
 }
 
-export async function PATCH(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
-    // TODO: Add authentication check
-    // const session = await getServerSession(authOptions)
-    // if (!session || session.user.role !== 'ADMIN') {
-    //   return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    // }
-
-    const { id } = await params
-    const body = await request.json()
-    const validatedData = updateServiceSchema.parse(body)
-
-    // Check if service exists
-    const existingService = await prisma.service.findUnique({
-      where: { id }
-    })
-
-    if (!existingService) {
-      return NextResponse.json(
-        { error: 'Service not found' },
-        { status: 404 }
-      )
+    await dbConnect();
+    const { id } = await params;
+    if (!isValid(id)) return NextResponse.json({ error: "Invalid id" }, { status: 400 });
+    const json = await req.json();
+    const parsed = patchSchema.safeParse(json);
+    if (!parsed.success) return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 });
+    if (parsed.data.slug) {
+      const exists = await Service.findOne({ slug: parsed.data.slug, _id: { $ne: id } });
+      if (exists) return NextResponse.json({ error: "Slug already exists" }, { status: 409 });
     }
-
-    // Check if slug is being updated and if it already exists
-    if (validatedData.slug && validatedData.slug !== existingService.slug) {
-      const slugExists = await prisma.service.findUnique({
-        where: { slug: validatedData.slug }
-      })
-
-      if (slugExists) {
-        return NextResponse.json(
-          { error: 'A service with this slug already exists' },
-          { status: 400 }
-        )
-      }
-    }
-
-    const updatedService = await prisma.service.update({
-      where: { id },
-      data: validatedData
-    })
-
-    return NextResponse.json(updatedService)
-  } catch (error) {
-    if (error instanceof z.ZodError) {
-      return NextResponse.json(
-        { error: 'Validation error', details: error.issues },
-        { status: 400 }
-      )
-    }
-
-    console.error('Error updating service:', error)
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    )
+    const updated = await Service.findByIdAndUpdate(id, parsed.data, { new: true }).lean();
+    if (!updated) return NextResponse.json({ error: "Not found" }, { status: 404 });
+    return NextResponse.json({ service: toObject(updated as { _id: unknown }) });
+  } catch (e) {
+    console.error(e);
+    return NextResponse.json({ error: "Failed to update service" }, { status: 500 });
   }
 }
 
-export async function DELETE(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function DELETE(_: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
-    // TODO: Add authentication check
-    // const session = await getServerSession(authOptions)
-    // if (!session || session.user.role !== 'ADMIN') {
-    //   return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    // }
-
-    const { id } = await params
-    // Check if service exists
-    const existingService = await prisma.service.findUnique({
-      where: { id }
-    })
-
-    if (!existingService) {
-      return NextResponse.json(
-        { error: 'Service not found' },
-        { status: 404 }
-      )
-    }
-
-    await prisma.service.delete({
-      where: { id }
-    })
-
-    return NextResponse.json(
-      { message: 'Service deleted successfully' },
-      { status: 200 }
-    )
-  } catch (error) {
-    console.error('Error deleting service:', error)
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    )
+    await dbConnect();
+    const { id } = await params;
+    if (!isValid(id)) return NextResponse.json({ error: "Invalid id" }, { status: 400 });
+    const deleted = await Service.findByIdAndDelete(id).lean();
+    if (!deleted) return NextResponse.json({ error: "Not found" }, { status: 404 });
+    return NextResponse.json({ ok: true });
+  } catch (e) {
+    console.error(e);
+    return NextResponse.json({ error: "Failed to delete service" }, { status: 500 });
   }
 }
