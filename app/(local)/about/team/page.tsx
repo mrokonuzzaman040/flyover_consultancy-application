@@ -1,7 +1,7 @@
 import { Metadata } from 'next'
 import Reveal from '@/components/ui/reveal'
 import PageHeader from '@/components/page-header'
-import { Mail, Linkedin, Phone, MapPin, Award, Users, Target, Heart } from 'lucide-react'
+import { Mail, Linkedin, Phone, Award, Users, Target, Heart } from 'lucide-react'
 import Image from 'next/image'
 import { dbConnect, toObject } from '@/lib/mongoose'
 import Team from '@/lib/models/Team'
