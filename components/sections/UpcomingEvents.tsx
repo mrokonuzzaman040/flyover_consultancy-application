@@ -4,24 +4,21 @@ import Link from "next/link";
 import { useState, useEffect } from 'react';
 
 interface Event {
-  _id?: string;
-  id?: string | number;
+  id: string;
   title: string;
   slug: string;
   description: string;
   date?: string;
   time?: string;
   location?: string;
-  type?: string;
-  attendees?: string;
-  featured?: boolean;
-  icon?: string;
-  color?: string;
+  venue?: string;
+  city?: string;
+  bannerUrl?: string;
   startAt?: string;
   endAt?: string;
-  eventType?: string;
-  category?: string;
-  targetAudience?: string;
+  eventType?: 'workshop' | 'seminar' | 'conference' | 'webinar' | 'fair' | 'exhibition' | 'networking' | 'other';
+  category?: 'education' | 'career' | 'networking' | 'training' | 'information' | 'other';
+  targetAudience?: string[];
   organizer?: string;
   organizerEmail?: string;
   organizerPhone?: string;
@@ -34,17 +31,30 @@ interface Event {
   capacity?: number;
   seatsRemaining?: number;
   requirements?: string[];
-  agenda?: string[];
+  agenda?: Array<{
+    time: string;
+    title: string;
+    description?: string;
+    speaker?: string;
+  }>;
   speakers?: Array<{
     name: string;
     title: string;
+    company?: string;
     bio?: string;
     image?: string;
-    company?: string;
+    socialLinks?: {
+      linkedin?: string;
+      twitter?: string;
+      website?: string;
+    };
   }>;
   tags?: string[];
-  createdAt: string;
-  updatedAt: string;
+  featured?: boolean;
+  priority?: 'low' | 'medium' | 'high';
+  status?: 'draft' | 'published' | 'cancelled' | 'completed';
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 interface UpcomingEventsProps {
@@ -197,15 +207,15 @@ export default function UpcomingEvents({ events: propEvents }: UpcomingEventsPro
           <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
             {upcomingEvents.map((event, index) => {
               const { day, month } = formatDate(event);
-              const eventType = event.eventType || event.type || 'Event';
-              const eventColor = event.color || 'from-blue-500 to-indigo-600';
-              const eventTime = event.time || 'TBD';
-              const eventLocation = event.location || 'TBD';
-              const eventAttendees = event.attendees || 'TBD';
+              const eventType = event.eventType || 'other';
+              const eventColor = 'from-brand-500 to-brand-600'; // Use brand colors
+              const eventTime = event.startAt ? new Date(event.startAt).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }) : (event.time || 'TBD');
+              const eventLocation = event.venue || event.location || event.city || 'TBD';
+              const eventAttendees = event.capacity ? `${event.capacity} seats` : 'TBD';
               
               return (
                 <article
-                  key={event._id || event.id || index}
+                  key={event.id || index}
                   className={`group relative bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 border border-gray-100 overflow-hidden ${
                     isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
                   } ${
@@ -281,14 +291,14 @@ export default function UpcomingEvents({ events: propEvents }: UpcomingEventsPro
                       {/* Action Button */}
                       <div className="pt-4">
                         <Link 
-                          href={`/events/register/${event.slug}`}
+                          href={`/events/${event.slug}`}
                           className={`w-full py-3 px-4 rounded-xl font-semibold transition-all duration-300 block text-center ${
                             hoveredIndex === index
                               ? `bg-gradient-to-r from-brand-600 to-brand-700 text-white shadow-lg transform scale-105`
                               : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                           }`}
                         >
-                          {eventType === 'Webinar' ? 'Register Free' : 'Register Now'}
+                          {event.isFree ? 'Register Free' : `Register - ${event.currency} ${event.price || 0}`}
                         </Link>
                       </div>
                     </div>

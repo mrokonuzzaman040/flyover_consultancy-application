@@ -52,8 +52,10 @@ export async function PUT(
     
     const validationResult = updateMeetingSchema.safeParse(body);
     if (!validationResult.success) {
+      const fieldErrors = validationResult.error.flatten().fieldErrors;
+      const errorMessage = Object.values(fieldErrors).flat().join(', ') || 'Validation failed';
       return NextResponse.json(
-        { error: "Validation failed", details: validationResult.error.flatten().fieldErrors },
+        { error: errorMessage },
         { status: 400 }
       );
     }

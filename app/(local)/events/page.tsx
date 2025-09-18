@@ -66,13 +66,13 @@ function EventCard({ event, index, isPast = false }: { event: Event; index: numb
 
   const getEventTypeColor = (type?: string) => {
     switch (type) {
-      case 'webinar': return 'bg-blue-50 text-blue-600';
-      case 'workshop': return 'bg-green-50 text-green-600';
-      case 'seminar': return 'bg-purple-50 text-purple-600';
-      case 'conference': return 'bg-indigo-50 text-indigo-600';
-      case 'fair': return 'bg-orange-50 text-orange-600';
-      case 'exhibition': return 'bg-pink-50 text-pink-600';
-      case 'networking': return 'bg-teal-50 text-teal-600';
+      case 'webinar': return 'bg-brand-50 text-brand-600';
+      case 'workshop': return 'bg-brand-100 text-brand-700';
+      case 'seminar': return 'bg-brand-50 text-brand-600';
+      case 'conference': return 'bg-brand-100 text-brand-700';
+      case 'fair': return 'bg-brand-50 text-brand-600';
+      case 'exhibition': return 'bg-brand-100 text-brand-700';
+      case 'networking': return 'bg-brand-50 text-brand-600';
       default: return 'bg-gray-50 text-gray-600';
     }
   };
@@ -131,9 +131,9 @@ function EventCard({ event, index, isPast = false }: { event: Event; index: numb
   return (
     <>
       <Reveal delay={index * 0.1}>
-        <div className={`relative rounded-2xl bg-white p-6 shadow-sm border border-gray-100 hover:shadow-lg transition-all duration-300 ${event.featured ? 'ring-2 ring-blue-500 ring-opacity-20' : ''} ${isPast ? 'opacity-90' : ''}`}>
+        <div className={`relative rounded-2xl bg-white p-6 shadow-sm border border-gray-100 hover:shadow-lg transition-all duration-300 ${event.featured ? 'ring-2 ring-brand-500 ring-opacity-20' : ''} ${isPast ? 'opacity-90' : ''}`}>
           {event.featured && !isPast && (
-            <div className="absolute -top-3 -right-3 bg-orange-500 text-white px-3 py-1 rounded-full text-xs font-medium flex items-center gap-1">
+            <div className="absolute -top-3 -right-3 bg-brand-500 text-white px-3 py-1 rounded-full text-xs font-medium flex items-center gap-1">
               <StarIcon className="h-3 w-3" />
               Featured
             </div>
@@ -177,7 +177,7 @@ function EventCard({ event, index, isPast = false }: { event: Event; index: numb
                 <span>{event.capacity - (event.seatsRemaining || 0)} registered</span>
                 <div className="flex-1 bg-gray-200 rounded-full h-1.5 ml-2">
                   <div 
-                    className="bg-blue-500 h-1.5 rounded-full transition-all duration-300" 
+                    className="bg-brand-500 h-1.5 rounded-full transition-all duration-300" 
                     style={{ width: `${Math.min(attendancePercentage, 100)}%` }}
                   ></div>
                 </div>
@@ -237,7 +237,7 @@ function EventCard({ event, index, isPast = false }: { event: Event; index: numb
             ) : (
               <Link 
                 href={`/events/register/${event.slug}`}
-                className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center gap-2 text-sm font-medium"
+                className="w-full bg-brand-600 text-white py-2 px-4 rounded-lg hover:bg-brand-700 transition-colors flex items-center justify-center gap-2 text-sm font-medium"
               >
                 Register Now
                 <ArrowRightIcon className="h-4 w-4" />
@@ -330,7 +330,7 @@ export default function EventsPage() {
         />
         <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
           <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-brand-600 mx-auto"></div>
             <p className="mt-4 text-gray-600">Loading events...</p>
           </div>
         </div>
@@ -351,7 +351,7 @@ export default function EventsPage() {
             <p className="text-red-600 mb-4">{error}</p>
             <button 
               onClick={fetchEvents}
-              className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+              className="bg-brand-600 text-white px-4 py-2 rounded-lg hover:bg-brand-700"
             >
               Try Again
             </button>
@@ -419,33 +419,33 @@ export default function EventsPage() {
 
         {/* Statistics Section */}
         <Reveal delay={0.3}>
-          <div className="mb-16 rounded-2xl bg-gradient-to-r from-green-600 to-blue-600 p-8 text-white">
+          <div className="mb-16 rounded-2xl bg-gradient-to-r from-brand-600 to-brand-700 p-8 text-white">
             <div className="text-center mb-8">
               <h3 className="text-2xl font-bold mb-4">Join Thousands of Successful Students</h3>
-              <p className="text-green-100 max-w-2xl mx-auto">
+              <p className="text-brand-100 max-w-2xl mx-auto">
                 Our events have helped students from around the world achieve their study abroad dreams.
               </p>
             </div>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
               <div className="text-center">
-                <CalendarIcon className="h-8 w-8 mx-auto mb-2 text-green-200" />
+                <CalendarIcon className="h-8 w-8 mx-auto mb-2 text-brand-200" />
                 <div className="text-2xl font-bold mb-1">150+</div>
-                <div className="text-green-200 text-sm">Events Hosted</div>
+                <div className="text-brand-200 text-sm">Events Hosted</div>
               </div>
               <div className="text-center">
-                <UsersIcon className="h-8 w-8 mx-auto mb-2 text-green-200" />
+                <UsersIcon className="h-8 w-8 mx-auto mb-2 text-brand-200" />
                 <div className="text-2xl font-bold mb-1">25k+</div>
-                <div className="text-green-200 text-sm">Attendees</div>
+                <div className="text-brand-200 text-sm">Attendees</div>
               </div>
               <div className="text-center">
-                <StarIcon className="h-8 w-8 mx-auto mb-2 text-green-200" />
+                <StarIcon className="h-8 w-8 mx-auto mb-2 text-brand-200" />
                 <div className="text-2xl font-bold mb-1">4.8</div>
-                <div className="text-green-200 text-sm">Average Rating</div>
+                <div className="text-brand-200 text-sm">Average Rating</div>
               </div>
               <div className="text-center">
-                <TrendingUpIcon className="h-8 w-8 mx-auto mb-2 text-green-200" />
+                <TrendingUpIcon className="h-8 w-8 mx-auto mb-2 text-brand-200" />
                 <div className="text-2xl font-bold mb-1">95%</div>
-                <div className="text-green-200 text-sm">Success Rate</div>
+                <div className="text-brand-200 text-sm">Success Rate</div>
               </div>
             </div>
           </div>
